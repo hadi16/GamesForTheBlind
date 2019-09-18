@@ -64,10 +64,10 @@ public class AudioPlayer {
         Scanner keyboard = new Scanner(System.in);
 
         int selectedChoice = 0;
-        while (selectedChoice != 2) {
-            System.out.println("1 -> Pause");
-            System.out.println("2 -> Exit");
-            System.out.println("3 -> Resume");
+        while (selectedChoice != AudioOption.STOP.getOptionValue()) {
+            System.out.println(AudioOption.PAUSE.getOptionValue() + " -> Pause");
+            System.out.println(AudioOption.STOP.getOptionValue() + " -> Stop & Exit");
+            System.out.println(AudioOption.RESUME.getOptionValue() + " -> Resume");
 
             if (!keyboard.hasNextInt()) {
                 System.out.println("You didn't enter an integer!");
