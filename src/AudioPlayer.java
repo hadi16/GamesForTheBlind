@@ -6,17 +6,13 @@ import java.util.Scanner;
 
 public class AudioPlayer {
     private final String audioFilePath;
+    private final Clip clip;
+
     private Long currentFrame;
-    private Clip clip;
     private PlayStatus status; // current status of clip
 
-    private AudioPlayer(String audioFilePath) {
-        try {
-            this.clip = AudioSystem.getClip();
-        } catch (LineUnavailableException e) {
-            e.printStackTrace();
-        }
-
+    private AudioPlayer(String audioFilePath) throws LineUnavailableException {
+        this.clip = AudioSystem.getClip();
         this.audioFilePath = audioFilePath;
         this.resetAudioStream();
     }
@@ -29,42 +25,56 @@ public class AudioPlayer {
     public static void main(String[] args) {
         Scanner keyboard = new Scanner(System.in);
 
-        System.out.println("Enter a Letter:");
-        System.out.println("h -> helloWorld.wav");
-        System.out.println("m -> testWav.wav");
-
         String selectedChar = "";
         while (!selectedChar.equals("h") && !selectedChar.equals("m")) {
+            System.out.println("Enter a Letter:");
+            System.out.println("h -> helloWorld.wav");
+            System.out.println("m -> testWav.wav");
+
             selectedChar = keyboard.nextLine();
         }
 
-        String audioFilePath = selectedChar.equalsIgnoreCase("h") ? "audio/helloWorld.wav" : "audio/testWave.wav";
-        new AudioPlayer(audioFilePath).runAudioPlayerPrompt();
+        keyboard.close();
+
+        final String AUDIO_DIRECTORY = "audio/";
+        final String audioFilePath;
+        if (selectedChar.equalsIgnoreCase("h")) {
+            audioFilePath = AUDIO_DIRECTORY + "helloWorld.wav";
+        } else {
+            audioFilePath = AUDIO_DIRECTORY + "testWave.wav";
+        }
+
+        try {
+            AudioPlayer audioPlayer = new AudioPlayer(audioFilePath);
+            audioPlayer.runAudioPlayerPrompt();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        }
     }
 
     private void runAudioPlayerPrompt() {
         final Map<Integer, Runnable> choicesToFunction = Map.of(
-                1, this::pause,
-                2, this::stop,
-                3, this::resumeAudio
+                AudioOption.PAUSE.getOptionValue(), this::pause,
+                AudioOption.STOP.getOptionValue(), this::stop,
+                AudioOption.RESUME.getOptionValue(), this::resumeAudio
         );
 
         this.play();
 
-        Scanner scanner = new Scanner(System.in);
+        Scanner keyboard = new Scanner(System.in);
 
         int selectedChoice = 0;
-        while (selectedChoice != 2) {
-            System.out.println("1 -> Pause");
-            System.out.println("2 -> Exit");
-            System.out.println("3 -> Resume");
+        while (selectedChoice != AudioOption.STOP.getOptionValue()) {
+            System.out.println(AudioOption.PAUSE.getOptionValue() + " -> Pause");
+            System.out.println(AudioOption.STOP.getOptionValue() + " -> Stop & Exit");
+            System.out.println(AudioOption.RESUME.getOptionValue() + " -> Resume");
 
-            if (!scanner.hasNextInt()) {
+            if (!keyboard.hasNextInt()) {
                 System.out.println("You didn't enter an integer!");
                 continue;
             }
 
-            selectedChoice = scanner.nextInt();
+            selectedChoice = keyboard.nextInt();
 
             Runnable functionToExecute = choicesToFunction.get(selectedChoice);
             if (functionToExecute == null) {
@@ -74,7 +84,8 @@ public class AudioPlayer {
 
             functionToExecute.run();
         }
-        scanner.close();
+
+        keyboard.close();
     }
 
     // Method to play the audio
