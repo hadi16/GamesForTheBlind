@@ -9,11 +9,13 @@ import java.util.Scanner;
 public class AudioPlayer {
     private final String audioFilePath;
     private final Clip clip;
+    private final Scanner keyboard;
 
     private long currentFrame;
     private PlayStatus status; // current status of clip
 
-    public AudioPlayer() throws LineUnavailableException {
+    public AudioPlayer(Scanner keyboard) throws LineUnavailableException {
+        this.keyboard = keyboard;
         this.clip = AudioSystem.getClip();
 
         this.audioFilePath = this.getAudioFilePath();
@@ -28,18 +30,14 @@ public class AudioPlayer {
                 "M", AUDIO_DIRECTORY + "testWave.wav"
         );
 
-        Scanner keyboard = new Scanner(System.in);
-
         String audioFilePath = null;
         while (audioFilePath == null) {
             System.out.println("Enter a Letter:");
             inputStringToAudioFilePath.forEach(
                     (inputChar, audioFile) -> System.out.println(inputChar + " -> " + audioFile)
             );
-            audioFilePath = inputStringToAudioFilePath.get(keyboard.nextLine());
+            audioFilePath = inputStringToAudioFilePath.get(this.keyboard.nextLine());
         }
-
-        keyboard.close();
 
         return audioFilePath;
     }
@@ -53,20 +51,18 @@ public class AudioPlayer {
 
         this.play();
 
-        Scanner keyboard = new Scanner(System.in);
-
         int selectedChoice = 0;
         while (selectedChoice != AudioOption.STOP.getOptionValue()) {
             System.out.println(AudioOption.PAUSE.getOptionValue() + " -> Pause");
             System.out.println(AudioOption.STOP.getOptionValue() + " -> Stop & Exit");
             System.out.println(AudioOption.RESUME.getOptionValue() + " -> Resume");
 
-            if (!keyboard.hasNextInt()) {
+            if (!this.keyboard.hasNextInt()) {
                 System.out.println("You didn't enter an integer!");
                 continue;
             }
 
-            selectedChoice = keyboard.nextInt();
+            selectedChoice = this.keyboard.nextInt();
 
             Runnable functionToExecute = choicesToFunction.get(selectedChoice);
             if (functionToExecute == null) {
@@ -76,8 +72,6 @@ public class AudioPlayer {
 
             functionToExecute.run();
         }
-
-        keyboard.close();
     }
 
     // Method to play the audio
