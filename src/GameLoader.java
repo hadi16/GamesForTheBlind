@@ -7,18 +7,17 @@ import java.util.Scanner;
 
 public class GameLoader {
     public static void main(String[] args) {
+        final Scanner keyboard = new Scanner(System.in);
         final Map<String, Runnable> optionCharToGame = Map.of(
                 "S", SudokuBoard::new,
                 "A", () -> {
                     try {
-                        new AudioPlayer();
+                        new AudioPlayer(keyboard);
                     } catch (LineUnavailableException e) {
                         e.printStackTrace();
                     }
                 }
         );
-
-        Scanner keyboard = new Scanner(System.in);
 
         Runnable gameToExecute = null;
         while (gameToExecute == null) {
@@ -26,8 +25,8 @@ public class GameLoader {
             gameToExecute = optionCharToGame.get(keyboard.nextLine());
         }
 
-        keyboard.close();
-
         gameToExecute.run();
+
+        keyboard.close();
     }
 }
