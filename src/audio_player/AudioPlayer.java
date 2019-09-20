@@ -1,3 +1,5 @@
+package audio_player;
+
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -8,48 +10,38 @@ public class AudioPlayer {
     private final String audioFilePath;
     private final Clip clip;
 
-    private Long currentFrame;
+    private long currentFrame;
     private PlayStatus status; // current status of clip
 
-    private AudioPlayer(String audioFilePath) throws LineUnavailableException {
+    public AudioPlayer() throws LineUnavailableException {
         this.clip = AudioSystem.getClip();
-        this.audioFilePath = audioFilePath;
+
+        this.audioFilePath = this.getAudioFilePath();
         this.resetAudioStream();
+        this.runAudioPlayerPrompt();
     }
 
-    /**
-     * Says hello to the world.
-     *
-     * @param args The arguments of the program.
-     */
-    public static void main(String[] args) {
+    private String getAudioFilePath() {
+        final String AUDIO_DIRECTORY = "audio/";
+        final Map<String, String> inputStringToAudioFilePath = Map.of(
+                "H", AUDIO_DIRECTORY + "helloWorld.wav",
+                "M", AUDIO_DIRECTORY + "testWave.wav"
+        );
+
         Scanner keyboard = new Scanner(System.in);
 
-        String selectedChar = "";
-        while (!selectedChar.equals("h") && !selectedChar.equals("m")) {
+        String audioFilePath = null;
+        while (audioFilePath == null) {
             System.out.println("Enter a Letter:");
-            System.out.println("h -> helloWorld.wav");
-            System.out.println("m -> testWav.wav");
-
-            selectedChar = keyboard.nextLine();
+            inputStringToAudioFilePath.forEach(
+                    (inputChar, audioFile) -> System.out.println(inputChar + " -> " + audioFile)
+            );
+            audioFilePath = inputStringToAudioFilePath.get(keyboard.nextLine());
         }
 
         keyboard.close();
 
-        final String AUDIO_DIRECTORY = "audio/";
-        final String audioFilePath;
-        if (selectedChar.equalsIgnoreCase("h")) {
-            audioFilePath = AUDIO_DIRECTORY + "helloWorld.wav";
-        } else {
-            audioFilePath = AUDIO_DIRECTORY + "testWave.wav";
-        }
-
-        try {
-            AudioPlayer audioPlayer = new AudioPlayer(audioFilePath);
-            audioPlayer.runAudioPlayerPrompt();
-        } catch (LineUnavailableException e) {
-            e.printStackTrace();
-        }
+        return audioFilePath;
     }
 
     private void runAudioPlayerPrompt() {
