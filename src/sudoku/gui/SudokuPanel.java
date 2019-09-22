@@ -12,7 +12,11 @@ public class SudokuPanel extends JPanel {
 
     public SudokuPanel(int numSudokuSquares) {
         this.numSudokuSquares = numSudokuSquares;
-        this.sudokuGrid = new Generator().generate(20);
+
+        Generator sudokuGenerator = new Generator(numSudokuSquares);
+        int numberOfEmptyCells = (numSudokuSquares * numSudokuSquares) / 3;
+
+        this.sudokuGrid = sudokuGenerator.generate(numberOfEmptyCells);
     }
 
     @Override
