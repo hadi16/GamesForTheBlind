@@ -1,33 +1,51 @@
 package sudoku.gui;
 
+import sudoku.generator.Generator;
+import sudoku.generator.Grid;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class SudokuPanel extends JPanel {
+    private final int numSudokuSquares;
+    private final Grid sudokuGrid;
+
+    public SudokuPanel(int numSudokuSquares) {
+        this.numSudokuSquares = numSudokuSquares;
+        this.sudokuGrid = new Generator().generate(20);
+    }
+
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
 
-        Graphics2D graphics2D = (Graphics2D) graphics.create();
+        Rectangle bounds = graphics.getClipBounds();
+        final int TOTAL_BOARD_LENGTH = Math.min(bounds.height, bounds.width);
 
-        final int NUM_SUDOKU_SQUARES = 4;
-        final int TOTAL_BOARD_LENGTH = 200;
+        graphics.setFont(new Font("Arial", Font.PLAIN, TOTAL_BOARD_LENGTH / 20));
 
-        int squareDimension = (TOTAL_BOARD_LENGTH - NUM_SUDOKU_SQUARES) / NUM_SUDOKU_SQUARES;
-        int yPosition = (TOTAL_BOARD_LENGTH - (squareDimension * NUM_SUDOKU_SQUARES)) / 2;
+        int squareDimension = (TOTAL_BOARD_LENGTH - this.numSudokuSquares) / this.numSudokuSquares;
+        int yPosition = (TOTAL_BOARD_LENGTH - (squareDimension * this.numSudokuSquares)) / 2;
 
-        for (int rowIndex = 0; rowIndex < NUM_SUDOKU_SQUARES; rowIndex++) {
-            int xPosition = (TOTAL_BOARD_LENGTH - (squareDimension * NUM_SUDOKU_SQUARES)) / 2;
+        for (int rowIndex = 0; rowIndex < this.numSudokuSquares; rowIndex++) {
+            int xPosition = (TOTAL_BOARD_LENGTH - (squareDimension * this.numSudokuSquares)) / 2;
 
-            for (int columnIndex = 0; columnIndex < NUM_SUDOKU_SQUARES; columnIndex++) {
+            for (int columnIndex = 0; columnIndex < this.numSudokuSquares; columnIndex++) {
                 graphics.drawRect(xPosition, yPosition, squareDimension, squareDimension);
+
+                int squareNum = this.sudokuGrid.getCell(rowIndex, columnIndex).getValue();
+                if (squareNum != 0) {
+                    graphics.drawString(
+                            Integer.toString(squareNum),
+                            xPosition + squareDimension / 3,
+                            yPosition + (2 * squareDimension / 3)
+                    );
+                }
 
                 xPosition += squareDimension;
             }
 
             yPosition += squareDimension;
         }
-
-        graphics2D.dispose();
     }
 }
