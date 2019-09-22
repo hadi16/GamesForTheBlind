@@ -26,7 +26,7 @@ public class Cell {
     }
 
     /**
-     * Returns the value of the Cell. <br><br> The value is a digit (1, ..., 9) or 0 if the Cell is
+     * Returns the value of the Cell. <br><br> The value is a digit (1, 2,...) or 0 if the Cell is
      * empty.
      *
      * @return the value of the Cell.

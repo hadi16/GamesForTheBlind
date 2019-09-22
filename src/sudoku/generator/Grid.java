@@ -14,31 +14,32 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * This class represents a Sudoku Grid consisting of a 9x9 matrix containing nine 3x3 sub-grids of
- * {@link Cell}s.
+ * This class represents a Sudoku Grid consisting of a NxN matrix containing blocks of {@link Cell}s.
  */
 public class Grid {
+    private final int numSudokuSquares;
     private final Cell[][] grid;
 
-    private Grid(Cell[][] grid) {
+    private Grid(Cell[][] grid, int numSudokuSquares) {
         this.grid = grid;
+        this.numSudokuSquares = numSudokuSquares;
     }
 
     /**
-     * A static factory method which returns a Grid of a given two-dimensional array of integers.
+     * A factory method which returns a Grid of a given two-dimensional array of integers.
      *
      * @param grid a two-dimensional int-array representation of a Grid
      * @return a Grid instance corresponding to the provided two-dimensional int-array
      */
-    private static Grid of(int[][] grid) {
-        verifyGrid(grid);
+    private static Grid of(int[][] grid, int numSudokuSquares) {
+        verifyGrid(grid, numSudokuSquares);
 
-        Cell[][] cells = new Cell[9][9];
+        Cell[][] cells = new Cell[numSudokuSquares][numSudokuSquares];
         List<List<Cell>> rows = new ArrayList<>();
         List<List<Cell>> columns = new ArrayList<>();
         List<List<Cell>> boxes = new ArrayList<>();
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < numSudokuSquares; i++) {
             rows.add(new ArrayList<>());
             columns.add(new ArrayList<>());
             boxes.add(new ArrayList<>());
@@ -52,7 +53,9 @@ public class Grid {
 
                 rows.get(row).add(cell);
                 columns.get(column).add(cell);
-                boxes.get((row / 3) * 3 + column / 3).add(cell);
+
+                int blockSize = (int) Math.sqrt(numSudokuSquares);
+                boxes.get((row / blockSize) * blockSize + column / blockSize).add(cell);
 
                 if (lastCell != null) {
                     lastCell.setNextCell(cell);
@@ -62,7 +65,7 @@ public class Grid {
             }
         }
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < numSudokuSquares; i++) {
             List<Cell> row = rows.get(i);
             for (Cell cell : row) {
                 List<Cell> rowNeighbors = new ArrayList<>(row);
@@ -88,7 +91,7 @@ public class Grid {
             }
         }
 
-        return new Grid(cells);
+        return new Grid(cells, numSudokuSquares);
     }
 
     /**
@@ -96,28 +99,28 @@ public class Grid {
      *
      * @return an empty Grid
      */
-    public static Grid emptyGrid() {
-        int[][] emptyGrid = new int[9][9];
-        return Grid.of(emptyGrid);
+    public static Grid emptyGrid(int numSudokuSquares) {
+        int[][] emptyGrid = new int[numSudokuSquares][numSudokuSquares];
+        return Grid.of(emptyGrid, numSudokuSquares);
     }
 
-    private static void verifyGrid(int[][] grid) {
+    private static void verifyGrid(int[][] grid, int numSudokuSquares) {
         if (grid == null) {
             throw new IllegalArgumentException("grid must not be null");
         }
 
-        if (grid.length != 9) {
+        if (grid.length != numSudokuSquares) {
             throw new IllegalArgumentException("grid must have nine rows");
         }
 
         for (int[] row : grid) {
-            if (row.length != 9) {
+            if (row.length != numSudokuSquares) {
                 throw new IllegalArgumentException("grid must have nine columns");
             }
 
             for (int value : row) {
-                if (value < 0 || value > 9) {
-                    throw new IllegalArgumentException("grid must contain values from 0-9");
+                if (value < 0 || value > numSudokuSquares) {
+                    throw new IllegalArgumentException("grid must contain values from 0-" + numSudokuSquares);
                 }
             }
         }
@@ -238,6 +241,6 @@ public class Grid {
      */
     @Override
     public String toString() {
-        return StringConverter.toString(this);
+        return StringConverter.toString(this, (int) Math.sqrt(this.numSudokuSquares));
     }
 }

@@ -9,7 +9,7 @@
 package sudoku.generator;
 
 public class StringConverter {
-    public static String toString(Grid grid) {
+    public static String toString(Grid grid, int blockSize) {
         StringBuilder builder = new StringBuilder();
         int size = grid.getSize();
 
@@ -18,11 +18,11 @@ public class StringConverter {
             printRowBorder(builder);
             for (int column = 0; column < size; column++) {
                 printValue(builder, grid, row, column);
-                printRightColumnBorder(builder, column + 1, size);
+                printRightColumnBorder(builder, column + 1, size, blockSize);
             }
             printRowBorder(builder);
             builder.append("\n");
-            printBottomRowBorder(builder, row + 1, size);
+            printBottomRowBorder(builder, row + 1, size, blockSize);
         }
         printBottomBorder(builder);
 
@@ -43,24 +43,24 @@ public class StringConverter {
         builder.append(" ").append(output).append(" ");
     }
 
-    private static void printRightColumnBorder(StringBuilder builder, int column, int size) {
+    private static void printRightColumnBorder(StringBuilder builder, int column, int size, int blockSize) {
         if (column == size) {
             return;
         }
 
-        if (column % 3 == 0) {
+        if (column % blockSize == 0) {
             builder.append("║");
         } else {
             builder.append("│");
         }
     }
 
-    private static void printBottomRowBorder(StringBuilder builder, int row, int size) {
+    private static void printBottomRowBorder(StringBuilder builder, int row, int size, int blockSize) {
         if (row == size) {
             return;
         }
 
-        if (row % 3 == 0) {
+        if (row % blockSize == 0) {
             builder.append("╠═══╪═══╪═══╬═══╪═══╪═══╬═══╪═══╪═══╣\n");
         } else {
             builder.append("╟───┼───┼───╫───┼───┼───╫───┼───┼───╢\n");

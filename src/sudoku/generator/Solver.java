@@ -8,12 +8,16 @@
 
 package sudoku.generator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
  * A Solver is capable of solving a given Sudoku {@link Grid}.
  */
 public class Solver {
+    private final int numSudokuSquares;
+
     private static final int EMPTY = 0;
 
     private final int[] values;
@@ -21,7 +25,8 @@ public class Solver {
     /**
      * Constructs a new Solver instance.
      */
-    public Solver() {
+    public Solver(int numSudokuSquares) {
+        this.numSudokuSquares = numSudokuSquares;
         this.values = this.generateRandomValues();
     }
 
@@ -60,19 +65,22 @@ public class Solver {
     }
 
     private int[] generateRandomValues() {
-        int[] values = {EMPTY, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        List<Integer> values = new ArrayList<>(EMPTY);
+        for (int i = 0; i < this.numSudokuSquares; i++) {
+            values.add(i + 1);
+        }
 
         Random random = new Random();
-        for (int i = 0, j = random.nextInt(9), tmp = values[j]; i < values.length;
-             i++, j = random.nextInt(9), tmp = values[j]) {
+        for (int i = 0, j = random.nextInt(this.numSudokuSquares), tmp = values.get(j); i < values.size();
+             i++, j = random.nextInt(this.numSudokuSquares), tmp = values.get(j)) {
             if (i == j) {
                 continue;
             }
 
-            values[j] = values[i];
-            values[i] = tmp;
+            values.set(j, values.get(i));
+            values.set(i, tmp);
         }
 
-        return values;
+        return values.stream().mapToInt(Integer::intValue).toArray();
     }
 }
