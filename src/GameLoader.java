@@ -9,7 +9,7 @@ public class GameLoader {
     public static void main(String[] args) {
         final Scanner keyboard = new Scanner(System.in);
         final Map<String, Runnable> optionCharToGame = Map.of(
-                "S", SudokuBoard::new,
+                "S", () -> new SudokuBoard(9),
                 "A", () -> {
                     try {
                         new AudioPlayer(keyboard);
