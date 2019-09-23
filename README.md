@@ -1,15 +1,35 @@
-# GamesForTheBlind
-Games for the Blind contains versions of Sudoku and Mastermind that blind users can navigate using a traditional keyboard. The game will be easily installable via a traditional Windows executable file. Users will begin with an optional set of audio instructions, which will teach blind users the rules for Sudoku or Mastermind and inform them of which keyboard buttons to press for a given action in the game. 
-Games for the Blind is a collection of computer games specifically designed for the blind.
+# Games For The Blind
+Games for the Blind is a computer game software specifically designed for the blind! The two games currently featured on this software are Sudoku and Mastermind. Both games are navigatable through the traditional QWERTY keyboard(with a number pad) and uses audio files to.
 
 
-## Game Installation
-Games for the Blind will be easily installed via a Windows executable file.
+## Requirements
+Self 
+Windows 7 
 
-# User Manual
+## Features
+
+**Self-Contained Program:**
+This program is not internet dependent and only uses libraries contained in version 12 of Oracle's Java Developement Kit.
+
+**Software GUI (Frontend):** The frontend of the software will consist of Java Swing components. It serves as a visual representation of the current game state, with the game state being updated as the game is played.
+
+**Software Backend:** The backend of our software consists of Java code that generates a new game state in the form of a Sudoku board or Mastermind 4-digit code for the user to solve. For Sudoku, the backend ensures that only valid numbers are placed on the board, as blind users would likely otherwise become very frustrated.
+
+**Software Synthesizer:** This Java code calls into a series of prerecorded audio files (spoken in English), which will allow a blind user to navigate and understand the current state of the game that is being played.
+
+
+
+## Installation 
+Games for the Blind uses izPack 5.1 to create a JAR installer file for the  application. The software uses launch4j to: 
+1. wrap this JAR installer file into a Windows executable  
+2. embed JDK 12 into this executable installer file.
+Games for the Blind can be easily installed by blind users. 
+
+## Technical
+
 
 ## Sudoku User Manual
-Rules 
+**Rules**  
 The goal of Sudoku is to fill up the missing numbers on the board so that no number is repeated in each block, row, and column. 
  
 **4x4 Board:** A 4x4 Sudoku board is broken into four blocks. Each block contains four squares for numbers to be placed. The squares will be filled in with the numbers 1-4 such that no number is repeated in each block, row, and column. 
@@ -38,3 +58,14 @@ Example: Place a ‘3’ into the top-right square in the bottom-left block in a
 6. Press the space bar to return to the fully zoomed-out position. 
 
 ## Mastermind User Manual
+**Rules of Mastermind:** The goal of Mastermind is to correctly guess a pre-determined code. Typically, this code is made up of a series of colored pegs; however, in this version of Mastermind, numbered pegs will be used instead. To guess the code, the player must place four numbers from 1-6 (numbers may be used more than once) into four spaces. After making the guess, the player is notified about how much of their guess is correct. This is done by adding four small pegs off to the side. A black peg means that a numbered peg is the right number in the right place. A white peg means that a peg with that number is in the code, but not in the correct place. No peg means that a peg is not the correct number nor is it in the correct place. This is repeated until the code is correctly guessed. 
+ 
+**How to Play Mastermind Using Mouse:** Click and drag a numbered peg into a peg hole, then click “Make Guess.” 
+ 
+**How to Play Mastermind Using Keyboard:** Use the ‘A’, ‘S’, ‘D’, and ‘F’ keys to select a hole to place the peg. Use the number pad to enter a number from 1 to 6. Hit the spacebar to make a guess. The player will be given feedback on the accuracy of their guess. Pressing “Q” followed by a number will read back that row. This will allow users to look back row by row and remember past guesses
+
+
+
+
+## License
+This code it publicly available and licensed under GPLv3. 
