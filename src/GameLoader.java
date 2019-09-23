@@ -8,7 +8,15 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class GameLoader {
-    private static int getRequestedSudokuBoardSize(Scanner keyboard) {
+    private GameLoader() {
+        this.runGameLoader();
+    }
+
+    public static void main(String[] args) {
+        new GameLoader();
+    }
+
+    private int getRequestedSudokuBoardSize(Scanner keyboard) {
         ArrayList<Integer> SUPPORTED_SUDOKU_SIZES = new ArrayList<>(Arrays.asList(4, 9));
 
         int selectedBoardSize = -1;
@@ -30,10 +38,10 @@ public class GameLoader {
         return selectedBoardSize;
     }
 
-    public static void main(String[] args) {
+    private void runGameLoader() {
         final Scanner keyboard = new Scanner(System.in);
         final Map<String, Runnable> optionCharToGame = Map.of(
-                "S", () -> new SudokuBoard(getRequestedSudokuBoardSize(keyboard)),
+                "S", () -> new SudokuBoard(this.getRequestedSudokuBoardSize(keyboard)),
                 "A", () -> {
                     try {
                         new AudioPlayer(keyboard);
