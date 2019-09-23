@@ -1,19 +1,15 @@
 # Games For The Blind
-Games for the Blind is a computer game software specifically designed for the blind! The two games currently featured on this software are Sudoku and Mastermind. Both games are navigatable through the traditional QWERTY keyboard(with a number pad) and uses audio files to.
+Games for the Blind is a computer game program specifically designed for the blind. The two games currently featured on this software are Sudoku and Mastermind. Both games are navigable using a traditional QWERTY keyboard (with a number pad) and use prerecorded audio files to help explain the current game state to the player.
 
-
-## Requirements
-Self 
-Windows 7 
 
 ## Features
 
 **Self-Contained Program:**
 This program is not internet dependent and only uses libraries contained in version 12 of Oracle's Java Developement Kit.
 
-**Software GUI (Frontend):** The frontend of the software will consist of Java Swing components. It serves as a visual representation of the current game state, with the game state being updated as the game is played.
+**Software GUI (Frontend):** The frontend of the software consists of Java Swing components. It serves as a visual representation of the current game state, with the game state being updated as the game is played.
 
-**Software Backend:** The backend of our software consists of Java code that generates a new game state in the form of a Sudoku board or Mastermind 4-digit code for the user to solve. For Sudoku, the backend ensures that only valid numbers are placed on the board, as blind users would likely otherwise become very frustrated.
+**Software Backend:** The backend of our software consists of Java code that generates a new game state in the form of a Sudoku board or Mastermind 4-digit code for the user to solve. For Sudoku, the backend ensures that only valid numbers are placed on the board,as blind users would likely otherwise become very frustrated.
 
 **Software Synthesizer:** This Java code calls into a series of prerecorded audio files (spoken in English), which will allow a blind user to navigate and understand the current state of the game that is being played.
 
@@ -25,20 +21,21 @@ Games for the Blind uses izPack 5.1 to create a JAR installer file for the  appl
 2. embed JDK 12 into this executable installer file.
 Games for the Blind can be easily installed by blind users. 
 
-## Technical
-
 
 ## Sudoku User Manual
-**Rules**  
+### Rules  
 The goal of Sudoku is to fill up the missing numbers on the board so that no number is repeated in each block, row, and column. 
  
-**4x4 Board:** A 4x4 Sudoku board is broken into four blocks. Each block contains four squares for numbers to be placed. The squares will be filled in with the numbers 1-4 such that no number is repeated in each block, row, and column. 
+**4x4 Board:** 
+A 4x4 Sudoku board is broken into four blocks. Each block contains four squares for numbers to be placed. The squares will be filled in with the numbers 1-4 such that no number is repeated in each block, row, and column. 
  
-**6x6 Board:** A 6x6 Sudoku board is somewhat different. The board is broken into six rectangles, each with six squares for numbers to be placed. Each block has two rows and 3 columns of squares to place the numbers 1-6. The squares are arranged so that there are two columns and three rows of squares on the board. 
+**6x6 Board:** 
+A 6x6 Sudoku board is somewhat different. The board is broken into six rectangles, each with six squares for numbers to be placed. Each block has two rows and 3 columns of squares to place the numbers 1-6. The squares are arranged so that there are two columns and three rows of squares on the board. 
  
-**9x9 Board:** A 9x9 Sudoku board is broken into nine blocks. Each block contains squares for numbers to be placed. The squares must be filled with the numbers 1-9 such that no number is repeated twice in each block, row, and column. 
+**9x9 Board:** 
+A 9x9 Sudoku board is broken into nine blocks. Each block contains squares for numbers to be placed. The squares must be filled with the numbers 1-9 such that no number is repeated twice in each block, row, and column. 
  
-**Playing Instructions** 
+### How to Play 
  
 **How to Play Sudoku Using Mouse:** Simply click on the square where you would like to place a number and press the corresponding number on the number pad. 
  
