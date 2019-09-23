@@ -106,16 +106,16 @@ public class Grid {
 
     private static void verifyGrid(int[][] grid, int numSudokuSquares) {
         if (grid == null) {
-            throw new IllegalArgumentException("grid must not be null");
+            throw new IllegalArgumentException("Grid must not be null");
         }
 
         if (grid.length != numSudokuSquares) {
-            throw new IllegalArgumentException("grid must have nine rows");
+            throw new IllegalArgumentException("Grid must have " + numSudokuSquares + " rows");
         }
 
         for (int[] row : grid) {
             if (row.length != numSudokuSquares) {
-                throw new IllegalArgumentException("grid must have nine columns");
+                throw new IllegalArgumentException("Grid must have " + numSudokuSquares + " columns");
             }
 
             for (int value : row) {
