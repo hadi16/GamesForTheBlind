@@ -1,19 +1,19 @@
 package sudoku.gui;
 
-import sudoku.Direction;
 import sudoku.SudokuState;
+import sudoku.enums.Direction;
 import sudoku.generator.Grid;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class SudokuPanel extends JPanel {
-    private final SudokuState sudokuState;
     private final int sudokuBoardSize;
+    private SudokuState sudokuState;
 
-    public SudokuPanel(SudokuState sudokuState) {
-        this.sudokuState = sudokuState;
-        this.sudokuBoardSize = sudokuState.getSudokuBoardSize();
+    public SudokuPanel(SudokuState initialState) {
+        this.sudokuState = initialState;
+        this.sudokuBoardSize = initialState.getSudokuBoardSize();
     }
 
     private void paintHighlightedSquares(Graphics graphics, int rowIdx, int colIdx, int xPos, int yPos, int squareDim) {
@@ -51,7 +51,9 @@ public class SudokuPanel extends JPanel {
             int xPosition = (TOTAL_BOARD_LENGTH - (squareDimension * this.sudokuBoardSize)) / 2;
 
             for (int columnIndex = 0; columnIndex < this.sudokuBoardSize; columnIndex++) {
-                this.paintHighlightedSquares(graphics, rowIndex, columnIndex, xPosition, yPosition, squareDimension);
+                this.paintHighlightedSquares(
+                        graphics, rowIndex, columnIndex, xPosition, yPosition, squareDimension
+                );
 
                 graphics.setColor(Color.BLACK);
                 graphics.drawRect(xPosition, yPosition, squareDimension, squareDimension);
@@ -70,5 +72,9 @@ public class SudokuPanel extends JPanel {
 
             yPosition += squareDimension;
         }
+    }
+
+    public void setSudokuState(SudokuState sudokuState) {
+        this.sudokuState = sudokuState;
     }
 }

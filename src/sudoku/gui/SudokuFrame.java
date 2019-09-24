@@ -8,11 +8,9 @@ import javax.swing.*;
 public class SudokuFrame extends JFrame {
     private final SudokuPanel sudokuPanel;
 
-    public SudokuFrame(SudokuGame sudokuGame) {
-        SudokuState sudokuState = sudokuGame.getSudokuState();
-
-        this.sudokuPanel = new SudokuPanel(sudokuState);
-        this.initializeGui(new SudokuKeyboardListener(sudokuGame, sudokuState.getSudokuBoardSize()));
+    public SudokuFrame(SudokuGame sudokuGame, SudokuState initialState, int sudokuBoardSize) {
+        this.sudokuPanel = new SudokuPanel(initialState);
+        this.initializeGui(new SudokuKeyboardListener(sudokuGame, sudokuBoardSize));
     }
 
     private void initializeGui(SudokuKeyboardListener sudokuKeyboardListener) {
@@ -27,6 +25,10 @@ public class SudokuFrame extends JFrame {
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setSize(FRAME_DIMENSION, FRAME_DIMENSION);
         frame.setVisible(true);
+    }
+
+    public void receiveSudokuState(SudokuState state) {
+        this.sudokuPanel.setSudokuState(state);
     }
 
     public void repaintSudokuPanel() {

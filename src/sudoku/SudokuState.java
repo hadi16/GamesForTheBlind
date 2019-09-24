@@ -1,5 +1,6 @@
 package sudoku;
 
+import sudoku.enums.Direction;
 import sudoku.generator.Generator;
 import sudoku.generator.Grid;
 
@@ -15,6 +16,22 @@ public class SudokuState {
 
         this.sudokuBoardSize = sudokuBoardSize;
         this.sudokuGrid = new Generator(sudokuBoardSize).generate(numberOfEmptyCells);
+    }
+
+    public SudokuState(SudokuState originalState) {
+        this.sudokuBoardSize = originalState.sudokuBoardSize;
+        this.sudokuGrid = new Grid(originalState.sudokuGrid);
+
+        // Enums are immutable set (don't need copy constructor for them).
+        this.selectedBlockDirection = originalState.selectedBlockDirection;
+        this.selectedSquareDirection = originalState.selectedSquareDirection;
+    }
+
+    public void setSquareNumber(int numberToFill) {
+        if (this.selectedSquareDirection == null || this.selectedBlockDirection == null) {
+            System.err.println("YOu didn't select a square to fill first!");
+            return;
+        }
     }
 
     public void setHighlightedDirection(Direction directionToSet) {

@@ -2,6 +2,7 @@
 .vscode/
 out/
 
+*.DS_Store
 *.prefs
 *.class
 *.classpath

@@ -1,6 +1,6 @@
 package sudoku.action;
 
-import sudoku.Direction;
+import sudoku.enums.Direction;
 
 public class SudokuHighlightAction extends SudokuAction {
     private final Direction directionToHighlight;

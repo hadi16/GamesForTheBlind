@@ -1,8 +1,9 @@
 package sudoku.gui;
 
-import sudoku.Direction;
 import sudoku.SudokuGame;
+import sudoku.action.SudokuFillAction;
 import sudoku.action.SudokuHighlightAction;
+import sudoku.enums.Direction;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -45,13 +46,18 @@ public class SudokuKeyboardListener implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        char selectedKeyChar = Character.toUpperCase(e.getKeyChar());
+        if (Character.isDigit(e.getKeyChar())) {
+            this.sudokuGame.receiveAction(
+                    new SudokuFillAction(Character.getNumericValue(e.getKeyChar()))
+            );
+        }
 
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             this.sudokuGame.receiveAction(new SudokuHighlightAction(null));
             return;
         }
 
+        char selectedKeyChar = Character.toUpperCase(e.getKeyChar());
         Direction currentSelectedDirection = this.charToBoardDirection.get(selectedKeyChar);
         if (currentSelectedDirection == null) {
             System.err.println("An unrecognized key was pressed on the keyboard: " + selectedKeyChar);
