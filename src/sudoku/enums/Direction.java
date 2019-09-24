@@ -1,5 +1,6 @@
 package sudoku.enums;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -89,5 +90,52 @@ public enum Direction {
             default:
                 throw new IllegalArgumentException("Invalid value provided for the number of Sudoku blocks!");
         }
+    }
+
+    private static Point getBlockPoint(int numberOfBlocks, Direction blockDirection) {
+        for (int rowIdx = 0; rowIdx < numberOfBlocks; rowIdx++) {
+            for (int columnIdx = 0; columnIdx < numberOfBlocks; columnIdx++) {
+                boolean blockInDirection = blockInDirection(
+                        rowIdx * numberOfBlocks,
+                        columnIdx * numberOfBlocks,
+                        numberOfBlocks,
+                        blockDirection
+                );
+                if (blockInDirection) {
+                    return new Point(columnIdx, rowIdx);
+                }
+            }
+        }
+
+        throw new IllegalArgumentException("Could not find the selected block point!");
+    }
+
+    private static ArrayList<Integer> getSquareIndicesToCheck(int blockPointIdx, int numberOfBlocks) {
+        ArrayList<Integer> indicesToCheck = new ArrayList<>();
+        int currentIdx = blockPointIdx * numberOfBlocks;
+        while (indicesToCheck.size() != numberOfBlocks) {
+            indicesToCheck.add(currentIdx);
+            currentIdx++;
+        }
+        return indicesToCheck;
+    }
+
+    public static Point directionsToSudokuPoint(
+            int numberOfBlocks, Direction blockDirection, Direction squareDirection
+    ) {
+        Point blockPoint = getBlockPoint(numberOfBlocks, blockDirection);
+
+        ArrayList<Integer> rowIndicesToCheck = getSquareIndicesToCheck(blockPoint.y, numberOfBlocks);
+        ArrayList<Integer> columnIndicesToCheck = getSquareIndicesToCheck(blockPoint.x, numberOfBlocks);
+
+        for (int rowIdx : rowIndicesToCheck) {
+            for (int columnIdx : columnIndicesToCheck) {
+                if (squareInDirection(rowIdx, columnIdx, numberOfBlocks, blockDirection, squareDirection)) {
+                    return new Point(columnIdx, rowIdx);
+                }
+            }
+        }
+
+        throw new IllegalArgumentException("Could not find the square row & column idx!");
     }
 }
