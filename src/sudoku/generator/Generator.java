@@ -14,16 +14,16 @@ import java.util.Random;
  * A Generator to generate random Sudoku {@link Grid} instances.
  */
 public class Generator {
-    private final int numSudokuSquares;
+    private final int sudokuBoardSize;
 
     private Solver solver;
 
     /**
      * Constructs a new Generator instance.
      */
-    public Generator(int numSudokuSquares) {
-        this.solver = new Solver(numSudokuSquares);
-        this.numSudokuSquares = numSudokuSquares;
+    public Generator(int sudokuBoardSize) {
+        this.solver = new Solver(sudokuBoardSize);
+        this.sudokuBoardSize = sudokuBoardSize;
     }
 
     /**
@@ -45,8 +45,8 @@ public class Generator {
     private void eraseCells(Grid grid, int numberOfEmptyCells) {
         Random random = new Random();
         for (int i = 0; i < numberOfEmptyCells; i++) {
-            int randomRow = random.nextInt(this.numSudokuSquares);
-            int randomColumn = random.nextInt(this.numSudokuSquares);
+            int randomRow = random.nextInt(this.sudokuBoardSize);
+            int randomColumn = random.nextInt(this.sudokuBoardSize);
 
             Cell cell = grid.getCell(randomRow, randomColumn);
             if (!cell.isEmpty()) {
@@ -58,7 +58,7 @@ public class Generator {
     }
 
     private Grid generate() {
-        Grid grid = Grid.emptyGrid(this.numSudokuSquares);
+        Grid grid = Grid.emptyGrid(this.sudokuBoardSize);
 
         this.solver.solve(grid);
 

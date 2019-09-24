@@ -9,7 +9,7 @@
 package sudoku.generator;
 
 public class StringConverter {
-    public static String toString(Grid grid, int blockSize) {
+    public static String toString(Grid grid, int numberOfBlocks) {
         StringBuilder builder = new StringBuilder();
         int size = grid.getSize();
 
@@ -18,11 +18,11 @@ public class StringConverter {
             printRowBorder(builder);
             for (int column = 0; column < size; column++) {
                 printValue(builder, grid, row, column);
-                printRightColumnBorder(builder, column + 1, size, blockSize);
+                printRightColumnBorder(builder, column + 1, size, numberOfBlocks);
             }
             printRowBorder(builder);
             builder.append("\n");
-            printBottomRowBorder(builder, row + 1, size, blockSize);
+            printBottomRowBorder(builder, row + 1, size, numberOfBlocks);
         }
         printBottomBorder(builder);
 
@@ -43,24 +43,24 @@ public class StringConverter {
         builder.append(" ").append(output).append(" ");
     }
 
-    private static void printRightColumnBorder(StringBuilder builder, int column, int size, int blockSize) {
+    private static void printRightColumnBorder(StringBuilder builder, int column, int size, int numberOfBlocks) {
         if (column == size) {
             return;
         }
 
-        if (column % blockSize == 0) {
+        if (column % numberOfBlocks == 0) {
             builder.append("║");
         } else {
             builder.append("│");
         }
     }
 
-    private static void printBottomRowBorder(StringBuilder builder, int row, int size, int blockSize) {
+    private static void printBottomRowBorder(StringBuilder builder, int row, int size, int numberOfBlocks) {
         if (row == size) {
             return;
         }
 
-        if (row % blockSize == 0) {
+        if (row % numberOfBlocks == 0) {
             builder.append("╠═══╪═══╪═══╬═══╪═══╪═══╬═══╪═══╪═══╣\n");
         } else {
             builder.append("╟───┼───┼───╫───┼───┼───╫───┼───┼───╢\n");
