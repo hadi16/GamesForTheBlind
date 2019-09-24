@@ -6,14 +6,18 @@ import sudoku.generator.Grid;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class SudokuPanel extends JPanel {
     private final int sudokuBoardSize;
+    private final ArrayList<Point> originallyFilledSquares;
+
     private SudokuState sudokuState;
 
     public SudokuPanel(SudokuState initialState) {
         this.sudokuState = initialState;
         this.sudokuBoardSize = initialState.getSudokuBoardSize();
+        this.originallyFilledSquares = initialState.getOriginallyFilledSquares();
     }
 
     private void paintHighlightedSquares(Graphics graphics, int rowIdx, int colIdx, int xPos, int yPos, int squareDim) {
@@ -51,6 +55,11 @@ public class SudokuPanel extends JPanel {
             int xPosition = (TOTAL_BOARD_LENGTH - (squareDimension * this.sudokuBoardSize)) / 2;
 
             for (int columnIndex = 0; columnIndex < this.sudokuBoardSize; columnIndex++) {
+                graphics.setColor(Color.GRAY);
+                if (this.originallyFilledSquares.contains(new Point(columnIndex, rowIndex))) {
+                    graphics.fillRect(xPosition, yPosition, squareDimension, squareDimension);
+                }
+
                 this.paintHighlightedSquares(
                         graphics, rowIndex, columnIndex, xPosition, yPosition, squareDimension
                 );

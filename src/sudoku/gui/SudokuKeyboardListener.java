@@ -50,6 +50,7 @@ public class SudokuKeyboardListener implements KeyListener {
             this.sudokuGame.receiveAction(
                     new SudokuFillAction(Character.getNumericValue(e.getKeyChar()))
             );
+            return;
         }
 
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
