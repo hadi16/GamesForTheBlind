@@ -1,4 +1,4 @@
-package sudoku;
+package sudoku.enums;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,20 +64,20 @@ public enum Direction {
             return false;
         }
 
-        ArrayList<Integer> upperRighthandCornerIndices = new ArrayList<>(Collections.singletonList(0));
-        while (upperRighthandCornerIndices.size() != numberOfBlocks) {
-            upperRighthandCornerIndices.add(
-                    Collections.max(upperRighthandCornerIndices) + 1
+        ArrayList<Integer> upperRightHandCornerIndices = new ArrayList<>(Collections.singletonList(0));
+        while (upperRightHandCornerIndices.size() != numberOfBlocks) {
+            upperRightHandCornerIndices.add(
+                    Collections.max(upperRightHandCornerIndices) + 1
             );
         }
 
         int equivalentRowIdx = rowIdx;
-        while (!upperRighthandCornerIndices.contains(equivalentRowIdx)) {
+        while (!upperRightHandCornerIndices.contains(equivalentRowIdx)) {
             equivalentRowIdx -= numberOfBlocks;
         }
 
         int equivalentColIdx = columnIdx;
-        while (!upperRighthandCornerIndices.contains(equivalentColIdx)) {
+        while (!upperRightHandCornerIndices.contains(equivalentColIdx)) {
             equivalentColIdx -= numberOfBlocks;
         }
 
