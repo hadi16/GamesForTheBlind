@@ -1,5 +1,6 @@
 import audio_player.AudioPlayer;
-import sudoku.gui.SudokuBoard;
+import sudoku.SudokuGame;
+import sudoku.SudokuState;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class GameLoader {
     private void runGameLoader() {
         final Scanner keyboard = new Scanner(System.in);
         final Map<String, Runnable> optionCharToGame = Map.of(
-                "S", () -> new SudokuBoard(this.getRequestedSudokuBoardSize(keyboard)),
+                "S", () -> new SudokuGame(this.getRequestedSudokuBoardSize(keyboard)),
                 "A", () -> {
                     try {
                         new AudioPlayer(keyboard);

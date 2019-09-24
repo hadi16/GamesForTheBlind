@@ -5,7 +5,7 @@ Games for the Blind is a computer game program specifically designed for the bli
 ## Features
 
 **Self-Contained Program:**
-This program is not internet dependent and only uses libraries contained in version 12 of Oracle's Java Developement Kit.
+This program is not internet dependent and only uses libraries contained in version 12 of Oracle's Java Development Kit.
 
 **Software GUI (Frontend):** The frontend of the software consists of Java Swing components. It serves as a visual representation of the current game state, with the game state being updated as the game is played.
 
@@ -65,4 +65,4 @@ Example: Place a ‘3’ into the top-right square in the bottom-left block in a
 
 
 ## License
-This code it publicly available and licensed under GPLv3. 
+This code is publicly available and licensed under GPLv3. 

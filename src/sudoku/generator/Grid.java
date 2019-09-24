@@ -17,12 +17,12 @@ import java.util.Optional;
  * This class represents a Sudoku Grid consisting of a NxN matrix containing blocks of {@link Cell}s.
  */
 public class Grid {
-    private final int numSudokuSquares;
+    private final int sudokuBoardSize;
     private final Cell[][] grid;
 
-    private Grid(Cell[][] grid, int numSudokuSquares) {
+    private Grid(Cell[][] grid, int sudokuBoardSize) {
         this.grid = grid;
-        this.numSudokuSquares = numSudokuSquares;
+        this.sudokuBoardSize = sudokuBoardSize;
     }
 
     /**
@@ -54,8 +54,8 @@ public class Grid {
                 rows.get(row).add(cell);
                 columns.get(column).add(cell);
 
-                int blockSize = (int) Math.sqrt(numSudokuSquares);
-                boxes.get((row / blockSize) * blockSize + column / blockSize).add(cell);
+                int numberOfBlocks = (int) Math.sqrt(numSudokuSquares);
+                boxes.get((row / numberOfBlocks) * numberOfBlocks + column / numberOfBlocks).add(cell);
 
                 if (lastCell != null) {
                     lastCell.setNextCell(cell);
@@ -241,6 +241,6 @@ public class Grid {
      */
     @Override
     public String toString() {
-        return StringConverter.toString(this, (int) Math.sqrt(this.numSudokuSquares));
+        return StringConverter.toString(this, (int) Math.sqrt(this.sudokuBoardSize));
     }
 }
