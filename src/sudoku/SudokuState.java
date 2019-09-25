@@ -1,6 +1,5 @@
 package sudoku;
 
-import sudoku.enums.Direction;
 import sudoku.generator.Cell;
 import sudoku.generator.Generator;
 import sudoku.generator.Grid;
@@ -14,8 +13,8 @@ public class SudokuState {
 
     private final ArrayList<Point> originallyFilledSquares;
 
-    private Direction selectedBlockDirection;
-    private Direction selectedSquareDirection;
+    private Point selectedBlockPoint;
+    private Point selectedSquarePoint;
 
     public SudokuState(int sudokuBoardSize) {
         int numberOfEmptyCells = (sudokuBoardSize * sudokuBoardSize) / 3;
@@ -31,8 +30,8 @@ public class SudokuState {
         this.sudokuGrid = new Grid(originalState.sudokuGrid);
 
         // Enums are immutable set (don't need copy constructor for them).
-        this.selectedBlockDirection = originalState.selectedBlockDirection;
-        this.selectedSquareDirection = originalState.selectedSquareDirection;
+        this.selectedBlockPoint = originalState.selectedBlockPoint;
+        this.selectedSquarePoint = originalState.selectedSquarePoint;
 
         ArrayList<Point> originallyFilledSquares = new ArrayList<>();
         for (Point point : originalState.originallyFilledSquares) {
@@ -60,16 +59,16 @@ public class SudokuState {
             return;
         }
 
-        if (this.selectedSquareDirection == null || this.selectedBlockDirection == null) {
+        if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
             System.err.println("You didn't select a square to fill first!");
             return;
         }
 
-        Point squarePointToSet = Direction.directionsToSudokuPoint(
-                (int) Math.sqrt(this.sudokuBoardSize), this.selectedBlockDirection, this.selectedSquareDirection
+        int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
+        Cell cellToSet = this.sudokuGrid.getCell(
+                this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y,
+                this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x
         );
-
-        Cell cellToSet = this.sudokuGrid.getCell(squarePointToSet.y, squarePointToSet.x);
         if (cellToSet.getValue() != 0) {
             System.err.println("This cell is already set!");
             return;
@@ -83,27 +82,27 @@ public class SudokuState {
         cellToSet.setValue(numberToFill);
     }
 
-    public void setHighlightedDirection(Direction directionToSet) {
-        if (directionToSet == null) {
-            if (this.selectedSquareDirection != null) {
-                this.selectedSquareDirection = null;
+    public void setHighlightedPoint(Point pointToSet) {
+        if (pointToSet == null) {
+            if (this.selectedSquarePoint != null) {
+                this.selectedSquarePoint = null;
             } else {
-                this.selectedBlockDirection = null;
+                this.selectedBlockPoint = null;
             }
             return;
         }
 
-        if (this.selectedBlockDirection != null && this.selectedSquareDirection != null) {
+        if (this.selectedBlockPoint != null && this.selectedSquarePoint != null) {
             System.err.println("You have already selected both a block & square on the board!");
             return;
         }
 
-        if (this.selectedBlockDirection == null) {
-            this.selectedBlockDirection = directionToSet;
+        if (this.selectedBlockPoint == null) {
+            this.selectedBlockPoint = pointToSet;
             return;
         }
 
-        this.selectedSquareDirection = directionToSet;
+        this.selectedSquarePoint = pointToSet;
     }
 
     public int getSudokuBoardSize() {
@@ -114,12 +113,12 @@ public class SudokuState {
         return this.sudokuGrid;
     }
 
-    public Direction getSelectedBlockDirection() {
-        return this.selectedBlockDirection;
+    public Point getSelectedBlockPoint() {
+        return this.selectedBlockPoint;
     }
 
-    public Direction getSelectedSquareDirection() {
-        return this.selectedSquareDirection;
+    public Point getSelectedSquarePoint() {
+        return this.selectedSquarePoint;
     }
 
     public ArrayList<Point> getOriginallyFilledSquares() {
