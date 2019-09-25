@@ -15,8 +15,8 @@ public enum Direction {
     WEST(-1, 0),
     NORTHWEST(-1, -1);
 
-    public final int x;
-    public final int y;
+    private final int x;
+    private final int y;
 
     Direction(int x, int y) {
         this.x = x;

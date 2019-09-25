@@ -7,8 +7,7 @@ import java.util.Random;
  */
 public class Generator {
     private final int sudokuBoardSize;
-
-    private Solver solver;
+    private final Solver solver;
 
     /**
      * Constructs a new Generator instance.
