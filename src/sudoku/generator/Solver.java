@@ -1,11 +1,3 @@
-/*
- * Copyright (c) 2015 André Diermann
- *
- * Use of this source code is governed by an MIT-style
- * license that can be found in the LICENSE file or at
- * https://opensource.org/licenses/MIT.
- */
-
 package sudoku.generator;
 
 import java.util.ArrayList;
@@ -16,17 +8,15 @@ import java.util.Random;
  * A Solver is capable of solving a given Sudoku {@link Grid}.
  */
 public class Solver {
-    private final int numSudokuSquares;
-
     private static final int EMPTY = 0;
-
+    private final int sudokuBoardSize;
     private final int[] values;
 
     /**
      * Constructs a new Solver instance.
      */
-    public Solver(int numSudokuSquares) {
-        this.numSudokuSquares = numSudokuSquares;
+    public Solver(int sudokuBoardSize) {
+        this.sudokuBoardSize = sudokuBoardSize;
         this.values = this.generateRandomValues();
     }
 
@@ -66,13 +56,13 @@ public class Solver {
 
     private int[] generateRandomValues() {
         List<Integer> values = new ArrayList<>(EMPTY);
-        for (int i = 0; i < this.numSudokuSquares; i++) {
+        for (int i = 0; i < this.sudokuBoardSize; i++) {
             values.add(i + 1);
         }
 
         Random random = new Random();
-        for (int i = 0, j = random.nextInt(this.numSudokuSquares), tmp = values.get(j); i < values.size();
-             i++, j = random.nextInt(this.numSudokuSquares), tmp = values.get(j)) {
+        for (int i = 0, j = random.nextInt(this.sudokuBoardSize), tmp = values.get(j); i < values.size();
+             i++, j = random.nextInt(this.sudokuBoardSize), tmp = values.get(j)) {
             if (i == j) {
                 continue;
             }
