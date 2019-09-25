@@ -1,11 +1,3 @@
-/*
- * Copyright (c) 2015 André Diermann
- *
- * Use of this source code is governed by an MIT-style
- * license that can be found in the LICENSE file or at
- * https://opensource.org/licenses/MIT.
- */
-
 package sudoku.generator;
 
 import java.util.ArrayList;
@@ -17,12 +9,26 @@ import java.util.Optional;
  * This class represents a Sudoku Grid consisting of a NxN matrix containing blocks of {@link Cell}s.
  */
 public class Grid {
-    private final int numSudokuSquares;
+    private final int sudokuBoardSize;
     private final Cell[][] grid;
 
-    private Grid(Cell[][] grid, int numSudokuSquares) {
+    private Grid(Cell[][] grid, int sudokuBoardSize) {
         this.grid = grid;
-        this.numSudokuSquares = numSudokuSquares;
+        this.sudokuBoardSize = sudokuBoardSize;
+    }
+
+    public Grid(Grid originalGrid) {
+        int[][] gridNumbers = new int[originalGrid.sudokuBoardSize][];
+        for (int i = 0; i < gridNumbers.length; i++) {
+            gridNumbers[i] = new int[originalGrid.sudokuBoardSize];
+            for (int j = 0; j < gridNumbers[0].length; j++) {
+                gridNumbers[i][j] = originalGrid.grid[i][j].getValue();
+            }
+        }
+
+        Grid newGrid = Grid.of(gridNumbers, originalGrid.sudokuBoardSize);
+        this.sudokuBoardSize = newGrid.sudokuBoardSize;
+        this.grid = newGrid.grid;
     }
 
     /**
@@ -31,15 +37,15 @@ public class Grid {
      * @param grid a two-dimensional int-array representation of a Grid
      * @return a Grid instance corresponding to the provided two-dimensional int-array
      */
-    private static Grid of(int[][] grid, int numSudokuSquares) {
-        verifyGrid(grid, numSudokuSquares);
+    private static Grid of(int[][] grid, int sudokuBoardSize) {
+        verifyGrid(grid, sudokuBoardSize);
 
-        Cell[][] cells = new Cell[numSudokuSquares][numSudokuSquares];
+        Cell[][] cells = new Cell[sudokuBoardSize][sudokuBoardSize];
         List<List<Cell>> rows = new ArrayList<>();
         List<List<Cell>> columns = new ArrayList<>();
         List<List<Cell>> boxes = new ArrayList<>();
 
-        for (int i = 0; i < numSudokuSquares; i++) {
+        for (int i = 0; i < sudokuBoardSize; i++) {
             rows.add(new ArrayList<>());
             columns.add(new ArrayList<>());
             boxes.add(new ArrayList<>());
@@ -54,8 +60,8 @@ public class Grid {
                 rows.get(row).add(cell);
                 columns.get(column).add(cell);
 
-                int blockSize = (int) Math.sqrt(numSudokuSquares);
-                boxes.get((row / blockSize) * blockSize + column / blockSize).add(cell);
+                int numberOfBlocks = (int) Math.sqrt(sudokuBoardSize);
+                boxes.get((row / numberOfBlocks) * numberOfBlocks + column / numberOfBlocks).add(cell);
 
                 if (lastCell != null) {
                     lastCell.setNextCell(cell);
@@ -65,7 +71,7 @@ public class Grid {
             }
         }
 
-        for (int i = 0; i < numSudokuSquares; i++) {
+        for (int i = 0; i < sudokuBoardSize; i++) {
             List<Cell> row = rows.get(i);
             for (Cell cell : row) {
                 List<Cell> rowNeighbors = new ArrayList<>(row);
@@ -91,7 +97,7 @@ public class Grid {
             }
         }
 
-        return new Grid(cells, numSudokuSquares);
+        return new Grid(cells, sudokuBoardSize);
     }
 
     /**
@@ -106,16 +112,16 @@ public class Grid {
 
     private static void verifyGrid(int[][] grid, int numSudokuSquares) {
         if (grid == null) {
-            throw new IllegalArgumentException("grid must not be null");
+            throw new IllegalArgumentException("Grid must not be null");
         }
 
         if (grid.length != numSudokuSquares) {
-            throw new IllegalArgumentException("grid must have nine rows");
+            throw new IllegalArgumentException("Grid must have " + numSudokuSquares + " rows");
         }
 
         for (int[] row : grid) {
             if (row.length != numSudokuSquares) {
-                throw new IllegalArgumentException("grid must have nine columns");
+                throw new IllegalArgumentException("Grid must have " + numSudokuSquares + " columns");
             }
 
             for (int value : row) {
@@ -241,6 +247,6 @@ public class Grid {
      */
     @Override
     public String toString() {
-        return StringConverter.toString(this, (int) Math.sqrt(this.numSudokuSquares));
+        return StringConverter.toString(this, (int) Math.sqrt(this.sudokuBoardSize));
     }
 }
