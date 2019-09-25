@@ -1,6 +1,5 @@
 import audio_player.AudioPlayer;
 import sudoku.SudokuGame;
-import sudoku.SudokuState;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.util.ArrayList;
