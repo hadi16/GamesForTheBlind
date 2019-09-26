@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/GamesForTheBlind/src"/>
+	<classpathentry kind="src" path="/GamesForTheBlind/audio"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/com.google.cloud:google-cloud-texttospeech:0.111.0-beta"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/com.google.guava:guava:27.1-jre"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

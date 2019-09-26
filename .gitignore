@@ -6,5 +6,3 @@ out/
 *.DS_Store
 *.prefs
 *.class
-*.classpath
-*.project
