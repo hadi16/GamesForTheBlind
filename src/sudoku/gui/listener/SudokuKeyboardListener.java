@@ -4,6 +4,7 @@ import sudoku.InputType;
 import sudoku.SudokuGame;
 import sudoku.action.SudokuFillAction;
 import sudoku.action.SudokuHighlightAction;
+import synthesizer.Phrase;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -64,7 +65,7 @@ public class SudokuKeyboardListener implements KeyListener {
         char selectedKeyChar = Character.toUpperCase(e.getKeyChar());
         Point currentSelectedPoint = this.charToPoint.get(selectedKeyChar);
         if (currentSelectedPoint == null) {
-            System.err.println("An unrecognized key was pressed on the keyboard: " + selectedKeyChar);
+            System.err.println(Phrase.UNRECOGNIZED_KEY.getPhraseValue() + " (" + selectedKeyChar + ")");
             return;
         }
 

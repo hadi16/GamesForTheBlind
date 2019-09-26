@@ -3,6 +3,7 @@ package sudoku;
 import sudoku.generator.Cell;
 import sudoku.generator.Generator;
 import sudoku.generator.Grid;
+import synthesizer.Phrase;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class SudokuState {
 
     public void setSquareNumber(int numberToFill) {
         if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
-            System.err.println("You didn't select a square to fill first!");
+            System.err.println(Phrase.NO_SELECTED_SQUARE.getPhraseValue());
             return;
         }
 
@@ -68,7 +69,7 @@ public class SudokuState {
 
         if (numberToFill == 0) {
             if (this.originallyFilledSquares.contains(pointToSet)) {
-                System.err.println("You cannot delete an originally set square on the board!");
+                System.err.println(Phrase.CANNOT_DELETE_ORIGINAL.getPhraseValue());
             } else {
                 cellToSet.setValue(0);
             }
@@ -76,12 +77,13 @@ public class SudokuState {
         }
 
         if (!(numberToFill > 0 && numberToFill <= this.sudokuBoardSize)) {
-            System.err.println("The number to fill must be between 1 and " + this.sudokuBoardSize);
+            var phrase = this.sudokuBoardSize == 9 ? Phrase.INVALID_NUMBER_TO_FILL_9 : Phrase.INVALID_NUMBER_TO_FILL_4;
+            System.err.println(phrase.getPhraseValue());
             return;
         }
 
         if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
-            System.err.println("This value is invalid for the cell!");
+            System.err.println(Phrase.CELL_VALUE_INVALID.getPhraseValue());
             return;
         }
 
@@ -119,7 +121,7 @@ public class SudokuState {
         }
 
         if (this.selectedBlockPoint != null && this.selectedSquarePoint != null) {
-            System.err.println("You have already selected both a block & square on the board!");
+            System.err.println(Phrase.SELECTED_BOTH.getPhraseValue());
             return;
         }
 
