@@ -80,11 +80,6 @@ public class SudokuState {
             return;
         }
 
-        if (cellToSet.getValue() != 0) {
-            System.err.println("This cell is already set!");
-            return;
-        }
-
         if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
             System.err.println("This value is invalid for the cell!");
             return;
@@ -95,7 +90,7 @@ public class SudokuState {
 
     public void setHighlightedPoint(Point pointToSet, InputType inputType) {
         if (inputType == InputType.MOUSE) {
-            Point blockPointToSet =  new Point(
+            Point blockPointToSet = new Point(
                     pointToSet.x / this.sudokuBoardSize, pointToSet.y / this.sudokuBoardSize
             );
 

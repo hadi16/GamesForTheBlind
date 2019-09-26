@@ -1,5 +1,6 @@
 .idea/
 .vscode/
+lib/
 out/
 
 *.DS_Store

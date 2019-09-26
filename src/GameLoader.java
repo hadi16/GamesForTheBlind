@@ -1,5 +1,6 @@
 import audio_player.AudioPlayer;
 import sudoku.SudokuGame;
+import synthesizer.GoogleCloudSynthesizer;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.util.ArrayList;
@@ -8,11 +9,17 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class GameLoader {
+    private static boolean BUILD_PHRASES = false;
+
     private GameLoader() {
         this.runGameLoader();
     }
 
     public static void main(String[] args) {
+        if (BUILD_PHRASES) {
+            GoogleCloudSynthesizer.createPhraseAudioFiles();
+        }
+
         new GameLoader();
     }
 
