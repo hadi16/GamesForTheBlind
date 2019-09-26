@@ -1,5 +1,6 @@
-package sudoku.gui;
+package sudoku.gui.listener;
 
+import sudoku.InputType;
 import sudoku.SudokuGame;
 import sudoku.action.SudokuFillAction;
 import sudoku.action.SudokuHighlightAction;
@@ -54,7 +55,9 @@ public class SudokuKeyboardListener implements KeyListener {
         }
 
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            this.sudokuGame.receiveAction(new SudokuHighlightAction(null));
+            this.sudokuGame.receiveAction(
+                    new SudokuHighlightAction(null, InputType.KEYBOARD)
+            );
             return;
         }
 
@@ -65,7 +68,9 @@ public class SudokuKeyboardListener implements KeyListener {
             return;
         }
 
-        this.sudokuGame.receiveAction(new SudokuHighlightAction(currentSelectedPoint));
+        this.sudokuGame.receiveAction(
+                new SudokuHighlightAction(currentSelectedPoint, InputType.KEYBOARD)
+        );
     }
 
     @Override
