@@ -3,6 +3,7 @@
 lib/
 out/
 
+*.iml
 *.DS_Store
 *.prefs
 *.class
