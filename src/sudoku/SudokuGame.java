@@ -17,7 +17,9 @@ public class SudokuGame {
     public void receiveAction(SudokuAction sudokuAction) {
         if (sudokuAction instanceof SudokuHighlightAction) {
             SudokuHighlightAction sudokuHighlightAction = (SudokuHighlightAction) sudokuAction;
-            this.sudokuState.setHighlightedPoint(sudokuHighlightAction.getPointToHighlight());
+            this.sudokuState.setHighlightedPoint(
+                    sudokuHighlightAction.getPointToHighlight(), sudokuHighlightAction.getInputType()
+            );
 
             this.sendStateToGui();
             return;

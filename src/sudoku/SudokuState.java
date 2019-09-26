@@ -54,21 +54,32 @@ public class SudokuState {
     }
 
     public void setSquareNumber(int numberToFill) {
-        if (!(numberToFill > 0 && numberToFill <= this.sudokuBoardSize)) {
-            System.err.println("The number to fill must be between 1 and " + this.sudokuBoardSize);
-            return;
-        }
-
         if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
             System.err.println("You didn't select a square to fill first!");
             return;
         }
 
         int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
-        Cell cellToSet = this.sudokuGrid.getCell(
-                this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y,
-                this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x
+        Point pointToSet = new Point(
+                this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
+                this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
         );
+        Cell cellToSet = this.sudokuGrid.getCell(pointToSet.y, pointToSet.x);
+
+        if (numberToFill == 0) {
+            if (this.originallyFilledSquares.contains(pointToSet)) {
+                System.err.println("You cannot delete an originally set square on the board!");
+            } else {
+                cellToSet.setValue(0);
+            }
+            return;
+        }
+
+        if (!(numberToFill > 0 && numberToFill <= this.sudokuBoardSize)) {
+            System.err.println("The number to fill must be between 1 and " + this.sudokuBoardSize);
+            return;
+        }
+
         if (cellToSet.getValue() != 0) {
             System.err.println("This cell is already set!");
             return;
@@ -82,7 +93,27 @@ public class SudokuState {
         cellToSet.setValue(numberToFill);
     }
 
-    public void setHighlightedPoint(Point pointToSet) {
+    public void setHighlightedPoint(Point pointToSet, InputType inputType) {
+        if (inputType == InputType.MOUSE) {
+            Point blockPointToSet =  new Point(
+                    pointToSet.x / this.sudokuBoardSize, pointToSet.y / this.sudokuBoardSize
+            );
+
+            Point squarePointToSet = new Point(
+                    pointToSet.x % this.sudokuBoardSize, pointToSet.y % this.sudokuBoardSize
+            );
+
+            if (blockPointToSet.equals(this.selectedBlockPoint) && squarePointToSet.equals(this.selectedSquarePoint)) {
+                this.selectedBlockPoint = null;
+                this.selectedSquarePoint = null;
+                return;
+            }
+
+            this.selectedBlockPoint = blockPointToSet;
+            this.selectedSquarePoint = squarePointToSet;
+            return;
+        }
+
         if (pointToSet == null) {
             if (this.selectedSquarePoint != null) {
                 this.selectedSquarePoint = null;
