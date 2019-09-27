@@ -56,7 +56,9 @@ public class SudokuState {
 
     public void setSquareNumber(int numberToFill) {
         if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
-            System.err.println(Phrase.NO_SELECTED_SQUARE.getPhraseValue());
+            Phrase relevantPhrase = Phrase.NO_SELECTED_SQUARE;
+            relevantPhrase.playPhraseAudioFile();
+            System.err.println(relevantPhrase.getPhraseValue());
             return;
         }
 
@@ -69,7 +71,9 @@ public class SudokuState {
 
         if (numberToFill == 0) {
             if (this.originallyFilledSquares.contains(pointToSet)) {
-                System.err.println(Phrase.CANNOT_DELETE_ORIGINAL.getPhraseValue());
+                Phrase relevantPhrase = Phrase.CANNOT_DELETE_ORIGINAL;
+                relevantPhrase.playPhraseAudioFile();
+                System.err.println(relevantPhrase.getPhraseValue());
             } else {
                 cellToSet.setValue(0);
             }
@@ -78,12 +82,15 @@ public class SudokuState {
 
         if (!(numberToFill > 0 && numberToFill <= this.sudokuBoardSize)) {
             var phrase = this.sudokuBoardSize == 9 ? Phrase.INVALID_NUMBER_TO_FILL_9 : Phrase.INVALID_NUMBER_TO_FILL_4;
+            phrase.playPhraseAudioFile();
             System.err.println(phrase.getPhraseValue());
             return;
         }
 
         if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
-            System.err.println(Phrase.CELL_VALUE_INVALID.getPhraseValue());
+            Phrase relevantPhrase = Phrase.CELL_VALUE_INVALID;
+            relevantPhrase.playPhraseAudioFile();
+            System.err.println(relevantPhrase.getPhraseValue());
             return;
         }
 
@@ -117,7 +124,9 @@ public class SudokuState {
         }
 
         if (this.selectedBlockPoint != null && this.selectedSquarePoint != null) {
-            System.err.println(Phrase.SELECTED_BOTH.getPhraseValue());
+            Phrase relevantPhrase = Phrase.SELECTED_BOTH;
+            relevantPhrase.playPhraseAudioFile();
+            System.err.println(relevantPhrase.getPhraseValue());
             return;
         }
 
