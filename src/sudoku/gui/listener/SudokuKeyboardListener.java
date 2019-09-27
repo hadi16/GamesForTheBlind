@@ -65,7 +65,9 @@ public class SudokuKeyboardListener implements KeyListener {
         char selectedKeyChar = Character.toUpperCase(e.getKeyChar());
         Point currentSelectedPoint = this.charToPoint.get(selectedKeyChar);
         if (currentSelectedPoint == null) {
-            System.err.println(Phrase.UNRECOGNIZED_KEY.getPhraseValue() + " (" + selectedKeyChar + ")");
+            Phrase relevantPhrase = Phrase.UNRECOGNIZED_KEY;
+            relevantPhrase.playPhraseAudioFile();
+            System.err.println(relevantPhrase.getPhraseValue() + " (" + selectedKeyChar + ")");
             return;
         }
 

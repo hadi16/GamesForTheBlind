@@ -47,8 +47,8 @@ public enum Phrase {
     }
 
     public void playPhraseAudioFile() {
-        new MediaPlayer(
+        /*new MediaPlayer(
                 new Media(this.getPhraseAudioFile().toURI().toString())
-        ).play();
+        ).play();*/
     }
 }
