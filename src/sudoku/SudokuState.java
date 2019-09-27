@@ -92,13 +92,9 @@ public class SudokuState {
 
     public void setHighlightedPoint(Point pointToSet, InputType inputType) {
         if (inputType == InputType.MOUSE) {
-            Point blockPointToSet = new Point(
-                    pointToSet.x / this.sudokuBoardSize, pointToSet.y / this.sudokuBoardSize
-            );
-
-            Point squarePointToSet = new Point(
-                    pointToSet.x % this.sudokuBoardSize, pointToSet.y % this.sudokuBoardSize
-            );
+            int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
+            Point blockPointToSet = new Point(pointToSet.x / numberOfBlocks, pointToSet.y / numberOfBlocks);
+            Point squarePointToSet = new Point(pointToSet.x % numberOfBlocks, pointToSet.y % numberOfBlocks);
 
             if (blockPointToSet.equals(this.selectedBlockPoint) && squarePointToSet.equals(this.selectedSquarePoint)) {
                 this.selectedBlockPoint = null;
