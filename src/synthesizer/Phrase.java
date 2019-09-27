@@ -1,5 +1,12 @@
 package synthesizer;
 
+import com.google.common.hash.Hashing;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+
 public enum Phrase {
     IN_ROW("You have the following numbers in the same row: "),
     IN_COLUMN("You have the following numbers in the same column: "),
@@ -29,5 +36,19 @@ public enum Phrase {
 
     public String getPhraseValue() {
         return this.phraseValue;
+    }
+
+    public String getPhaseHashValue() {
+        return Hashing.sha256().hashString(phraseValue, StandardCharsets.UTF_8).toString();
+    }
+
+    public File getPhraseAudioFile() {
+        return new File("phrases/" + this.getPhaseHashValue() + ".mp3");
+    }
+
+    public void playPhraseAudioFile() {
+        new MediaPlayer(
+                new Media(this.getPhraseAudioFile().toURI().toString())
+        ).play();
     }
 }
