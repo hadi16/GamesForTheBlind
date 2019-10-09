@@ -4,6 +4,7 @@ import sudoku.InputType;
 import sudoku.SudokuGame;
 import sudoku.action.SudokuFillAction;
 import sudoku.action.SudokuHighlightAction;
+import synthesizer.AudioPlayer;
 import synthesizer.Phrase;
 
 import java.awt.*;
@@ -32,10 +33,11 @@ public class SudokuKeyboardListener implements KeyListener {
             )
     );
 
+    private final AudioPlayer audioPlayer;
     private final SudokuGame sudokuGame;
     private final Map<Character, Point> charToPoint;
 
-    public SudokuKeyboardListener(SudokuGame sudokuGame, int sudokuBoardSize) {
+    public SudokuKeyboardListener(SudokuGame sudokuGame, int sudokuBoardSize, AudioPlayer audioPlayer) {
         if (!BOARD_SIZE_TO_CHAR_TO_POINT.containsKey(sudokuBoardSize)) {
             throw new IllegalArgumentException(
                     "Improper Sudoku board size passed to keyboard listener: " + sudokuBoardSize
@@ -44,6 +46,7 @@ public class SudokuKeyboardListener implements KeyListener {
 
         this.sudokuGame = sudokuGame;
         this.charToPoint = BOARD_SIZE_TO_CHAR_TO_POINT.get(sudokuBoardSize);
+        this.audioPlayer = audioPlayer;
     }
 
     @Override
@@ -66,7 +69,7 @@ public class SudokuKeyboardListener implements KeyListener {
         Point currentSelectedPoint = this.charToPoint.get(selectedKeyChar);
         if (currentSelectedPoint == null) {
             Phrase relevantPhrase = Phrase.UNRECOGNIZED_KEY;
-            relevantPhrase.playPhraseAudioFile();
+            this.audioPlayer.playPhrases(new Phrase[]{relevantPhrase});
             System.err.println(relevantPhrase.getPhraseValue() + " (" + selectedKeyChar + ")");
             return;
         }

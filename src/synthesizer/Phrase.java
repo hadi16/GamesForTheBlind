@@ -1,11 +1,11 @@
 package synthesizer;
 
 import com.google.common.hash.Hashing;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public enum Phrase {
     IN_ROW("You have the following numbers in the same row: "),
@@ -28,6 +28,7 @@ public enum Phrase {
     EIGHT("8"),
     NINE("9");
 
+    public static final Path PHRASE_FILES_DIRECTORY = Paths.get(System.getProperty("user.dir"), "phrases/");
     private final String phraseValue;
 
     Phrase(String phraseValue) {
@@ -43,12 +44,8 @@ public enum Phrase {
     }
 
     public File getPhraseAudioFile() {
-        return new File("phrases/" + this.getPhaseHashValue() + ".mp3");
-    }
-
-    public void playPhraseAudioFile() {
-        /*new MediaPlayer(
-                new Media(this.getPhraseAudioFile().toURI().toString())
-        ).play();*/
+        return new File(
+                String.format("%s/%s.wav", PHRASE_FILES_DIRECTORY.toString(), this.getPhaseHashValue())
+        );
     }
 }

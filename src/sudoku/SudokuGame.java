@@ -4,14 +4,15 @@ import sudoku.action.SudokuAction;
 import sudoku.action.SudokuFillAction;
 import sudoku.action.SudokuHighlightAction;
 import sudoku.gui.SudokuFrame;
+import synthesizer.AudioPlayer;
 
 public class SudokuGame {
     private final SudokuState sudokuState;
     private final SudokuFrame sudokuFrame;
 
-    public SudokuGame(int sudokuBoardSize) {
-        this.sudokuState = new SudokuState(sudokuBoardSize);
-        this.sudokuFrame = new SudokuFrame(this, this.sudokuState, sudokuBoardSize);
+    public SudokuGame(int sudokuBoardSize, AudioPlayer audioPlayer) {
+        this.sudokuState = new SudokuState(sudokuBoardSize, audioPlayer);
+        this.sudokuFrame = new SudokuFrame(this, this.sudokuState, sudokuBoardSize, audioPlayer);
     }
 
     public void receiveAction(SudokuAction sudokuAction) {
