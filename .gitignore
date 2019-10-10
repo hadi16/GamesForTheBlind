@@ -1,9 +1,11 @@
 .idea/
 .vscode/
+lib/
 out/
 
+*.iml
 *.DS_Store
 *.prefs
 *.class
-*.classpath
-*.project
+
+google_api_key.json

@@ -2,29 +2,39 @@ package sudoku.gui;
 
 import sudoku.SudokuGame;
 import sudoku.SudokuState;
+import sudoku.gui.listener.SudokuKeyboardListener;
+import sudoku.gui.listener.SudokuMouseListener;
+import synthesizer.AudioPlayer;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class SudokuFrame extends JFrame {
+    private final JFrame frame;
     private final SudokuPanel sudokuPanel;
 
-    public SudokuFrame(SudokuGame sudokuGame, SudokuState initialState, int sudokuBoardSize) {
+    public SudokuFrame(SudokuGame sudokuGame, SudokuState initialState, int sudokuBoardSize, AudioPlayer audioPlayer) {
         this.sudokuPanel = new SudokuPanel(initialState);
-        this.initializeGui(new SudokuKeyboardListener(sudokuGame, sudokuBoardSize));
+        this.frame = new JFrame("Sudoku");
+
+        this.initializeGui(
+                new SudokuKeyboardListener(sudokuGame, sudokuBoardSize, audioPlayer),
+                new SudokuMouseListener(sudokuGame, this, sudokuBoardSize)
+        );
     }
 
-    private void initializeGui(SudokuKeyboardListener sudokuKeyboardListener) {
+    private void initializeGui(SudokuKeyboardListener sudokuKeyboardListener, SudokuMouseListener sudokuMouseListener) {
         final int FRAME_DIMENSION = 500;
 
-        JFrame frame = new JFrame("Sudoku");
+        this.frame.add(new JPanel());
+        this.frame.add(this.sudokuPanel);
 
-        frame.add(new JPanel());
-        frame.add(this.sudokuPanel);
-        frame.addKeyListener(sudokuKeyboardListener);
+        this.frame.addMouseListener(sudokuMouseListener);
+        this.frame.addKeyListener(sudokuKeyboardListener);
 
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        frame.setSize(FRAME_DIMENSION, FRAME_DIMENSION);
-        frame.setVisible(true);
+        this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.frame.setSize(FRAME_DIMENSION, FRAME_DIMENSION);
+        this.frame.setVisible(true);
     }
 
     public void receiveSudokuState(SudokuState state) {
@@ -33,5 +43,9 @@ public class SudokuFrame extends JFrame {
 
     public void repaintSudokuPanel() {
         this.sudokuPanel.repaint();
+    }
+
+    public Rectangle getFrameBounds() {
+        return new Rectangle(this.frame.getBounds());
     }
 }
