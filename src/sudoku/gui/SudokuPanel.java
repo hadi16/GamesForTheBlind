@@ -1,7 +1,6 @@
 package sudoku.gui;
 
 import sudoku.SudokuState;
-import sudoku.enums.Direction;
 import sudoku.generator.Grid;
 
 import javax.swing.*;
@@ -21,17 +20,26 @@ public class SudokuPanel extends JPanel {
     }
 
     private void paintHighlightedSquares(Graphics graphics, int rowIdx, int colIdx, int xPos, int yPos, int squareDim) {
-        Direction selectedBlockDir = this.sudokuState.getSelectedBlockDirection();
-        Direction selectedSquareDir = this.sudokuState.getSelectedSquareDirection();
+        Point selectedBlockPoint = this.sudokuState.getSelectedBlockPoint();
+        Point selectedSquarePoint = this.sudokuState.getSelectedSquarePoint();
 
         graphics.setColor(Color.YELLOW);
         int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
-        if (selectedSquareDir == null && selectedBlockDir != null) {
-            if (Direction.blockInDirection(rowIdx, colIdx, numberOfBlocks, selectedBlockDir)) {
+        if (selectedSquarePoint == null && selectedBlockPoint != null) {
+            int minRowIdx = selectedBlockPoint.y * numberOfBlocks;
+            int maxRowIdx = (selectedBlockPoint.y + 1) * numberOfBlocks - 1;
+
+            int minColumnIdx = selectedBlockPoint.x * numberOfBlocks;
+            int maxColumnIdx = (selectedBlockPoint.x + 1) * numberOfBlocks - 1;
+
+            if (rowIdx >= minRowIdx && rowIdx <= maxRowIdx && colIdx >= minColumnIdx && colIdx <= maxColumnIdx) {
                 graphics.fillRect(xPos, yPos, squareDim, squareDim);
             }
-        } else if (selectedSquareDir != null) {
-            if (Direction.squareInDirection(rowIdx, colIdx, numberOfBlocks, selectedBlockDir, selectedSquareDir)) {
+        } else if (selectedSquarePoint != null) {
+            int selectedRowIndex = selectedBlockPoint.y * numberOfBlocks + selectedSquarePoint.y;
+            int selectedColumnIndex = selectedBlockPoint.x * numberOfBlocks + selectedSquarePoint.x;
+
+            if (selectedRowIndex == rowIdx && selectedColumnIndex == colIdx) {
                 graphics.fillRect(xPos, yPos, squareDim, squareDim);
             }
         }

@@ -1,15 +1,23 @@
 package sudoku.action;
 
-import sudoku.enums.Direction;
+import sudoku.InputType;
+
+import java.awt.*;
 
 public class SudokuHighlightAction extends SudokuAction {
-    private final Direction directionToHighlight;
+    private final Point pointToHighlight;
+    private final InputType inputType;
 
-    public SudokuHighlightAction(Direction directionToHighlight) {
-        this.directionToHighlight = directionToHighlight;
+    public SudokuHighlightAction(Point pointToHighlight, InputType inputType) {
+        this.pointToHighlight = pointToHighlight;
+        this.inputType = inputType;
     }
 
-    public Direction getDirectionToHighlight() {
-        return this.directionToHighlight;
+    public Point getPointToHighlight() {
+        return this.pointToHighlight;
+    }
+
+    public InputType getInputType() {
+        return this.inputType;
     }
 }
