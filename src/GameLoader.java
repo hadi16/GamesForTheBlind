@@ -18,7 +18,11 @@ public class GameLoader {
             audioPlayer = new AudioPlayer();
         } catch (LineUnavailableException e) {
             e.printStackTrace();
+            System.exit(1);
         }
+
+        Thread audioPlayerThread = new Thread(audioPlayer);
+        audioPlayerThread.start();
 
         new SudokuGame(this.getRequestedSudokuBoardSize(keyboard), audioPlayer);
 
