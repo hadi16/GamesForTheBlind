@@ -60,7 +60,8 @@ public class SudokuState {
     public void setSquareNumber(int numberToFill) {
         if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
             Phrase relevantPhrase = Phrase.NO_SELECTED_SQUARE;
-            this.audioPlayer.playPhrases(new Phrase[]{relevantPhrase});
+
+            this.audioPlayer.replacePhraseToPlay(relevantPhrase);
             System.err.println(relevantPhrase.getPhraseValue());
             return;
         }
@@ -75,7 +76,7 @@ public class SudokuState {
         if (numberToFill == 0) {
             if (this.originallyFilledSquares.contains(pointToSet)) {
                 Phrase relevantPhrase = Phrase.CANNOT_DELETE_ORIGINAL;
-                this.audioPlayer.playPhrases(new Phrase[]{relevantPhrase});
+                this.audioPlayer.replacePhraseToPlay(relevantPhrase);
                 System.err.println(relevantPhrase.getPhraseValue());
             } else {
                 cellToSet.setValue(0);
@@ -84,15 +85,21 @@ public class SudokuState {
         }
 
         if (!(numberToFill > 0 && numberToFill <= this.sudokuBoardSize)) {
-            var phrase = this.sudokuBoardSize == 9 ? Phrase.INVALID_NUMBER_TO_FILL_9 : Phrase.INVALID_NUMBER_TO_FILL_4;
-            this.audioPlayer.playPhrases(new Phrase[]{phrase});
+            Phrase phrase;
+            if (this.sudokuBoardSize == 9) {
+                phrase = Phrase.INVALID_NUMBER_TO_FILL_9;
+            } else {
+                phrase = Phrase.INVALID_NUMBER_TO_FILL_4;
+            }
+
+            this.audioPlayer.replacePhraseToPlay(phrase);
             System.err.println(phrase.getPhraseValue());
             return;
         }
 
         if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
             Phrase relevantPhrase = Phrase.CELL_VALUE_INVALID;
-            this.audioPlayer.playPhrases(new Phrase[]{relevantPhrase});
+            this.audioPlayer.replacePhraseToPlay(relevantPhrase);
             System.err.println(relevantPhrase.getPhraseValue());
             return;
         }
@@ -128,7 +135,7 @@ public class SudokuState {
 
         if (this.selectedBlockPoint != null && this.selectedSquarePoint != null) {
             Phrase relevantPhrase = Phrase.SELECTED_BOTH;
-            this.audioPlayer.playPhrases(new Phrase[]{relevantPhrase});
+            this.audioPlayer.replacePhraseToPlay(relevantPhrase);
             System.err.println(relevantPhrase.getPhraseValue());
             return;
         }

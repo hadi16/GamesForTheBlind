@@ -69,7 +69,7 @@ public class SudokuKeyboardListener implements KeyListener {
         Point currentSelectedPoint = this.charToPoint.get(selectedKeyChar);
         if (currentSelectedPoint == null) {
             Phrase relevantPhrase = Phrase.UNRECOGNIZED_KEY;
-            this.audioPlayer.playPhrases(new Phrase[]{relevantPhrase});
+            this.audioPlayer.replacePhraseToPlay(relevantPhrase);
             System.err.println(relevantPhrase.getPhraseValue() + " (" + selectedKeyChar + ")");
             return;
         }
