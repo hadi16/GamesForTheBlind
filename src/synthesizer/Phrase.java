@@ -26,7 +26,24 @@ public enum Phrase {
     SIX("6"),
     SEVEN("7"),
     EIGHT("8"),
-    NINE("9");
+    NINE("9"),
+    INSTRUCTIONS9("welcome to sudoku! each of the nine blocks must contain the numbers 1 through 9 within its square." +
+            "each number can only appear once in a row, column or box." +
+            "each nine-square column, or nine-square row, within the entire board, must also have the numbers 1 through 9, without repetition."),
+    INSTRUCTIONS4("welcome to sudoku! each of the nine blocks must contain the numbers 1 through 9 within its square." +
+            "each number can only appear once in a row, column or box." +
+            "each nine-square column, or nine-square row, within the entire board, must also have the numbers 1 through 9, without repetition."),
+    CONGRATS("YOU'VE FINISHED THE GAME! CONGRATULATIONS!"),
+    EMPTY_PIECES_OF_BOARD_1("There are "),
+    EMPTY_PIECES_OF_BOARD_2("Empty squares left on the board."),
+    EMPTY_PIECES_OF_BOARD_3("There is "),
+    EMPTY_PIECES_OF_BOARD_4("Empty square left on the board."),
+    EMPTY_PIECES_IN_SECTION_1("Empty squares left in this section."),
+    EMPTY(" "),
+    CURRENT_VALUE("The current value in this box is "),
+    PLACED_NUM("You have placed a "),
+    ;
+
 
     public static final Path PHRASE_FILES_DIRECTORY = Paths.get(System.getProperty("user.dir"), "phrases/");
     private final String phraseValue;
