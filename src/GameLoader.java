@@ -1,19 +1,39 @@
-import audio_player.AudioPlayer;
 import sudoku.SudokuGame;
-import sudoku.SudokuState;
+import synthesizer.AudioPlayer;
+import synthesizer.GoogleCloudRetriever;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Scanner;
 
 public class GameLoader {
+    private static boolean BUILD_PHRASES = false;
+
     private GameLoader() {
-        this.runGameLoader();
+        final Scanner keyboard = new Scanner(System.in);
+
+        AudioPlayer audioPlayer = null;
+        try {
+            audioPlayer = new AudioPlayer();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        Thread audioPlayerThread = new Thread(audioPlayer);
+        audioPlayerThread.start();
+
+        new SudokuGame(this.getRequestedSudokuBoardSize(keyboard), audioPlayer);
+
+        keyboard.close();
     }
 
     public static void main(String[] args) {
+        if (BUILD_PHRASES) {
+            GoogleCloudRetriever.createPhraseAudioFiles();
+        }
+
         new GameLoader();
     }
 
@@ -37,29 +57,5 @@ public class GameLoader {
             }
         }
         return selectedBoardSize;
-    }
-
-    private void runGameLoader() {
-        final Scanner keyboard = new Scanner(System.in);
-        final Map<String, Runnable> optionCharToGame = Map.of(
-                "S", () -> new SudokuGame(this.getRequestedSudokuBoardSize(keyboard)),
-                "A", () -> {
-                    try {
-                        new AudioPlayer(keyboard);
-                    } catch (LineUnavailableException e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
-
-        Runnable gameToExecute = null;
-        while (gameToExecute == null) {
-            System.out.println("Press 'S' to launch Sudoku or 'A' to launch AudioPlayer.");
-            gameToExecute = optionCharToGame.get(keyboard.nextLine());
-        }
-
-        gameToExecute.run();
-
-        keyboard.close();
     }
 }

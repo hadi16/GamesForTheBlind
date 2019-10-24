@@ -1,29 +1,31 @@
 package sudoku;
 
-import sudoku.enums.Direction;
 import sudoku.generator.Cell;
 import sudoku.generator.Generator;
 import sudoku.generator.Grid;
+import synthesizer.AudioPlayer;
+import synthesizer.Phrase;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public class SudokuState {
+    private final AudioPlayer audioPlayer;
     private final int sudokuBoardSize;
     private final Grid sudokuGrid;
-
     private final ArrayList<Point> originallyFilledSquares;
 
-    private Direction selectedBlockDirection;
-    private Direction selectedSquareDirection;
+    private Point selectedBlockPoint;
+    private Point selectedSquarePoint;
 
-    public SudokuState(int sudokuBoardSize) {
+    public SudokuState(int sudokuBoardSize, AudioPlayer audioPlayer) {
         int numberOfEmptyCells = (sudokuBoardSize * sudokuBoardSize) / 3;
 
         this.sudokuBoardSize = sudokuBoardSize;
         this.sudokuGrid = new Generator(sudokuBoardSize).generate(numberOfEmptyCells);
 
         this.originallyFilledSquares = this.initializeOriginallyFilledSquares();
+        this.audioPlayer = audioPlayer;
     }
 
     public SudokuState(SudokuState originalState) {
@@ -31,14 +33,15 @@ public class SudokuState {
         this.sudokuGrid = new Grid(originalState.sudokuGrid);
 
         // Enums are immutable set (don't need copy constructor for them).
-        this.selectedBlockDirection = originalState.selectedBlockDirection;
-        this.selectedSquareDirection = originalState.selectedSquareDirection;
+        this.selectedBlockPoint = originalState.selectedBlockPoint;
+        this.selectedSquarePoint = originalState.selectedSquarePoint;
 
         ArrayList<Point> originallyFilledSquares = new ArrayList<>();
         for (Point point : originalState.originallyFilledSquares) {
             originallyFilledSquares.add(new Point(point));
         }
         this.originallyFilledSquares = originallyFilledSquares;
+        this.audioPlayer = originalState.audioPlayer;
     }
 
     private ArrayList<Point> initializeOriginallyFilledSquares() {
@@ -55,55 +58,94 @@ public class SudokuState {
     }
 
     public void setSquareNumber(int numberToFill) {
-        if (!(numberToFill > 0 && numberToFill <= this.sudokuBoardSize)) {
-            System.err.println("The number to fill must be between 1 and " + this.sudokuBoardSize);
+        if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
+            Phrase relevantPhrase = Phrase.NO_SELECTED_SQUARE;
+
+            this.audioPlayer.replacePhraseToPlay(relevantPhrase);
+            System.err.println(relevantPhrase.getPhraseValue());
             return;
         }
 
-        if (this.selectedSquareDirection == null || this.selectedBlockDirection == null) {
-            System.err.println("You didn't select a square to fill first!");
-            return;
-        }
-
-        Point squarePointToSet = Direction.directionsToSudokuPoint(
-                (int) Math.sqrt(this.sudokuBoardSize), this.selectedBlockDirection, this.selectedSquareDirection
+        int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
+        Point pointToSet = new Point(
+                this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
+                this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
         );
+        Cell cellToSet = this.sudokuGrid.getCell(pointToSet.y, pointToSet.x);
 
-        Cell cellToSet = this.sudokuGrid.getCell(squarePointToSet.y, squarePointToSet.x);
-        if (cellToSet.getValue() != 0) {
-            System.err.println("This cell is already set!");
+        if (numberToFill == 0) {
+            if (this.originallyFilledSquares.contains(pointToSet)) {
+                Phrase relevantPhrase = Phrase.CANNOT_DELETE_ORIGINAL;
+                this.audioPlayer.replacePhraseToPlay(relevantPhrase);
+                System.err.println(relevantPhrase.getPhraseValue());
+            } else {
+                cellToSet.setValue(0);
+            }
+            return;
+        }
+
+        if (!(numberToFill > 0 && numberToFill <= this.sudokuBoardSize)) {
+            Phrase phrase;
+            if (this.sudokuBoardSize == 9) {
+                phrase = Phrase.INVALID_NUMBER_TO_FILL_9;
+            } else {
+                phrase = Phrase.INVALID_NUMBER_TO_FILL_4;
+            }
+
+            this.audioPlayer.replacePhraseToPlay(phrase);
+            System.err.println(phrase.getPhraseValue());
             return;
         }
 
         if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
-            System.err.println("This value is invalid for the cell!");
+            Phrase relevantPhrase = Phrase.CELL_VALUE_INVALID;
+            this.audioPlayer.replacePhraseToPlay(relevantPhrase);
+            System.err.println(relevantPhrase.getPhraseValue());
             return;
         }
 
         cellToSet.setValue(numberToFill);
     }
 
-    public void setHighlightedDirection(Direction directionToSet) {
-        if (directionToSet == null) {
-            if (this.selectedSquareDirection != null) {
-                this.selectedSquareDirection = null;
+    public void setHighlightedPoint(Point pointToSet, InputType inputType) {
+        if (inputType == InputType.MOUSE) {
+            int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
+            Point blockPointToSet = new Point(pointToSet.x / numberOfBlocks, pointToSet.y / numberOfBlocks);
+            Point squarePointToSet = new Point(pointToSet.x % numberOfBlocks, pointToSet.y % numberOfBlocks);
+
+            if (blockPointToSet.equals(this.selectedBlockPoint) && squarePointToSet.equals(this.selectedSquarePoint)) {
+                this.selectedBlockPoint = null;
+                this.selectedSquarePoint = null;
+                return;
+            }
+
+            this.selectedBlockPoint = blockPointToSet;
+            this.selectedSquarePoint = squarePointToSet;
+            return;
+        }
+
+        if (pointToSet == null) {
+            if (this.selectedSquarePoint != null) {
+                this.selectedSquarePoint = null;
             } else {
-                this.selectedBlockDirection = null;
+                this.selectedBlockPoint = null;
             }
             return;
         }
 
-        if (this.selectedBlockDirection != null && this.selectedSquareDirection != null) {
-            System.err.println("You have already selected both a block & square on the board!");
+        if (this.selectedBlockPoint != null && this.selectedSquarePoint != null) {
+            Phrase relevantPhrase = Phrase.SELECTED_BOTH;
+            this.audioPlayer.replacePhraseToPlay(relevantPhrase);
+            System.err.println(relevantPhrase.getPhraseValue());
             return;
         }
 
-        if (this.selectedBlockDirection == null) {
-            this.selectedBlockDirection = directionToSet;
+        if (this.selectedBlockPoint == null) {
+            this.selectedBlockPoint = pointToSet;
             return;
         }
 
-        this.selectedSquareDirection = directionToSet;
+        this.selectedSquarePoint = pointToSet;
     }
 
     public int getSudokuBoardSize() {
@@ -114,12 +156,12 @@ public class SudokuState {
         return this.sudokuGrid;
     }
 
-    public Direction getSelectedBlockDirection() {
-        return this.selectedBlockDirection;
+    public Point getSelectedBlockPoint() {
+        return this.selectedBlockPoint;
     }
 
-    public Direction getSelectedSquareDirection() {
-        return this.selectedSquareDirection;
+    public Point getSelectedSquarePoint() {
+        return this.selectedSquarePoint;
     }
 
     public ArrayList<Point> getOriginallyFilledSquares() {
