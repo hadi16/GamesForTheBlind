@@ -26,7 +26,6 @@ public class SudokuFrame extends JFrame {
     private void initializeGui(SudokuKeyboardListener sudokuKeyboardListener, SudokuMouseListener sudokuMouseListener) {
         final int FRAME_DIMENSION = 500;
 
-        this.frame.add(new JPanel());
         this.frame.add(this.sudokuPanel);
 
         this.frame.addMouseListener(sudokuMouseListener);
