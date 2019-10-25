@@ -19,7 +19,6 @@ public class Solver {
         this.sudokuBoardSize = sudokuBoardSize;
         this.values = this.generateRandomValues();
     }
-
     /**
      * Solves a given {@link Grid} using backtracking.
      *
@@ -32,6 +31,14 @@ public class Solver {
         if (!solvable) {
             throw new IllegalStateException("The provided grid is not solvable.");
         }
+        return true;
+    }
+    public boolean superSolver(Grid grid) {
+        boolean solvable = this.solve(grid, grid.getFirstEmptyCell().orElse(null));
+        if (solvable) {
+            return true;
+        }
+        return false;
     }
 
     private boolean solve(Grid grid, Cell cell) {

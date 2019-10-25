@@ -164,9 +164,12 @@ public class Grid {
      * @return true if the given value is valid or false otherwise
      */
     public boolean isValidValueForCell(Cell cell, int value) {
-        return this.isValidInRow(cell, value) && this.isValidInColumn(cell, value) && this.isValidInBox(cell, value);
+        Solver solver = new Solver(sudokuBoardSize);
+        if (solver.solve(this)) {
+            return this.isValidInRow(cell, value) && this.isValidInColumn(cell, value) && this.isValidInBox(cell, value);
+        }
+        else throw new IllegalStateException("Unsolveable puzzle");
     }
-
     private boolean isValidInRow(Cell cell, int value) {
         return !this.getRowValuesOf(cell).contains(value);
     }
