@@ -24,8 +24,9 @@ public class Solver {
      *
      * @param grid the {@link Grid} to solve
      * @throws IllegalStateException in case the provided {@link Grid} is invalid.
+     * @return
      */
-    public void solve(Grid grid) {
+    public boolean solve(Grid grid) {
         boolean solvable = this.solve(grid, grid.getFirstEmptyCell().orElse(null));
 
         if (!solvable) {
