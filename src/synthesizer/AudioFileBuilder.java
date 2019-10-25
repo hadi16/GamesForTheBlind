@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class AudioFileBuilder {
     private final File phraseDirectory;
@@ -22,13 +21,21 @@ public class AudioFileBuilder {
     }
 
     public void deleteOldPhraseAudioFiles() {
-        List<File> audioFiles = Arrays.asList(this.phraseDirectory.listFiles());
+        File[] filesInDirectory = this.phraseDirectory.listFiles();
+        if (filesInDirectory == null) {
+            return;
+        }
+        ArrayList<File> audioFiles = new ArrayList<>(Arrays.asList(filesInDirectory));
+
         for (Phrase phrase : Phrase.values()) {
             audioFiles.remove(phrase.getPhraseAudioFile());
         }
 
         for (File oldPhraseAudioFile : audioFiles) {
-            oldPhraseAudioFile.delete();
+            if (!oldPhraseAudioFile.isDirectory()) {
+                oldPhraseAudioFile.delete();
+                System.out.println("Deleted audio file: " + oldPhraseAudioFile.getPath());
+            }
         }
     }
 
