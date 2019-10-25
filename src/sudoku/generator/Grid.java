@@ -171,14 +171,18 @@ public class Grid {
         }
         else throw new IllegalStateException("Unsolveable puzzle");
     }
+
+    //checks to see if the number would be valid in the row
     private boolean isValidInRow(Cell cell, int value) {
         return !this.getRowValuesOf(cell).contains(value);
     }
 
+    //checks to see if the number would be valid in the column
     private boolean isValidInColumn(Cell cell, int value) {
         return !this.getColumnValuesOf(cell).contains(value);
     }
 
+    //checks to see if the number would be valid in a NxN box
     private boolean isValidInBox(Cell cell, int value) {
         return !this.getBoxValuesOf(cell).contains(value);
     }
