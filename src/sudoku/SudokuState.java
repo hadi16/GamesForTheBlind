@@ -18,6 +18,7 @@ public class SudokuState {
     private Point selectedBlockPoint;
     private Point selectedSquarePoint;
     private int count;
+    private int placedNum;
 
     public SudokuState(int sudokuBoardSize, AudioPlayer audioPlayer) {
         int numberOfEmptyCells = (sudokuBoardSize * sudokuBoardSize) / 3;
@@ -59,12 +60,47 @@ public class SudokuState {
         return originallyFilledSquares;
     }
 
-    public void readRemainingNumOfCells(){
+    public void readRemainingNumOfCells() {
         int counter = getCount();
+
+
 
         Phrase relevantPhrase = Phrase.CONGRATS;
         Phrase relevantPhrase1 = Phrase.EMPTY;
         Phrase relevantPhrase2 = Phrase.EMPTY;
+
+
+
+        if ( counter == 0) {
+            try {
+                this.audioPlayer.replacePhraseToPlay(relevantPhrase);
+                System.err.println(relevantPhrase.getPhraseValue());
+                Thread.sleep(2000);
+
+            } catch (Exception e) {
+                System.out.println((e));
+            }
+
+            //end game
+            Runtime.getRuntime().exit(1);
+            return;
+        }
+
+        if ( counter == 0) {
+            try {
+                this.audioPlayer.replacePhraseToPlay(relevantPhrase);
+                System.err.println(relevantPhrase.getPhraseValue());
+                Thread.sleep(2000);
+
+            } catch (Exception e) {
+                System.out.println((e));
+            }
+
+            //end game
+            Runtime.getRuntime().exit(1);
+            return;
+        }
+
         switch(counter){
             case 1:
                 relevantPhrase1 = Phrase.EMPTY_PIECES_OF_BOARD_3;
@@ -112,6 +148,7 @@ public class SudokuState {
                 relevantPhrase2 = Phrase.EMPTY_PIECES_OF_BOARD_2;
                 break;
         }
+
         try {
             this.audioPlayer.replacePhraseToPlay(relevantPhrase1);
             System.err.println(relevantPhrase1.getPhraseValue());
@@ -131,8 +168,8 @@ public class SudokuState {
     }
 
     public void readNumInSquare (int num) {
-
         Phrase relevantPhrase = Phrase.EMPTY;
+        this.placedNum = num;
 
         switch(num){
             case 1:
@@ -248,6 +285,7 @@ public class SudokuState {
     }
 
     public void setHighlightedPoint(Point pointToSet, InputType inputType) {
+
         if (inputType == InputType.MOUSE) {
             int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
             Point blockPointToSet = new Point(pointToSet.x / numberOfBlocks, pointToSet.y / numberOfBlocks);
@@ -274,10 +312,21 @@ public class SudokuState {
         }
 
         if (this.selectedBlockPoint != null && this.selectedSquarePoint != null) {
-            Phrase relevantPhrase = Phrase.SELECTED_BOTH;
-            this.audioPlayer.replacePhraseToPlay(relevantPhrase);
-            System.err.println(relevantPhrase.getPhraseValue());
-            return;
+            Cell cell = this.sudokuGrid.getCell(pointToSet.y, pointToSet.x);
+            try {
+                this.audioPlayer.replacePhraseToPlay(Phrase.CURRENT_VALUE);
+                System.err.println(Phrase.CURRENT_VALUE.getPhraseValue());
+                Thread.sleep(1000);
+
+                readNumInSquare(cell.getValue());
+
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+
+
+        return;
         }
 
         if (this.selectedBlockPoint == null) {
@@ -287,6 +336,7 @@ public class SudokuState {
 
         this.selectedSquarePoint = pointToSet;
     }
+
 
     /*
     - changing "You have already selected both a block & square on the board." to "current value in this box is"
@@ -298,6 +348,8 @@ public class SudokuState {
     }
 
     public void readTheRow(){
+
+
         return;
     }
 
