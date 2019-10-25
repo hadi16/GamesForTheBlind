@@ -7,9 +7,10 @@ import synthesizer.AudioPlayer;
 import synthesizer.Phrase;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-public class SudokuState {
+public class SudokuState{
     private final AudioPlayer audioPlayer;
     private final int sudokuBoardSize;
     private final Grid sudokuGrid;
@@ -18,7 +19,6 @@ public class SudokuState {
     private Point selectedBlockPoint;
     private Point selectedSquarePoint;
     private int count;
-    private int placedNum;
 
     public SudokuState(int sudokuBoardSize, AudioPlayer audioPlayer) {
         int numberOfEmptyCells = (sudokuBoardSize * sudokuBoardSize) / 3;
@@ -169,7 +169,6 @@ public class SudokuState {
 
     public void readNumInSquare (int num) {
         Phrase relevantPhrase = Phrase.EMPTY;
-        this.placedNum = num;
 
         switch(num){
             case 1:
@@ -312,7 +311,7 @@ public class SudokuState {
         }
 
         if (this.selectedBlockPoint != null && this.selectedSquarePoint != null) {
-            Cell cell = this.sudokuGrid.getCell(pointToSet.y, pointToSet.x);
+            Cell cell = this.sudokuGrid.getCell(selectedSquarePoint.y, selectedSquarePoint.x);
             try {
                 this.audioPlayer.replacePhraseToPlay(Phrase.CURRENT_VALUE);
                 System.err.println(Phrase.CURRENT_VALUE.getPhraseValue());
@@ -339,23 +338,47 @@ public class SudokuState {
 
 
     /*
-    - changing "You have already selected both a block & square on the board." to "current value in this box is"
     - call instructions
      */
     public void readTheSection(){
     //can be later
         return;
     }
-
-    public void readTheRow(){
-
+    public void playInstruction(){
 
         return;
     }
+
+    public void readTheRow(){
+        int selectedRow = this.selectedSquarePoint.y;
+        for (int columnIdx = 0; columnIdx < this.sudokuBoardSize; columnIdx++) {
+                Cell cellAtPosition = this.sudokuGrid.getCell(selectedRow, columnIdx);
+                if (cellAtPosition.getValue() != 0) {
+                    readNumInSquare(cellAtPosition.getValue());
+                }
+            }
+
+        return;
+    }
+
+    public void keyPressed(KeyEvent e) {
+        if (Character.isAlphabetic(e.getKeyChar())) {
+            char selection = e.getKeyChar();
+            if(selection == 'I'){
+                if(sudokuBoardSize == 4){
+                    Phrase relevantPhrase = Phrase.INSTRUCTIONS4;
+                    this.audioPlayer.replacePhraseToPlay(relevantPhrase);
+                    System.err.println(relevantPhrase.getPhraseValue());
+
+                }
+            }
+        }
+        }
 
     public void readTheColumn(){
         return;
     }
+
 
     public int getSudokuBoardSize() {
         return this.sudokuBoardSize;
