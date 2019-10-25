@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class GameLoader {
-    private static boolean BUILD_PHRASES = true;
+    private static boolean BUILD_PHRASES = false;
 
     private GameLoader() {
         final Scanner keyboard = new Scanner(System.in);
