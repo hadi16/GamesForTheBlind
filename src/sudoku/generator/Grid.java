@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+
 /**
  * This class represents a Sudoku Grid consisting of a NxN matrix containing blocks of {@link Cell}s.
  */
@@ -207,7 +208,7 @@ public class Grid {
     }
 
     /**
-     * Returns the first empty {@link Cell} of this Grid. <br><br> Note: The result is wrapped by an
+     * Returns the first empty {@link Cell} of this e. <br><br> Note: The result is wrapped by an
      * {@link Optional}.
      *
      * @return a non-null value containing the first empty {@link Cell} if present
@@ -228,7 +229,7 @@ public class Grid {
      * @param cell the {@link Cell} of which the next empty {@link Cell} should be obtained
      * @return a non-null value containing the next empty {@link Cell} if present
      */
-    public Optional<Cell> getNextEmptyCellOf(Cell cell) {
+    Optional<Cell> getNextEmptyCellOf(Cell cell) {
         Cell nextEmptyCell = null;
 
         while ((cell = cell.getNextCell()) != null) {
