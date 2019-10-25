@@ -4,6 +4,7 @@ import sudoku.InputType;
 import sudoku.SudokuGame;
 import sudoku.action.SudokuFillAction;
 import sudoku.action.SudokuHighlightAction;
+import sudoku.action.SudokuReadPositionAction;
 import synthesizer.AudioPlayer;
 import synthesizer.Phrase;
 
@@ -71,7 +72,25 @@ public class SudokuKeyboardListener implements KeyListener {
         Point currentSelectedPoint = this.charToPoint.get(selectedKeyChar);
 
         if (currentSelectedPoint == null ) {
-            if (selectedKeyChar == 'I') {
+            /*
+                reads the entire row that the player is in
+             */
+            if (selectedKeyChar == 'J') {
+                String type = "row";
+                this.sudokuGame.receiveAction(
+                        new SudokuReadPositionAction(type)
+                );
+                return;
+
+            }
+            else if(selectedKeyChar == 'K'){
+                String type ="column";
+                this.sudokuGame.receiveAction(
+                        new SudokuReadPositionAction(type)
+                );
+                return;
+            }
+            else if (selectedKeyChar == 'I') {
                 if (sudokuBoardSize == 4) {
                     Phrase relevantPhrase = Phrase.INSTRUCTIONS4;
                     this.audioPlayer.replacePhraseToPlay(relevantPhrase);
@@ -86,7 +105,8 @@ public class SudokuKeyboardListener implements KeyListener {
                     return;
 
                 }
-            } else {
+            }
+            else {
                 Phrase relevantPhrase = Phrase.UNRECOGNIZED_KEY;
 
                 this.audioPlayer.replacePhraseToPlay(relevantPhrase);

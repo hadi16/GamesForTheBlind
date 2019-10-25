@@ -3,6 +3,7 @@ package sudoku;
 import sudoku.action.SudokuAction;
 import sudoku.action.SudokuFillAction;
 import sudoku.action.SudokuHighlightAction;
+import sudoku.action.SudokuReadPositionAction;
 import sudoku.gui.SudokuFrame;
 import synthesizer.AudioPlayer;
 
@@ -32,6 +33,20 @@ public class SudokuGame {
 
             this.sendStateToGui();
             return;
+        }
+
+        if(sudokuAction instanceof SudokuReadPositionAction) {
+            SudokuReadPositionAction sudokuReadPositionAction = (SudokuReadPositionAction) sudokuAction;
+            if (sudokuReadPositionAction.getType().equals("row")){
+                this.sudokuState.readTheRow();
+                this.sendStateToGui();
+                return;
+             }
+            else if (sudokuReadPositionAction.getType().equals("column")){
+                this.sudokuState.readTheColumn();
+                this.sendStateToGui();
+                return;
+            }
         }
 
         System.err.println("An unrecognized form of a Sudoku action was received by the game!");
