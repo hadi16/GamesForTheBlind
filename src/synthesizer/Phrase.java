@@ -8,9 +8,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public enum Phrase {
-    IN_ROW("You have the following numbers in the same row: "),
-    IN_COLUMN("You have the following numbers in the same column: "),
-    IN_BLOCK("You have the following numbers in the same block: "),
+    IN_ROW("You have the following numbers in the same row:"),
+    IN_COLUMN("You have the following numbers in the same column:"),
+    IN_BLOCK("You have the following numbers in the same block:"),
 
     NO_SELECTED_SQUARE("You didn't select a square to fill first."),
     CANNOT_DELETE_ORIGINAL("You cannot delete an originally set square on the board."),
@@ -21,8 +21,7 @@ public enum Phrase {
     INVALID_NUMBER_TO_FILL_4("The number to fill must be between 1 and 4"),
     INVALID_NUMBER_TO_FILL_9("The number to fill must be between 1 and 9"),
 
-    EMPTY(" "),
-    ZERO("0"),
+    EMPTY("EMPTY"),
     ONE("1"),
     TWO("2"),
     THREE("3"),
@@ -63,15 +62,15 @@ public enum Phrase {
 
     CONGRATS("YOU'VE FINISHED THE GAME! CONGRATULATIONS!"),
 
-    EMPTY_PIECES_OF_BOARD_PLURAL_1("There are "),
-    EMPTY_PIECES_OF_BOARD_PLURAL_2(" empty squares left on the board."),
-    EMPTY_PIECES_OF_BOARD_SINGULAR_1("There is "),
-    EMPTY_PIECES_OF_BOARD_SINGULAR_2(" empty square left on the board."),
-    EMPTY_PIECES_IN_SECTION(" empty squares left in this section."),
+    EMPTY_PIECES_OF_BOARD_PLURAL_1("There are"),
+    EMPTY_PIECES_OF_BOARD_PLURAL_2("empty squares left on the board."),
+    EMPTY_PIECES_OF_BOARD_SINGULAR_1("There is"),
+    EMPTY_PIECES_OF_BOARD_SINGULAR_2("empty square left on the board."),
+    EMPTY_PIECES_IN_SECTION("empty squares left in this section."),
 
-    CURRENT_VALUE("The current value in this box is "),
-    PLACED_NUM("You have placed a "),
-    REMOVED_NUM("You have removed the number ");
+    CURRENT_VALUE("The current value in this box is"),
+    PLACED_NUM("You have placed a"),
+    REMOVED_NUM("You have removed the number");
 
     public static final Path PHRASE_FILES_DIRECTORY = Paths.get(System.getProperty("user.dir"), "phrases/");
     private final String phraseValue;
@@ -96,7 +95,7 @@ public enum Phrase {
 
     public static Phrase convertIntegerToPhrase(int numberToConvert) {
         final Phrase[] NUM_PHRASE_LIST = new Phrase[]{
-                Phrase.ZERO,            Phrase.ONE,             Phrase.TWO,             Phrase.THREE,
+                Phrase.EMPTY,           Phrase.ONE,             Phrase.TWO,             Phrase.THREE,
                 Phrase.FOUR,            Phrase.FIVE,            Phrase.SIX,             Phrase.SEVEN,
                 Phrase.EIGHT,           Phrase.NINE,            Phrase.TEN,             Phrase.ELEVEN,
                 Phrase.TWELVE,          Phrase.THIRTEEN,        Phrase.FOURTEEN,        Phrase.FIFTEEN,
