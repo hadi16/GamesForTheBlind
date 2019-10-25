@@ -74,21 +74,19 @@ public class SudokuState {
     }
 
     private void readRemainingNumberOfCells() {
-        ArrayList<Phrase> phrasesToRead = new ArrayList<>();
-        if (this.numberOfEmptyCells >= 1 && this.numberOfEmptyCells <= 9) {
-            if (this.numberOfEmptyCells == 1) {
-                phrasesToRead = new ArrayList<>(Arrays.asList(
-                        Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_1, Phrase.ONE, Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_2)
-                );
-            } else {
-                phrasesToRead = new ArrayList<>(Arrays.asList(
-                        Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_1,
-                        Phrase.convertIntegerToPhrase(this.numberOfEmptyCells),
-                        Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_2
-                ));
-            }
-        } else if (this.numberOfEmptyCells == 0) {
+        ArrayList<Phrase> phrasesToRead;
+        if (this.numberOfEmptyCells == 0) {
             phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
+        } else if (this.numberOfEmptyCells == 1) {
+            phrasesToRead = new ArrayList<>(Arrays.asList(
+                    Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_1, Phrase.ONE, Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_2)
+            );
+        } else {
+            phrasesToRead = new ArrayList<>(Arrays.asList(
+                    Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_1,
+                    Phrase.convertIntegerToPhrase(this.numberOfEmptyCells),
+                    Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_2
+            ));
         }
 
         this.replacePhraseAndPrintToError(phrasesToRead);
@@ -110,16 +108,17 @@ public class SudokuState {
 
         if (numberToFill == 0) {
             if (this.originallyFilledSquares.contains(pointToSet)) {
+                // This square will always contain a number from 1-9 or 1-4 (never 0).
                 this.replacePhraseAndPrintToError(new ArrayList<>(Arrays.asList(
                         Phrase.CANNOT_DELETE_ORIGINAL,
                         Phrase.CURRENT_VALUE,
                         Phrase.convertIntegerToPhrase(cellToSet.getValue())
                 )));
             } else {
-                cellToSet.setValue(0);
                 this.replacePhraseAndPrintToError(new ArrayList<>(Arrays.asList(
-                        Phrase.PLACED_NUM, Phrase.convertIntegerToPhrase(cellToSet.getValue()))
+                        Phrase.REMOVED_NUM, Phrase.convertIntegerToPhrase(cellToSet.getValue()))
                 ));
+                cellToSet.setValue(0);
             }
             return;
         }
@@ -137,6 +136,10 @@ public class SudokuState {
         }
 
         cellToSet.setValue(numberToFill);
+        this.replacePhraseAndPrintToError(
+                new ArrayList<>(Arrays.asList(Phrase.PLACED_NUM, Phrase.convertIntegerToPhrase(numberToFill)))
+        );
+
         this.numberOfEmptyCells--;
         this.readRemainingNumberOfCells();
     }
@@ -178,19 +181,6 @@ public class SudokuState {
         }
 
         this.selectedSquarePoint = pointToSet;
-    }
-
-    /*
-    - changing "You have already selected both a block & square on the board." to "current value in this box is"
-    - call instructions
-     */
-    public void readTheSection() {
-    }
-
-    public void readTheRow() {
-    }
-
-    public void readTheColumn() {
     }
 
     public int getSudokuBoardSize() {

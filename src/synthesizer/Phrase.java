@@ -32,12 +32,12 @@ public enum Phrase {
     EIGHT("8"),
     NINE("9"),
 
-    INSTRUCTIONS_4("welcome to sudoku! each of the nine blocks must contain the numbers 1 through 9 within its square." +
-            "each number can only appear once in a row, column or box." +
-            "each nine-square column, or nine-square row, within the entire board, must also have the numbers 1 through 9, without repetition."),
-    INSTRUCTIONS_9("welcome to sudoku! each of the nine blocks must contain the numbers 1 through 9 within its square." +
-            "each number can only appear once in a row, column or box." +
-            "each nine-square column, or nine-square row, within the entire board, must also have the numbers 1 through 9, without repetition."),
+    INSTRUCTIONS_4("Welcome to Sudoku! Each of the four blocks must contain the numbers 1 through 4 " +
+            "within its square. Each number can only appear once in a row, column or box. Each four-square column, " +
+            "or four-square row, within the entire board, must also have the numbers 1 through 4, without repetition."),
+    INSTRUCTIONS_9("Welcome to Sudoku! Each of the nine blocks must contain the numbers 1 through 9 " +
+            "within its square. Each number can only appear once in a row, column or box. Each nine-square column, " +
+            "or nine-square row, within the entire board, must also have the numbers 1 through 9, without repetition."),
 
     CONGRATS("YOU'VE FINISHED THE GAME! CONGRATULATIONS!"),
 
@@ -48,7 +48,8 @@ public enum Phrase {
     EMPTY_PIECES_IN_SECTION("Empty squares left in this section."),
 
     CURRENT_VALUE("The current value in this box is "),
-    PLACED_NUM("You have placed a ");
+    PLACED_NUM("You have placed a "),
+    REMOVED_NUM("You have removed the number ");
 
     public static final Path PHRASE_FILES_DIRECTORY = Paths.get(System.getProperty("user.dir"), "phrases/");
     private final String phraseValue;
@@ -72,17 +73,16 @@ public enum Phrase {
     }
 
     public static Phrase convertIntegerToPhrase(int numberToConvert) {
-        if (!(numberToConvert >= 0 && numberToConvert <= 9)) {
-            throw new IllegalArgumentException("The number to convert must be between 0 and 9!");
+        if (numberToConvert <= 0) {
+            throw new IllegalArgumentException("The number to convert must be greater than 0!");
         }
 
         final Phrase[] NUM_PHRASE_LIST = new Phrase[]{
-                Phrase.EMPTY,
                 Phrase.ONE,     Phrase.TWO,     Phrase.THREE,
                 Phrase.FOUR,    Phrase.FIVE,    Phrase.SIX,
                 Phrase.SEVEN,   Phrase.EIGHT,   Phrase.NINE
         };
 
-        return NUM_PHRASE_LIST[numberToConvert];
+        return NUM_PHRASE_LIST[numberToConvert - 1];
     }
 }
