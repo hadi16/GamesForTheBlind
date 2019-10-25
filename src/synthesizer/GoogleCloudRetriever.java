@@ -41,6 +41,7 @@ public class GoogleCloudRetriever {
                 try (OutputStream out = new FileOutputStream(phraseFile)) {
                     out.write(audioContents.toByteArray());
                 }
+                System.out.println("Phrase audio file successfully saved: " + phrase);
             }
         } catch (IOException e) {
             e.printStackTrace();
