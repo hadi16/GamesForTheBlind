@@ -7,15 +7,40 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-public class GoogleCloudRetriever {
-    public static void createPhraseAudioFiles() {
-        try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
-            File phraseDirectory = new File(Phrase.PHRASE_FILES_DIRECTORY.toString());
-            if (!phraseDirectory.exists()) {
-                phraseDirectory.mkdirs();
+public class AudioFileBuilder {
+    private final File phraseDirectory;
+
+    public AudioFileBuilder() {
+        this.phraseDirectory = new File(Phrase.PHRASE_FILES_DIRECTORY.toString());
+        if (!this.phraseDirectory.exists()) {
+            this.phraseDirectory.mkdirs();
+        }
+    }
+
+    public void deleteOldPhraseAudioFiles() {
+        File[] filesInDirectory = this.phraseDirectory.listFiles();
+        if (filesInDirectory == null) {
+            return;
+        }
+        ArrayList<File> audioFiles = new ArrayList<>(Arrays.asList(filesInDirectory));
+
+        for (Phrase phrase : Phrase.values()) {
+            audioFiles.remove(phrase.getPhraseAudioFile());
+        }
+
+        for (File oldPhraseAudioFile : audioFiles) {
+            if (!oldPhraseAudioFile.isDirectory()) {
+                oldPhraseAudioFile.delete();
+                System.out.println("Deleted audio file: " + oldPhraseAudioFile.getPath());
             }
+        }
+    }
 
+    public void createPhraseAudioFiles() {
+        try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
             for (Phrase phrase : Phrase.values()) {
                 File phraseFile = phrase.getPhraseAudioFile();
                 if (phraseFile.exists()) {
@@ -41,6 +66,7 @@ public class GoogleCloudRetriever {
                 try (OutputStream out = new FileOutputStream(phraseFile)) {
                     out.write(audioContents.toByteArray());
                 }
+                System.out.println("Phrase audio file successfully saved: " + phrase);
             }
         } catch (IOException e) {
             e.printStackTrace();

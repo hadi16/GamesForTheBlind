@@ -1,14 +1,13 @@
 package sudoku.action;
 
-public class SudokuReadPositionAction extends SudokuAction{
-    private final String type;
+public class SudokuReadPositionAction extends SudokuAction {
+    private final boolean readRow;
 
-    public SudokuReadPositionAction(String type){
-        this.type = type;
+    public SudokuReadPositionAction(boolean readRow) {
+        this.readRow = readRow;
     }
 
-    public String getType(){
-        return this.type;
+    public boolean isReadRow() {
+        return this.readRow;
     }
 }
-
