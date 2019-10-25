@@ -10,6 +10,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Optional;
 
 public class SudokuState {
     private final AudioPlayer audioPlayer;
@@ -20,6 +21,8 @@ public class SudokuState {
     private Point selectedBlockPoint;
     private Point selectedSquarePoint;
     private int numberOfEmptyCells;
+
+    private boolean gameOver = false;
 
     public SudokuState(int sudokuBoardSize, AudioPlayer audioPlayer) {
         this.numberOfEmptyCells = (sudokuBoardSize * sudokuBoardSize) / 3;
@@ -46,6 +49,7 @@ public class SudokuState {
         this.originallyFilledSquares = originallyFilledSquares;
         this.audioPlayer = originalState.audioPlayer;
         this.numberOfEmptyCells = originalState.numberOfEmptyCells;
+        this.gameOver = originalState.gameOver;
     }
 
     private void replacePhraseAndPrintToError(Phrase relevantPhrase) {
@@ -73,10 +77,25 @@ public class SudokuState {
         return originallyFilledSquares;
     }
 
+    private Optional<Cell> getCurrentlySelectedCell() {
+        if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
+            return Optional.empty();
+        }
+
+        int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
+        Point newPoint = new Point(
+                this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
+                this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
+        );
+
+        return Optional.of(this.sudokuGrid.getCell(newPoint.y, newPoint.x));
+    }
+
     private void readRemainingNumberOfCells() {
         ArrayList<Phrase> phrasesToRead;
         if (this.numberOfEmptyCells == 0) {
             phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
+            this.gameOver = true;
         } else if (this.numberOfEmptyCells == 1) {
             phrasesToRead = new ArrayList<>(Arrays.asList(
                     Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_1, Phrase.ONE, Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_2)
@@ -170,8 +189,11 @@ public class SudokuState {
             return;
         }
 
-        if (this.selectedBlockPoint != null && this.selectedSquarePoint != null) {
-            this.replacePhraseAndPrintToError(Phrase.SELECTED_BOTH);
+        Optional<Cell> selectedCell = this.getCurrentlySelectedCell();
+        if (selectedCell.isPresent()) {
+            this.replacePhraseAndPrintToError(new ArrayList<>(Arrays.asList(
+                    Phrase.CURRENT_VALUE, Phrase.convertIntegerToPhrase(selectedCell.get().getValue())
+            )));
             return;
         }
 
@@ -181,6 +203,42 @@ public class SudokuState {
         }
 
         this.selectedSquarePoint = pointToSet;
+    }
+
+    public void readInstructions() {
+        this.replacePhraseAndPrintToError(
+                this.sudokuBoardSize == 9 ? Phrase.INSTRUCTIONS_9 : Phrase.INSTRUCTIONS_4
+        );
+    }
+
+    public void readUnrecognizedKey(char unrecognizedKey) {
+        this.audioPlayer.replacePhraseToPlay(Phrase.UNRECOGNIZED_KEY);
+        System.err.println(Phrase.UNRECOGNIZED_KEY.getPhraseValue() + "(" + unrecognizedKey + ")");
+    }
+
+    public void readRowOrColumn(boolean readRow) {
+        int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
+
+        Point selectedPoint = new Point(
+                this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
+                this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
+        );
+
+        ArrayList<Phrase> numbersToRead = new ArrayList<>();
+        for (int rowOrColumnIdx = 0; rowOrColumnIdx < this.sudokuBoardSize; rowOrColumnIdx++) {
+            Cell cellToRead;
+            if (readRow) {
+                cellToRead = this.sudokuGrid.getCell(selectedPoint.y, rowOrColumnIdx);
+            } else {
+                cellToRead = this.sudokuGrid.getCell(rowOrColumnIdx, selectedPoint.x);
+            }
+
+            int cellValue = cellToRead.getValue();
+            if (cellValue != 0) {
+                numbersToRead.add(Phrase.convertIntegerToPhrase(cellValue));
+            }
+        }
+        this.replacePhraseAndPrintToError(numbersToRead);
     }
 
     public int getSudokuBoardSize() {

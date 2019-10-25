@@ -16,12 +16,13 @@ public enum Phrase {
     CANNOT_DELETE_ORIGINAL("You cannot delete an originally set square on the board."),
     CELL_VALUE_INVALID("This value is invalid for the cell."),
     SELECTED_BOTH("You have already selected both a block & square on the board."),
-    UNRECOGNIZED_KEY("An unrecognized key was pressed on the keyboard."),
+    UNRECOGNIZED_KEY("An unrecognized key was pressed on the keyboard: "),
 
     INVALID_NUMBER_TO_FILL_4("The number to fill must be between 1 and 4"),
     INVALID_NUMBER_TO_FILL_9("The number to fill must be between 1 and 9"),
 
     EMPTY(" "),
+    ZERO("0"),
     ONE("1"),
     TWO("2"),
     THREE("3"),
@@ -31,6 +32,20 @@ public enum Phrase {
     SEVEN("7"),
     EIGHT("8"),
     NINE("9"),
+    TEN("10"),
+    ELEVEN("11"),
+    TWELVE("12"),
+    THIRTEEN("13"),
+    FOURTEEN("14"),
+    FIFTEEN("15"),
+    SIXTEEN("16"),
+    SEVENTEEN("17"),
+    EIGHTEEN("18"),
+    NINETEEN("19"),
+    TWENTY("20"),
+    TWENTY_ONE("21"),
+    TWENTY_TWO("22"),
+    TWENTY_THREE("23"),
 
     INSTRUCTIONS_4("Welcome to Sudoku! Each of the four blocks must contain the numbers 1 through 4 " +
             "within its square. Each number can only appear once in a row, column or box. Each four-square column, " +
@@ -73,16 +88,22 @@ public enum Phrase {
     }
 
     public static Phrase convertIntegerToPhrase(int numberToConvert) {
-        if (numberToConvert <= 0) {
-            throw new IllegalArgumentException("The number to convert must be greater than 0!");
-        }
-
         final Phrase[] NUM_PHRASE_LIST = new Phrase[]{
-                Phrase.ONE,     Phrase.TWO,     Phrase.THREE,
-                Phrase.FOUR,    Phrase.FIVE,    Phrase.SIX,
-                Phrase.SEVEN,   Phrase.EIGHT,   Phrase.NINE
+                Phrase.ZERO,        Phrase.ONE,         Phrase.TWO,         Phrase.THREE,           Phrase.FOUR,
+                Phrase.FIVE,        Phrase.SIX,         Phrase.SEVEN,       Phrase.EIGHT,           Phrase.NINE,
+                Phrase.TEN,         Phrase.ELEVEN,      Phrase.TWELVE,      Phrase.THIRTEEN,        Phrase.FOURTEEN,
+                Phrase.FIFTEEN,     Phrase.SIXTEEN,     Phrase.SEVENTEEN,   Phrase.EIGHTEEN,        Phrase.NINETEEN,
+                Phrase.TWENTY,      Phrase.TWENTY_ONE,  Phrase.TWENTY_TWO,  Phrase.TWENTY_THREE
         };
 
-        return NUM_PHRASE_LIST[numberToConvert - 1];
+        if (numberToConvert < 0) {
+            throw new IllegalArgumentException("The number to convert must be greater than or equal to 0!");
+        }
+
+        if (numberToConvert >= NUM_PHRASE_LIST.length) {
+            throw new IllegalArgumentException("The number to convert must be less than " + NUM_PHRASE_LIST.length);
+        }
+
+        return NUM_PHRASE_LIST[numberToConvert];
     }
 }
