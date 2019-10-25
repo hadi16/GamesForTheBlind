@@ -46,6 +46,13 @@ public enum Phrase {
     TWENTY_ONE("21"),
     TWENTY_TWO("22"),
     TWENTY_THREE("23"),
+    TWENTY_FOUR("24"),
+    TWENTY_FIVE("25"),
+    TWENTY_SIX("26"),
+    TWENTY_SEVEN("27"),
+    TWENTY_EIGHT("28"),
+    TWENTY_NINE("29"),
+    THIRTY("30"),
 
     INSTRUCTIONS_4("Welcome to Sudoku! Each of the four blocks must contain the numbers 1 through 4 " +
             "within its square. Each number can only appear once in a row, column or box. Each four-square column, " +
@@ -88,12 +95,16 @@ public enum Phrase {
     }
 
     public static Phrase convertIntegerToPhrase(int numberToConvert) {
+        System.out.println(numberToConvert);
         final Phrase[] NUM_PHRASE_LIST = new Phrase[]{
-                Phrase.ZERO,        Phrase.ONE,         Phrase.TWO,         Phrase.THREE,           Phrase.FOUR,
-                Phrase.FIVE,        Phrase.SIX,         Phrase.SEVEN,       Phrase.EIGHT,           Phrase.NINE,
-                Phrase.TEN,         Phrase.ELEVEN,      Phrase.TWELVE,      Phrase.THIRTEEN,        Phrase.FOURTEEN,
-                Phrase.FIFTEEN,     Phrase.SIXTEEN,     Phrase.SEVENTEEN,   Phrase.EIGHTEEN,        Phrase.NINETEEN,
-                Phrase.TWENTY,      Phrase.TWENTY_ONE,  Phrase.TWENTY_TWO,  Phrase.TWENTY_THREE
+                Phrase.ZERO,            Phrase.ONE,             Phrase.TWO,             Phrase.THREE,
+                Phrase.FOUR,            Phrase.FIVE,            Phrase.SIX,             Phrase.SEVEN,
+                Phrase.EIGHT,           Phrase.NINE,            Phrase.TEN,             Phrase.ELEVEN,
+                Phrase.TWELVE,          Phrase.THIRTEEN,        Phrase.FOURTEEN,        Phrase.FIFTEEN,
+                Phrase.SIXTEEN,         Phrase.SEVENTEEN,       Phrase.EIGHTEEN,        Phrase.NINETEEN,
+                Phrase.TWENTY,          Phrase.TWENTY_ONE,      Phrase.TWENTY_TWO,      Phrase.TWENTY_THREE,
+                Phrase.TWENTY_FOUR,     Phrase.TWENTY_FIVE,     Phrase.TWENTY_SIX,      Phrase.TWENTY_SEVEN,
+                Phrase.TWENTY_EIGHT,    Phrase.TWENTY_NINE,     Phrase.THIRTY
         };
 
         if (numberToConvert < 0) {

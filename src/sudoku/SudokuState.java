@@ -52,14 +52,14 @@ public class SudokuState {
         this.gameOver = originalState.gameOver;
     }
 
-    private void replacePhraseAndPrintToError(Phrase relevantPhrase) {
-        System.err.println(relevantPhrase.getPhraseValue());
+    private void replacePhraseAndPrint(Phrase relevantPhrase) {
+        System.out.println(relevantPhrase.getPhraseValue());
         this.audioPlayer.replacePhraseToPlay(relevantPhrase);
     }
 
-    private void replacePhraseAndPrintToError(ArrayList<Phrase> relevantPhraseList) {
-        relevantPhraseList.forEach(x -> System.err.print(x.getPhraseValue()));
-        System.err.println();
+    private void replacePhraseAndPrint(ArrayList<Phrase> relevantPhraseList) {
+        relevantPhraseList.forEach(x -> System.out.print(x.getPhraseValue()));
+        System.out.println();
 
         this.audioPlayer.replacePhraseToPlay(relevantPhraseList);
     }
@@ -108,12 +108,12 @@ public class SudokuState {
             ));
         }
 
-        this.replacePhraseAndPrintToError(phrasesToRead);
+        this.replacePhraseAndPrint(phrasesToRead);
     }
 
     public void setSquareNumber(int numberToFill) {
         if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
-            this.replacePhraseAndPrintToError(Phrase.NO_SELECTED_SQUARE);
+            this.replacePhraseAndPrint(Phrase.NO_SELECTED_SQUARE);
             this.readRemainingNumberOfCells();
             return;
         }
@@ -128,13 +128,13 @@ public class SudokuState {
         if (numberToFill == 0) {
             if (this.originallyFilledSquares.contains(pointToSet)) {
                 // This square will always contain a number from 1-9 or 1-4 (never 0).
-                this.replacePhraseAndPrintToError(new ArrayList<>(Arrays.asList(
+                this.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
                         Phrase.CANNOT_DELETE_ORIGINAL,
                         Phrase.CURRENT_VALUE,
                         Phrase.convertIntegerToPhrase(cellToSet.getValue())
                 )));
             } else {
-                this.replacePhraseAndPrintToError(new ArrayList<>(Arrays.asList(
+                this.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
                         Phrase.REMOVED_NUM, Phrase.convertIntegerToPhrase(cellToSet.getValue()))
                 ));
                 cellToSet.setValue(0);
@@ -143,19 +143,19 @@ public class SudokuState {
         }
 
         if (!(numberToFill > 0 && numberToFill <= this.sudokuBoardSize)) {
-            this.replacePhraseAndPrintToError(
+            this.replacePhraseAndPrint(
                     this.sudokuBoardSize == 9 ? Phrase.INVALID_NUMBER_TO_FILL_9 : Phrase.INVALID_NUMBER_TO_FILL_4
             );
             return;
         }
 
         if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
-            this.replacePhraseAndPrintToError(Phrase.CELL_VALUE_INVALID);
+            this.replacePhraseAndPrint(Phrase.CELL_VALUE_INVALID);
             return;
         }
 
         cellToSet.setValue(numberToFill);
-        this.replacePhraseAndPrintToError(
+        this.replacePhraseAndPrint(
                 new ArrayList<>(Arrays.asList(Phrase.PLACED_NUM, Phrase.convertIntegerToPhrase(numberToFill)))
         );
 
@@ -191,7 +191,7 @@ public class SudokuState {
 
         Optional<Cell> selectedCell = this.getCurrentlySelectedCell();
         if (selectedCell.isPresent()) {
-            this.replacePhraseAndPrintToError(new ArrayList<>(Arrays.asList(
+            this.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
                     Phrase.CURRENT_VALUE, Phrase.convertIntegerToPhrase(selectedCell.get().getValue())
             )));
             return;
@@ -206,14 +206,14 @@ public class SudokuState {
     }
 
     public void readInstructions() {
-        this.replacePhraseAndPrintToError(
+        this.replacePhraseAndPrint(
                 this.sudokuBoardSize == 9 ? Phrase.INSTRUCTIONS_9 : Phrase.INSTRUCTIONS_4
         );
     }
 
     public void readUnrecognizedKey(char unrecognizedKey) {
         this.audioPlayer.replacePhraseToPlay(Phrase.UNRECOGNIZED_KEY);
-        System.err.println(Phrase.UNRECOGNIZED_KEY.getPhraseValue() + "(" + unrecognizedKey + ")");
+        System.out.println(Phrase.UNRECOGNIZED_KEY.getPhraseValue() + "(" + unrecognizedKey + ")");
     }
 
     public void readRowOrColumn(boolean readRow) {
@@ -224,7 +224,8 @@ public class SudokuState {
                 this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
         );
 
-        ArrayList<Phrase> numbersToRead = new ArrayList<>();
+        ArrayList<Phrase> phrasesToRead = new ArrayList<>();
+        phrasesToRead.add(readRow ? Phrase.IN_ROW : Phrase.IN_COLUMN);
         for (int rowOrColumnIdx = 0; rowOrColumnIdx < this.sudokuBoardSize; rowOrColumnIdx++) {
             Cell cellToRead;
             if (readRow) {
@@ -235,10 +236,10 @@ public class SudokuState {
 
             int cellValue = cellToRead.getValue();
             if (cellValue != 0) {
-                numbersToRead.add(Phrase.convertIntegerToPhrase(cellValue));
+                phrasesToRead.add(Phrase.convertIntegerToPhrase(cellValue));
             }
         }
-        this.replacePhraseAndPrintToError(numbersToRead);
+        this.replacePhraseAndPrint(phrasesToRead);
     }
 
     public int getSudokuBoardSize() {
