@@ -49,6 +49,16 @@ public class AudioPlayer implements Runnable {
         }
     }
 
+    public void replacePhraseToPlay(ArrayList<Phrase> phrases) {
+        synchronized (this) {
+            if (this.clip.isRunning()) {
+                this.clip.close();
+            }
+
+            this.phrasesToPlay = phrases;
+        }
+    }
+
     @Override
     public void run() {
         while (true) {
