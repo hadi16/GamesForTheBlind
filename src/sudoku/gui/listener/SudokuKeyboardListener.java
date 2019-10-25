@@ -4,6 +4,7 @@ import sudoku.InputType;
 import sudoku.SudokuGame;
 import sudoku.action.SudokuFillAction;
 import sudoku.action.SudokuHighlightAction;
+import sudoku.action.SudokuReadPositionAction;
 import synthesizer.AudioPlayer;
 import synthesizer.Phrase;
 
@@ -36,6 +37,7 @@ public class SudokuKeyboardListener implements KeyListener {
     private final AudioPlayer audioPlayer;
     private final SudokuGame sudokuGame;
     private final Map<Character, Point> charToPoint;
+    private int sudokuBoardSize;
 
     public SudokuKeyboardListener(SudokuGame sudokuGame, int sudokuBoardSize, AudioPlayer audioPlayer) {
         if (!BOARD_SIZE_TO_CHAR_TO_POINT.containsKey(sudokuBoardSize)) {
@@ -47,6 +49,7 @@ public class SudokuKeyboardListener implements KeyListener {
         this.sudokuGame = sudokuGame;
         this.charToPoint = BOARD_SIZE_TO_CHAR_TO_POINT.get(sudokuBoardSize);
         this.audioPlayer = audioPlayer;
+        this.sudokuBoardSize = sudokuBoardSize;
     }
 
     @Override
@@ -67,11 +70,51 @@ public class SudokuKeyboardListener implements KeyListener {
 
         char selectedKeyChar = Character.toUpperCase(e.getKeyChar());
         Point currentSelectedPoint = this.charToPoint.get(selectedKeyChar);
-        if (currentSelectedPoint == null) {
-            Phrase relevantPhrase = Phrase.UNRECOGNIZED_KEY;
-            this.audioPlayer.replacePhraseToPlay(relevantPhrase);
-            System.err.println(relevantPhrase.getPhraseValue() + " (" + selectedKeyChar + ")");
-            return;
+
+        if (currentSelectedPoint == null ) {
+            /*
+                reads the entire row that the player is in
+             */
+            if (selectedKeyChar == 'J') {
+                String type = "row";
+                this.sudokuGame.receiveAction(
+                        new SudokuReadPositionAction(type)
+                );
+                return;
+
+            }
+            else if(selectedKeyChar == 'K'){
+                String type ="column";
+                this.sudokuGame.receiveAction(
+                        new SudokuReadPositionAction(type)
+                );
+                return;
+            }
+            else if (selectedKeyChar == 'I') {
+                if (sudokuBoardSize == 4) {
+                    Phrase relevantPhrase = Phrase.INSTRUCTIONS4;
+                    this.audioPlayer.replacePhraseToPlay(relevantPhrase);
+                    System.err.println(relevantPhrase.getPhraseValue());
+                    return;
+
+                }
+                if (sudokuBoardSize == 9) {
+                    Phrase relevantPhrase = Phrase.INSTRUCTIONS9;
+                    this.audioPlayer.replacePhraseToPlay(relevantPhrase);
+                    System.err.println(relevantPhrase.getPhraseValue());
+                    return;
+
+                }
+            }
+            else {
+                Phrase relevantPhrase = Phrase.UNRECOGNIZED_KEY;
+
+                this.audioPlayer.replacePhraseToPlay(relevantPhrase);
+                System.err.println(relevantPhrase.getPhraseValue() + " (" + selectedKeyChar + ")");
+                return;
+
+            }
+
         }
 
         this.sudokuGame.receiveAction(
