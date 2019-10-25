@@ -58,8 +58,9 @@ public class SudokuState {
     }
 
     private void replacePhraseAndPrint(ArrayList<Phrase> relevantPhraseList) {
-        relevantPhraseList.forEach(x -> System.out.print(x.getPhraseValue()));
-        System.out.println();
+        ArrayList<String> phraseStringList = new ArrayList<>();
+        relevantPhraseList.forEach(phrase -> phraseStringList.add(phrase.getPhraseValue()));
+        System.out.println(String.join(" ", phraseStringList));
 
         this.audioPlayer.replacePhraseToPlay(relevantPhraseList);
     }
@@ -239,10 +240,7 @@ public class SudokuState {
                 cellToRead = this.sudokuGrid.getCell(rowOrColumnIdx, selectedPoint.x);
             }
 
-            int cellValue = cellToRead.getValue();
-            if (cellValue != 0) {
-                phrasesToRead.add(Phrase.convertIntegerToPhrase(cellValue));
-            }
+            phrasesToRead.add(Phrase.convertIntegerToPhrase(cellToRead.getValue()));
         }
         this.replacePhraseAndPrint(phrasesToRead);
     }
