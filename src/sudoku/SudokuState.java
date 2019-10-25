@@ -1,5 +1,6 @@
 package sudoku;
 
+import org.apache.commons.lang3.ObjectUtils;
 import sudoku.generator.Cell;
 import sudoku.generator.Generator;
 import sudoku.generator.Grid;
@@ -7,9 +8,10 @@ import synthesizer.AudioPlayer;
 import synthesizer.Phrase;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-public class SudokuState {
+public class SudokuState{
     private final AudioPlayer audioPlayer;
     private final int sudokuBoardSize;
     private final Grid sudokuGrid;
@@ -18,6 +20,7 @@ public class SudokuState {
     private Point selectedBlockPoint;
     private Point selectedSquarePoint;
     private int count;
+    private Point pointSelected;
 
     public SudokuState(int sudokuBoardSize, AudioPlayer audioPlayer) {
         int numberOfEmptyCells = (sudokuBoardSize * sudokuBoardSize) / 3;
@@ -59,12 +62,47 @@ public class SudokuState {
         return originallyFilledSquares;
     }
 
-    public void readRemainingNumOfCells(){
+    public void readRemainingNumOfCells() {
         int counter = getCount();
+
+
 
         Phrase relevantPhrase = Phrase.CONGRATS;
         Phrase relevantPhrase1 = Phrase.EMPTY;
         Phrase relevantPhrase2 = Phrase.EMPTY;
+
+
+
+        if ( counter == 0) {
+            try {
+                this.audioPlayer.replacePhraseToPlay(relevantPhrase);
+                System.err.println(relevantPhrase.getPhraseValue());
+                Thread.sleep(2000);
+
+            } catch (Exception e) {
+                System.out.println((e));
+            }
+
+            //end game
+            Runtime.getRuntime().exit(1);
+            return;
+        }
+
+        if ( counter == 0) {
+            try {
+                this.audioPlayer.replacePhraseToPlay(relevantPhrase);
+                System.err.println(relevantPhrase.getPhraseValue());
+                Thread.sleep(2000);
+
+            } catch (Exception e) {
+                System.out.println((e));
+            }
+
+            //end game
+            Runtime.getRuntime().exit(1);
+            return;
+        }
+
         switch(counter){
             case 1:
                 relevantPhrase1 = Phrase.EMPTY_PIECES_OF_BOARD_3;
@@ -112,6 +150,7 @@ public class SudokuState {
                 relevantPhrase2 = Phrase.EMPTY_PIECES_OF_BOARD_2;
                 break;
         }
+
         try {
             this.audioPlayer.replacePhraseToPlay(relevantPhrase1);
             System.err.println(relevantPhrase1.getPhraseValue());
@@ -131,7 +170,6 @@ public class SudokuState {
     }
 
     public void readNumInSquare (int num) {
-
         Phrase relevantPhrase = Phrase.EMPTY;
 
         switch(num){
@@ -248,6 +286,7 @@ public class SudokuState {
     }
 
     public void setHighlightedPoint(Point pointToSet, InputType inputType) {
+        this.pointSelected = pointToSet;
         if (inputType == InputType.MOUSE) {
             int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
             Point blockPointToSet = new Point(pointToSet.x / numberOfBlocks, pointToSet.y / numberOfBlocks);
@@ -274,10 +313,28 @@ public class SudokuState {
         }
 
         if (this.selectedBlockPoint != null && this.selectedSquarePoint != null) {
-            Phrase relevantPhrase = Phrase.SELECTED_BOTH;
-            this.audioPlayer.replacePhraseToPlay(relevantPhrase);
-            System.err.println(relevantPhrase.getPhraseValue());
-            return;
+            int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
+
+            Point newPoint = new Point(
+                    this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
+                    this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
+            );
+            Cell cell = this.sudokuGrid.getCell(newPoint.y, newPoint.x);
+
+            try {
+                this.audioPlayer.replacePhraseToPlay(Phrase.CURRENT_VALUE);
+                System.err.println(Phrase.CURRENT_VALUE.getPhraseValue());
+                Thread.sleep(1500);
+
+                readNumInSquare(cell.getValue());
+
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+
+
+        return;
         }
 
         if (this.selectedBlockPoint == null) {
@@ -288,22 +345,77 @@ public class SudokuState {
         this.selectedSquarePoint = pointToSet;
     }
 
-    /*
-    - changing "You have already selected both a block & square on the board." to "current value in this box is"
-    - call instructions
-     */
+
     public void readTheSection(){
     //can be later
         return;
     }
 
+    /*
+    * reads the row that the player is currently in
+    *
+    *
+    * */
     public void readTheRow(){
+        int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
+
+        Point newPoint = new Point(
+                this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
+                this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
+        );
+        try {
+            int newYPoint = newPoint.y;
+            this.audioPlayer.replacePhraseToPlay(Phrase.IN_ROW);
+            System.err.println(Phrase.CURRENT_VALUE.getPhraseValue());
+            Thread.sleep(3000);
+            for (int columnIdx = 0; columnIdx < this.sudokuBoardSize; columnIdx++) {
+                Cell cellAtPosition = this.sudokuGrid.getCell(newYPoint, columnIdx);
+
+                if (cellAtPosition.getValue() != 0) {
+
+                    readNumInSquare(cellAtPosition.getValue());
+                    Thread.sleep(1000);
+
+
+                }
+            }
+        }catch (Exception e) {
+                System.out.println(e);
+            }
+
         return;
     }
 
+
     public void readTheColumn(){
+        int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
+
+        Point newPoint = new Point(
+                this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
+                this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
+        );
+        try {
+            int newXPoint = newPoint.x;
+            this.audioPlayer.replacePhraseToPlay(Phrase.IN_COLUMN);
+            System.err.println(Phrase.CURRENT_VALUE.getPhraseValue());
+            Thread.sleep(3000);
+            for (int rowIdx = 0; rowIdx < this.sudokuBoardSize; rowIdx++) {
+                Cell cellAtPosition = this.sudokuGrid.getCell(rowIdx, newXPoint);
+
+                if (cellAtPosition.getValue() != 0) {
+
+                    readNumInSquare(cellAtPosition.getValue());
+                    Thread.sleep(1000);
+
+                }
+            }
+        }catch (Exception e) {
+            System.out.println(e);
+        }
+
         return;
     }
+
 
     public int getSudokuBoardSize() {
         return this.sudokuBoardSize;
