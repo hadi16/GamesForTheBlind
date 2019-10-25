@@ -30,9 +30,9 @@ public enum Phrase {
     INSTRUCTIONS9("welcome to sudoku! each of the nine blocks must contain the numbers 1 through 9 within its square." +
             "each number can only appear once in a row, column or box." +
             "each nine-square column, or nine-square row, within the entire board, must also have the numbers 1 through 9, without repetition."),
-    INSTRUCTIONS4("welcome to sudoku! each of the nine blocks must contain the numbers 1 through 9 within its square." +
+    INSTRUCTIONS4("welcome to sudoku! each of the four blocks must contain the numbers 1 through 4 within its square." +
             "each number can only appear once in a row, column or box." +
-            "each nine-square column, or nine-square row, within the entire board, must also have the numbers 1 through 9, without repetition."),
+            "each four-square column, or four-square row, within the entire board, must also have the numbers 1 through 4, without repetition."),
     CONGRATS("YOU'VE FINISHED THE GAME! CONGRATULATIONS!"),
     EMPTY_PIECES_OF_BOARD_1("There are "),
     EMPTY_PIECES_OF_BOARD_2("Empty squares left on the board."),
