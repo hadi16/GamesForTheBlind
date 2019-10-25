@@ -1,9 +1,6 @@
 package sudoku;
 
-import sudoku.action.SudokuAction;
-import sudoku.action.SudokuFillAction;
-import sudoku.action.SudokuHighlightAction;
-import sudoku.action.SudokuReadPositionAction;
+import sudoku.action.*;
 import sudoku.gui.SudokuFrame;
 import synthesizer.AudioPlayer;
 
@@ -13,10 +10,21 @@ public class SudokuGame {
 
     public SudokuGame(int sudokuBoardSize, AudioPlayer audioPlayer) {
         this.sudokuState = new SudokuState(sudokuBoardSize, audioPlayer);
-        this.sudokuFrame = new SudokuFrame(this, this.sudokuState, sudokuBoardSize, audioPlayer);
+        this.sudokuFrame = new SudokuFrame(this, this.sudokuState, sudokuBoardSize);
     }
 
     public void receiveAction(SudokuAction sudokuAction) {
+        if (sudokuAction instanceof SudokuInstructionsAction) {
+            this.sudokuState.readInstructions();
+            return;
+        }
+
+        if (sudokuAction instanceof SudokuUnrecognizedKeyAction) {
+            SudokuUnrecognizedKeyAction sudokuUnrecognizedKeyAction = (SudokuUnrecognizedKeyAction) sudokuAction;
+            this.sudokuState.readUnrecognizedKey(sudokuUnrecognizedKeyAction.getUnrecognizedKey());
+            return;
+        }
+
         if (sudokuAction instanceof SudokuHighlightAction) {
             SudokuHighlightAction sudokuHighlightAction = (SudokuHighlightAction) sudokuAction;
             this.sudokuState.setHighlightedPoint(
@@ -35,18 +43,11 @@ public class SudokuGame {
             return;
         }
 
-        if(sudokuAction instanceof SudokuReadPositionAction) {
+        if (sudokuAction instanceof SudokuReadPositionAction) {
             SudokuReadPositionAction sudokuReadPositionAction = (SudokuReadPositionAction) sudokuAction;
-            if (sudokuReadPositionAction.getType().equals("row")){
-                this.sudokuState.readTheRow();
-                this.sendStateToGui();
-                return;
-             }
-            else if (sudokuReadPositionAction.getType().equals("column")){
-                this.sudokuState.readTheColumn();
-                this.sendStateToGui();
-                return;
-            }
+            this.sudokuState.readRowOrColumn(sudokuReadPositionAction.isReadRow());
+            this.sendStateToGui();
+            return;
         }
 
         System.err.println("An unrecognized form of a Sudoku action was received by the game!");

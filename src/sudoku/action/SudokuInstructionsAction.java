@@ -1,4 +1,4 @@
 package sudoku.action;
 
-public class SudokuInstructionsAction {
+public class SudokuInstructionsAction extends SudokuAction {
 }
