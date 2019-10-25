@@ -95,7 +95,6 @@ public class SudokuState {
         ArrayList<Phrase> phrasesToRead;
         if (this.numberOfEmptyCells == 0) {
             phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
-            this.gameOver = true;
         } else if (this.numberOfEmptyCells == 1) {
             phrasesToRead = new ArrayList<>(Arrays.asList(
                     Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_1, Phrase.ONE, Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_2)
@@ -157,13 +156,16 @@ public class SudokuState {
 
         cellToSet.setValue(numberToFill);
 
+        this.numberOfEmptyCells--;
+        if (this.numberOfEmptyCells == 0) {
+            this.gameOver = true;
+        }
+
         ArrayList<Phrase> phrasesToRead = new ArrayList<>(
                 Arrays.asList(Phrase.PLACED_NUM, Phrase.convertIntegerToPhrase(numberToFill))
         );
         phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
         this.replacePhraseAndPrint(phrasesToRead);
-
-        this.numberOfEmptyCells--;
     }
 
     public void setHighlightedPoint(Point pointToSet, InputType inputType) {
@@ -263,5 +265,9 @@ public class SudokuState {
 
     public ArrayList<Point> getOriginallyFilledSquares() {
         return this.originallyFilledSquares;
+    }
+
+    public boolean isGameOver() {
+        return this.gameOver;
     }
 }
