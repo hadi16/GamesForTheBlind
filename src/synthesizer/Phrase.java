@@ -42,6 +42,7 @@ public enum Phrase {
     EMPTY(" "),
     CURRENT_VALUE("The current value in this box is "),
     PLACED_NUM("You have placed a "),
+    EMPTY_SQUARE("An empty square"),
     ;
 
 

@@ -72,22 +72,6 @@ public class SudokuState{
         Phrase relevantPhrase2 = Phrase.EMPTY;
 
 
-
-        if ( counter == 0) {
-            try {
-                this.audioPlayer.replacePhraseToPlay(relevantPhrase);
-                System.err.println(relevantPhrase.getPhraseValue());
-                Thread.sleep(2000);
-
-            } catch (Exception e) {
-                System.out.println((e));
-            }
-
-            //end game
-            Runtime.getRuntime().exit(1);
-            return;
-        }
-
         if ( counter == 0) {
             try {
                 this.audioPlayer.replacePhraseToPlay(relevantPhrase);
@@ -346,10 +330,7 @@ public class SudokuState{
     }
 
 
-    public void readTheSection(){
-    //can be later
-        return;
-    }
+
 
     /*
     * reads the row that the player is currently in
@@ -359,6 +340,14 @@ public class SudokuState{
     public void readTheRow(){
         int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
 
+        if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
+            Phrase relevantPhrase = Phrase.NO_SELECTED_SQUARE;
+
+            this.audioPlayer.replacePhraseToPlay(relevantPhrase);
+            System.err.println(relevantPhrase.getPhraseValue());
+            return;
+        }
+
         Point newPoint = new Point(
                 this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
                 this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
@@ -366,7 +355,7 @@ public class SudokuState{
         try {
             int newYPoint = newPoint.y;
             this.audioPlayer.replacePhraseToPlay(Phrase.IN_ROW);
-            System.err.println(Phrase.CURRENT_VALUE.getPhraseValue());
+            System.err.println(Phrase.IN_ROW.getPhraseValue());
             Thread.sleep(3000);
             for (int columnIdx = 0; columnIdx < this.sudokuBoardSize; columnIdx++) {
                 Cell cellAtPosition = this.sudokuGrid.getCell(newYPoint, columnIdx);
@@ -375,8 +364,12 @@ public class SudokuState{
 
                     readNumInSquare(cellAtPosition.getValue());
                     Thread.sleep(1000);
-
-
+                }
+                else
+                {
+                    this.audioPlayer.replacePhraseToPlay(Phrase.EMPTY_SQUARE);
+                    System.err.println(Phrase.EMPTY_SQUARE.getPhraseValue());
+                    Thread.sleep(1000);
                 }
             }
         }catch (Exception e) {
@@ -390,6 +383,14 @@ public class SudokuState{
     public void readTheColumn(){
         int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
 
+        if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
+            Phrase relevantPhrase = Phrase.NO_SELECTED_SQUARE;
+
+            this.audioPlayer.replacePhraseToPlay(relevantPhrase);
+            System.err.println(relevantPhrase.getPhraseValue());
+            return;
+        }
+
         Point newPoint = new Point(
                 this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
                 this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
@@ -397,7 +398,7 @@ public class SudokuState{
         try {
             int newXPoint = newPoint.x;
             this.audioPlayer.replacePhraseToPlay(Phrase.IN_COLUMN);
-            System.err.println(Phrase.CURRENT_VALUE.getPhraseValue());
+            System.err.println(Phrase.IN_COLUMN.getPhraseValue());
             Thread.sleep(3000);
             for (int rowIdx = 0; rowIdx < this.sudokuBoardSize; rowIdx++) {
                 Cell cellAtPosition = this.sudokuGrid.getCell(rowIdx, newXPoint);
@@ -406,7 +407,12 @@ public class SudokuState{
 
                     readNumInSquare(cellAtPosition.getValue());
                     Thread.sleep(1000);
-
+                }
+                else
+                {
+                    this.audioPlayer.replacePhraseToPlay(Phrase.EMPTY_SQUARE);
+                    System.err.println(Phrase.EMPTY_SQUARE.getPhraseValue());
+                    Thread.sleep(1000);
                 }
             }
         }catch (Exception e) {
