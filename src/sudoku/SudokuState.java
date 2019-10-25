@@ -91,7 +91,7 @@ public class SudokuState {
         return Optional.of(this.sudokuGrid.getCell(newPoint.y, newPoint.x));
     }
 
-    private void readRemainingNumberOfCells() {
+    private ArrayList<Phrase> getRemainingNumberOfEmptySquaresPhraseList() {
         ArrayList<Phrase> phrasesToRead;
         if (this.numberOfEmptyCells == 0) {
             phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
@@ -108,13 +108,14 @@ public class SudokuState {
             ));
         }
 
-        this.replacePhraseAndPrint(phrasesToRead);
+        return phrasesToRead;
     }
 
     public void setSquareNumber(int numberToFill) {
         if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
-            this.replacePhraseAndPrint(Phrase.NO_SELECTED_SQUARE);
-            this.readRemainingNumberOfCells();
+            ArrayList<Phrase> phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.NO_SELECTED_SQUARE));
+            phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
+            this.replacePhraseAndPrint(phrasesToRead);
             return;
         }
 
@@ -155,12 +156,14 @@ public class SudokuState {
         }
 
         cellToSet.setValue(numberToFill);
-        this.replacePhraseAndPrint(
-                new ArrayList<>(Arrays.asList(Phrase.PLACED_NUM, Phrase.convertIntegerToPhrase(numberToFill)))
+
+        ArrayList<Phrase> phrasesToRead = new ArrayList<>(
+                Arrays.asList(Phrase.PLACED_NUM, Phrase.convertIntegerToPhrase(numberToFill))
         );
+        phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
+        this.replacePhraseAndPrint(phrasesToRead);
 
         this.numberOfEmptyCells--;
-        this.readRemainingNumberOfCells();
     }
 
     public void setHighlightedPoint(Point pointToSet, InputType inputType) {

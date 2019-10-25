@@ -64,10 +64,10 @@ public enum Phrase {
     CONGRATS("YOU'VE FINISHED THE GAME! CONGRATULATIONS!"),
 
     EMPTY_PIECES_OF_BOARD_PLURAL_1("There are "),
-    EMPTY_PIECES_OF_BOARD_PLURAL_2("Empty squares left on the board."),
+    EMPTY_PIECES_OF_BOARD_PLURAL_2(" empty squares left on the board."),
     EMPTY_PIECES_OF_BOARD_SINGULAR_1("There is "),
-    EMPTY_PIECES_OF_BOARD_SINGULAR_2("Empty square left on the board."),
-    EMPTY_PIECES_IN_SECTION("Empty squares left in this section."),
+    EMPTY_PIECES_OF_BOARD_SINGULAR_2(" empty square left on the board."),
+    EMPTY_PIECES_IN_SECTION(" empty squares left in this section."),
 
     CURRENT_VALUE("The current value in this box is "),
     PLACED_NUM("You have placed a "),
@@ -95,7 +95,6 @@ public enum Phrase {
     }
 
     public static Phrase convertIntegerToPhrase(int numberToConvert) {
-        System.out.println(numberToConvert);
         final Phrase[] NUM_PHRASE_LIST = new Phrase[]{
                 Phrase.ZERO,            Phrase.ONE,             Phrase.TWO,             Phrase.THREE,
                 Phrase.FOUR,            Phrase.FIVE,            Phrase.SIX,             Phrase.SEVEN,
