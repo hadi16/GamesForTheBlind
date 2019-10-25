@@ -14,6 +14,10 @@ public class SudokuGame {
     }
 
     public void receiveAction(SudokuAction sudokuAction) {
+        if (this.sudokuState.isGameOver()) {
+            return;
+        }
+
         if (sudokuAction instanceof SudokuInstructionsAction) {
             this.sudokuState.readInstructions();
             return;
