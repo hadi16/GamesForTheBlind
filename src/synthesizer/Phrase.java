@@ -15,7 +15,7 @@ public enum Phrase {
     IN_COLUMN("You have the following numbers in the same column:"),
     IN_BLOCK("You have the following numbers in the same block:"),
 
-    NO_SELECTED_SQUARE("You didn't select a square to fill first."),
+    NO_SELECTED_SQUARE("You didn't select a square first."),
     CANNOT_DELETE_ORIGINAL("You cannot delete an originally set square on the board."),
     CELL_VALUE_INVALID("This value is invalid for the cell."),
     SELECTED_BOTH("You have already selected both a block & square on the board."),
