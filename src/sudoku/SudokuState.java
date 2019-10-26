@@ -225,6 +225,11 @@ public class SudokuState {
     }
 
     public void readRowOrColumn(boolean readRow) {
+        if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
+            this.replacePhraseAndPrint(Phrase.NO_SELECTED_SQUARE);
+            return;
+        }
+
         int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
 
         Point selectedPoint = new Point(

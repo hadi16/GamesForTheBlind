@@ -67,7 +67,7 @@ public class AudioPlayer implements Runnable {
             }
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(this.clip.getMicrosecondLength() / 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
