@@ -81,7 +81,7 @@ public class SudokuKeyboardListener implements KeyListener {
                 return;
             }
 
-            this.sudokuGame.receiveAction(new SudokuUnrecognizedKeyAction(selectedKeyChar));
+            this.sudokuGame.receiveAction(new SudokuUnrecognizedKeyAction(e.getKeyCode()));
             return;
         }
 

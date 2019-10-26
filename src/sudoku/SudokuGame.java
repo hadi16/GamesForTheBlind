@@ -25,7 +25,7 @@ public class SudokuGame {
 
         if (sudokuAction instanceof SudokuUnrecognizedKeyAction) {
             SudokuUnrecognizedKeyAction sudokuUnrecognizedKeyAction = (SudokuUnrecognizedKeyAction) sudokuAction;
-            this.sudokuState.readUnrecognizedKey(sudokuUnrecognizedKeyAction.getUnrecognizedKey());
+            this.sudokuState.readUnrecognizedKey(sudokuUnrecognizedKeyAction.getKeyCode());
             return;
         }
 
