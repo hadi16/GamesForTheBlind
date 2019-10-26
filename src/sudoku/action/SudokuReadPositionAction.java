@@ -1,13 +1,15 @@
 package sudoku.action;
 
-public class SudokuReadPositionAction extends SudokuAction {
-    private final boolean readRow;
+import sudoku.SudokuSection;
 
-    public SudokuReadPositionAction(boolean readRow) {
-        this.readRow = readRow;
+public class SudokuReadPositionAction extends SudokuAction {
+    private final SudokuSection sudokuSection;
+
+    public SudokuReadPositionAction(SudokuSection sudokuSection) {
+        this.sudokuSection = sudokuSection;
     }
 
-    public boolean isReadRow() {
-        return this.readRow;
+    public SudokuSection getSudokuSection() {
+        return sudokuSection;
     }
 }

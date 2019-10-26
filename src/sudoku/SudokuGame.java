@@ -34,7 +34,6 @@ public class SudokuGame {
             this.sudokuState.setHighlightedPoint(
                     sudokuHighlightAction.getPointToHighlight(), sudokuHighlightAction.getInputType()
             );
-
             this.sendStateToGui();
             return;
         }
@@ -42,14 +41,13 @@ public class SudokuGame {
         if (sudokuAction instanceof SudokuFillAction) {
             SudokuFillAction sudokuFillAction = (SudokuFillAction) sudokuAction;
             this.sudokuState.setSquareNumber(sudokuFillAction.getNumberToFill());
-
             this.sendStateToGui();
             return;
         }
 
         if (sudokuAction instanceof SudokuReadPositionAction) {
             SudokuReadPositionAction sudokuReadPositionAction = (SudokuReadPositionAction) sudokuAction;
-            this.sudokuState.readRowOrColumn(sudokuReadPositionAction.isReadRow());
+            this.sudokuState.readBoardSection(sudokuReadPositionAction.getSudokuSection());
             this.sendStateToGui();
             return;
         }

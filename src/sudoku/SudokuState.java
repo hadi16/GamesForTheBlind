@@ -78,18 +78,18 @@ public class SudokuState {
         return originallyFilledSquares;
     }
 
-    private Optional<Cell> getCurrentlySelectedCell() {
-        if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
+    private Optional<Cell> getSelectedCellAtPosition(Point selectedSquarePoint, Point selectedBlockPoint) {
+        if (selectedSquarePoint == null || selectedBlockPoint == null) {
             return Optional.empty();
         }
 
         int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
-        Point newPoint = new Point(
-                this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
-                this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
+        Point cellPoint = new Point(
+                selectedBlockPoint.x * numberOfBlocks + selectedSquarePoint.x,
+                selectedBlockPoint.y * numberOfBlocks + selectedSquarePoint.y
         );
 
-        return Optional.of(this.sudokuGrid.getCell(newPoint.y, newPoint.x));
+        return Optional.of(this.sudokuGrid.getCell(cellPoint.y, cellPoint.x));
     }
 
     private ArrayList<Phrase> getRemainingNumberOfEmptySquaresPhraseList() {
@@ -195,7 +195,7 @@ public class SudokuState {
             return;
         }
 
-        Optional<Cell> selectedCell = this.getCurrentlySelectedCell();
+        Optional<Cell> selectedCell = this.getSelectedCellAtPosition(this.selectedSquarePoint, this.selectedBlockPoint);
         if (selectedCell.isPresent()) {
             this.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
                     Phrase.CURRENT_VALUE, Phrase.convertIntegerToPhrase(selectedCell.get().getValue())
@@ -224,7 +224,43 @@ public class SudokuState {
         this.replacePhraseAndPrint(phrasesToRead);
     }
 
-    public void readRowOrColumn(boolean readRow) {
+    private ArrayList<Phrase> getRowOrColumnPhrases(Point selectedPoint, boolean readRow) {
+        ArrayList<Phrase> phrasesToRead = new ArrayList<>();
+        phrasesToRead.add(readRow ? Phrase.IN_ROW : Phrase.IN_COLUMN);
+        for (int rowOrColumnIdx = 0; rowOrColumnIdx < this.sudokuBoardSize; rowOrColumnIdx++) {
+            Cell cellToRead;
+            if (readRow) {
+                cellToRead = this.sudokuGrid.getCell(selectedPoint.y, rowOrColumnIdx);
+            } else {
+                cellToRead = this.sudokuGrid.getCell(rowOrColumnIdx, selectedPoint.x);
+            }
+
+            phrasesToRead.add(Phrase.convertIntegerToPhrase(cellToRead.getValue()));
+        }
+        return phrasesToRead;
+    }
+
+    private ArrayList<Phrase> getBlockPhrases() {
+        ArrayList<Phrase> phrasesToRead = new ArrayList<>();
+        phrasesToRead.add(Phrase.IN_BLOCK);
+
+        int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
+        for (int rowIndex = 0; rowIndex < numberOfBlocks; rowIndex++) {
+            for (int columnIndex = 0; columnIndex < numberOfBlocks; columnIndex++) {
+                Optional<Cell> cell = this.getSelectedCellAtPosition(
+                        new Point(columnIndex, rowIndex), this.selectedBlockPoint
+                );
+
+                cell.ifPresent(
+                        cellValue -> phrasesToRead.add(Phrase.convertIntegerToPhrase(cellValue.getValue()))
+                );
+            }
+        }
+
+        return phrasesToRead;
+    }
+
+    public void readBoardSection(SudokuSection sectionToRead) {
         if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
             this.replacePhraseAndPrint(Phrase.NO_SELECTED_SQUARE);
             return;
@@ -238,17 +274,18 @@ public class SudokuState {
         );
 
         ArrayList<Phrase> phrasesToRead = new ArrayList<>();
-        phrasesToRead.add(readRow ? Phrase.IN_ROW : Phrase.IN_COLUMN);
-        for (int rowOrColumnIdx = 0; rowOrColumnIdx < this.sudokuBoardSize; rowOrColumnIdx++) {
-            Cell cellToRead;
-            if (readRow) {
-                cellToRead = this.sudokuGrid.getCell(selectedPoint.y, rowOrColumnIdx);
-            } else {
-                cellToRead = this.sudokuGrid.getCell(rowOrColumnIdx, selectedPoint.x);
-            }
-
-            phrasesToRead.add(Phrase.convertIntegerToPhrase(cellToRead.getValue()));
+        switch (sectionToRead) {
+            case ROW:
+                phrasesToRead = this.getRowOrColumnPhrases(selectedPoint, true);
+                break;
+            case COLUMN:
+                phrasesToRead = this.getRowOrColumnPhrases(selectedPoint, false);
+                break;
+            case BLOCK:
+                phrasesToRead = this.getBlockPhrases();
+                break;
         }
+
         this.replacePhraseAndPrint(phrasesToRead);
     }
 

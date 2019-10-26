@@ -2,6 +2,7 @@ package sudoku.gui.listener;
 
 import sudoku.InputType;
 import sudoku.SudokuGame;
+import sudoku.SudokuSection;
 import sudoku.action.*;
 
 import java.awt.*;
@@ -70,14 +71,15 @@ public class SudokuKeyboardListener implements KeyListener {
         Point currentSelectedPoint = this.charToPoint.get(selectedKeyChar);
         if (currentSelectedPoint == null) {
             // Reads the entire row that the player is in
-            final Map<Character, Boolean> KEY_TO_READ_ROW = Map.of(
-                    'J', true,
-                    'K', false
+            final Map<Character, SudokuSection> KEY_TO_SECTION = Map.of(
+                    'J', SudokuSection.ROW,
+                    'K', SudokuSection.COLUMN,
+                    'L', SudokuSection.BLOCK
             );
 
-            Boolean readRow = KEY_TO_READ_ROW.get(selectedKeyChar);
-            if (readRow != null) {
-                this.sudokuGame.receiveAction(new SudokuReadPositionAction(readRow));
+            SudokuSection sudokuSection = KEY_TO_SECTION.get(selectedKeyChar);
+            if (sudokuSection != null) {
+                this.sudokuGame.receiveAction(new SudokuReadPositionAction(sudokuSection));
                 return;
             }
 
