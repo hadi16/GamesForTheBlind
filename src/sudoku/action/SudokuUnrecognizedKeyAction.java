@@ -1,13 +1,13 @@
 package sudoku.action;
 
 public class SudokuUnrecognizedKeyAction extends SudokuAction {
-    private final char unrecognizedKey;
+    private final int keyCode;
 
-    public SudokuUnrecognizedKeyAction(char unrecognizedKey) {
-        this.unrecognizedKey = unrecognizedKey;
+    public SudokuUnrecognizedKeyAction(int keyCode) {
+        this.keyCode = keyCode;
     }
 
-    public char getUnrecognizedKey() {
-        return this.unrecognizedKey;
+    public int getKeyCode() {
+        return keyCode;
     }
 }

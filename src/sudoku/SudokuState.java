@@ -217,9 +217,11 @@ public class SudokuState {
         );
     }
 
-    public void readUnrecognizedKey(char unrecognizedKey) {
-        this.audioPlayer.replacePhraseToPlay(Phrase.UNRECOGNIZED_KEY);
-        System.out.println(Phrase.UNRECOGNIZED_KEY.getPhraseValue() + "(" + unrecognizedKey + ")");
+    public void readUnrecognizedKey(int keyCode) {
+        ArrayList<Phrase> phrasesToRead = new ArrayList<>(Arrays.asList(
+                Phrase.UNRECOGNIZED_KEY, Phrase.keyCodeToPhrase(keyCode)
+        ));
+        this.replacePhraseAndPrint(phrasesToRead);
     }
 
     public void readRowOrColumn(boolean readRow) {
