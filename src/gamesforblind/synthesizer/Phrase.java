@@ -109,20 +109,6 @@ public enum Phrase {
         this.phraseValue = phraseValue;
     }
 
-    public String getPhraseValue() {
-        return this.phraseValue;
-    }
-
-    private String getPhaseHashValue() {
-        return Hashing.sha256().hashString(this.phraseValue, StandardCharsets.UTF_8).toString();
-    }
-
-    public File getPhraseAudioFile() {
-        return new File(
-                String.format("%s/%s.wav", PHRASE_FILES_DIRECTORY.toString(), this.getPhaseHashValue())
-        );
-    }
-
     public static Phrase keyCodeToPhrase(int keyCode) {
         final Map<Integer, Phrase> KEY_CODE_TO_PHRASE = ofEntries(
                 entry(KeyEvent.VK_0,                Phrase.ZERO),
@@ -223,5 +209,19 @@ public enum Phrase {
         }
 
         return NUM_PHRASE_LIST[numberToConvert];
+    }
+
+    public String getPhraseValue() {
+        return this.phraseValue;
+    }
+
+    private String getPhaseHashValue() {
+        return Hashing.sha256().hashString(this.phraseValue, StandardCharsets.UTF_8).toString();
+    }
+
+    public File getPhraseAudioFile() {
+        return new File(
+                String.format("%s/%s.wav", PHRASE_FILES_DIRECTORY.toString(), this.getPhaseHashValue())
+        );
     }
 }
