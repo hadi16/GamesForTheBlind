@@ -7,9 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class AudioPlayer implements Runnable {
-    private boolean isActive = true;
-
     private final Clip clip;
+    private boolean isActive = true;
     private ArrayList<Phrase> phrasesToPlay = new ArrayList<>();
 
     public AudioPlayer() throws LineUnavailableException {
