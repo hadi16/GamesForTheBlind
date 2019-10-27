@@ -26,21 +26,34 @@ public class Solver {
      * @throws IllegalStateException in case the provided {@link Grid} is invalid.
      * @return
      */
-    public boolean solve(Grid grid) {
+    public void solve(Grid grid) {
         boolean solvable = this.solve(grid, grid.getFirstEmptyCell().orElse(null));
-
         if (!solvable) {
             throw new IllegalStateException("The provided grid is not solvable.");
         }
-        return true;
     }
+
+    /**
+     *  Currently unworking solving stuffz, need to use copy constructor -Callum
+     *
+     *  Custom solver much like above solve method, returns a boolean
+
     public boolean superSolver(Grid grid) {
-        boolean solvable = this.solve(grid, grid.getFirstEmptyCell().orElse(null));
-        if (solvable) {
-            return true;
+        boolean solvable = this.superSolver(grid, grid.getFirstEmptyCell().orElse(null));
+        if (solvable) { return true; }return false;
+    }
+
+    //Custom solver to run recursively on input and make sure a solution is available
+    private boolean superSolver(Grid grid, Cell cell) {
+        if (cell == null) { return true; }
+        for (int value : this.values) {
+            if (grid.isValidValueForCell(cell, value)) {
+                if (this.superSolver(grid, grid.getNextEmptyCellOf(cell).orElse(null))) { return true; }
+                cell.setValue(EMPTY);
+            }
         }
         return false;
-    }
+    }*/
 
     private boolean solve(Grid grid, Cell cell) {
         if (cell == null) {

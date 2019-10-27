@@ -234,13 +234,26 @@ public class SudokuState {
             System.err.println(phrase.getPhraseValue());
             return;
         }
+        /**
+         * working on this -Callum
+         */
+        /*
+        Solver solver = new Solver(sudokuBoardSize);
 
-        if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
-            Phrase relevantPhrase3 = Phrase.CELL_VALUE_INVALID;
-            this.audioPlayer.replacePhraseToPlay(relevantPhrase3);
-            System.err.println(relevantPhrase3.getPhraseValue());
-            return;
-        }
+        cellToSet.setValue(numberToFill);//update cell for checking
+        Grid gridBackup = getSudokuGrid();//create test grid
+
+        if (!solver.superSolver(gridBackup)){
+            //if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
+             Phrase relevantPhrase3 = Phrase.CELL_VALUE_INVALID;
+             this.audioPlayer.replacePhraseToPlay(relevantPhrase3);
+             System.err.println(relevantPhrase3.getPhraseValue());
+
+            cellToSet.setValue(0);//reset the value to empty in real grid, it is set elsewhere if correct
+
+             return;
+           // }
+        }*/
 
         cellToSet.setValue(numberToFill);
         count--;
