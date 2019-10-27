@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+
 /**
  * This class represents a Sudoku Grid consisting of a NxN matrix containing blocks of {@link Cell}s.
  */
@@ -163,22 +164,27 @@ public class Grid {
      * @param value the value to validate
      * @return true if the given value is valid or false otherwise
      */
+
     public boolean isValidValueForCell(Cell cell, int value) {
         return this.isValidInRow(cell, value) && this.isValidInColumn(cell, value) && this.isValidInBox(cell, value);
     }
 
+    //checks to see if the number would be valid in the row
     private boolean isValidInRow(Cell cell, int value) {
         return !this.getRowValuesOf(cell).contains(value);
     }
 
+    //checks to see if the number would be valid in the column
     private boolean isValidInColumn(Cell cell, int value) {
         return !this.getColumnValuesOf(cell).contains(value);
     }
 
+    //checks to see if the number would be valid in a NxN box
     private boolean isValidInBox(Cell cell, int value) {
         return !this.getBoxValuesOf(cell).contains(value);
     }
 
+    //gets all values in row
     private Collection<Integer> getRowValuesOf(Cell cell) {
         List<Integer> rowValues = new ArrayList<>();
         for (Cell neighbor : cell.getRowNeighbors()) {
@@ -187,6 +193,7 @@ public class Grid {
         return rowValues;
     }
 
+    //gets all values in column
     private Collection<Integer> getColumnValuesOf(Cell cell) {
         List<Integer> columnValues = new ArrayList<>();
         for (Cell neighbor : cell.getColumnNeighbors()) {
@@ -195,6 +202,7 @@ public class Grid {
         return columnValues;
     }
 
+    //gets all values in box
     private Collection<Integer> getBoxValuesOf(Cell cell) {
         List<Integer> boxValues = new ArrayList<>();
         for (Cell neighbor : cell.getBoxNeighbors()) {
@@ -204,7 +212,7 @@ public class Grid {
     }
 
     /**
-     * Returns the first empty {@link Cell} of this Grid. <br><br> Note: The result is wrapped by an
+     * Returns the first empty {@link Cell} of this e. <br><br> Note: The result is wrapped by an
      * {@link Optional}.
      *
      * @return a non-null value containing the first empty {@link Cell} if present
@@ -225,7 +233,7 @@ public class Grid {
      * @param cell the {@link Cell} of which the next empty {@link Cell} should be obtained
      * @return a non-null value containing the next empty {@link Cell} if present
      */
-    public Optional<Cell> getNextEmptyCellOf(Cell cell) {
+    Optional<Cell> getNextEmptyCellOf(Cell cell) {
         Cell nextEmptyCell = null;
 
         while ((cell = cell.getNextCell()) != null) {
