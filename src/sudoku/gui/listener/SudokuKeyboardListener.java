@@ -2,10 +2,7 @@ package sudoku.gui.listener;
 
 import sudoku.InputType;
 import sudoku.SudokuGame;
-import sudoku.action.SudokuFillAction;
-import sudoku.action.SudokuHighlightAction;
-import synthesizer.AudioPlayer;
-import synthesizer.Phrase;
+import sudoku.action.*;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -39,11 +36,10 @@ public class SudokuKeyboardListener implements KeyListener {
             )
     );
 
-    private final AudioPlayer audioPlayer;
     private final SudokuGame sudokuGame;
     private final Map<Character, Point> charToPoint;
 
-    public SudokuKeyboardListener(SudokuGame sudokuGame, int sudokuBoardSize, AudioPlayer audioPlayer) {
+    public SudokuKeyboardListener(SudokuGame sudokuGame, int sudokuBoardSize) {
         if (!BOARD_SIZE_TO_CHAR_TO_POINT.containsKey(sudokuBoardSize)) {
             //gives exception for board selection size (4,9)
             throw new IllegalArgumentException(
@@ -53,7 +49,6 @@ public class SudokuKeyboardListener implements KeyListener {
 
         this.sudokuGame = sudokuGame;
         this.charToPoint = BOARD_SIZE_TO_CHAR_TO_POINT.get(sudokuBoardSize);
-        this.audioPlayer = audioPlayer;
     }
 
     /**
@@ -81,12 +76,27 @@ public class SudokuKeyboardListener implements KeyListener {
 
         //for unknown key inputs to send an error
         char selectedKeyChar = Character.toUpperCase(e.getKeyChar());
+
+        if (selectedKeyChar == 'I') {
+            this.sudokuGame.receiveAction(new SudokuInstructionsAction());
+            return;
+        }
+
         Point currentSelectedPoint = this.charToPoint.get(selectedKeyChar);
         if (currentSelectedPoint == null) {
-            //sends proper phrase for a incorrect key
-            Phrase relevantPhrase = Phrase.UNRECOGNIZED_KEY;
-            this.audioPlayer.replacePhraseToPlay(relevantPhrase);
-            System.err.println(relevantPhrase.getPhraseValue() + " (" + selectedKeyChar + ")");
+            // Reads the entire row that the player is in
+            final Map<Character, Boolean> KEY_TO_READ_ROW = Map.of(
+                    'J', true,
+                    'K', false
+            );
+
+            Boolean readRow = KEY_TO_READ_ROW.get(selectedKeyChar);
+            if (readRow != null) {
+                this.sudokuGame.receiveAction(new SudokuReadPositionAction(readRow));
+                return;
+            }
+
+            this.sudokuGame.receiveAction(new SudokuUnrecognizedKeyAction(selectedKeyChar));
             return;
         }
 

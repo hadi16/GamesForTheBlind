@@ -3,7 +3,6 @@ package sudoku;
 import sudoku.action.SudokuAction;
 import sudoku.action.SudokuFillAction;
 import sudoku.action.SudokuHighlightAction;
-
 import sudoku.gui.SudokuFrame;
 import synthesizer.AudioPlayer;
 
@@ -17,7 +16,7 @@ public class SudokuGame {
 
     public SudokuGame(int sudokuBoardSize, AudioPlayer audioPlayer) {
         this.sudokuState = new SudokuState(sudokuBoardSize, audioPlayer);
-        this.sudokuFrame = new SudokuFrame(this, this.sudokuState, sudokuBoardSize, audioPlayer);
+        this.sudokuFrame = new SudokuFrame(this, this.sudokuState, sudokuBoardSize);
     }
 
     /**
@@ -26,6 +25,21 @@ public class SudokuGame {
      * @param sudokuAction
      */
     public void receiveAction(SudokuAction sudokuAction) {
+        if (this.sudokuState.isGameOver()) {
+            return;
+        }
+
+        if (sudokuAction instanceof SudokuInstructionsAction) {
+            this.sudokuState.readInstructions();
+            return;
+        }
+
+        if (sudokuAction instanceof SudokuUnrecognizedKeyAction) {
+            SudokuUnrecognizedKeyAction sudokuUnrecognizedKeyAction = (SudokuUnrecognizedKeyAction) sudokuAction;
+            this.sudokuState.readUnrecognizedKey(sudokuUnrecognizedKeyAction.getUnrecognizedKey());
+            return;
+        }
+
         if (sudokuAction instanceof SudokuHighlightAction) {
             SudokuHighlightAction sudokuHighlightAction = (SudokuHighlightAction) sudokuAction;
             this.sudokuState.setHighlightedPoint(
@@ -41,6 +55,13 @@ public class SudokuGame {
             this.sudokuState.setSquareNumber(sudokuFillAction.getNumberToFill());
                 this.sendStateToGui();
                 return;
+        }
+
+        if (sudokuAction instanceof SudokuReadPositionAction) {
+            SudokuReadPositionAction sudokuReadPositionAction = (SudokuReadPositionAction) sudokuAction;
+            this.sudokuState.readRowOrColumn(sudokuReadPositionAction.isReadRow());
+            this.sendStateToGui();
+            return;
         }
 
         System.err.println("An unrecognized form of a Sudoku action was received by the game!");

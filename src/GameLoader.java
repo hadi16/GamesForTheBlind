@@ -1,6 +1,6 @@
 import sudoku.SudokuGame;
 import synthesizer.AudioPlayer;
-import synthesizer.GoogleCloudRetriever;
+import synthesizer.AudioFileBuilder;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.util.ArrayList;
@@ -35,7 +35,9 @@ public class GameLoader {
      */
     public static void main(String[] args) {
         if (BUILD_PHRASES) {
-            GoogleCloudRetriever.createPhraseAudioFiles();
+            AudioFileBuilder audioFileBuilder = new AudioFileBuilder();
+            audioFileBuilder.createPhraseAudioFiles();
+            audioFileBuilder.deleteOldPhraseAudioFiles();
         }
 
         new GameLoader();

@@ -9,15 +9,14 @@ import java.util.Collections;
 public class AudioPlayer implements Runnable {
     private final Clip clip;
     private ArrayList<Phrase> phrasesToPlay = new ArrayList<>();
-    private File audioFile;
 
     public AudioPlayer() throws LineUnavailableException {
         this.clip = AudioSystem.getClip();
     }
 
-    private void resetAudioStream() {
+    private void resetAudioStream(File audioFile) {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(this.audioFile.getAbsoluteFile());
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile.getAbsoluteFile());
             this.clip.open(audioInputStream);
         } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
             e.printStackTrace();
@@ -30,11 +29,9 @@ public class AudioPlayer implements Runnable {
                 return;
             }
 
-            this.clip.close();
-
-            this.audioFile = this.phrasesToPlay.remove(0).getPhraseAudioFile();
-            this.resetAudioStream();
-
+            this.resetAudioStream(
+                    this.phrasesToPlay.remove(0).getPhraseAudioFile()
+            );
             this.clip.start();
         }
     }
@@ -49,11 +46,30 @@ public class AudioPlayer implements Runnable {
         }
     }
 
+    public void replacePhraseToPlay(ArrayList<Phrase> phrases) {
+        synchronized (this) {
+            if (this.clip.isRunning()) {
+                this.clip.close();
+            }
+
+            this.phrasesToPlay = phrases;
+        }
+    }
+
     @Override
     public void run() {
         while (true) {
-            if (!this.clip.isRunning()) {
-                this.playPhrase();
+            synchronized (this) {
+                if (!this.clip.isRunning()) {
+                    this.clip.close();
+                    this.playPhrase();
+                }
+            }
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }

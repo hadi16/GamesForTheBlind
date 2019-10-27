@@ -4,7 +4,6 @@ import sudoku.SudokuGame;
 import sudoku.SudokuState;
 import sudoku.gui.listener.SudokuKeyboardListener;
 import sudoku.gui.listener.SudokuMouseListener;
-import synthesizer.AudioPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +25,7 @@ public class SudokuFrame extends JFrame {
         this.frame = new JFrame("Sudoku");
 
         this.initializeGui(
-                new SudokuKeyboardListener(sudokuGame, sudokuBoardSize, audioPlayer),
+                new SudokuKeyboardListener(sudokuGame, sudokuBoardSize),
                 new SudokuMouseListener(sudokuGame, this, sudokuBoardSize)
         );
     }

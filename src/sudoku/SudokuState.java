@@ -8,6 +8,9 @@ import synthesizer.Phrase;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Optional;
 
 public class SudokuState {
     private final AudioPlayer audioPlayer;
@@ -17,14 +20,15 @@ public class SudokuState {
 
     private Point selectedBlockPoint;
     private Point selectedSquarePoint;
-    private int count;
+    private int numberOfEmptyCells;
+
+    private boolean gameOver = false;
 
     public SudokuState(int sudokuBoardSize, AudioPlayer audioPlayer) {
-        int numberOfEmptyCells = (sudokuBoardSize * sudokuBoardSize) / 3;
-        count = numberOfEmptyCells;
+        this.numberOfEmptyCells = (sudokuBoardSize * sudokuBoardSize) / 3;
 
         this.sudokuBoardSize = sudokuBoardSize;
-        this.sudokuGrid = new Generator(sudokuBoardSize).generate(numberOfEmptyCells);
+        this.sudokuGrid = new Generator(sudokuBoardSize).generate(this.numberOfEmptyCells);
 
         this.originallyFilledSquares = this.initializeOriginallyFilledSquares();
         this.audioPlayer = audioPlayer;
@@ -44,6 +48,21 @@ public class SudokuState {
         }
         this.originallyFilledSquares = originallyFilledSquares;
         this.audioPlayer = originalState.audioPlayer;
+        this.numberOfEmptyCells = originalState.numberOfEmptyCells;
+        this.gameOver = originalState.gameOver;
+    }
+
+    private void replacePhraseAndPrint(Phrase relevantPhrase) {
+        System.out.println(relevantPhrase.getPhraseValue());
+        this.audioPlayer.replacePhraseToPlay(relevantPhrase);
+    }
+
+    private void replacePhraseAndPrint(ArrayList<Phrase> relevantPhraseList) {
+        ArrayList<String> phraseStringList = new ArrayList<>();
+        relevantPhraseList.forEach(phrase -> phraseStringList.add(phrase.getPhraseValue()));
+        System.out.println(String.join(" ", phraseStringList));
+
+        this.audioPlayer.replacePhraseToPlay(relevantPhraseList);
     }
 
     private ArrayList<Point> initializeOriginallyFilledSquares() {
@@ -59,122 +78,44 @@ public class SudokuState {
         return originallyFilledSquares;
     }
 
-    public void readRemainingNumOfCells(){
-        int counter = getCount();
-
-        Phrase relevantPhrase = Phrase.CONGRATS;
-        Phrase relevantPhrase1 = Phrase.EMPTY;
-        Phrase relevantPhrase2 = Phrase.EMPTY;
-        switch(counter){
-            case 1:
-                relevantPhrase1 = Phrase.EMPTY_PIECES_OF_BOARD_3;
-                relevantPhrase = Phrase.ONE;
-                relevantPhrase2 = Phrase.EMPTY_PIECES_OF_BOARD_4;
-                break;
-            case 2:
-                relevantPhrase1 = Phrase.EMPTY_PIECES_OF_BOARD_1;
-                relevantPhrase = Phrase.TWO;
-                relevantPhrase2 = Phrase.EMPTY_PIECES_OF_BOARD_2;
-                break;
-            case 3:
-                relevantPhrase1 = Phrase.EMPTY_PIECES_OF_BOARD_1;
-                relevantPhrase = Phrase.THREE;
-                relevantPhrase2 = Phrase.EMPTY_PIECES_OF_BOARD_2;
-                break;
-            case 4:
-                relevantPhrase1 = Phrase.EMPTY_PIECES_OF_BOARD_1;
-                relevantPhrase = Phrase.FOUR;
-                relevantPhrase2 = Phrase.EMPTY_PIECES_OF_BOARD_2;
-                break;
-            case 5:
-                relevantPhrase1 = Phrase.EMPTY_PIECES_OF_BOARD_1;
-                relevantPhrase = Phrase.FIVE;
-                relevantPhrase2 = Phrase.EMPTY_PIECES_OF_BOARD_2;
-                break;
-            case 6:
-                relevantPhrase1 = Phrase.EMPTY_PIECES_OF_BOARD_1;
-                relevantPhrase = Phrase.SIX;
-                relevantPhrase2 = Phrase.EMPTY_PIECES_OF_BOARD_2;
-                break;
-            case 7:
-                relevantPhrase1 = Phrase.EMPTY_PIECES_OF_BOARD_1;
-                relevantPhrase = Phrase.SEVEN;
-                relevantPhrase2 = Phrase.EMPTY_PIECES_OF_BOARD_2;
-                break;
-            case 8:
-                relevantPhrase1 = Phrase.EMPTY_PIECES_OF_BOARD_1;
-                relevantPhrase = Phrase.EIGHT;
-                relevantPhrase2 = Phrase.EMPTY_PIECES_OF_BOARD_2;
-                break;
-            case 9:
-                relevantPhrase1 = Phrase.EMPTY_PIECES_OF_BOARD_1;
-                relevantPhrase = Phrase.NINE;
-                relevantPhrase2 = Phrase.EMPTY_PIECES_OF_BOARD_2;
-                break;
+    private Optional<Cell> getCurrentlySelectedCell() {
+        if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
+            return Optional.empty();
         }
-        try {
-            this.audioPlayer.replacePhraseToPlay(relevantPhrase1);
-            System.err.println(relevantPhrase1.getPhraseValue());
-            // thread to sleep for 1000 milliseconds
-            Thread.sleep(1000);
 
-            this.audioPlayer.replacePhraseToPlay(relevantPhrase);
-            System.err.println(relevantPhrase.getPhraseValue());
-            Thread.sleep(1000);
+        int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
+        Point newPoint = new Point(
+                this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
+                this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
+        );
 
-            this.audioPlayer.replacePhraseToPlay(relevantPhrase2);
-            System.err.println(relevantPhrase2.getPhraseValue());
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return;
+        return Optional.of(this.sudokuGrid.getCell(newPoint.y, newPoint.x));
     }
 
-    public void readNumInSquare (int num) {
-
-        Phrase relevantPhrase = Phrase.EMPTY;
-
-        switch(num){
-            case 1:
-                relevantPhrase = Phrase.ONE;
-                break;
-            case 2:
-                relevantPhrase = Phrase.TWO;
-                break;
-            case 3:
-                relevantPhrase = Phrase.THREE;
-                break;
-            case 4:
-                relevantPhrase = Phrase.FOUR;
-                break;
-            case 5:
-                relevantPhrase = Phrase.FIVE;
-                break;
-            case 6:
-                relevantPhrase = Phrase.SIX;
-                break;
-            case 7:
-                relevantPhrase = Phrase.SEVEN;
-                break;
-            case 8:
-                relevantPhrase = Phrase.EIGHT;
-                break;
-            case 9:
-                relevantPhrase = Phrase.NINE;
-                break;
+    private ArrayList<Phrase> getRemainingNumberOfEmptySquaresPhraseList() {
+        ArrayList<Phrase> phrasesToRead;
+        if (this.numberOfEmptyCells == 0) {
+            phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
+        } else if (this.numberOfEmptyCells == 1) {
+            phrasesToRead = new ArrayList<>(Arrays.asList(
+                    Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_1, Phrase.ONE, Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_2)
+            );
+        } else {
+            phrasesToRead = new ArrayList<>(Arrays.asList(
+                    Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_1,
+                    Phrase.convertIntegerToPhrase(this.numberOfEmptyCells),
+                    Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_2
+            ));
         }
-        this.audioPlayer.replacePhraseToPlay(relevantPhrase);
-        System.err.println(relevantPhrase.getPhraseValue());
-        return;
+
+        return phrasesToRead;
     }
 
     public void setSquareNumber(int numberToFill) {
         if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
-            Phrase relevantPhrase = Phrase.NO_SELECTED_SQUARE;
-
-            this.audioPlayer.replacePhraseToPlay(relevantPhrase);
-            System.err.println(relevantPhrase.getPhraseValue());
-            readRemainingNumOfCells();
+            ArrayList<Phrase> phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.NO_SELECTED_SQUARE));
+            phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
+            this.replacePhraseAndPrint(phrasesToRead);
             return;
         }
 
@@ -187,54 +128,29 @@ public class SudokuState {
 
         if (numberToFill == 0) {
             if (this.originallyFilledSquares.contains(pointToSet)) {
-                try {
-                    Phrase relevantPhrase = Phrase.CANNOT_DELETE_ORIGINAL;
-                    this.audioPlayer.replacePhraseToPlay(relevantPhrase);
-                    System.err.println(relevantPhrase.getPhraseValue());
-                    Thread.sleep(1000);
-
-                    Phrase relevantPhrase1 = Phrase.CURRENT_VALUE;
-                    this.audioPlayer.replacePhraseToPlay(relevantPhrase1);
-                    System.err.println(relevantPhrase1.getPhraseValue());
-                    // thread to sleep for 1000 milliseconds
-                    Thread.sleep(1000);
-
-                    readNumInSquare (cellToSet.getValue());
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-
-
-
+                // This square will always contain a number from 1-9 or 1-4 (never 0).
+                this.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
+                        Phrase.CANNOT_DELETE_ORIGINAL,
+                        Phrase.CURRENT_VALUE,
+                        Phrase.convertIntegerToPhrase(cellToSet.getValue())
+                )));
             } else {
+                this.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
+                        Phrase.REMOVED_NUM, Phrase.convertIntegerToPhrase(cellToSet.getValue()))
+                ));
                 cellToSet.setValue(0);
-                try {
-                    Phrase relevantPhrase2 = Phrase.PLACED_NUM;
-                    this.audioPlayer.replacePhraseToPlay(relevantPhrase2);
-                    System.err.println(relevantPhrase2.getPhraseValue());
-                    Thread.sleep(1000);
-
-                    readNumInSquare(cellToSet.getValue());
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
             }
             return;
         }
 
         if (!(numberToFill > 0 && numberToFill <= this.sudokuBoardSize)) {
-            Phrase phrase;
-            if (this.sudokuBoardSize == 9) {
-                phrase = Phrase.INVALID_NUMBER_TO_FILL_9;
-            } else {
-                phrase = Phrase.INVALID_NUMBER_TO_FILL_4;
-            }
-
-            this.audioPlayer.replacePhraseToPlay(phrase);
-            System.err.println(phrase.getPhraseValue());
+            this.replacePhraseAndPrint(
+                    this.sudokuBoardSize == 9 ? Phrase.INVALID_NUMBER_TO_FILL_9 : Phrase.INVALID_NUMBER_TO_FILL_4
+            );
             return;
         }
-        /**
+
+      /**
          * working on this -Callum
          */
         /*
@@ -255,9 +171,23 @@ public class SudokuState {
            // }
         }*/
 
+        if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
+            this.replacePhraseAndPrint(Phrase.CELL_VALUE_INVALID);
+            return;
+        }
+      
         cellToSet.setValue(numberToFill);
-        count--;
-        readRemainingNumOfCells();
+
+        this.numberOfEmptyCells--;
+        if (this.numberOfEmptyCells == 0) {
+            this.gameOver = true;
+        }
+
+        ArrayList<Phrase> phrasesToRead = new ArrayList<>(
+                Arrays.asList(Phrase.PLACED_NUM, Phrase.convertIntegerToPhrase(numberToFill))
+        );
+        phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
+        this.replacePhraseAndPrint(phrasesToRead);
     }
 
     public void setHighlightedPoint(Point pointToSet, InputType inputType) {
@@ -286,10 +216,11 @@ public class SudokuState {
             return;
         }
 
-        if (this.selectedBlockPoint != null && this.selectedSquarePoint != null) {
-            Phrase relevantPhrase = Phrase.SELECTED_BOTH;
-            this.audioPlayer.replacePhraseToPlay(relevantPhrase);
-            System.err.println(relevantPhrase.getPhraseValue());
+        Optional<Cell> selectedCell = this.getCurrentlySelectedCell();
+        if (selectedCell.isPresent()) {
+            this.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
+                    Phrase.CURRENT_VALUE, Phrase.convertIntegerToPhrase(selectedCell.get().getValue())
+            )));
             return;
         }
 
@@ -301,21 +232,38 @@ public class SudokuState {
         this.selectedSquarePoint = pointToSet;
     }
 
-    /*
-    - changing "You have already selected both a block & square on the board." to "current value in this box is"
-    - call instructions
-     */
-    public void readTheSection(){
-    //can be later
-        return;
+    public void readInstructions() {
+        this.replacePhraseAndPrint(
+                this.sudokuBoardSize == 9 ? Phrase.INSTRUCTIONS_9 : Phrase.INSTRUCTIONS_4
+        );
     }
 
-    public void readTheRow(){
-        return;
+    public void readUnrecognizedKey(char unrecognizedKey) {
+        this.audioPlayer.replacePhraseToPlay(Phrase.UNRECOGNIZED_KEY);
+        System.out.println(Phrase.UNRECOGNIZED_KEY.getPhraseValue() + "(" + unrecognizedKey + ")");
     }
 
-    public void readTheColumn(){
-        return;
+    public void readRowOrColumn(boolean readRow) {
+        int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
+
+        Point selectedPoint = new Point(
+                this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
+                this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
+        );
+
+        ArrayList<Phrase> phrasesToRead = new ArrayList<>();
+        phrasesToRead.add(readRow ? Phrase.IN_ROW : Phrase.IN_COLUMN);
+        for (int rowOrColumnIdx = 0; rowOrColumnIdx < this.sudokuBoardSize; rowOrColumnIdx++) {
+            Cell cellToRead;
+            if (readRow) {
+                cellToRead = this.sudokuGrid.getCell(selectedPoint.y, rowOrColumnIdx);
+            } else {
+                cellToRead = this.sudokuGrid.getCell(rowOrColumnIdx, selectedPoint.x);
+            }
+
+            phrasesToRead.add(Phrase.convertIntegerToPhrase(cellToRead.getValue()));
+        }
+        this.replacePhraseAndPrint(phrasesToRead);
     }
 
     public int getSudokuBoardSize() {
@@ -338,7 +286,7 @@ public class SudokuState {
         return this.originallyFilledSquares;
     }
 
-    public int getCount(){
-        return this.count;
+    public boolean isGameOver() {
+        return this.gameOver;
     }
 }
