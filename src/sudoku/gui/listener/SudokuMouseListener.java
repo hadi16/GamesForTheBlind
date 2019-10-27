@@ -9,17 +9,29 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+
+/**
+ * Sudoku mouse listener class that will receive mouse inputs and appropriately call the proper
+ * action class
+ */
 public class SudokuMouseListener implements MouseListener {
     private final SudokuGame sudokuGame;
     private final SudokuFrame sudokuFrame;
     private final int sudokuBoardSize;
 
+    //sets the inputs to be contained within "this"
     public SudokuMouseListener(SudokuGame sudokuGame, SudokuFrame sudokuFrame, int sudokuBoardSize) {
         this.sudokuGame = sudokuGame;
         this.sudokuFrame = sudokuFrame;
         this.sudokuBoardSize = sudokuBoardSize;
     }
 
+    /**
+     * Reads in mouse clicks, obtains their coordinates allowing them to properly call an
+     * action to that cell
+     *
+     * @param e :which is a mouse event
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         Point selectedPoint = e.getPoint();
@@ -34,6 +46,8 @@ public class SudokuMouseListener implements MouseListener {
         );
     }
 
+
+    //overrides for mouse clicks
     @Override
     public void mousePressed(MouseEvent e) {
     }

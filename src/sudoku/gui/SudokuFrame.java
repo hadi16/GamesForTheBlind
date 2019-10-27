@@ -12,7 +12,15 @@ public class SudokuFrame extends JFrame {
     private final JFrame frame;
     private final SudokuPanel sudokuPanel;
 
-    public SudokuFrame(SudokuGame sudokuGame, SudokuState initialState, int sudokuBoardSize) {
+    /**
+     * Used for creating the GUI and activating a mouse listener to detect click locations
+     *
+     * @param sudokuGame
+     * @param initialState
+     * @param sudokuBoardSize
+     * @param audioPlayer
+     */
+    public SudokuFrame(SudokuGame sudokuGame, SudokuState initialState, int sudokuBoardSize, AudioPlayer audioPlayer) {
         this.sudokuPanel = new SudokuPanel(initialState);
         this.frame = new JFrame("Sudoku");
 
@@ -22,6 +30,13 @@ public class SudokuFrame extends JFrame {
         );
     }
 
+    /**
+     * Used for creating the on screen GUI, this will start at a dimension of 500 by 500 pixels but
+     * is fully changeable by dragging the screen dimensions
+     *
+     * @param sudokuKeyboardListener
+     * @param sudokuMouseListener
+     */
     private void initializeGui(SudokuKeyboardListener sudokuKeyboardListener, SudokuMouseListener sudokuMouseListener) {
         final int FRAME_DIMENSION = 500;
 
@@ -39,6 +54,9 @@ public class SudokuFrame extends JFrame {
         this.sudokuPanel.setSudokuState(state);
     }
 
+    /**
+     * Used for constanly updating the panel size and location as well as for inputs
+     */
     public void repaintSudokuPanel() {
         this.sudokuPanel.repaint();
     }
