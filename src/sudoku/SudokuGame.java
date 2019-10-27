@@ -1,9 +1,15 @@
 package sudoku;
 
-import sudoku.action.*;
+import sudoku.action.SudokuAction;
+import sudoku.action.SudokuFillAction;
+import sudoku.action.SudokuHighlightAction;
 import sudoku.gui.SudokuFrame;
 import synthesizer.AudioPlayer;
 
+/**
+ * Game class used for lots of functionality within the game such as initiating board, calling the action classes
+ * and sending some errors. Also used for updating the GUI properly
+ */
 public class SudokuGame {
     private final SudokuState sudokuState;
     private final SudokuFrame sudokuFrame;
@@ -13,6 +19,11 @@ public class SudokuGame {
         this.sudokuFrame = new SudokuFrame(this, this.sudokuState, sudokuBoardSize);
     }
 
+    /**
+     * Given an action as an input and from there calls the proper action function and sends the information to the GUI
+     *
+     * @param sudokuAction
+     */
     public void receiveAction(SudokuAction sudokuAction) {
         if (this.sudokuState.isGameOver()) {
             return;
@@ -42,9 +53,8 @@ public class SudokuGame {
         if (sudokuAction instanceof SudokuFillAction) {
             SudokuFillAction sudokuFillAction = (SudokuFillAction) sudokuAction;
             this.sudokuState.setSquareNumber(sudokuFillAction.getNumberToFill());
-
-            this.sendStateToGui();
-            return;
+                this.sendStateToGui();
+                return;
         }
 
         if (sudokuAction instanceof SudokuReadPositionAction) {
@@ -57,6 +67,9 @@ public class SudokuGame {
         System.err.println("An unrecognized form of a Sudoku action was received by the game!");
     }
 
+    /**
+     * Calls the painter class to repaint the Sudoku board based on the current state
+     */
     private void sendStateToGui() {
         this.sudokuFrame.receiveSudokuState(new SudokuState(this.sudokuState));
         this.sudokuFrame.repaintSudokuPanel();
