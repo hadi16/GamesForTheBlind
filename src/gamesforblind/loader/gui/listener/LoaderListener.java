@@ -14,14 +14,14 @@ import gamesforblind.loader.gui.LoaderGuiConstants;
  */
 public abstract class LoaderListener {
     /**
-     * A reference to the game loader, which is needed to send actions that the user has made.
+     * The game loader, which is needed to send actions that the user has made.
      */
     protected final GameLoader gameLoader;
 
     /**
      * Creates a new {@link LoaderListener}. This is never called directly ({@link LoaderListener} is abstract).
      *
-     * @param gameLoader A reference to the game loader class.
+     * @param gameLoader The game loader for the program.
      */
     protected LoaderListener(GameLoader gameLoader) {
         this.gameLoader = gameLoader;
