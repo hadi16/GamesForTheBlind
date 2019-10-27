@@ -1,5 +1,7 @@
 package gamesforblind.sudoku;
 
+import gamesforblind.sudoku.enums.InputType;
+import gamesforblind.sudoku.enums.SudokuSection;
 import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Generator;
 import gamesforblind.sudoku.generator.Grid;

@@ -1,6 +1,6 @@
 package gamesforblind.sudoku.gui.listener;
 
-import gamesforblind.sudoku.InputType;
+import gamesforblind.sudoku.enums.InputType;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
 import gamesforblind.sudoku.gui.SudokuFrame;

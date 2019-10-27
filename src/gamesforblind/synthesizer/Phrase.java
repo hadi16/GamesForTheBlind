@@ -185,6 +185,7 @@ public enum Phrase {
                 entry(KeyEvent.VK_ALT,              Phrase.ALT)
         );
 
+        // Return just an empty Phrase to prevent a null ptr exception (calls audio file that contains no sound).
         return Objects.requireNonNullElse(KEY_CODE_TO_PHRASE.get(keyCode), Phrase.BLANK);
     }
 
