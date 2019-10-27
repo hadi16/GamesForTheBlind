@@ -7,6 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * Class for
+ */
 public class SudokuPanel extends JPanel {
     private final int sudokuBoardSize;
     private final ArrayList<Point> originallyFilledSquares;
@@ -19,6 +22,16 @@ public class SudokuPanel extends JPanel {
         this.originallyFilledSquares = initialState.getOriginallyFilledSquares();
     }
 
+    /**
+     * Locates the square that is selected either using keyboard actions or a mouse input and highlights them
+     *
+     * @param graphics
+     * @param rowIdx
+     * @param colIdx
+     * @param xPos
+     * @param yPos
+     * @param squareDim
+     */
     private void paintHighlightedSquares(Graphics graphics, int rowIdx, int colIdx, int xPos, int yPos, int squareDim) {
         Point selectedBlockPoint = this.sudokuState.getSelectedBlockPoint();
         Point selectedSquarePoint = this.sudokuState.getSelectedSquarePoint();
@@ -45,6 +58,12 @@ public class SudokuPanel extends JPanel {
         }
     }
 
+    /**
+     * Allows all individual components to be painted. This includes, board dimensions, columns, rows, and
+     * numbers within cells. Might look into using comic sans as a font tho, idk yet.
+     *
+     * @param graphics
+     */
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);

@@ -150,11 +150,32 @@ public class SudokuState {
             return;
         }
 
+      /**
+         * working on this -Callum
+         */
+        /*
+        Solver solver = new Solver(sudokuBoardSize);
+
+        cellToSet.setValue(numberToFill);//update cell for checking
+        Grid gridBackup = getSudokuGrid();//create test grid
+
+        if (!solver.superSolver(gridBackup)){
+            //if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
+             Phrase relevantPhrase3 = Phrase.CELL_VALUE_INVALID;
+             this.audioPlayer.replacePhraseToPlay(relevantPhrase3);
+             System.err.println(relevantPhrase3.getPhraseValue());
+
+            cellToSet.setValue(0);//reset the value to empty in real grid, it is set elsewhere if correct
+
+             return;
+           // }
+        }*/
+
         if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
             this.replacePhraseAndPrint(Phrase.CELL_VALUE_INVALID);
             return;
         }
-
+      
         cellToSet.setValue(numberToFill);
 
         this.numberOfEmptyCells--;
