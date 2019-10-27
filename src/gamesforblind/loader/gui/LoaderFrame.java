@@ -1,7 +1,7 @@
 package gamesforblind.loader.gui;
 
-import gamesforblind.loader.enums.ArrowKeyDirection;
 import gamesforblind.loader.GameLoader;
+import gamesforblind.loader.enums.ArrowKeyDirection;
 import gamesforblind.loader.enums.SelectedGame;
 import gamesforblind.loader.gui.listener.LoaderActionListener;
 import gamesforblind.loader.gui.listener.LoaderKeyboardListener;
@@ -43,7 +43,7 @@ public class LoaderFrame extends JFrame {
 
     /**
      * Creates a new {@link LoaderFrame}.
-     * @param gameLoader The reference to game loader for program, which is needed for mouse & keyboard listeners.
+     * @param gameLoader The game loader for the program, which is needed for mouse & keyboard listeners.
      */
     public LoaderFrame(GameLoader gameLoader) {
         // Initialize the listener instance variables & add the keyboard listener (mouse listener set later).

@@ -1,9 +1,9 @@
 package gamesforblind.loader.gui.listener;
 
-import gamesforblind.loader.enums.ArrowKeyDirection;
 import gamesforblind.loader.GameLoader;
 import gamesforblind.loader.action.LoaderArrowKeyAction;
 import gamesforblind.loader.action.LoaderUnrecognizedKeyAction;
+import gamesforblind.loader.enums.ArrowKeyDirection;
 import gamesforblind.loader.gui.LoaderFrame;
 
 import java.awt.*;
@@ -16,16 +16,16 @@ import java.awt.event.KeyEvent;
  */
 public class LoaderKeyboardListener extends LoaderListener implements KeyEventDispatcher {
     /**
-     * A reference to the {@link LoaderFrame} instance for the loader GUI.
+     * The {@link LoaderFrame} instance for the loader GUI.
      * For now, I use this to handle the cases when the user selects a button in the GUI.
-     * TODO: remove the need to have this reference (get the button text directly from the {@link KeyEvent}).
+     * TODO: remove the need to have this (get the button text directly from the {@link KeyEvent}).
      */
     private final LoaderFrame loaderFrame;
 
     /**
      * Creates a new {@link LoaderKeyboardListener}.
      * @param gameLoader Reference to the game loader. Needed to send the appropriate action performed by the user.
-     * @param loaderFrame A reference to the {@link LoaderFrame} instance for the loader GUI.
+     * @param loaderFrame The {@link LoaderFrame} instance for the loader GUI.
      */
     public LoaderKeyboardListener(GameLoader gameLoader, LoaderFrame loaderFrame) {
         super(gameLoader);

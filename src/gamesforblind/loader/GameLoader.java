@@ -21,10 +21,10 @@ import java.util.Scanner;
  * Universal loader for the program. Instantiated solely in {@link gamesforblind.Main}.
  */
 public class GameLoader {
-    /** The reference to Scanner that is used throughout the entire program (needed for keyboard input). */
+    /** The Scanner that is used throughout the entire program (needed for keyboard input). */
     private final Scanner keyboard = new Scanner(System.in);
 
-    /** The reference to the audio player thread (needed to wait for finish before gracefully exiting the program). */
+    /** The audio player thread (needed to wait for finish before gracefully exiting the program). */
     private final Thread audioPlayerThread;
 
     private final LoaderFrame loaderFrame;
@@ -117,7 +117,7 @@ public class GameLoader {
     }
 
     /**
-     * Initializes the audio player and returns a reference to it.
+     * Initializes the audio player and returns it.
      *
      * @return The {@link AudioPlayer} for the entire program.
      */
