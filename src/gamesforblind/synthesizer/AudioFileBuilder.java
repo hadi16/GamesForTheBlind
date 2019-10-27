@@ -14,7 +14,9 @@ import java.util.Arrays;
  * Logic to create & delete audio files using Google Cloud Text-to-Speech's Java API.
  */
 public class AudioFileBuilder {
-    /** The directory that contains all of the Phrases in the program. */
+    /**
+     * The directory that contains all of the Phrases in the program.
+     */
     private final File phraseDirectory;
 
     /**

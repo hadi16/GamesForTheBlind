@@ -6,11 +6,14 @@ import java.util.ArrayList;
  * Class to call into the threaded audio player.
  */
 public class AudioPlayerExecutor {
-    /** The program's audio player. */
+    /**
+     * The program's audio player.
+     */
     private final AudioPlayer audioPlayer;
 
     /**
      * Creates a new {@link AudioPlayerExecutor}.
+     *
      * @param audioPlayer The program's audio player.
      */
     public AudioPlayerExecutor(AudioPlayer audioPlayer) {
@@ -19,6 +22,7 @@ public class AudioPlayerExecutor {
 
     /**
      * Replaces the Phrases to play for the audio player w/ a single Phrase & prints the Phrase text to stdout.
+     *
      * @param phrase The Phrase to replace in the program's audio player.
      */
     public void replacePhraseAndPrint(Phrase phrase) {
@@ -28,6 +32,7 @@ public class AudioPlayerExecutor {
 
     /**
      * Replaces the Phrases to play for the audio player w/ a list of Phrases & prints their text to stdout.
+     *
      * @param phrases The list of Phrases to replace in the program's audio player.
      */
     public void replacePhraseAndPrint(ArrayList<Phrase> phrases) {

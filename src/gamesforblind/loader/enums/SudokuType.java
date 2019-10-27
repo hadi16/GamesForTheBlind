@@ -13,6 +13,7 @@ public enum SudokuType {
 
     /**
      * Creates a new {@link SudokuType}
+     *
      * @param sudokuBoardSize The size of the given Sudoku game board (e.g. 4x4 --> sudokuBoardSize = 4).
      */
     SudokuType(int sudokuBoardSize) {
@@ -21,6 +22,7 @@ public enum SudokuType {
 
     /**
      * Getter for the sudokuBoardSize instance variable.
+     *
      * @return The size of the given Sudoku game board (e.g. 4x4 --> sudokuBoardSize = 4).
      */
     public int getSudokuBoardSize() {

@@ -16,7 +16,9 @@ import static gamesforblind.Constants.FRAME_DIMENSION;
  * Contains the logic for the loader GUI.
  */
 public class LoaderFrame extends JFrame {
-    /** Used for the button text of the currently highlighted button in the GUI. */
+    /**
+     * Used for the button text of the currently highlighted button in the GUI.
+     */
     private static final Color DARK_GOLD = new Color(218, 165, 32);
 
     /**
@@ -25,13 +27,19 @@ public class LoaderFrame extends JFrame {
      */
     private final ArrayList<JButton> relevantButtons = new ArrayList<>();
 
-    /** Reference to the mouse listener for the loader GUI. */
+    /**
+     * Reference to the mouse listener for the loader GUI.
+     */
     private final LoaderActionListener loaderActionListener;
 
-    /** Reference to keyboard listener for loader GUI. Reference needed to remove it when loader GUI closes.*/
+    /**
+     * Reference to keyboard listener for loader GUI. Reference needed to remove it when loader GUI closes.
+     */
     private final LoaderKeyboardListener loaderKeyboardListener;
 
-    /** JFrame for loader GUI. When moving between screens in GUI, this value is reassigned & old one is disposed. */
+    /**
+     * JFrame for loader GUI. When moving between screens in GUI, this value is reassigned & old one is disposed.
+     */
     private JFrame loaderFrame;
 
     /**
@@ -43,6 +51,7 @@ public class LoaderFrame extends JFrame {
 
     /**
      * Creates a new {@link LoaderFrame}.
+     *
      * @param gameLoader The game loader for the program, which is needed for mouse & keyboard listeners.
      */
     public LoaderFrame(GameLoader gameLoader) {
@@ -56,7 +65,8 @@ public class LoaderFrame extends JFrame {
 
     /**
      * Helper method to get a JButton for the loader GUI.
-     * @param buttonText The text of the button.
+     *
+     * @param buttonText    The text of the button.
      * @param preferredSize The requested size of the button.
      * @return The created JButton for the loader GUI.
      */
@@ -77,6 +87,7 @@ public class LoaderFrame extends JFrame {
 
     /**
      * Gets the game component that is variable depending on the currently selected game (the upper portion of the GUI).
+     *
      * @param selectedGame The currently selected game. If set to NONE, I am in the main screen of the loader GUI.
      * @return The upper portion of the loader GUI.
      */
@@ -113,6 +124,7 @@ public class LoaderFrame extends JFrame {
     /**
      * Dispose of the old loaderFrame (if one already exists) & reinitialize a new frame based on the game
      * that the user has selected. If selectedGame is set to NONE, just show the main selection screen.
+     *
      * @param selectedGame The game that the user has selected.
      */
     public void setLoaderGuiBasedOnSelectedGame(SelectedGame selectedGame) {
@@ -153,6 +165,7 @@ public class LoaderFrame extends JFrame {
 
     /**
      * Set or reset the highlighted button colors in the loader GUI.
+     *
      * @param reset If true, reset the currently highlighted button colors. Otherwise, highlight them.
      */
     private void setHighlightedButtonColors(boolean reset) {
@@ -173,6 +186,7 @@ public class LoaderFrame extends JFrame {
 
     /**
      * Resets the currently relevant buttons in the GUI.
+     *
      * @param selectedGame The currently selected game.
      */
     private void setRelevantButtons(SelectedGame selectedGame) {
@@ -223,6 +237,7 @@ public class LoaderFrame extends JFrame {
 
     /**
      * Changes the highlighted button index based on which arrow key was pressed by the user.
+     *
      * @param arrowKeyDirection The arrow key that was pressed by the user.
      */
     public void changeHighlightedButton(ArrowKeyDirection arrowKeyDirection) {
