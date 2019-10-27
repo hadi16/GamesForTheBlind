@@ -1,9 +1,11 @@
 package sudoku.action;
 
 import sudoku.InputType;
-
 import java.awt.*;
 
+/**
+ * Highlight class used for highlighting the cells and boxes upon keyboard and mouse navigation
+ */
 public class SudokuHighlightAction extends SudokuAction {
     private final Point pointToHighlight;
     private final InputType inputType;

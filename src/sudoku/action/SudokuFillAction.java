@@ -1,5 +1,8 @@
 package sudoku.action;
 
+/**
+ * Fill action class used for inputting numbers into the proper cells
+ */
 public class SudokuFillAction extends SudokuAction {
     private final int numberToFill;
 

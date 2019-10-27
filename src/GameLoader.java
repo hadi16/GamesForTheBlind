@@ -29,6 +29,10 @@ public class GameLoader {
         keyboard.close();
     }
 
+    /**
+     * Main method used for running the program
+     * @param args
+     */
     public static void main(String[] args) {
         if (BUILD_PHRASES) {
             GoogleCloudRetriever.createPhraseAudioFiles();
@@ -37,6 +41,13 @@ public class GameLoader {
         new GameLoader();
     }
 
+    /**
+     * Used for getting the size of sudoku the user would like to play, this may later be changed to also have
+     * a visual component through clicking a "4x4" or "9x9" button
+     *
+     * @param keyboard
+     * @return
+     */
     private int getRequestedSudokuBoardSize(Scanner keyboard) {
         ArrayList<Integer> SUPPORTED_SUDOKU_SIZES = new ArrayList<>(Arrays.asList(4, 9));
 

@@ -164,12 +164,9 @@ public class Grid {
      * @param value the value to validate
      * @return true if the given value is valid or false otherwise
      */
+
     public boolean isValidValueForCell(Cell cell, int value) {
-        Solver solver = new Solver(sudokuBoardSize);
-        if (solver.solve(this)) {
-            return this.isValidInRow(cell, value) && this.isValidInColumn(cell, value) && this.isValidInBox(cell, value);
-        }
-        else throw new IllegalStateException("Unsolveable puzzle");
+        return this.isValidInRow(cell, value) && this.isValidInColumn(cell, value) && this.isValidInBox(cell, value);
     }
 
     //checks to see if the number would be valid in the row
@@ -187,6 +184,7 @@ public class Grid {
         return !this.getBoxValuesOf(cell).contains(value);
     }
 
+    //gets all values in row
     private Collection<Integer> getRowValuesOf(Cell cell) {
         List<Integer> rowValues = new ArrayList<>();
         for (Cell neighbor : cell.getRowNeighbors()) {
@@ -195,6 +193,7 @@ public class Grid {
         return rowValues;
     }
 
+    //gets all values in column
     private Collection<Integer> getColumnValuesOf(Cell cell) {
         List<Integer> columnValues = new ArrayList<>();
         for (Cell neighbor : cell.getColumnNeighbors()) {
@@ -203,6 +202,7 @@ public class Grid {
         return columnValues;
     }
 
+    //gets all values in box
     private Collection<Integer> getBoxValuesOf(Cell cell) {
         List<Integer> boxValues = new ArrayList<>();
         for (Cell neighbor : cell.getBoxNeighbors()) {
