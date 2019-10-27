@@ -13,6 +13,7 @@ public class LoaderArrowKeyAction extends LoaderAction {
 
     /**
      * Creates a new {@link LoaderArrowKeyAction}
+     *
      * @param arrowKeyDirection Which arrow key was pressed in the loader.
      */
     public LoaderArrowKeyAction(ArrowKeyDirection arrowKeyDirection) {
@@ -21,6 +22,7 @@ public class LoaderArrowKeyAction extends LoaderAction {
 
     /**
      * Getter for the arrowKeyDirection instance variable.
+     *
      * @return Which arrow key was pressed in the loader (up/down/left/right).
      */
     public ArrowKeyDirection getArrowKeyDirection() {

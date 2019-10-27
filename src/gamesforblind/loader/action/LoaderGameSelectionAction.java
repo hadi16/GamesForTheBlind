@@ -14,6 +14,7 @@ public class LoaderGameSelectionAction extends LoaderAction {
 
     /**
      * Creates a new {@link LoaderGameSelectionAction}
+     *
      * @param selectedGame Which game the user has selected. If the user wishes to go back, this is NONE.
      */
     public LoaderGameSelectionAction(SelectedGame selectedGame) {
@@ -22,6 +23,7 @@ public class LoaderGameSelectionAction extends LoaderAction {
 
     /**
      * Getter for the selectedGame instance variable.
+     *
      * @return Which game the user has selected. If the user wishes to go back, this is NONE.
      */
     public SelectedGame getSelectedGame() {

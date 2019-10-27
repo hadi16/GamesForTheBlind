@@ -113,10 +113,14 @@ public enum Phrase {
     PLACED_NUM("You have placed a"),
     REMOVED_NUM("You have removed the number");
 
-    /** The directory for all of the Phrase audio files ("phrases" folder under the root of the project). */
+    /**
+     * The directory for all of the Phrase audio files ("phrases" folder under the root of the project).
+     */
     public static final Path PHRASE_FILES_DIRECTORY = Paths.get(System.getProperty("user.dir"), "phrases/");
 
-    /** The Phrase's String value, which is the phrase that needs to be fetched via the Google Cloud API. */
+    /**
+     * The Phrase's String value, which is the phrase that needs to be fetched via the Google Cloud API.
+     */
     private final String phraseValue;
 
     /**
@@ -129,6 +133,7 @@ public enum Phrase {
 
     /**
      * Creates a new {@link Phrase}
+     *
      * @param phraseValue The phrase value to set to the given enumeration member.
      */
     Phrase(String phraseValue) {
@@ -137,6 +142,7 @@ public enum Phrase {
 
     /**
      * Converts a key code on the keyboard to a Phrase. If no mapping exists, return Phrase.EMPTY.
+     *
      * @param keyCode The key code on the keyboard to convert.
      * @return A Phrase that represents the passed key code from the keyboard.
      */
@@ -227,6 +233,7 @@ public enum Phrase {
 
     /**
      * Converts a number between 0 (inclusive) & 30 (inclusive) to a numeric Phrase (0 maps to EMPTY).
+     *
      * @param numberToConvert The number to convert to a Phrase.
      * @return The numeric Phrase that corresponds to the given number that was passed.
      */
@@ -255,6 +262,7 @@ public enum Phrase {
 
     /**
      * Getter for the phraseValue instance variable
+     *
      * @return The value of the current Phrase.
      */
     public String getPhraseValue() {
@@ -263,6 +271,7 @@ public enum Phrase {
 
     /**
      * Helper method to retrieve a SHA-256 hash of the current phraseValue.
+     *
      * @return A SHA-256 hash of the current phraseValue.
      */
     private String getPhaseHashValue() {

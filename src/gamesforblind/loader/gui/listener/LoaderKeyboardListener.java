@@ -24,7 +24,8 @@ public class LoaderKeyboardListener extends LoaderListener implements KeyEventDi
 
     /**
      * Creates a new {@link LoaderKeyboardListener}.
-     * @param gameLoader Reference to the game loader. Needed to send the appropriate action performed by the user.
+     *
+     * @param gameLoader  Reference to the game loader. Needed to send the appropriate action performed by the user.
      * @param loaderFrame The {@link LoaderFrame} instance for the loader GUI.
      */
     public LoaderKeyboardListener(GameLoader gameLoader, LoaderFrame loaderFrame) {
@@ -34,6 +35,7 @@ public class LoaderKeyboardListener extends LoaderListener implements KeyEventDi
 
     /**
      * Triggered when the user selects a key in the game. If key was pressed, call a private helper method w/ the event.
+     *
      * @param e The event that was triggered by the user pressing a key in the game.
      * @return Whether the {@link KeyEvent} was fully dispatched (see {@link KeyEventDispatcher} docs for details).
      */
@@ -50,6 +52,7 @@ public class LoaderKeyboardListener extends LoaderListener implements KeyEventDi
 
     /**
      * Helper method that sends an appropriate action to the game loader based on which key the user pressed.
+     *
      * @param e The event that was triggered by the user pressing a key in the game.
      */
     private void sendActionBasedOnKeyPressed(KeyEvent e) {

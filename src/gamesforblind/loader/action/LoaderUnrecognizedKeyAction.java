@@ -11,6 +11,7 @@ public class LoaderUnrecognizedKeyAction extends LoaderAction {
 
     /**
      * Creates a new {@link LoaderUnrecognizedKeyAction}
+     *
      * @param keyCode The key code of the unrecognized key that was selected.
      */
     public LoaderUnrecognizedKeyAction(int keyCode) {
@@ -19,6 +20,7 @@ public class LoaderUnrecognizedKeyAction extends LoaderAction {
 
     /**
      * Getter for the keyCode instance variable.
+     *
      * @return The key code of the unrecognized key that was selected.
      */
     public int getKeyCode() {
