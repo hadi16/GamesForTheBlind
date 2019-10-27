@@ -1,6 +1,6 @@
 package gamesforblind.sudoku.action;
 
-import gamesforblind.sudoku.InputType;
+import gamesforblind.sudoku.enums.InputType;
 
 import java.awt.*;
 
