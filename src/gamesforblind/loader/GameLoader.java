@@ -6,6 +6,7 @@ import gamesforblind.loader.gui.LoaderFrame;
 import gamesforblind.loader.gui.LoaderGuiConstants;
 import gamesforblind.loader.gui.listener.LoaderActionListener;
 import gamesforblind.loader.gui.listener.LoaderKeyboardListener;
+import gamesforblind.logger.LogCreator;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.synthesizer.AudioPlayer;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
@@ -31,6 +32,8 @@ public class GameLoader {
      */
     private final Thread audioPlayerThread;
 
+    private final LogCreator logCreator = new LogCreator();
+
     private final LoaderFrame loaderFrame;
     private final AudioPlayerExecutor audioPlayerExecutor;
 
@@ -55,6 +58,8 @@ public class GameLoader {
      * @param action The action that was sent to the game loader.
      */
     public void receiveAction(LoaderAction action) {
+        this.logCreator.addProgramAction(action);
+
         // Case 1: the user pressed one of the arrow keys in the game.
         if (action instanceof LoaderArrowKeyAction) {
             final Map<String, Phrase> BUTTON_TEXT_TO_PHRASE = Map.of(
@@ -91,7 +96,7 @@ public class GameLoader {
             int sudokuBoardSize = loaderSudokuSelectionAction.getSudokuType().getSudokuBoardSize();
 
             this.loaderFrame.closeLoaderFrames();
-            new SudokuGame(sudokuBoardSize, this.audioPlayerExecutor);
+            new SudokuGame(sudokuBoardSize, this.audioPlayerExecutor, this.logCreator);
             return;
         }
 
