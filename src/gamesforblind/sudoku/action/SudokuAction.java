@@ -1,4 +1,6 @@
 package gamesforblind.sudoku.action;
 
-public abstract class SudokuAction {
+import gamesforblind.ProgramAction;
+
+public abstract class SudokuAction extends ProgramAction {
 }

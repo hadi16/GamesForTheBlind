@@ -1,15 +1,29 @@
 package gamesforblind.loader.action;
 
+import gamesforblind.loader.adapter.LoaderSudokuSelectionActionAdapter;
 import gamesforblind.loader.enums.SudokuType;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * Action for when the user makes a selection between a 4x4 and 9x9 Sudoku game.
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
 public class LoaderSudokuSelectionAction extends LoaderAction {
     /**
      * Which Sudoku game the user has selected (e.g. 4x4 or 9x9).
      */
+    @XmlElement
     private final SudokuType sudokuType;
+
+    private LoaderSudokuSelectionAction() {
+        this(null);
+    }
 
     /**
      * Creates a new {@link LoaderSudokuSelectionAction}
@@ -27,5 +41,10 @@ public class LoaderSudokuSelectionAction extends LoaderAction {
      */
     public SudokuType getSudokuType() {
         return this.sudokuType;
+    }
+
+    @Override
+    public XmlAdapter getJaxbAdapter() {
+        return new LoaderSudokuSelectionActionAdapter();
     }
 }

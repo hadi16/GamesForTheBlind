@@ -1,5 +1,6 @@
 package gamesforblind.sudoku;
 
+import gamesforblind.logger.LogCreator;
 import gamesforblind.sudoku.action.*;
 import gamesforblind.sudoku.gui.SudokuFrame;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
@@ -11,10 +12,12 @@ import gamesforblind.synthesizer.AudioPlayerExecutor;
 public class SudokuGame {
     private final SudokuState sudokuState;
     private final SudokuFrame sudokuFrame;
+    private final LogCreator logCreator;
 
-    public SudokuGame(int sudokuBoardSize, AudioPlayerExecutor audioPlayerExecutor) {
+    public SudokuGame(int sudokuBoardSize, AudioPlayerExecutor audioPlayerExecutor, LogCreator logCreator) {
+        this.logCreator = logCreator;
         this.sudokuState = new SudokuState(sudokuBoardSize, audioPlayerExecutor);
-        this.sudokuFrame = new SudokuFrame(this, this.sudokuState, sudokuBoardSize);
+        this.sudokuFrame = new SudokuFrame(this, this.sudokuState, sudokuBoardSize, logCreator);
     }
 
     /**
@@ -23,6 +26,8 @@ public class SudokuGame {
      * @param sudokuAction
      */
     public void receiveAction(SudokuAction sudokuAction) {
+        this.logCreator.addProgramAction(sudokuAction);
+
         if (this.sudokuState.isGameOver()) {
             return;
         }
