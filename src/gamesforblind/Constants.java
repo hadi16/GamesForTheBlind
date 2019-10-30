@@ -27,4 +27,18 @@ public class Constants {
     public static final File LOG_FILES_DIRECTORY = new File(
             Paths.get(System.getProperty("user.dir"), "logs/").toString()
     );
+
+    // region Loader Button Text Values
+    /* The various button text values that are used throughout the loader GUI. */
+    public static final String PLAY_SUDOKU_BUTTON = "PLAY SUDOKU";
+    public static final String EXIT_BUTTON = "EXIT";
+
+    /**
+     * I want to have "GO" & "BACK" be on separate lines. Swing supports HTML, so I used a HTML break tag for this.
+     */
+    public static final String BACK_BUTTON = "<html>GO<br/>BACK</html>";
+
+    public static final String FOUR_BY_FOUR_SUDOKU_BUTTON = "4x4";
+    public static final String NINE_BY_NINE_SUDOKU_BUTTON = "9x9";
+    // endregion
 }

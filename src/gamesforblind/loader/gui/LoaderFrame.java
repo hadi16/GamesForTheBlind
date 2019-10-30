@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static gamesforblind.Constants.FRAME_DIMENSION;
+import static gamesforblind.Constants.*;
 
 /**
  * Contains the logic for the loader GUI.
@@ -107,7 +107,7 @@ public class LoaderFrame extends JFrame {
         // Case 1: I am in the main screen (just return the "PLAY_SUDOKU" button).
         if (selectedGame == SelectedGame.NONE) {
             return this.getUIButton(
-                    LoaderGuiConstants.PLAY_SUDOKU_BUTTON,
+                    PLAY_SUDOKU_BUTTON,
                     new Dimension(FRAME_DIMENSION, FRAME_DIMENSION / HEIGHT_DIVISOR)
             );
         }
@@ -120,9 +120,9 @@ public class LoaderFrame extends JFrame {
             JPanel sudokuOptionsPanel = new JPanel();
             sudokuOptionsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, FRAME_DIMENSION / 10, 0));
 
-            sudokuOptionsPanel.add(this.getUIButton(LoaderGuiConstants.BACK_BUTTON, BUTTON_SIZE));
-            sudokuOptionsPanel.add(this.getUIButton(LoaderGuiConstants.FOUR_BY_FOUR_SUDOKU_BUTTON, BUTTON_SIZE));
-            sudokuOptionsPanel.add(this.getUIButton(LoaderGuiConstants.NINE_BY_NINE_SUDOKU_BUTTON, BUTTON_SIZE));
+            sudokuOptionsPanel.add(this.getUIButton(BACK_BUTTON, BUTTON_SIZE));
+            sudokuOptionsPanel.add(this.getUIButton(FOUR_BY_FOUR_SUDOKU_BUTTON, BUTTON_SIZE));
+            sudokuOptionsPanel.add(this.getUIButton(NINE_BY_NINE_SUDOKU_BUTTON, BUTTON_SIZE));
 
             return sudokuOptionsPanel;
         }
@@ -150,7 +150,7 @@ public class LoaderFrame extends JFrame {
         selectedGameComponent.setVisible(true);
 
         JButton exitButton = this.getUIButton(
-                LoaderGuiConstants.EXIT_BUTTON, new Dimension(FRAME_DIMENSION, FRAME_DIMENSION / 3)
+                EXIT_BUTTON, new Dimension(FRAME_DIMENSION, FRAME_DIMENSION / 3)
         );
 
         // Disable the exit button when in a game selection screen (e.g. Sudoku's).
