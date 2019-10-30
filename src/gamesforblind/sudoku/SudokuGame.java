@@ -1,6 +1,8 @@
 package gamesforblind.sudoku;
 
-import gamesforblind.logger.LogCreator;
+import gamesforblind.ProgramArgs;
+import gamesforblind.logger.LogFactory;
+import gamesforblind.logger.LogWriter;
 import gamesforblind.sudoku.action.*;
 import gamesforblind.sudoku.gui.SudokuFrame;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
@@ -12,12 +14,25 @@ import gamesforblind.synthesizer.AudioPlayerExecutor;
 public class SudokuGame {
     private final SudokuState sudokuState;
     private final SudokuFrame sudokuFrame;
-    private final LogCreator logCreator;
+    private final LogFactory logFactory;
+    private final ProgramArgs programArgs;
 
-    public SudokuGame(int sudokuBoardSize, AudioPlayerExecutor audioPlayerExecutor, LogCreator logCreator) {
-        this.logCreator = logCreator;
-        this.sudokuState = new SudokuState(sudokuBoardSize, audioPlayerExecutor);
-        this.sudokuFrame = new SudokuFrame(this, this.sudokuState, sudokuBoardSize, logCreator);
+    public SudokuGame(
+            int sudokuBoardSize, AudioPlayerExecutor audioPlayerExecutor, LogFactory logFactory, ProgramArgs programArgs
+    ) {
+        this.programArgs = programArgs;
+        this.logFactory = logFactory;
+
+        if (programArgs.isPlaybackMode()) {
+            this.sudokuState = new SudokuState(
+                    sudokuBoardSize, audioPlayerExecutor, logFactory.getOriginalSudokuGrid()
+            );
+        } else {
+            this.sudokuState = new SudokuState(sudokuBoardSize, audioPlayerExecutor);
+            this.logFactory.setOriginalSudokuGrid(this.sudokuState.getOriginalGrid());
+        }
+
+        this.sudokuFrame = new SudokuFrame(this, this.sudokuState, sudokuBoardSize, programArgs);
     }
 
     /**
@@ -26,7 +41,17 @@ public class SudokuGame {
      * @param sudokuAction
      */
     public void receiveAction(SudokuAction sudokuAction) {
-        this.logCreator.addProgramAction(sudokuAction);
+        if (!this.programArgs.isPlaybackMode()) {
+            this.logFactory.addProgramAction(sudokuAction);
+        }
+
+        if (sudokuAction instanceof SudokuExitAction) {
+            if (!this.programArgs.isPlaybackMode()) {
+                LogWriter logWriter = new LogWriter(this.logFactory);
+                logWriter.saveGameLog();
+                System.exit(0);
+            }
+        }
 
         if (this.sudokuState.isGameOver()) {
             return;
@@ -73,7 +98,7 @@ public class SudokuGame {
      * Calls the painter class to repaint the Sudoku board based on the current state
      */
     private void sendStateToGui() {
-        this.sudokuFrame.receiveSudokuState(new SudokuState(this.sudokuState));
+        this.sudokuFrame.receiveSudokuState(this.sudokuState);
         this.sudokuFrame.repaintSudokuPanel();
     }
 }

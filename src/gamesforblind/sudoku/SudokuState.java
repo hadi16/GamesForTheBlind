@@ -15,25 +15,44 @@ import java.util.Collections;
 import java.util.Optional;
 
 public class SudokuState {
-    private final AudioPlayerExecutor audioPlayerExecutor;
+    private final OriginalSudokuGrid originalGrid;
     private final int sudokuBoardSize;
+
+    private final AudioPlayerExecutor audioPlayerExecutor;
     private final Grid sudokuGrid;
     private final ArrayList<Point> originallyFilledSquares;
 
     private Point selectedBlockPoint;
     private Point selectedSquarePoint;
+
     private int numberOfEmptyCells;
 
     private boolean gameOver = false;
 
-    public SudokuState(int sudokuBoardSize, AudioPlayerExecutor audioPlayerExecutor) {
-        this.numberOfEmptyCells = (sudokuBoardSize * sudokuBoardSize) / 3;
+    private int getInitialNumberOfEmptyCells(int sudokuBoardSize) {
+        return (sudokuBoardSize * sudokuBoardSize) / 3;
+    }
 
+    public SudokuState(int sudokuBoardSize, AudioPlayerExecutor audioPlayerExecutor, OriginalSudokuGrid originalGrid) {
         this.sudokuBoardSize = sudokuBoardSize;
+        this.audioPlayerExecutor = audioPlayerExecutor;
+        this.originalGrid = originalGrid;
+
+        this.numberOfEmptyCells = this.getInitialNumberOfEmptyCells(sudokuBoardSize);
+        this.sudokuGrid = Grid.of(originalGrid.getGrid(), sudokuBoardSize);
+        this.originallyFilledSquares = this.initializeOriginallyFilledSquares();
+    }
+
+    public SudokuState(int sudokuBoardSize, AudioPlayerExecutor audioPlayerExecutor) {
+        this.sudokuBoardSize = sudokuBoardSize;
+        this.audioPlayerExecutor = audioPlayerExecutor;
+
+        this.numberOfEmptyCells = this.getInitialNumberOfEmptyCells(sudokuBoardSize);
+
         this.sudokuGrid = new Generator(sudokuBoardSize).generate(this.numberOfEmptyCells);
+        this.originalGrid = OriginalSudokuGrid.of(this.sudokuGrid.toIntArray());
 
         this.originallyFilledSquares = this.initializeOriginallyFilledSquares();
-        this.audioPlayerExecutor = audioPlayerExecutor;
     }
 
     public SudokuState(SudokuState originalState) {
@@ -52,6 +71,8 @@ public class SudokuState {
         this.audioPlayerExecutor = originalState.audioPlayerExecutor;
         this.numberOfEmptyCells = originalState.numberOfEmptyCells;
         this.gameOver = originalState.gameOver;
+
+        this.originalGrid = new OriginalSudokuGrid(originalState.originalGrid);
     }
 
     private ArrayList<Point> initializeOriginallyFilledSquares() {
@@ -159,9 +180,11 @@ public class SudokuState {
             return;
         }
 
+        if (cellToSet.getValue() == 0) {
+            this.numberOfEmptyCells--;
+        }
         cellToSet.setValue(numberToFill);
 
-        this.numberOfEmptyCells--;
         if (this.numberOfEmptyCells == 0) {
             this.gameOver = true;
         }
@@ -315,5 +338,9 @@ public class SudokuState {
 
     public boolean isGameOver() {
         return this.gameOver;
+    }
+
+    public OriginalSudokuGrid getOriginalGrid() {
+        return this.originalGrid;
     }
 }

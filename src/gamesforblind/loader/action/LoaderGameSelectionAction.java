@@ -1,18 +1,16 @@
 package gamesforblind.loader.action;
 
-import gamesforblind.loader.adapter.LoaderGameSelectionActionAdapter;
 import gamesforblind.loader.enums.SelectedGame;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * Action for when the user makes a menu selection in the loader, either with the keyboard or mouse.
  */
-@XmlRootElement
+@XmlRootElement(name = "LoaderGameSelectionAction")
 @XmlAccessorType(XmlAccessType.NONE)
 public class LoaderGameSelectionAction extends LoaderAction {
     /**
@@ -22,6 +20,7 @@ public class LoaderGameSelectionAction extends LoaderAction {
     @XmlElement
     private final SelectedGame selectedGame;
 
+    @SuppressWarnings("unused")
     private LoaderGameSelectionAction() {
         this(null);
     }
@@ -42,10 +41,5 @@ public class LoaderGameSelectionAction extends LoaderAction {
      */
     public SelectedGame getSelectedGame() {
         return this.selectedGame;
-    }
-
-    @Override
-    public XmlAdapter getJaxbAdapter() {
-        return new LoaderGameSelectionActionAdapter();
     }
 }

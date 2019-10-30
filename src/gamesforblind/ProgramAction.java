@@ -1,12 +1,18 @@
 package gamesforblind;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import gamesforblind.adapter.LocalDateTimeAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDateTime;
 
+@XmlAccessorType(XmlAccessType.NONE)
 public abstract class ProgramAction {
-    private final LocalDateTime localDateTime;
-
-    public abstract XmlAdapter getJaxbAdapter();
+    @XmlElement
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+    protected final LocalDateTime localDateTime;
 
     public ProgramAction() {
         this.localDateTime = LocalDateTime.now();

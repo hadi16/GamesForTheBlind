@@ -1,22 +1,25 @@
 package gamesforblind.loader;
 
+import gamesforblind.ProgramAction;
+import gamesforblind.ProgramArgs;
 import gamesforblind.loader.action.*;
 import gamesforblind.loader.enums.SelectedGame;
 import gamesforblind.loader.gui.LoaderFrame;
 import gamesforblind.loader.gui.LoaderGuiConstants;
+import gamesforblind.loader.gui.LogFileSelectionGui;
 import gamesforblind.loader.gui.listener.LoaderActionListener;
 import gamesforblind.loader.gui.listener.LoaderKeyboardListener;
-import gamesforblind.logger.LogCreator;
+import gamesforblind.logger.LogFactory;
+import gamesforblind.logger.LogReader;
 import gamesforblind.sudoku.SudokuGame;
+import gamesforblind.sudoku.action.SudokuAction;
 import gamesforblind.synthesizer.AudioPlayer;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
 import gamesforblind.synthesizer.Phrase;
 
 import javax.sound.sampled.LineUnavailableException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Scanner;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 /**
  * Universal loader for the program. Instantiated solely in {@link gamesforblind.Main}.
@@ -32,23 +35,76 @@ public class GameLoader {
      */
     private final Thread audioPlayerThread;
 
-    private final LogCreator logCreator = new LogCreator();
+    private final LogFactory logFactory;
 
     private final LoaderFrame loaderFrame;
     private final AudioPlayerExecutor audioPlayerExecutor;
 
+    private final ProgramArgs programArgs;
+
+    private SudokuGame sudokuGame;
+
     /**
      * Creates a new {@link GameLoader} (this is only called directly from main()).
      */
-    public GameLoader() {
+    public GameLoader(ProgramArgs programArgs) {
         // Initialize the audio player & start the audio player thread.
         AudioPlayer audioPlayer = this.initializeAudioPlayer();
         this.audioPlayerExecutor = new AudioPlayerExecutor(audioPlayer);
         this.audioPlayerThread = new Thread(audioPlayer);
         this.audioPlayerThread.start();
 
-        this.loaderFrame = new LoaderFrame(this);
+        this.programArgs = programArgs;
         this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.PLAY_OR_EXIT);
+        this.logFactory = this.getLogFactory();
+        this.loaderFrame = new LoaderFrame(this, programArgs);
+
+        if (this.programArgs.isPlaybackMode()) {
+            this.loopThroughSavedProgramActions();
+        }
+    }
+
+    private void loopThroughSavedProgramActions() {
+        ArrayList<ProgramAction> programActions = this.logFactory.getProgramActionList();
+        for (int i = 0; i < programActions.size(); i++) {
+            ProgramAction currentAction = programActions.get(i);
+
+            if (currentAction instanceof LoaderAction) {
+                this.receiveAction((LoaderAction) currentAction);
+            } else if (currentAction instanceof SudokuAction) {
+                this.sudokuGame.receiveAction((SudokuAction) currentAction);
+            }
+
+            if (i == programActions.size() - 1) {
+                break;
+            }
+
+            ProgramAction nextAction = programActions.get(i + 1);
+            long millisToSleep = ChronoUnit.MILLIS.between(
+                    currentAction.getLocalDateTime(), nextAction.getLocalDateTime()
+            );
+
+            try {
+                Thread.sleep(millisToSleep);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private LogFactory getLogFactory() {
+        if (!this.programArgs.isPlaybackMode()) {
+            return new LogFactory();
+        }
+
+        LogFileSelectionGui logFileSelectionGui = new LogFileSelectionGui();
+        Optional<String> maybeLogFilePath = logFileSelectionGui.getSelectedLogFilePath();
+        if (maybeLogFilePath.isEmpty()) {
+            System.err.println("Could not load XML log file!");
+            System.exit(1);
+        }
+
+        return new LogReader().restoreLoggedProgramActions(maybeLogFilePath.get());
     }
 
     /**
@@ -58,16 +114,18 @@ public class GameLoader {
      * @param action The action that was sent to the game loader.
      */
     public void receiveAction(LoaderAction action) {
-        this.logCreator.addProgramAction(action);
+        if (!this.programArgs.isPlaybackMode()) {
+            this.logFactory.addProgramAction(action);
+        }
 
         // Case 1: the user pressed one of the arrow keys in the game.
         if (action instanceof LoaderArrowKeyAction) {
             final Map<String, Phrase> BUTTON_TEXT_TO_PHRASE = Map.of(
-                    LoaderGuiConstants.PLAY_SUDOKU_BUTTON,          Phrase.SPACE_FOR_SUDOKU,
-                    LoaderGuiConstants.EXIT_BUTTON,                 Phrase.SPACE_FOR_EXIT,
-                    LoaderGuiConstants.BACK_BUTTON,                 Phrase.GO_BACK_TO_GAME_SELECTION,
-                    LoaderGuiConstants.FOUR_BY_FOUR_SUDOKU_BUTTON,  Phrase.SELECT_SUDOKU_FOUR,
-                    LoaderGuiConstants.NINE_BY_NINE_SUDOKU_BUTTON,  Phrase.SELECT_SUDOKU_NINE
+                    LoaderGuiConstants.PLAY_SUDOKU_BUTTON, Phrase.SPACE_FOR_SUDOKU,
+                    LoaderGuiConstants.EXIT_BUTTON, Phrase.SPACE_FOR_EXIT,
+                    LoaderGuiConstants.BACK_BUTTON, Phrase.GO_BACK_TO_GAME_SELECTION,
+                    LoaderGuiConstants.FOUR_BY_FOUR_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_FOUR,
+                    LoaderGuiConstants.NINE_BY_NINE_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_NINE
             );
 
             LoaderArrowKeyAction loaderArrowKeyAction = (LoaderArrowKeyAction) action;
@@ -96,7 +154,9 @@ public class GameLoader {
             int sudokuBoardSize = loaderSudokuSelectionAction.getSudokuType().getSudokuBoardSize();
 
             this.loaderFrame.closeLoaderFrames();
-            new SudokuGame(sudokuBoardSize, this.audioPlayerExecutor, this.logCreator);
+            this.sudokuGame = new SudokuGame(
+                    sudokuBoardSize, this.audioPlayerExecutor, this.logFactory, this.programArgs
+            );
             return;
         }
 

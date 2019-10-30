@@ -1,18 +1,16 @@
 package gamesforblind.loader.action;
 
-import gamesforblind.loader.adapter.LoaderArrowKeyActionAdapter;
 import gamesforblind.loader.enums.ArrowKeyDirection;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * Action for when the user presses an arrow key (up/down/left/right) while in the loader screen.
  */
-@XmlRootElement
+@XmlRootElement(name = "LoaderArrowKeyAction")
 @XmlAccessorType(XmlAccessType.NONE)
 public class LoaderArrowKeyAction extends LoaderAction {
     /**
@@ -21,6 +19,7 @@ public class LoaderArrowKeyAction extends LoaderAction {
     @XmlElement
     private final ArrowKeyDirection arrowKeyDirection;
 
+    @SuppressWarnings("unused")
     private LoaderArrowKeyAction() {
         this(null);
     }
@@ -41,10 +40,5 @@ public class LoaderArrowKeyAction extends LoaderAction {
      */
     public ArrowKeyDirection getArrowKeyDirection() {
         return this.arrowKeyDirection;
-    }
-
-    @Override
-    public XmlAdapter getJaxbAdapter() {
-        return new LoaderArrowKeyActionAdapter();
     }
 }
