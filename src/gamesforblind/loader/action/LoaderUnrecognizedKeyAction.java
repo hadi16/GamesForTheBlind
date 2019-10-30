@@ -1,17 +1,14 @@
 package gamesforblind.loader.action;
 
-import gamesforblind.loader.adapter.LoaderUnrecognizedKeyActionAdapter;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * Action for when the user presses an unrecognized key while in the loader GUI.
  */
-@XmlRootElement
+@XmlRootElement(name = "LoaderUnrecognizedKeyAction")
 @XmlAccessorType(XmlAccessType.NONE)
 public class LoaderUnrecognizedKeyAction extends LoaderAction {
     /**
@@ -20,6 +17,7 @@ public class LoaderUnrecognizedKeyAction extends LoaderAction {
     @XmlElement
     private final int keyCode;
 
+    @SuppressWarnings("unused")
     private LoaderUnrecognizedKeyAction() {
         this(0);
     }
@@ -40,10 +38,5 @@ public class LoaderUnrecognizedKeyAction extends LoaderAction {
      */
     public int getKeyCode() {
         return this.keyCode;
-    }
-
-    @Override
-    public XmlAdapter getJaxbAdapter() {
-        return new LoaderUnrecognizedKeyActionAdapter();
     }
 }

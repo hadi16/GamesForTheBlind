@@ -1,6 +1,6 @@
 package gamesforblind.sudoku.gui;
 
-import gamesforblind.logger.LogCreator;
+import gamesforblind.ProgramArgs;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.SudokuState;
 import gamesforblind.sudoku.gui.listener.SudokuKeyboardListener;
@@ -23,34 +23,25 @@ public class SudokuFrame extends JFrame {
      * @param initialState
      * @param sudokuBoardSize
      */
-    public SudokuFrame(SudokuGame sudokuGame, SudokuState initialState, int sudokuBoardSize, LogCreator logCreator) {
+    public SudokuFrame(SudokuGame sudokuGame, SudokuState initialState, int sudokuBoardSize, ProgramArgs programArgs) {
         this.sudokuPanel = new SudokuPanel(initialState);
         this.frame = new JFrame("Sudoku");
 
-        this.initializeGui(
-                new SudokuKeyboardListener(sudokuGame, sudokuBoardSize),
-                new SudokuMouseListener(sudokuGame, this, sudokuBoardSize),
-                new SudokuWindowListener(logCreator)
-        );
+        this.initializeGui();
+
+        if (!programArgs.isPlaybackMode()) {
+            this.frame.addMouseListener(new SudokuMouseListener(sudokuGame, this, sudokuBoardSize));
+            this.frame.addKeyListener(new SudokuKeyboardListener(sudokuGame, sudokuBoardSize));
+            this.frame.addWindowListener(new SudokuWindowListener(sudokuGame));
+        }
     }
 
     /**
      * Used for creating the on screen GUI, this will start at a dimension of 500 by 500 pixels but
      * is fully changeable by dragging the screen dimensions
-     *
-     * @param keyboardListener
-     * @param mouseListener
      */
-    private void initializeGui(
-            SudokuKeyboardListener keyboardListener,
-            SudokuMouseListener mouseListener,
-            SudokuWindowListener windowListener
-    ) {
+    private void initializeGui() {
         this.frame.add(this.sudokuPanel);
-
-        this.frame.addMouseListener(mouseListener);
-        this.frame.addKeyListener(keyboardListener);
-        this.frame.addWindowListener(windowListener);
 
         this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.frame.setSize(FRAME_DIMENSION, FRAME_DIMENSION);

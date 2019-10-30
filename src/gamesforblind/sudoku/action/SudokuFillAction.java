@@ -1,16 +1,23 @@
 package gamesforblind.sudoku.action;
 
-import gamesforblind.sudoku.adapter.SudokuFillActionAdapter;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * Fill action class used for inputting numbers into the proper cells
  */
-@XmlRootElement
+@XmlRootElement(name = "SudokuFillAction")
+@XmlAccessorType(XmlAccessType.NONE)
 public class SudokuFillAction extends SudokuAction {
+    @XmlElement
     private final int numberToFill;
+
+    @SuppressWarnings("unused")
+    private SudokuFillAction() {
+        this(0);
+    }
 
     public SudokuFillAction(int numberToFill) {
         this.numberToFill = numberToFill;
@@ -18,10 +25,5 @@ public class SudokuFillAction extends SudokuAction {
 
     public int getNumberToFill() {
         return this.numberToFill;
-    }
-
-    @Override
-    public XmlAdapter getJaxbAdapter() {
-        return new SudokuFillActionAdapter();
     }
 }

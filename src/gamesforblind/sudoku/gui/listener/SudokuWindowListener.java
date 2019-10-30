@@ -1,20 +1,21 @@
 package gamesforblind.sudoku.gui.listener;
 
-import gamesforblind.logger.LogCreator;
+import gamesforblind.sudoku.SudokuGame;
+import gamesforblind.sudoku.action.SudokuExitAction;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 public class SudokuWindowListener implements WindowListener {
-    private final LogCreator logCreator;
+    private final SudokuGame sudokuGame;
 
-    public SudokuWindowListener(LogCreator logCreator) {
-        this.logCreator = logCreator;
+    public SudokuWindowListener(SudokuGame sudokuGame) {
+        this.sudokuGame = sudokuGame;
     }
 
     @Override
     public void windowClosing(WindowEvent e) {
-        this.logCreator.saveProgramActions();
+        this.sudokuGame.receiveAction(new SudokuExitAction());
     }
 
     @Override

@@ -19,7 +19,6 @@ public class Main {
             audioFileBuilder.deleteOldPhraseAudioFiles();
         }
 
-        // Uses the universal launcher for the games.
-        new GameLoader();
+        new GameLoader(new ProgramArgs(args));
     }
 }

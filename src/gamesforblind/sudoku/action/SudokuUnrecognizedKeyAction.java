@@ -1,13 +1,20 @@
 package gamesforblind.sudoku.action;
 
-import gamesforblind.sudoku.adapter.SudokuUnrecognizedKeyActionAdapter;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-@XmlRootElement
+@XmlRootElement(name = "SudokuUnrecognizedKeyAction")
+@XmlAccessorType(XmlAccessType.NONE)
 public class SudokuUnrecognizedKeyAction extends SudokuAction {
+    @XmlElement
     private final int keyCode;
+
+    @SuppressWarnings("unused")
+    private SudokuUnrecognizedKeyAction() {
+        this(0);
+    }
 
     public SudokuUnrecognizedKeyAction(int keyCode) {
         this.keyCode = keyCode;
@@ -15,10 +22,5 @@ public class SudokuUnrecognizedKeyAction extends SudokuAction {
 
     public int getKeyCode() {
         return this.keyCode;
-    }
-
-    @Override
-    public XmlAdapter getJaxbAdapter() {
-        return new SudokuUnrecognizedKeyActionAdapter();
     }
 }

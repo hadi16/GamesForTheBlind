@@ -1,5 +1,6 @@
 package gamesforblind.loader.gui;
 
+import gamesforblind.ProgramArgs;
 import gamesforblind.loader.GameLoader;
 import gamesforblind.loader.enums.ArrowKeyDirection;
 import gamesforblind.loader.enums.SelectedGame;
@@ -49,16 +50,23 @@ public class LoaderFrame extends JFrame {
      */
     private int highlightedButtonIndex = 0;
 
+    private final ProgramArgs programArgs;
+
     /**
      * Creates a new {@link LoaderFrame}.
      *
      * @param gameLoader The game loader for the program, which is needed for mouse & keyboard listeners.
      */
-    public LoaderFrame(GameLoader gameLoader) {
+    public LoaderFrame(GameLoader gameLoader, ProgramArgs programArgs) {
+        this.programArgs = programArgs;
+
         // Initialize the listener instance variables & add the keyboard listener (mouse listener set later).
         this.loaderActionListener = new LoaderActionListener(gameLoader);
         this.loaderKeyboardListener = new LoaderKeyboardListener(gameLoader, this);
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this.loaderKeyboardListener);
+
+        if (!programArgs.isPlaybackMode()) {
+            KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this.loaderKeyboardListener);
+        }
 
         this.setLoaderGuiBasedOnSelectedGame(SelectedGame.NONE);
     }
@@ -75,7 +83,9 @@ public class LoaderFrame extends JFrame {
         final Font BUTTON_FONT = new Font("Arial", Font.BOLD, FRAME_DIMENSION / 11);
 
         JButton button = new JButton(buttonText);
-        button.addActionListener(this.loaderActionListener);
+        if (!this.programArgs.isPlaybackMode()) {
+            button.addActionListener(this.loaderActionListener);
+        }
 
         // Needed to set the background color of the button (for highlighted buttons in the GUI).
         button.setOpaque(true);
