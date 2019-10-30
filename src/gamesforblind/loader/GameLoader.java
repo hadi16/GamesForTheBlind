@@ -5,7 +5,6 @@ import gamesforblind.ProgramArgs;
 import gamesforblind.loader.action.*;
 import gamesforblind.loader.enums.SelectedGame;
 import gamesforblind.loader.gui.LoaderFrame;
-import gamesforblind.loader.gui.LoaderGuiConstants;
 import gamesforblind.loader.gui.LogFileSelectionGui;
 import gamesforblind.loader.gui.listener.LoaderActionListener;
 import gamesforblind.loader.gui.listener.LoaderKeyboardListener;
@@ -20,6 +19,8 @@ import gamesforblind.synthesizer.Phrase;
 import javax.sound.sampled.LineUnavailableException;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+
+import static gamesforblind.Constants.*;
 
 /**
  * Universal loader for the program. Instantiated solely in {@link gamesforblind.Main}.
@@ -121,11 +122,11 @@ public class GameLoader {
         // Case 1: the user pressed one of the arrow keys in the game.
         if (action instanceof LoaderArrowKeyAction) {
             final Map<String, Phrase> BUTTON_TEXT_TO_PHRASE = Map.of(
-                    LoaderGuiConstants.PLAY_SUDOKU_BUTTON, Phrase.SPACE_FOR_SUDOKU,
-                    LoaderGuiConstants.EXIT_BUTTON, Phrase.SPACE_FOR_EXIT,
-                    LoaderGuiConstants.BACK_BUTTON, Phrase.GO_BACK_TO_GAME_SELECTION,
-                    LoaderGuiConstants.FOUR_BY_FOUR_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_FOUR,
-                    LoaderGuiConstants.NINE_BY_NINE_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_NINE
+                    PLAY_SUDOKU_BUTTON, Phrase.SPACE_FOR_SUDOKU,
+                    EXIT_BUTTON, Phrase.SPACE_FOR_EXIT,
+                    BACK_BUTTON, Phrase.GO_BACK_TO_GAME_SELECTION,
+                    FOUR_BY_FOUR_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_FOUR,
+                    NINE_BY_NINE_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_NINE
             );
 
             LoaderArrowKeyAction loaderArrowKeyAction = (LoaderArrowKeyAction) action;

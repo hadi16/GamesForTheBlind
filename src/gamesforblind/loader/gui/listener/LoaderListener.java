@@ -6,7 +6,8 @@ import gamesforblind.loader.action.LoaderGameSelectionAction;
 import gamesforblind.loader.action.LoaderSudokuSelectionAction;
 import gamesforblind.loader.enums.SelectedGame;
 import gamesforblind.loader.enums.SudokuType;
-import gamesforblind.loader.gui.LoaderGuiConstants;
+
+import static gamesforblind.Constants.*;
 
 /**
  * An abstract class that all listeners in the loader GUI inherit from. This is done to
@@ -38,21 +39,21 @@ public abstract class LoaderListener {
     protected void sendSelectionActionBasedOnButtonText(String buttonText) {
         switch (buttonText) {
             // Cases for when the user can select between playing Sudoku & exiting the program.
-            case LoaderGuiConstants.PLAY_SUDOKU_BUTTON:
+            case PLAY_SUDOKU_BUTTON:
                 this.gameLoader.receiveAction(new LoaderGameSelectionAction(SelectedGame.SUDOKU));
                 break;
-            case LoaderGuiConstants.EXIT_BUTTON:
+            case EXIT_BUTTON:
                 this.gameLoader.receiveAction(new LoaderExitAction());
                 break;
 
             // Cases for when the user can select between going back, a new 4x4 Sudoku game, or a new 9x9 Sudoku game.
-            case LoaderGuiConstants.BACK_BUTTON:
+            case BACK_BUTTON:
                 this.gameLoader.receiveAction(new LoaderGameSelectionAction(SelectedGame.NONE));
                 break;
-            case LoaderGuiConstants.FOUR_BY_FOUR_SUDOKU_BUTTON:
+            case FOUR_BY_FOUR_SUDOKU_BUTTON:
                 this.gameLoader.receiveAction(new LoaderSudokuSelectionAction(SudokuType.FOUR_BY_FOUR));
                 break;
-            case LoaderGuiConstants.NINE_BY_NINE_SUDOKU_BUTTON:
+            case NINE_BY_NINE_SUDOKU_BUTTON:
                 this.gameLoader.receiveAction(new LoaderSudokuSelectionAction(SudokuType.NINE_BY_NINE));
                 break;
         }
