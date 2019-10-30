@@ -224,9 +224,7 @@ public class SudokuState {
 
         Optional<Cell> selectedCell = this.getSelectedCellAtPosition(this.selectedSquarePoint, this.selectedBlockPoint);
         if (selectedCell.isPresent()) {
-            this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
-                    Phrase.CURRENT_VALUE, Phrase.convertIntegerToPhrase(selectedCell.get().getValue())
-            )));
+            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.convertIntegerToPhrase(selectedCell.get().getValue()));
             return;
         }
 
