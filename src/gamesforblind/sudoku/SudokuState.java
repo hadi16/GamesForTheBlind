@@ -242,6 +242,54 @@ public class SudokuState {
         );
     }
 
+    public void giveHint() {
+        if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
+            ArrayList<Phrase> phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.NO_SELECTED_SQUARE));
+            phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
+            this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
+            return;
+        }
+
+        int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
+        Point pointToSet = new Point(
+                this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
+                this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
+        );
+        Cell cellToSet = this.sudokuGrid.getCell(pointToSet.y, pointToSet.x);
+
+        if (this.originallyFilledSquares.contains(cellToSet)) {
+
+            ArrayList<Phrase> phrasesToRead = new ArrayList<>(Arrays.asList(
+                    Phrase.CURRENT_VALUE,
+                    Phrase.convertIntegerToPhrase(cellToSet.getValue())
+
+            ));
+            this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
+        }
+
+        //change this  -- this.solve(this.originalGrid, cellToSet);
+        int[] values = new int [] {1,2,3,4,5,6,7,8,9};
+
+        for (int value : values) {
+            if (this.sudokuGrid.isValidValueForCell(cellToSet, value)) {
+                cellToSet.setValue(value);
+                break;
+            }
+        }
+
+        ArrayList<Phrase> phrasesToRead = new ArrayList<>(
+                Arrays.asList(Phrase.convertIntegerToPhrase(cellToSet.getValue()))
+        );
+
+        this.numberOfEmptyCells--;
+        phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
+
+        this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
+        if (this.numberOfEmptyCells == 0) {
+            this.gameOver = true;
+        }
+    }
+
     public void readUnrecognizedKey(int keyCode) {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>(Arrays.asList(
                 Phrase.UNRECOGNIZED_KEY, Phrase.keyCodeToPhrase(keyCode)
