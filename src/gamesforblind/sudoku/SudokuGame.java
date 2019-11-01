@@ -62,6 +62,12 @@ public class SudokuGame {
             return;
         }
 
+        if (sudokuAction instanceof SudokuHintKeyAction) {
+            this.sudokuState.giveHint();
+            this.sendStateToGui();
+            return;
+        }
+
         if (sudokuAction instanceof SudokuUnrecognizedKeyAction) {
             SudokuUnrecognizedKeyAction sudokuUnrecognizedKeyAction = (SudokuUnrecognizedKeyAction) sudokuAction;
             this.sudokuState.readUnrecognizedKey(sudokuUnrecognizedKeyAction.getKeyCode());
