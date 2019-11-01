@@ -1,6 +1,7 @@
 package gamesforblind.sudoku;
 
 import gamesforblind.ProgramArgs;
+import gamesforblind.enums.SudokuType;
 import gamesforblind.logger.LogFactory;
 import gamesforblind.logger.LogWriter;
 import gamesforblind.sudoku.action.*;
@@ -18,21 +19,21 @@ public class SudokuGame {
     private final ProgramArgs programArgs;
 
     public SudokuGame(
-            int sudokuBoardSize, AudioPlayerExecutor audioPlayerExecutor, LogFactory logFactory, ProgramArgs programArgs
+            SudokuType sudokuType, AudioPlayerExecutor audioPlayerExecutor, LogFactory logFactory, ProgramArgs programArgs
     ) {
         this.programArgs = programArgs;
         this.logFactory = logFactory;
 
         if (programArgs.isPlaybackMode()) {
             this.sudokuState = new SudokuState(
-                    sudokuBoardSize, audioPlayerExecutor, logFactory.getOriginalSudokuGrid()
+                    sudokuType, audioPlayerExecutor, logFactory.getOriginalSudokuGrid()
             );
         } else {
-            this.sudokuState = new SudokuState(sudokuBoardSize, audioPlayerExecutor);
+            this.sudokuState = new SudokuState(sudokuType, audioPlayerExecutor);
             this.logFactory.setOriginalSudokuGrid(this.sudokuState.getOriginalGrid());
         }
 
-        this.sudokuFrame = new SudokuFrame(this, this.sudokuState, sudokuBoardSize, programArgs);
+        this.sudokuFrame = new SudokuFrame(this, this.sudokuState, sudokuType, programArgs);
     }
 
     /**

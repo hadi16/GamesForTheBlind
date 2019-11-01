@@ -1,7 +1,7 @@
 package gamesforblind.sudoku.action;
 
 import gamesforblind.adapter.PointAdapter;
-import gamesforblind.sudoku.enums.InputType;
+import gamesforblind.enums.InputType;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
