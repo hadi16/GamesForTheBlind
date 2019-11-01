@@ -39,6 +39,7 @@ public class Constants {
     public static final String BACK_BUTTON = "<html>GO<br/>BACK</html>";
 
     public static final String FOUR_BY_FOUR_SUDOKU_BUTTON = "4x4";
+    public static final String SIX_BY_SIX_SUDOKU_BUTTON = "6x6";
     public static final String NINE_BY_NINE_SUDOKU_BUTTON = "9x9";
     // endregion
 }

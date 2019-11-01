@@ -1,5 +1,6 @@
 package gamesforblind.sudoku.generator;
 
+import gamesforblind.enums.SudokuType;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -10,14 +11,14 @@ public class GeneratorTest {
      */
     @Test
     public void generateCorrectNumEmpty() {
-        final int SUDOKU_BOARD_SIZE = 4;
+        final SudokuType SUDOKU_TYPE = SudokuType.FOUR_BY_FOUR;
         final int NUMBER_OF_EMPTY_CELLS = 4;
 
-        Grid testGrid = new Generator(SUDOKU_BOARD_SIZE).generate(NUMBER_OF_EMPTY_CELLS);
+        Grid testGrid = new Generator(SUDOKU_TYPE).generate(NUMBER_OF_EMPTY_CELLS);
 
         int actualNumberOfEmptyCells = 0;
-        for (int rowIndex = 0; rowIndex < SUDOKU_BOARD_SIZE; rowIndex++) {
-            for (int columnIndex = 0; columnIndex < SUDOKU_BOARD_SIZE; columnIndex++) {
+        for (int rowIndex = 0; rowIndex < SUDOKU_TYPE.getSudokuBoardSize(); rowIndex++) {
+            for (int columnIndex = 0; columnIndex < SUDOKU_TYPE.getSudokuBoardSize(); columnIndex++) {
                 Cell currentCell = testGrid.getCell(rowIndex, columnIndex);
                 if (currentCell.isEmpty()) {
                     actualNumberOfEmptyCells++;

@@ -1,7 +1,8 @@
 package gamesforblind.sudoku;
 
-import gamesforblind.sudoku.enums.InputType;
-import gamesforblind.sudoku.enums.SudokuSection;
+import gamesforblind.enums.InputType;
+import gamesforblind.enums.SudokuSection;
+import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Generator;
 import gamesforblind.sudoku.generator.Grid;
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 public class SudokuState {
     private final OriginalSudokuGrid originalGrid;
-    private final int sudokuBoardSize;
+    private final SudokuType sudokuType;
 
     private final AudioPlayerExecutor audioPlayerExecutor;
     private final Grid sudokuGrid;
@@ -29,33 +30,33 @@ public class SudokuState {
 
     private boolean gameOver = false;
 
-    public SudokuState(int sudokuBoardSize, AudioPlayerExecutor audioPlayerExecutor, OriginalSudokuGrid originalGrid) {
-        this.sudokuBoardSize = sudokuBoardSize;
+    public SudokuState(SudokuType sudokuType, AudioPlayerExecutor audioPlayerExecutor, OriginalSudokuGrid originalGrid) {
+        this.sudokuType = sudokuType;
         this.audioPlayerExecutor = audioPlayerExecutor;
         this.originalGrid = originalGrid;
 
-        this.numberOfEmptyCells = this.getInitialNumberOfEmptyCells(sudokuBoardSize);
-        this.sudokuGrid = Grid.of(originalGrid.getGrid(), sudokuBoardSize);
+        this.numberOfEmptyCells = this.getInitialNumberOfEmptyCells(sudokuType.getSudokuBoardSize());
+        this.sudokuGrid = Grid.of(originalGrid.getGrid(), sudokuType);
         this.originallyFilledSquares = this.initializeOriginallyFilledSquares();
     }
 
-    public SudokuState(int sudokuBoardSize, AudioPlayerExecutor audioPlayerExecutor) {
-        this.sudokuBoardSize = sudokuBoardSize;
+    public SudokuState(SudokuType sudokuType, AudioPlayerExecutor audioPlayerExecutor) {
+        this.sudokuType = sudokuType;
         this.audioPlayerExecutor = audioPlayerExecutor;
 
-        this.numberOfEmptyCells = this.getInitialNumberOfEmptyCells(sudokuBoardSize);
+        this.numberOfEmptyCells = this.getInitialNumberOfEmptyCells(sudokuType.getSudokuBoardSize());
 
-        this.sudokuGrid = new Generator(sudokuBoardSize).generate(this.numberOfEmptyCells);
+        this.sudokuGrid = new Generator(sudokuType).generate(this.numberOfEmptyCells);
         this.originalGrid = OriginalSudokuGrid.of(this.sudokuGrid.toIntArray());
 
         this.originallyFilledSquares = this.initializeOriginallyFilledSquares();
     }
 
     public SudokuState(SudokuState originalState) {
-        this.sudokuBoardSize = originalState.sudokuBoardSize;
         this.sudokuGrid = new Grid(originalState.sudokuGrid);
 
         // Enums are immutable set (don't need copy constructor for them).
+        this.sudokuType = originalState.sudokuType;
         this.selectedBlockPoint = originalState.selectedBlockPoint;
         this.selectedSquarePoint = originalState.selectedSquarePoint;
 
@@ -77,14 +78,17 @@ public class SudokuState {
 
     private ArrayList<Point> initializeOriginallyFilledSquares() {
         ArrayList<Point> originallyFilledSquares = new ArrayList<>();
-        for (int rowIdx = 0; rowIdx < this.sudokuBoardSize; rowIdx++) {
-            for (int columnIdx = 0; columnIdx < this.sudokuBoardSize; columnIdx++) {
+
+        int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
+        for (int rowIdx = 0; rowIdx < sudokuBoardSize; rowIdx++) {
+            for (int columnIdx = 0; columnIdx < sudokuBoardSize; columnIdx++) {
                 Cell cellAtPosition = this.sudokuGrid.getCell(rowIdx, columnIdx);
                 if (cellAtPosition.getValue() != 0) {
                     originallyFilledSquares.add(new Point(columnIdx, rowIdx));
                 }
             }
         }
+
         return originallyFilledSquares;
     }
 
@@ -93,10 +97,11 @@ public class SudokuState {
             return Optional.empty();
         }
 
-        int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
+        int numberOfBlocksWidth = this.sudokuType.getSudokuBoardSize() / this.sudokuType.getBlockWidth();
+        int numberOfBlocksHeight = this.sudokuType.getSudokuBoardSize() / this.sudokuType.getBlockHeight();
         Point cellPoint = new Point(
-                selectedBlockPoint.x * numberOfBlocks + selectedSquarePoint.x,
-                selectedBlockPoint.y * numberOfBlocks + selectedSquarePoint.y
+                selectedBlockPoint.x * numberOfBlocksWidth + selectedSquarePoint.x,
+                selectedBlockPoint.y * numberOfBlocksHeight + selectedSquarePoint.y
         );
 
         return Optional.of(this.sudokuGrid.getCell(cellPoint.y, cellPoint.x));
@@ -129,11 +134,7 @@ public class SudokuState {
             return;
         }
 
-        int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
-        Point pointToSet = new Point(
-                this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
-                this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
-        );
+        Point pointToSet = this.getSelectedPoint();
         Cell cellToSet = this.sudokuGrid.getCell(pointToSet.y, pointToSet.x);
 
         if (numberToFill == 0) {
@@ -153,9 +154,10 @@ public class SudokuState {
             return;
         }
 
-        if (!(numberToFill > 0 && numberToFill <= this.sudokuBoardSize)) {
+        int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
+        if (!(numberToFill > 0 && numberToFill <= sudokuBoardSize)) {
             this.audioPlayerExecutor.replacePhraseAndPrint(
-                    this.sudokuBoardSize == 9 ? Phrase.INVALID_NUMBER_TO_FILL_9 : Phrase.INVALID_NUMBER_TO_FILL_4
+                    sudokuBoardSize == 9 ? Phrase.INVALID_NUMBER_TO_FILL_9 : Phrase.INVALID_NUMBER_TO_FILL_4
             );
             return;
         }
@@ -198,9 +200,15 @@ public class SudokuState {
 
     public void setHighlightedPoint(Point pointToSet, InputType inputType) {
         if (inputType == InputType.MOUSE) {
-            int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
-            Point blockPointToSet = new Point(pointToSet.x / numberOfBlocks, pointToSet.y / numberOfBlocks);
-            Point squarePointToSet = new Point(pointToSet.x % numberOfBlocks, pointToSet.y % numberOfBlocks);
+            int numberOfBlocksWidth = this.sudokuType.getSudokuBoardSize() / this.sudokuType.getBlockWidth();
+            int numberOfBlocksHeight = this.sudokuType.getSudokuBoardSize() / this.sudokuType.getBlockHeight();
+
+            Point blockPointToSet = new Point(
+                    pointToSet.x / numberOfBlocksWidth, pointToSet.y / numberOfBlocksHeight
+            );
+            Point squarePointToSet = new Point(
+                    pointToSet.x % numberOfBlocksWidth, pointToSet.y % numberOfBlocksHeight
+            );
 
             if (blockPointToSet.equals(this.selectedBlockPoint) && squarePointToSet.equals(this.selectedSquarePoint)) {
                 this.selectedBlockPoint = null;
@@ -238,7 +246,7 @@ public class SudokuState {
 
     public void readInstructions() {
         this.audioPlayerExecutor.replacePhraseAndPrint(
-                this.sudokuBoardSize == 9 ? Phrase.INSTRUCTIONS_9 : Phrase.INSTRUCTIONS_4
+                this.sudokuType.getSudokuBoardSize() == 9 ? Phrase.INSTRUCTIONS_9 : Phrase.INSTRUCTIONS_4
         );
     }
 
@@ -250,7 +258,7 @@ public class SudokuState {
             return;
         }
 
-        int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
+        int numberOfBlocks = (int) Math.sqrt(this.sudokuType.getSudokuBoardSize());
         Point pointToSet = new Point(
                 this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
                 this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
@@ -278,7 +286,7 @@ public class SudokuState {
         }
 
         ArrayList<Phrase> phrasesToRead = new ArrayList<>(
-                Arrays.asList(Phrase.convertIntegerToPhrase(cellToSet.getValue()))
+                Collections.singletonList(Phrase.convertIntegerToPhrase(cellToSet.getValue()))
         );
 
         this.numberOfEmptyCells--;
@@ -300,7 +308,7 @@ public class SudokuState {
     private ArrayList<Phrase> getRowOrColumnPhrases(Point selectedPoint, boolean readRow) {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>();
         phrasesToRead.add(readRow ? Phrase.IN_ROW : Phrase.IN_COLUMN);
-        for (int rowOrColumnIdx = 0; rowOrColumnIdx < this.sudokuBoardSize; rowOrColumnIdx++) {
+        for (int rowOrColumnIdx = 0; rowOrColumnIdx < this.sudokuType.getSudokuBoardSize(); rowOrColumnIdx++) {
             Cell cellToRead;
             if (readRow) {
                 cellToRead = this.sudokuGrid.getCell(selectedPoint.y, rowOrColumnIdx);
@@ -317,9 +325,8 @@ public class SudokuState {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>();
         phrasesToRead.add(Phrase.IN_BLOCK);
 
-        int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
-        for (int rowIndex = 0; rowIndex < numberOfBlocks; rowIndex++) {
-            for (int columnIndex = 0; columnIndex < numberOfBlocks; columnIndex++) {
+        for (int rowIndex = 0; rowIndex < this.sudokuType.getBlockHeight(); rowIndex++) {
+            for (int columnIndex = 0; columnIndex < this.sudokuType.getBlockWidth(); columnIndex++) {
                 Optional<Cell> cell = this.getSelectedCellAtPosition(
                         new Point(columnIndex, rowIndex), this.selectedBlockPoint
                 );
@@ -339,12 +346,7 @@ public class SudokuState {
             return;
         }
 
-        int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
-
-        Point selectedPoint = new Point(
-                this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
-                this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
-        );
+        Point selectedPoint = this.getSelectedPoint();
 
         ArrayList<Phrase> phrasesToRead = new ArrayList<>();
         switch (sectionToRead) {
@@ -362,8 +364,19 @@ public class SudokuState {
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
 
+    private Point getSelectedPoint() {
+        int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
+        int numberOfBlocksWidth = sudokuBoardSize / this.sudokuType.getBlockWidth();
+        int numberOfBlocksHeight = sudokuBoardSize / this.sudokuType.getBlockHeight();
+
+        return new Point(
+                this.selectedBlockPoint.x * numberOfBlocksWidth + this.selectedSquarePoint.x,
+                this.selectedBlockPoint.y * numberOfBlocksHeight + this.selectedSquarePoint.y
+        );
+    }
+
     public int getSudokuBoardSize() {
-        return this.sudokuBoardSize;
+        return this.sudokuType.getSudokuBoardSize();
     }
 
     public Grid getSudokuGrid() {

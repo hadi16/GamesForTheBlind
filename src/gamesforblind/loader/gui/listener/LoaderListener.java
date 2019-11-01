@@ -4,8 +4,8 @@ import gamesforblind.loader.GameLoader;
 import gamesforblind.loader.action.LoaderExitAction;
 import gamesforblind.loader.action.LoaderGameSelectionAction;
 import gamesforblind.loader.action.LoaderSudokuSelectionAction;
-import gamesforblind.loader.enums.SelectedGame;
-import gamesforblind.loader.enums.SudokuType;
+import gamesforblind.enums.SelectedGame;
+import gamesforblind.enums.SudokuType;
 
 import static gamesforblind.Constants.*;
 
@@ -52,6 +52,9 @@ public abstract class LoaderListener {
                 break;
             case FOUR_BY_FOUR_SUDOKU_BUTTON:
                 this.gameLoader.receiveAction(new LoaderSudokuSelectionAction(SudokuType.FOUR_BY_FOUR));
+                break;
+            case SIX_BY_SIX_SUDOKU_BUTTON:
+                this.gameLoader.receiveAction(new LoaderSudokuSelectionAction(SudokuType.SIX_BY_SIX));
                 break;
             case NINE_BY_NINE_SUDOKU_BUTTON:
                 this.gameLoader.receiveAction(new LoaderSudokuSelectionAction(SudokuType.NINE_BY_NINE));

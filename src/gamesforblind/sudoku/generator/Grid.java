@@ -1,5 +1,7 @@
 package gamesforblind.sudoku.generator;
 
+import gamesforblind.enums.SudokuType;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -10,25 +12,26 @@ import java.util.Optional;
  * This class represents a Sudoku Grid consisting of a NxN matrix containing blocks of {@link Cell}s.
  */
 public class Grid {
-    private final int sudokuBoardSize;
+    private final SudokuType sudokuType;
     private final Cell[][] grid;
 
-    private Grid(Cell[][] grid, int sudokuBoardSize) {
+    private Grid(Cell[][] grid, SudokuType sudokuType) {
         this.grid = grid;
-        this.sudokuBoardSize = sudokuBoardSize;
+        this.sudokuType = sudokuType;
     }
 
     public Grid(Grid originalGrid) {
-        int[][] gridNumbers = new int[originalGrid.sudokuBoardSize][];
+        int[][] gridNumbers = new int[originalGrid.grid.length][];
         for (int i = 0; i < gridNumbers.length; i++) {
-            gridNumbers[i] = new int[originalGrid.sudokuBoardSize];
+            gridNumbers[i] = new int[originalGrid.grid[i].length];
             for (int j = 0; j < gridNumbers[0].length; j++) {
                 gridNumbers[i][j] = originalGrid.grid[i][j].getValue();
             }
         }
 
-        Grid newGrid = Grid.of(gridNumbers, originalGrid.sudokuBoardSize);
-        this.sudokuBoardSize = newGrid.sudokuBoardSize;
+        Grid newGrid = Grid.of(gridNumbers, originalGrid.sudokuType);
+
+        this.sudokuType = newGrid.sudokuType;
         this.grid = newGrid.grid;
     }
 
@@ -38,7 +41,9 @@ public class Grid {
      * @param grid a two-dimensional int-array representation of a Grid
      * @return a Grid instance corresponding to the provided two-dimensional int-array
      */
-    public static Grid of(int[][] grid, int sudokuBoardSize) {
+    public static Grid of(int[][] grid, SudokuType sudokuType) {
+        int sudokuBoardSize = sudokuType.getSudokuBoardSize();
+
         verifyGrid(grid, sudokuBoardSize);
 
         Cell[][] cells = new Cell[sudokuBoardSize][sudokuBoardSize];
@@ -61,8 +66,8 @@ public class Grid {
                 rows.get(row).add(cell);
                 columns.get(column).add(cell);
 
-                int numberOfBlocks = (int) Math.sqrt(sudokuBoardSize);
-                boxes.get((row / numberOfBlocks) * numberOfBlocks + column / numberOfBlocks).add(cell);
+                int blockHeight = sudokuType.getBlockHeight();
+                boxes.get((row / blockHeight) * blockHeight + column / sudokuType.getBlockWidth()).add(cell);
 
                 if (lastCell != null) {
                     lastCell.setNextCell(cell);
@@ -98,7 +103,7 @@ public class Grid {
             }
         }
 
-        return new Grid(cells, sudokuBoardSize);
+        return new Grid(cells, sudokuType);
     }
 
     /**
@@ -106,9 +111,9 @@ public class Grid {
      *
      * @return an empty Grid
      */
-    public static Grid emptyGrid(int numSudokuSquares) {
-        int[][] emptyGrid = new int[numSudokuSquares][numSudokuSquares];
-        return Grid.of(emptyGrid, numSudokuSquares);
+    public static Grid emptyGrid(SudokuType sudokuType) {
+        int[][] emptyGrid = new int[sudokuType.getSudokuBoardSize()][sudokuType.getSudokuBoardSize()];
+        return Grid.of(emptyGrid, sudokuType);
     }
 
     private static void verifyGrid(int[][] grid, int numSudokuSquares) {
@@ -266,6 +271,6 @@ public class Grid {
      */
     @Override
     public String toString() {
-        return StringConverter.toString(this, (int) Math.sqrt(this.sudokuBoardSize));
+        return StringConverter.toString(this, (int) Math.sqrt(this.sudokuType.getSudokuBoardSize()));
     }
 }

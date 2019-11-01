@@ -3,7 +3,7 @@ package gamesforblind.loader.gui.listener;
 import gamesforblind.loader.GameLoader;
 import gamesforblind.loader.action.LoaderArrowKeyAction;
 import gamesforblind.loader.action.LoaderUnrecognizedKeyAction;
-import gamesforblind.loader.enums.ArrowKeyDirection;
+import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.loader.gui.LoaderFrame;
 
 import java.awt.*;
