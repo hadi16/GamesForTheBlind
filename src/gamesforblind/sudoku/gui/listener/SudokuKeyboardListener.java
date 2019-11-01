@@ -82,6 +82,10 @@ public class SudokuKeyboardListener implements KeyListener {
             this.sudokuGame.receiveAction(new SudokuInstructionsAction());
             return;
         }
+        if (selectedKeyChar == 'H') {
+            this.sudokuGame.receiveAction(new SudokuHintKeyAction());
+            return;
+        }
 
         Point currentSelectedPoint = this.charToPoint.get(selectedKeyChar);
         if (currentSelectedPoint == null) {
