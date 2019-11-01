@@ -38,19 +38,18 @@ public class LoaderFrame extends JFrame {
      */
     private final LoaderKeyboardListener loaderKeyboardListener;
 
+    private final ProgramArgs programArgs;
+
     /**
      * JFrame for loader GUI. When moving between screens in GUI, this value is reassigned & old one is disposed.
      */
     private JFrame loaderFrame;
-
     /**
      * Holds the index of the currently highlighted button.
      * In main screen, 0 --> "PLAY SUDOKU", 1 --> "EXIT"
      * In Sudoku screen, 0 --> "BACK", 1 --> "4x4", 2 --> "9x9"
      */
     private int highlightedButtonIndex = 0;
-
-    private final ProgramArgs programArgs;
 
     /**
      * Creates a new {@link LoaderFrame}.

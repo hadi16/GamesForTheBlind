@@ -18,17 +18,6 @@ public class Grid {
         this.sudokuBoardSize = sudokuBoardSize;
     }
 
-    public int[][] toIntArray() {
-        int[][] mappedGrid = new int[this.grid.length][];
-        for (int i = 0; i < this.grid.length; i++) {
-            mappedGrid[i] = new int[this.grid[i].length];
-            for (int j = 0; j < this.grid[i].length; j++) {
-                mappedGrid[i][j] = this.grid[i][j].getValue();
-            }
-        }
-        return mappedGrid;
-    }
-
     public Grid(Grid originalGrid) {
         int[][] gridNumbers = new int[originalGrid.sudokuBoardSize][];
         for (int i = 0; i < gridNumbers.length; i++) {
@@ -142,6 +131,17 @@ public class Grid {
                 }
             }
         }
+    }
+
+    public int[][] toIntArray() {
+        int[][] mappedGrid = new int[this.grid.length][];
+        for (int i = 0; i < this.grid.length; i++) {
+            mappedGrid[i] = new int[this.grid[i].length];
+            for (int j = 0; j < this.grid[i].length; j++) {
+                mappedGrid[i][j] = this.grid[i][j].getValue();
+            }
+        }
+        return mappedGrid;
     }
 
     /**

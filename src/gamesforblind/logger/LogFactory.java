@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import static gamesforblind.Constants.LOG_FILES_DIRECTORY;
 
 public class LogFactory {
-    private OriginalSudokuGrid originalSudokuGrid;
     private final ArrayList<ProgramAction> programActionList = new ArrayList<>();
+    private OriginalSudokuGrid originalSudokuGrid;
 
     public LogFactory() {
         if (!LOG_FILES_DIRECTORY.exists()) {
@@ -26,12 +26,12 @@ public class LogFactory {
         this.programActionList.add(actionToAdd);
     }
 
-    public void setOriginalSudokuGrid(OriginalSudokuGrid originalSudokuGrid) {
-        this.originalSudokuGrid = originalSudokuGrid;
-    }
-
     public OriginalSudokuGrid getOriginalSudokuGrid() {
         return this.originalSudokuGrid;
+    }
+
+    public void setOriginalSudokuGrid(OriginalSudokuGrid originalSudokuGrid) {
+        this.originalSudokuGrid = originalSudokuGrid;
     }
 
     public ArrayList<ProgramAction> getProgramActionList() {

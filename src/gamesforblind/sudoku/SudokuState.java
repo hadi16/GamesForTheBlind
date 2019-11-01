@@ -29,10 +29,6 @@ public class SudokuState {
 
     private boolean gameOver = false;
 
-    private int getInitialNumberOfEmptyCells(int sudokuBoardSize) {
-        return (sudokuBoardSize * sudokuBoardSize) / 3;
-    }
-
     public SudokuState(int sudokuBoardSize, AudioPlayerExecutor audioPlayerExecutor, OriginalSudokuGrid originalGrid) {
         this.sudokuBoardSize = sudokuBoardSize;
         this.audioPlayerExecutor = audioPlayerExecutor;
@@ -73,6 +69,10 @@ public class SudokuState {
         this.gameOver = originalState.gameOver;
 
         this.originalGrid = new OriginalSudokuGrid(originalState.originalGrid);
+    }
+
+    private int getInitialNumberOfEmptyCells(int sudokuBoardSize) {
+        return (sudokuBoardSize * sudokuBoardSize) / 3;
     }
 
     private ArrayList<Point> initializeOriginallyFilledSquares() {
@@ -268,7 +268,7 @@ public class SudokuState {
         }
 
         //change this  -- this.solve(this.originalGrid, cellToSet);
-        int[] values = new int [] {1,2,3,4,5,6,7,8,9};
+        int[] values = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
 
         for (int value : values) {
             if (this.sudokuGrid.isValidValueForCell(cellToSet, value)) {
