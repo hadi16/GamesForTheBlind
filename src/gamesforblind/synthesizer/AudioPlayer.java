@@ -52,12 +52,12 @@ public class AudioPlayer implements Runnable {
      * Plays the first remaining Phrase in the phrasesToPlay instance variable.
      */
     private void playPhrase() {
-        synchronized (this) {
-            if (this.phrasesToPlay.isEmpty()) {
-                return;
-            }
+        if (this.phrasesToPlay.isEmpty()) {
+            return;
+        }
 
-            // Resets the audio stream to the first remaining Phrase & start the clip.
+        // Resets the audio stream to the first remaining Phrase & start the clip.
+        synchronized (this) {
             this.resetAudioStream(this.phrasesToPlay.remove(0).getPhraseAudioFile());
             this.clip.start();
         }
@@ -69,12 +69,12 @@ public class AudioPlayer implements Runnable {
      * @param phrase The {@link Phrase} to replace the phrases to play with.
      */
     public void replacePhraseToPlay(Phrase phrase) {
-        synchronized (this) {
-            // Since I'm REPLACING the phrases to play, I need to first close the running clip.
-            if (this.clip.isRunning()) {
-                this.clip.close();
-            }
+        // Since I'm REPLACING the phrases to play, I need to first close the running clip.
+        if (this.clip.isRunning()) {
+            this.clip.close();
+        }
 
+        synchronized (this) {
             this.phrasesToPlay = new ArrayList<>(Collections.singletonList(phrase));
         }
     }
@@ -102,16 +102,20 @@ public class AudioPlayer implements Runnable {
     public void run() {
         // Terminate only when isActive is set to false.
         while (this.isActive) {
-            synchronized (this) {
-                if (!this.clip.isRunning()) {
-                    this.clip.close();
+            if (!this.clip.isRunning()) {
+                long start = System.currentTimeMillis();
+                this.clip.close();
+                long end = System.currentTimeMillis();
+                System.out.println("duration: " + (end - start));
+
+                synchronized (this) {
                     this.playPhrase();
                 }
             }
 
             try {
                 // Divide by 1000 to convert microseconds to milliseconds.
-                Thread.sleep(this.clip.getMicrosecondLength() / 1000);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
