@@ -13,7 +13,7 @@ public abstract class SudokuKeyboardInterface {
     protected final SudokuType sudokuType;
     private final Grid sudokuGrid;
 
-    public SudokuKeyboardInterface(SudokuType sudokuType, Grid sudokuGrid) {
+    protected SudokuKeyboardInterface(SudokuType sudokuType, Grid sudokuGrid) {
         this.sudokuType = sudokuType;
         this.sudokuGrid = sudokuGrid;
     }
