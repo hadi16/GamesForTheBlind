@@ -2,8 +2,8 @@ package gamesforblind.loader.gui;
 
 import gamesforblind.ProgramArgs;
 import gamesforblind.loader.GameLoader;
-import gamesforblind.loader.enums.ArrowKeyDirection;
-import gamesforblind.loader.enums.SelectedGame;
+import gamesforblind.enums.ArrowKeyDirection;
+import gamesforblind.enums.SelectedGame;
 import gamesforblind.loader.gui.listener.LoaderActionListener;
 import gamesforblind.loader.gui.listener.LoaderKeyboardListener;
 
@@ -38,19 +38,18 @@ public class LoaderFrame extends JFrame {
      */
     private final LoaderKeyboardListener loaderKeyboardListener;
 
+    private final ProgramArgs programArgs;
+
     /**
      * JFrame for loader GUI. When moving between screens in GUI, this value is reassigned & old one is disposed.
      */
     private JFrame loaderFrame;
-
     /**
      * Holds the index of the currently highlighted button.
      * In main screen, 0 --> "PLAY SUDOKU", 1 --> "EXIT"
      * In Sudoku screen, 0 --> "BACK", 1 --> "4x4", 2 --> "9x9"
      */
     private int highlightedButtonIndex = 0;
-
-    private final ProgramArgs programArgs;
 
     /**
      * Creates a new {@link LoaderFrame}.
@@ -80,7 +79,7 @@ public class LoaderFrame extends JFrame {
      */
     private JButton getUIButton(String buttonText, Dimension preferredSize) {
         // Make the size of the button font dependent on the size of the frame.
-        final Font BUTTON_FONT = new Font("Arial", Font.BOLD, FRAME_DIMENSION / 11);
+        final Font BUTTON_FONT = new Font("Arial", Font.BOLD, FRAME_DIMENSION / 13);
 
         JButton button = new JButton(buttonText);
         if (!this.programArgs.isPlaybackMode()) {
@@ -115,13 +114,14 @@ public class LoaderFrame extends JFrame {
         // Case 2: I am in the Sudoku selection screen (return a JPanel with "BACK", "4x4", and "9x9" buttons).
         if (selectedGame == SelectedGame.SUDOKU) {
             final Dimension BUTTON_SIZE = new Dimension(
-                    FRAME_DIMENSION / 3, FRAME_DIMENSION / HEIGHT_DIVISOR
+                    FRAME_DIMENSION / 4, FRAME_DIMENSION / HEIGHT_DIVISOR
             );
             JPanel sudokuOptionsPanel = new JPanel();
-            sudokuOptionsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, FRAME_DIMENSION / 10, 0));
+            sudokuOptionsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, FRAME_DIMENSION / 15, 0));
 
             sudokuOptionsPanel.add(this.getUIButton(BACK_BUTTON, BUTTON_SIZE));
             sudokuOptionsPanel.add(this.getUIButton(FOUR_BY_FOUR_SUDOKU_BUTTON, BUTTON_SIZE));
+            sudokuOptionsPanel.add(this.getUIButton(SIX_BY_SIX_SUDOKU_BUTTON, BUTTON_SIZE));
             sudokuOptionsPanel.add(this.getUIButton(NINE_BY_NINE_SUDOKU_BUTTON, BUTTON_SIZE));
 
             return sudokuOptionsPanel;

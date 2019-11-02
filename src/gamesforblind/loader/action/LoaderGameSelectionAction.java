@@ -1,6 +1,6 @@
 package gamesforblind.loader.action;
 
-import gamesforblind.loader.enums.SelectedGame;
+import gamesforblind.enums.SelectedGame;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

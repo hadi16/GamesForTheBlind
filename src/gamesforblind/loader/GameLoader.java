@@ -2,8 +2,10 @@ package gamesforblind.loader;
 
 import gamesforblind.ProgramAction;
 import gamesforblind.ProgramArgs;
+import gamesforblind.enums.InterfaceType;
+import gamesforblind.enums.SelectedGame;
+import gamesforblind.enums.SudokuType;
 import gamesforblind.loader.action.*;
-import gamesforblind.loader.enums.SelectedGame;
 import gamesforblind.loader.gui.LoaderFrame;
 import gamesforblind.loader.gui.LogFileSelectionGui;
 import gamesforblind.loader.gui.listener.LoaderActionListener;
@@ -152,11 +154,19 @@ public class GameLoader {
         // Case 3: the user selected one of the Sudoku board sizes in the loader GUI (4x4 or 9x9).
         if (action instanceof LoaderSudokuSelectionAction) {
             LoaderSudokuSelectionAction loaderSudokuSelectionAction = (LoaderSudokuSelectionAction) action;
-            int sudokuBoardSize = loaderSudokuSelectionAction.getSudokuType().getSudokuBoardSize();
+            SudokuType sudokuType = loaderSudokuSelectionAction.getSudokuType();
+
+            ArrayList<InterfaceType> supportedInterfaces = sudokuType.getSupportedSudokuInterfaces();
+            InterfaceType selectedInterfaceType = this.programArgs.getSelectedInterfaceType();
+            if (!supportedInterfaces.contains(selectedInterfaceType)) {
+                throw new IllegalArgumentException(
+                        "Interface type " + selectedInterfaceType + " not supported for Sudoku type " + sudokuType
+                );
+            }
 
             this.loaderFrame.closeLoaderFrames();
             this.sudokuGame = new SudokuGame(
-                    sudokuBoardSize, this.audioPlayerExecutor, this.logFactory, this.programArgs
+                    sudokuType, this.audioPlayerExecutor, this.logFactory, this.programArgs
             );
             return;
         }
