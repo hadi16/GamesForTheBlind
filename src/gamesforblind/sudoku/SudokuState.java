@@ -126,11 +126,27 @@ public class SudokuState {
         return phrasesToRead;
     }
 
+    private boolean readCannotDeleteOriginal() {
+        Point selectedPoint = this.getSelectedPoint();
+
+        if (!this.originallyFilledSquares.contains(selectedPoint)) {
+            return false;
+        }
+
+        Cell cellToSet = this.sudokuGrid.getCell(selectedPoint.y, selectedPoint.x);
+
+        // Square will always contain a number from 1-9 or 1-4 (never 0), since it is an originally set square.
+        this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
+                Phrase.CANNOT_DELETE_ORIGINAL,
+                Phrase.CURRENT_VALUE,
+                Phrase.convertIntegerToPhrase(cellToSet.getValue())
+        )));
+
+        return true;
+    }
+
     public void setSquareNumber(int numberToFill) {
-        if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
-            ArrayList<Phrase> phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.NO_SELECTED_SQUARE));
-            phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
-            this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
+        if (this.readNoSelectedSquareMessage()) {
             return;
         }
 
@@ -138,19 +154,14 @@ public class SudokuState {
         Cell cellToSet = this.sudokuGrid.getCell(pointToSet.y, pointToSet.x);
 
         if (numberToFill == 0) {
-            if (this.originallyFilledSquares.contains(pointToSet)) {
-                // This square will always contain a number from 1-9 or 1-4 (never 0).
-                this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
-                        Phrase.CANNOT_DELETE_ORIGINAL,
-                        Phrase.CURRENT_VALUE,
-                        Phrase.convertIntegerToPhrase(cellToSet.getValue())
-                )));
-            } else {
-                this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
-                        Phrase.REMOVED_NUM, Phrase.convertIntegerToPhrase(cellToSet.getValue()))
-                ));
-                cellToSet.setValue(0);
+            if (this.readCannotDeleteOriginal()) {
+                return;
             }
+
+            this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
+                    Phrase.REMOVED_NUM, Phrase.convertIntegerToPhrase(cellToSet.getValue()))
+            ));
+            cellToSet.setValue(0);
             return;
         }
 
@@ -254,49 +265,44 @@ public class SudokuState {
         );
     }
 
-    public void giveHint() {
+    private boolean readNoSelectedSquareMessage() {
         if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
             ArrayList<Phrase> phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.NO_SELECTED_SQUARE));
             phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
             this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
+            return true;
+        }
+
+        return false;
+    }
+
+    public void giveHint() {
+        if (this.readNoSelectedSquareMessage()) {
             return;
         }
 
-        int numberOfBlocks = (int) Math.sqrt(this.sudokuType.getSudokuBoardSize());
-        Point pointToSet = new Point(
-                this.selectedBlockPoint.x * numberOfBlocks + this.selectedSquarePoint.x,
-                this.selectedBlockPoint.y * numberOfBlocks + this.selectedSquarePoint.y
-        );
-        Cell cellToSet = this.sudokuGrid.getCell(pointToSet.y, pointToSet.x);
-
-        if (this.originallyFilledSquares.contains(cellToSet)) {
-
-            ArrayList<Phrase> phrasesToRead = new ArrayList<>(Arrays.asList(
-                    Phrase.CURRENT_VALUE,
-                    Phrase.convertIntegerToPhrase(cellToSet.getValue())
-
-            ));
-            this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
+        if (this.readCannotDeleteOriginal()) {
+            return;
         }
 
-        //change this  -- this.solve(this.originalGrid, cellToSet);
-        int[] values = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
-
-        for (int value : values) {
-            if (this.sudokuGrid.isValidValueForCell(cellToSet, value)) {
-                cellToSet.setValue(value);
+        Point pointToSet = this.getSelectedPoint();
+        Cell cellToSet = this.sudokuGrid.getCell(pointToSet.y, pointToSet.x);
+        
+        for (int cellValue = 1; cellValue <= this.sudokuType.getSudokuBoardSize(); cellValue++) {
+            if (this.sudokuGrid.isValidValueForCell(cellToSet, cellValue)) {
+                cellToSet.setValue(cellValue);
                 break;
             }
         }
 
+        this.numberOfEmptyCells--;
+
         ArrayList<Phrase> phrasesToRead = new ArrayList<>(
                 Collections.singletonList(Phrase.convertIntegerToPhrase(cellToSet.getValue()))
         );
-
-        this.numberOfEmptyCells--;
         phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
-
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
+
         if (this.numberOfEmptyCells == 0) {
             this.gameOver = true;
         }
@@ -345,8 +351,7 @@ public class SudokuState {
     }
 
     public void readBoardSection(SudokuSection sectionToRead) {
-        if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
-            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.NO_SELECTED_SQUARE);
+        if (this.readNoSelectedSquareMessage()) {
             return;
         }
 
