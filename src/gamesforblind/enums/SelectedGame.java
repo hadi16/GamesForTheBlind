@@ -1,4 +1,4 @@
-package gamesforblind.loader.enums;
+package gamesforblind.enums;
 
 /**
  * Enumeration for the different games that can be selected in the loader GUI.

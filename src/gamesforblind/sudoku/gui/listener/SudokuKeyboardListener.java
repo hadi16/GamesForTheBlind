@@ -1,15 +1,15 @@
 package gamesforblind.sudoku.gui.listener;
 
+import gamesforblind.enums.InputType;
+import gamesforblind.enums.SudokuSection;
+import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.action.*;
-import gamesforblind.sudoku.enums.InputType;
-import gamesforblind.sudoku.enums.SudokuSection;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Map;
-
 
 /**
  * Sudoku keyboard listener class that will receive keyboard inputs and appropriately call the proper
@@ -40,7 +40,9 @@ public class SudokuKeyboardListener implements KeyListener {
     private final SudokuGame sudokuGame;
     private final Map<Character, Point> charToPoint;
 
-    public SudokuKeyboardListener(SudokuGame sudokuGame, int sudokuBoardSize) {
+    public SudokuKeyboardListener(SudokuGame sudokuGame, SudokuType sudokuType) {
+        int sudokuBoardSize = sudokuType.getSudokuBoardSize();
+
         if (!BOARD_SIZE_TO_CHAR_TO_POINT.containsKey(sudokuBoardSize)) {
             //gives exception for board selection size (4,9)
             throw new IllegalArgumentException(

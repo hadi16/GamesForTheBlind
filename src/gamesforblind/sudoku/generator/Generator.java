@@ -1,20 +1,22 @@
 package gamesforblind.sudoku.generator;
 
+import gamesforblind.enums.SudokuType;
+
 import java.util.Random;
 
 /**
  * A Generator to generate random Sudoku {@link Grid} instances.
  */
 public class Generator {
-    private final int sudokuBoardSize;
+    private final SudokuType sudokuType;
     private final Solver solver;
 
     /**
      * Constructs a new Generator instance.
      */
-    public Generator(int sudokuBoardSize) {
-        this.solver = new Solver(sudokuBoardSize);
-        this.sudokuBoardSize = sudokuBoardSize;
+    public Generator(SudokuType sudokuType) {
+        this.solver = new Solver(sudokuType.getSudokuBoardSize());
+        this.sudokuType = sudokuType;
     }
 
     /**
@@ -36,8 +38,8 @@ public class Generator {
     private void eraseCells(Grid grid, int numberOfEmptyCells) {
         Random random = new Random();
         for (int i = 0; i < numberOfEmptyCells; i++) {
-            int randomRow = random.nextInt(this.sudokuBoardSize);
-            int randomColumn = random.nextInt(this.sudokuBoardSize);
+            int randomRow = random.nextInt(this.sudokuType.getSudokuBoardSize());
+            int randomColumn = random.nextInt(this.sudokuType.getSudokuBoardSize());
 
             Cell cell = grid.getCell(randomRow, randomColumn);
             if (!cell.isEmpty()) {
@@ -49,7 +51,7 @@ public class Generator {
     }
 
     private Grid generate() {
-        Grid grid = Grid.emptyGrid(this.sudokuBoardSize);
+        Grid grid = Grid.emptyGrid(this.sudokuType);
 
         this.solver.solve(grid);
 

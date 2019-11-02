@@ -1,6 +1,6 @@
 package gamesforblind.loader.action;
 
-import gamesforblind.loader.enums.SudokuType;
+import gamesforblind.enums.SudokuType;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

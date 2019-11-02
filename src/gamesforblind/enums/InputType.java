@@ -1,4 +1,4 @@
-package gamesforblind.sudoku.enums;
+package gamesforblind.enums;
 
 public enum InputType {
     MOUSE, KEYBOARD

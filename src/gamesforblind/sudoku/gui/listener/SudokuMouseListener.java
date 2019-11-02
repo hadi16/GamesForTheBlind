@@ -1,14 +1,14 @@
 package gamesforblind.sudoku.gui.listener;
 
+import gamesforblind.enums.InputType;
+import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
-import gamesforblind.sudoku.enums.InputType;
 import gamesforblind.sudoku.gui.SudokuFrame;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 
 /**
  * Sudoku mouse listener class that will receive mouse inputs and appropriately call the proper
@@ -20,10 +20,10 @@ public class SudokuMouseListener implements MouseListener {
     private final int sudokuBoardSize;
 
     //sets the inputs to be contained within "this"
-    public SudokuMouseListener(SudokuGame sudokuGame, SudokuFrame sudokuFrame, int sudokuBoardSize) {
+    public SudokuMouseListener(SudokuGame sudokuGame, SudokuFrame sudokuFrame, SudokuType sudokuType) {
         this.sudokuGame = sudokuGame;
         this.sudokuFrame = sudokuFrame;
-        this.sudokuBoardSize = sudokuBoardSize;
+        this.sudokuBoardSize = sudokuType.getSudokuBoardSize();
     }
 
     /**

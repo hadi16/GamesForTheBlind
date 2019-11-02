@@ -1,6 +1,7 @@
 package gamesforblind.sudoku.gui;
 
 import gamesforblind.ProgramArgs;
+import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.SudokuState;
 import gamesforblind.sudoku.gui.listener.SudokuKeyboardListener;
@@ -21,17 +22,16 @@ public class SudokuFrame extends JFrame {
      *
      * @param sudokuGame
      * @param initialState
-     * @param sudokuBoardSize
      */
-    public SudokuFrame(SudokuGame sudokuGame, SudokuState initialState, int sudokuBoardSize, ProgramArgs programArgs) {
+    public SudokuFrame(SudokuGame sudokuGame, SudokuState initialState, SudokuType sudokuType, ProgramArgs programArgs) {
         this.sudokuPanel = new SudokuPanel(initialState);
         this.frame = new JFrame("Sudoku");
 
         this.initializeGui();
 
         if (!programArgs.isPlaybackMode()) {
-            this.frame.addMouseListener(new SudokuMouseListener(sudokuGame, this, sudokuBoardSize));
-            this.frame.addKeyListener(new SudokuKeyboardListener(sudokuGame, sudokuBoardSize));
+            this.frame.addMouseListener(new SudokuMouseListener(sudokuGame, this, sudokuType));
+            this.frame.addKeyListener(new SudokuKeyboardListener(sudokuGame, sudokuType));
             this.frame.addWindowListener(new SudokuWindowListener(sudokuGame));
         }
     }
