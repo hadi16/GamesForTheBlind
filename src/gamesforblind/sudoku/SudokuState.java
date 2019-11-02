@@ -200,6 +200,10 @@ public class SudokuState {
 
     public void setHighlightedPoint(Point pointToSet, InputType inputType) {
         if (inputType == InputType.MOUSE) {
+            // Offset needed for the column labels ("A", "B", etc). For some reason,
+            // the same offset is not needed for the row labels (not sure why).
+            pointToSet = new Point(pointToSet.x, pointToSet.y - 1);
+
             int numberOfBlocksWidth = this.sudokuType.getSudokuBoardSize() / this.sudokuType.getBlockWidth();
             int numberOfBlocksHeight = this.sudokuType.getSudokuBoardSize() / this.sudokuType.getBlockHeight();
 
