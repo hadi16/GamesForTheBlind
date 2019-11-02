@@ -58,28 +58,12 @@ public class SudokuPanel extends JPanel {
         }
     }
 
-    /**
-     * Allows all individual components to be painted. This includes, board dimensions, columns, rows, and
-     * numbers within cells. Might look into using comic sans as a font tho, idk yet.
-     *
-     * @param graphics
-     */
-    @Override
-    protected void paintComponent(Graphics graphics) {
-        super.paintComponent(graphics);
-
+    private void paintMainBoard(Graphics graphics, int squareDimension, int initialPosition) {
         Grid sudokuGrid = this.sudokuState.getSudokuGrid();
 
-        Rectangle bounds = graphics.getClipBounds();
-        final int TOTAL_BOARD_LENGTH = Math.min(bounds.height, bounds.width);
-
-        graphics.setFont(new Font("Arial", Font.PLAIN, TOTAL_BOARD_LENGTH / 15));
-
-        int squareDimension = (TOTAL_BOARD_LENGTH - this.sudokuBoardSize) / this.sudokuBoardSize;
-        int yPosition = (TOTAL_BOARD_LENGTH - (squareDimension * this.sudokuBoardSize)) / 2;
-
+        int yPosition = initialPosition;
         for (int rowIndex = 0; rowIndex < this.sudokuBoardSize; rowIndex++) {
-            int xPosition = (TOTAL_BOARD_LENGTH - (squareDimension * this.sudokuBoardSize)) / 2;
+            int xPosition = initialPosition;
 
             for (int columnIndex = 0; columnIndex < this.sudokuBoardSize; columnIndex++) {
                 graphics.setColor(Color.GRAY);
@@ -108,6 +92,54 @@ public class SudokuPanel extends JPanel {
 
             yPosition += squareDimension;
         }
+    }
+
+    private void paintBoardLabels(Graphics graphics, int squareDimension, int initialPosition) {
+        graphics.setColor(Color.BLACK);
+
+        int yPosition = initialPosition + squareDimension;
+        for (int rowIndex = 0; rowIndex < this.sudokuBoardSize; rowIndex++) {
+            graphics.drawString(
+                    Integer.toString(rowIndex + 1),
+                    initialPosition + squareDimension / 3,
+                    yPosition + (2 * squareDimension / 3)
+            );
+            yPosition += squareDimension;
+        }
+
+        int xPosition = initialPosition + squareDimension;
+        for (int columnIndex = 0; columnIndex < this.sudokuBoardSize; columnIndex++) {
+            graphics.drawString(
+                    Character.toString((char) columnIndex + 'A'),
+                    xPosition + squareDimension / 3,
+                    initialPosition + (2 * squareDimension / 3)
+            );
+            xPosition += squareDimension;
+        }
+    }
+
+    /**
+     * Allows all individual components to be painted. This includes, board dimensions, columns, rows, and
+     * numbers within cells. Might look into using comic sans as a font tho, idk yet.
+     *
+     * @param graphics
+     */
+    @Override
+    protected void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
+
+        Rectangle bounds = graphics.getClipBounds();
+        final int TOTAL_BOARD_LENGTH = Math.min(bounds.height, bounds.width);
+
+        graphics.setFont(new Font("Arial", Font.PLAIN, TOTAL_BOARD_LENGTH / 15));
+
+        int squaresPerSide = this.sudokuBoardSize + 1;
+        int squareDimension = (TOTAL_BOARD_LENGTH - squaresPerSide) / squaresPerSide;
+
+        final int INITIAL_POSITION = (TOTAL_BOARD_LENGTH - (squareDimension * squaresPerSide)) / 2;
+
+        this.paintBoardLabels(graphics, squareDimension, INITIAL_POSITION);
+        this.paintMainBoard(graphics, squareDimension, INITIAL_POSITION + squareDimension);
     }
 
     public void setSudokuState(SudokuState sudokuState) {
