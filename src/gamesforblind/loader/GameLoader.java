@@ -2,6 +2,7 @@ package gamesforblind.loader;
 
 import gamesforblind.ProgramAction;
 import gamesforblind.ProgramArgs;
+import gamesforblind.enums.InterfaceType;
 import gamesforblind.enums.SelectedGame;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.loader.action.*;
@@ -154,6 +155,14 @@ public class GameLoader {
         if (action instanceof LoaderSudokuSelectionAction) {
             LoaderSudokuSelectionAction loaderSudokuSelectionAction = (LoaderSudokuSelectionAction) action;
             SudokuType sudokuType = loaderSudokuSelectionAction.getSudokuType();
+
+            ArrayList<InterfaceType> supportedInterfaces = sudokuType.getSupportedSudokuInterfaces();
+            InterfaceType selectedInterfaceType = this.programArgs.getSelectedInterfaceType();
+            if (!supportedInterfaces.contains(selectedInterfaceType)) {
+                throw new IllegalArgumentException(
+                        "Interface type " + selectedInterfaceType + " not supported for Sudoku type " + sudokuType
+                );
+            }
 
             this.loaderFrame.closeLoaderFrames();
             this.sudokuGame = new SudokuGame(

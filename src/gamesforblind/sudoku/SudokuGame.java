@@ -1,6 +1,7 @@
 package gamesforblind.sudoku;
 
 import gamesforblind.ProgramArgs;
+import gamesforblind.enums.InterfaceType;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.logger.LogFactory;
 import gamesforblind.logger.LogWriter;
@@ -24,12 +25,13 @@ public class SudokuGame {
         this.programArgs = programArgs;
         this.logFactory = logFactory;
 
+        InterfaceType selectedInterfaceType = programArgs.getSelectedInterfaceType();
         if (programArgs.isPlaybackMode()) {
             this.sudokuState = new SudokuState(
-                    sudokuType, audioPlayerExecutor, logFactory.getOriginalSudokuGrid()
+                    selectedInterfaceType, sudokuType, audioPlayerExecutor, logFactory.getOriginalSudokuGrid()
             );
         } else {
-            this.sudokuState = new SudokuState(sudokuType, audioPlayerExecutor);
+            this.sudokuState = new SudokuState(selectedInterfaceType, sudokuType, audioPlayerExecutor);
             this.logFactory.setOriginalSudokuGrid(this.sudokuState.getOriginalGrid());
         }
 
@@ -76,10 +78,9 @@ public class SudokuGame {
         }
 
         if (sudokuAction instanceof SudokuHighlightAction) {
-            SudokuHighlightAction sudokuHighlightAction = (SudokuHighlightAction) sudokuAction;
-            this.sudokuState.setHighlightedPoint(
-                    sudokuHighlightAction.getPointToHighlight(), sudokuHighlightAction.getInputType()
-            );
+            SudokuHighlightAction highlightAction = (SudokuHighlightAction) sudokuAction;
+            this.sudokuState.setHighlightedPoint(highlightAction.getPointToHighlight(), highlightAction.getInputType());
+            this.sudokuState.readSelectedSquare();
             this.sendStateToGui();
             return;
         }

@@ -1,11 +1,14 @@
 package gamesforblind.sudoku;
 
 import gamesforblind.enums.InputType;
+import gamesforblind.enums.InterfaceType;
 import gamesforblind.enums.SudokuSection;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Generator;
 import gamesforblind.sudoku.generator.Grid;
+import gamesforblind.sudoku.interfaces.SudokuBlockSelectionInterface;
+import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
 import gamesforblind.synthesizer.Phrase;
 
@@ -18,19 +21,17 @@ import java.util.Optional;
 public class SudokuState {
     private final OriginalSudokuGrid originalGrid;
     private final SudokuType sudokuType;
+    private final SudokuKeyboardInterface sudokuKeyboardInterface;
 
     private final AudioPlayerExecutor audioPlayerExecutor;
     private final Grid sudokuGrid;
     private final ArrayList<Point> originallyFilledSquares;
 
-    private Point selectedBlockPoint;
-    private Point selectedSquarePoint;
-
     private int numberOfEmptyCells;
-
     private boolean gameOver = false;
 
-    public SudokuState(SudokuType sudokuType, AudioPlayerExecutor audioPlayerExecutor, OriginalSudokuGrid originalGrid) {
+    public SudokuState(InterfaceType interfaceType, SudokuType sudokuType,
+                       AudioPlayerExecutor audioPlayerExecutor, OriginalSudokuGrid originalGrid) {
         this.sudokuType = sudokuType;
         this.audioPlayerExecutor = audioPlayerExecutor;
         this.originalGrid = originalGrid;
@@ -38,9 +39,11 @@ public class SudokuState {
         this.numberOfEmptyCells = this.getInitialNumberOfEmptyCells(sudokuType.getSudokuBoardSize());
         this.sudokuGrid = Grid.of(originalGrid.getGrid(), sudokuType);
         this.originallyFilledSquares = this.initializeOriginallyFilledSquares();
+
+        this.sudokuKeyboardInterface = this.initializeKeyboardInterface(interfaceType);
     }
 
-    public SudokuState(SudokuType sudokuType, AudioPlayerExecutor audioPlayerExecutor) {
+    public SudokuState(InterfaceType interfaceType, SudokuType sudokuType, AudioPlayerExecutor audioPlayerExecutor) {
         this.sudokuType = sudokuType;
         this.audioPlayerExecutor = audioPlayerExecutor;
 
@@ -50,26 +53,19 @@ public class SudokuState {
         this.originalGrid = OriginalSudokuGrid.of(this.sudokuGrid.toIntArray());
 
         this.originallyFilledSquares = this.initializeOriginallyFilledSquares();
+
+        this.sudokuKeyboardInterface = this.initializeKeyboardInterface(interfaceType);
     }
 
-    public SudokuState(SudokuState originalState) {
-        this.sudokuGrid = new Grid(originalState.sudokuGrid);
-
-        // Enums are immutable set (don't need copy constructor for them).
-        this.sudokuType = originalState.sudokuType;
-        this.selectedBlockPoint = originalState.selectedBlockPoint;
-        this.selectedSquarePoint = originalState.selectedSquarePoint;
-
-        ArrayList<Point> originallyFilledSquares = new ArrayList<>();
-        for (Point point : originalState.originallyFilledSquares) {
-            originallyFilledSquares.add(new Point(point));
+    private SudokuKeyboardInterface initializeKeyboardInterface(InterfaceType interfaceType) {
+        switch (interfaceType) {
+            case ARROW_KEY_INTERFACE:
+                throw new IllegalArgumentException("Arrow key interface not implemented yet!");
+            case BLOCK_SELECTION_INTERFACE:
+                return new SudokuBlockSelectionInterface(this.sudokuType, this.sudokuGrid);
+            default:
+                throw new IllegalArgumentException("Incorrect interface type passed to Sudoku state: " + interfaceType);
         }
-        this.originallyFilledSquares = originallyFilledSquares;
-        this.audioPlayerExecutor = originalState.audioPlayerExecutor;
-        this.numberOfEmptyCells = originalState.numberOfEmptyCells;
-        this.gameOver = originalState.gameOver;
-
-        this.originalGrid = new OriginalSudokuGrid(originalState.originalGrid);
     }
 
     private int getInitialNumberOfEmptyCells(int sudokuBoardSize) {
@@ -92,29 +88,14 @@ public class SudokuState {
         return originallyFilledSquares;
     }
 
-    private Optional<Cell> getSelectedCellAtPosition(Point selectedSquarePoint, Point selectedBlockPoint) {
-        if (selectedSquarePoint == null || selectedBlockPoint == null) {
-            return Optional.empty();
-        }
-
-        int numberOfBlocksWidth = this.sudokuType.getSudokuBoardSize() / this.sudokuType.getBlockWidth();
-        int numberOfBlocksHeight = this.sudokuType.getSudokuBoardSize() / this.sudokuType.getBlockHeight();
-        Point cellPoint = new Point(
-                selectedBlockPoint.x * numberOfBlocksWidth + selectedSquarePoint.x,
-                selectedBlockPoint.y * numberOfBlocksHeight + selectedSquarePoint.y
-        );
-
-        return Optional.of(this.sudokuGrid.getCell(cellPoint.y, cellPoint.x));
-    }
-
     private ArrayList<Phrase> getRemainingNumberOfEmptySquaresPhraseList() {
         ArrayList<Phrase> phrasesToRead;
         if (this.numberOfEmptyCells == 0) {
             phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
         } else if (this.numberOfEmptyCells == 1) {
             phrasesToRead = new ArrayList<>(Arrays.asList(
-                    Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_1, Phrase.ONE, Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_2)
-            );
+                    Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_1, Phrase.ONE, Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_2
+            ));
         } else {
             phrasesToRead = new ArrayList<>(Arrays.asList(
                     Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_1,
@@ -126,14 +107,12 @@ public class SudokuState {
         return phrasesToRead;
     }
 
-    private boolean readCannotDeleteOriginal() {
-        Point selectedPoint = this.getSelectedPoint();
-
-        if (!this.originallyFilledSquares.contains(selectedPoint)) {
+    private boolean readCannotDeleteOriginal(Point point) {
+        if (!this.originallyFilledSquares.contains(point)) {
             return false;
         }
 
-        Cell cellToSet = this.sudokuGrid.getCell(selectedPoint.y, selectedPoint.x);
+        Cell cellToSet = this.sudokuGrid.getCell(point.y, point.x);
 
         // Square will always contain a number from 1-9 or 1-4 (never 0), since it is an originally set square.
         this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
@@ -146,15 +125,17 @@ public class SudokuState {
     }
 
     public void setSquareNumber(int numberToFill) {
-        if (this.readNoSelectedSquareMessage()) {
+        Optional<Point> maybePointToSet = this.sudokuKeyboardInterface.getSelectedPoint();
+        if (maybePointToSet.isEmpty()) {
+            this.readNoSelectedSquareMessage();
             return;
         }
 
-        Point pointToSet = this.getSelectedPoint();
+        Point pointToSet = maybePointToSet.get();
         Cell cellToSet = this.sudokuGrid.getCell(pointToSet.y, pointToSet.x);
 
         if (numberToFill == 0) {
-            if (this.readCannotDeleteOriginal()) {
+            if (this.readCannotDeleteOriginal(pointToSet)) {
                 return;
             }
 
@@ -209,93 +190,40 @@ public class SudokuState {
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
 
-    public void setHighlightedPoint(Point pointToSet, InputType inputType) {
-        if (inputType == InputType.MOUSE) {
-            // Offset needed for the column labels ("A", "B", etc). For some reason,
-            // the same offset is not needed for the row labels (not sure why).
-            pointToSet = new Point(pointToSet.x, pointToSet.y - 1);
-
-            int numberOfBlocksWidth = this.sudokuType.getSudokuBoardSize() / this.sudokuType.getBlockWidth();
-            int numberOfBlocksHeight = this.sudokuType.getSudokuBoardSize() / this.sudokuType.getBlockHeight();
-
-            Point blockPointToSet = new Point(
-                    pointToSet.x / numberOfBlocksWidth, pointToSet.y / numberOfBlocksHeight
-            );
-            Point squarePointToSet = new Point(
-                    pointToSet.x % numberOfBlocksWidth, pointToSet.y % numberOfBlocksHeight
-            );
-
-            if (blockPointToSet.equals(this.selectedBlockPoint) && squarePointToSet.equals(this.selectedSquarePoint)) {
-                this.selectedBlockPoint = null;
-                this.selectedSquarePoint = null;
-                return;
-            }
-
-            this.selectedBlockPoint = blockPointToSet;
-            this.selectedSquarePoint = squarePointToSet;
-            return;
-        }
-
-        if (pointToSet == null) {
-            if (this.selectedSquarePoint != null) {
-                this.selectedSquarePoint = null;
-            } else {
-                this.selectedBlockPoint = null;
-            }
-            return;
-        }
-
-        Optional<Cell> selectedCell = this.getSelectedCellAtPosition(this.selectedSquarePoint, this.selectedBlockPoint);
-        if (selectedCell.isPresent()) {
-            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.convertIntegerToPhrase(selectedCell.get().getValue()));
-            return;
-        }
-
-        if (this.selectedBlockPoint == null) {
-            this.selectedBlockPoint = pointToSet;
-            return;
-        }
-
-        this.selectedSquarePoint = pointToSet;
-    }
-
     public void readInstructions() {
         this.audioPlayerExecutor.replacePhraseAndPrint(
                 this.sudokuType.getSudokuBoardSize() == 9 ? Phrase.INSTRUCTIONS_9 : Phrase.INSTRUCTIONS_4
         );
     }
 
-    private boolean readNoSelectedSquareMessage() {
-        if (this.selectedSquarePoint == null || this.selectedBlockPoint == null) {
-            ArrayList<Phrase> phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.NO_SELECTED_SQUARE));
-            phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
-            this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
-            return true;
-        }
-
-        return false;
+    private void readNoSelectedSquareMessage() {
+        ArrayList<Phrase> phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.NO_SELECTED_SQUARE));
+        phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
+        this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
 
     public void giveHint() {
-        if (this.readNoSelectedSquareMessage()) {
+        Optional<Point> maybePointToSet = this.sudokuKeyboardInterface.getSelectedPoint();
+
+        if (maybePointToSet.isEmpty()) {
+            this.readNoSelectedSquareMessage();
             return;
         }
 
-        if (this.readCannotDeleteOriginal()) {
+        Point pointToSet = maybePointToSet.get();
+        if (this.readCannotDeleteOriginal(pointToSet)) {
             return;
         }
 
-        Point pointToSet = this.getSelectedPoint();
         Cell cellToSet = this.sudokuGrid.getCell(pointToSet.y, pointToSet.x);
-        
+
         for (int cellValue = 1; cellValue <= this.sudokuType.getSudokuBoardSize(); cellValue++) {
             if (this.sudokuGrid.isValidValueForCell(cellToSet, cellValue)) {
                 cellToSet.setValue(cellValue);
+                this.numberOfEmptyCells--;
                 break;
             }
         }
-
-        this.numberOfEmptyCells--;
 
         ArrayList<Phrase> phrasesToRead = new ArrayList<>(
                 Collections.singletonList(Phrase.convertIntegerToPhrase(cellToSet.getValue()))
@@ -331,32 +259,44 @@ public class SudokuState {
         return phrasesToRead;
     }
 
-    private ArrayList<Phrase> getBlockPhrases() {
+    private ArrayList<Phrase> getBlockPhrases(Point selectedPoint) {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>();
         phrasesToRead.add(Phrase.IN_BLOCK);
 
-        for (int rowIndex = 0; rowIndex < this.sudokuType.getBlockHeight(); rowIndex++) {
-            for (int columnIndex = 0; columnIndex < this.sudokuType.getBlockWidth(); columnIndex++) {
-                Optional<Cell> cell = this.getSelectedCellAtPosition(
-                        new Point(columnIndex, rowIndex), this.selectedBlockPoint
-                );
+        int blockHeight = this.sudokuType.getBlockHeight();
+        int currentRowIndex = (selectedPoint.y / blockHeight) * blockHeight;
+        int maxRowIndex = currentRowIndex + blockHeight;
+        for (; currentRowIndex < maxRowIndex; currentRowIndex++) {
+            int blockWidth = this.sudokuType.getBlockWidth();
+            int currentColumnIndex = (selectedPoint.x / blockWidth) * blockWidth;
+            int maxColumnIndex = currentColumnIndex + blockWidth;
 
-                cell.ifPresent(
-                        cellValue -> phrasesToRead.add(Phrase.convertIntegerToPhrase(cellValue.getValue()))
-                );
+            for (; currentColumnIndex < maxColumnIndex; currentColumnIndex++) {
+                Cell cellAtPosition = this.sudokuGrid.getCell(currentRowIndex, currentColumnIndex);
+                phrasesToRead.add(Phrase.convertIntegerToPhrase(cellAtPosition.getValue()));
             }
         }
 
         return phrasesToRead;
     }
 
+    public void readSelectedSquare() {
+        Optional<Cell> maybeSelectedCell = this.sudokuKeyboardInterface.getSelectedCell();
+        if (maybeSelectedCell.isPresent()) {
+            Cell selectedCell = maybeSelectedCell.get();
+            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.convertIntegerToPhrase(selectedCell.getValue()));
+        }
+    }
+
     public void readBoardSection(SudokuSection sectionToRead) {
-        if (this.readNoSelectedSquareMessage()) {
+        Optional<Point> maybeSelectedPoint = this.sudokuKeyboardInterface.getSelectedPoint();
+
+        if (maybeSelectedPoint.isEmpty()) {
+            this.readNoSelectedSquareMessage();
             return;
         }
 
-        Point selectedPoint = this.getSelectedPoint();
-
+        Point selectedPoint = maybeSelectedPoint.get();
         ArrayList<Phrase> phrasesToRead = new ArrayList<>();
         switch (sectionToRead) {
             case ROW:
@@ -366,22 +306,15 @@ public class SudokuState {
                 phrasesToRead = this.getRowOrColumnPhrases(selectedPoint, false);
                 break;
             case BLOCK:
-                phrasesToRead = this.getBlockPhrases();
+                phrasesToRead = this.getBlockPhrases(selectedPoint);
                 break;
         }
 
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
 
-    private Point getSelectedPoint() {
-        int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
-        int numberOfBlocksWidth = sudokuBoardSize / this.sudokuType.getBlockWidth();
-        int numberOfBlocksHeight = sudokuBoardSize / this.sudokuType.getBlockHeight();
-
-        return new Point(
-                this.selectedBlockPoint.x * numberOfBlocksWidth + this.selectedSquarePoint.x,
-                this.selectedBlockPoint.y * numberOfBlocksHeight + this.selectedSquarePoint.y
-        );
+    public void setHighlightedPoint(Point pointToSet, InputType inputType) {
+        this.sudokuKeyboardInterface.setHighlightedPoint(pointToSet, inputType);
     }
 
     public int getSudokuBoardSize() {
@@ -390,14 +323,6 @@ public class SudokuState {
 
     public Grid getSudokuGrid() {
         return this.sudokuGrid;
-    }
-
-    public Point getSelectedBlockPoint() {
-        return this.selectedBlockPoint;
-    }
-
-    public Point getSelectedSquarePoint() {
-        return this.selectedSquarePoint;
     }
 
     public ArrayList<Point> getOriginallyFilledSquares() {
@@ -410,5 +335,9 @@ public class SudokuState {
 
     public OriginalSudokuGrid getOriginalGrid() {
         return this.originalGrid;
+    }
+
+    public SudokuKeyboardInterface getSudokuKeyboardInterface() {
+        return this.sudokuKeyboardInterface;
     }
 }

@@ -2,6 +2,8 @@ package gamesforblind.sudoku.gui;
 
 import gamesforblind.sudoku.SudokuState;
 import gamesforblind.sudoku.generator.Grid;
+import gamesforblind.sudoku.interfaces.SudokuBlockSelectionInterface;
+import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,9 +34,10 @@ public class SudokuPanel extends JPanel {
      * @param yPos
      * @param squareDim
      */
-    private void paintHighlightedSquares(Graphics graphics, int rowIdx, int colIdx, int xPos, int yPos, int squareDim) {
-        Point selectedBlockPoint = this.sudokuState.getSelectedBlockPoint();
-        Point selectedSquarePoint = this.sudokuState.getSelectedSquarePoint();
+    private void paintHighlightedSquares(Graphics graphics, SudokuBlockSelectionInterface blockSelectionInterface,
+                                         int rowIdx, int colIdx, int xPos, int yPos, int squareDim) {
+        Point selectedBlockPoint = blockSelectionInterface.getSelectedBlockPoint();
+        Point selectedSquarePoint = blockSelectionInterface.getSelectedSquarePoint();
 
         graphics.setColor(Color.YELLOW);
         int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
@@ -60,6 +63,7 @@ public class SudokuPanel extends JPanel {
 
     private void paintMainBoard(Graphics graphics, int squareDimension, int initialPosition) {
         Grid sudokuGrid = this.sudokuState.getSudokuGrid();
+        SudokuKeyboardInterface keyboardInterface = this.sudokuState.getSudokuKeyboardInterface();
 
         int yPosition = initialPosition;
         for (int rowIndex = 0; rowIndex < this.sudokuBoardSize; rowIndex++) {
@@ -71,9 +75,12 @@ public class SudokuPanel extends JPanel {
                     graphics.fillRect(xPosition, yPosition, squareDimension, squareDimension);
                 }
 
-                this.paintHighlightedSquares(
-                        graphics, rowIndex, columnIndex, xPosition, yPosition, squareDimension
-                );
+                if (keyboardInterface instanceof SudokuBlockSelectionInterface) {
+                    var blockInterface = (SudokuBlockSelectionInterface) keyboardInterface;
+                    this.paintHighlightedSquares(
+                            graphics, blockInterface, rowIndex, columnIndex, xPosition, yPosition, squareDimension
+                    );
+                }
 
                 graphics.setColor(Color.BLACK);
                 graphics.drawRect(xPosition, yPosition, squareDimension, squareDimension);
