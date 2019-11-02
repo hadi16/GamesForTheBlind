@@ -72,8 +72,9 @@ public enum Phrase {
     SPACE_FOR_SUDOKU("Press the SPACE BAR to play Sudoku."),
     GO_BACK_TO_GAME_SELECTION("Press the SPACE BAR to go back to the game selection screen."),
     SELECT_SUDOKU_FOUR("Press the SPACE BAR to play the 4 by 4 version of Sudoku."),
+    SELECT_SUDOKU_SIX("Press the SPACE BAR to play the 6 by 6 version of Sudoku."),
     SELECT_SUDOKU_NINE("Press the SPACE BAR to play the 9 by 9 version of Sudoku."),
-    WHICH_SUDOKU_GAME("Which Sudoku game would you like to play, 4 by 4 or 9 by 9? " +
+    WHICH_SUDOKU_GAME("Which Sudoku game would you like to play, 4 by 4, 6 by 6, or 9 by 9? " +
             "Use the arrow keys to make your selection."),
     PLAY_OR_EXIT("Would you like to play Sudoku or exit? Use the arrow keys to make your selection."),
     EXITING("The game is exiting. Goodbye!"),
@@ -97,6 +98,9 @@ public enum Phrase {
     INSTRUCTIONS_4("Welcome to Sudoku! Each of the four blocks must contain the numbers 1 through 4 " +
             "within its square. Each number can only appear once in a row, column or box. Each four-square column, " +
             "or four-square row, within the entire board, must also have the numbers 1 through 4, without repetition."),
+    INSTRUCTIONS_6("Welcome to Sudoku! Each of the six blocks must contain the numbers 1 through 6 " +
+            "within its square. Each number can only appear once in a row, column or box. Each six-square column, " +
+            "or six-square row, within the entire board, must also have the numbers 1 through 6, without repetition."),
     INSTRUCTIONS_9("Welcome to Sudoku! Each of the nine blocks must contain the numbers 1 through 9 " +
             "within its square. Each number can only appear once in a row, column or box. Each nine-square column, " +
             "or nine-square row, within the entire board, must also have the numbers 1 through 9, without repetition."),
