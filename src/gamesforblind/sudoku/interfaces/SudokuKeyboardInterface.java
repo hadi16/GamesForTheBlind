@@ -6,6 +6,7 @@ import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Grid;
 
 import java.awt.*;
+import java.util.Map;
 import java.util.Optional;
 
 public abstract class SudokuKeyboardInterface {
@@ -18,7 +19,10 @@ public abstract class SudokuKeyboardInterface {
     }
 
     public abstract Optional<Point> getSelectedPoint();
+
     public abstract void setHighlightedPoint(Point pointToSet, InputType inputType);
+
+    public abstract Map<Integer, Point> getKeyCodeToPointMapping();
 
     public Optional<Cell> getSelectedCell() {
         Optional<Point> selectedPoint = this.getSelectedPoint();

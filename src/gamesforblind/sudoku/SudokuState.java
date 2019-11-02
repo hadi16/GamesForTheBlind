@@ -276,13 +276,14 @@ public class SudokuState {
 
         int blockHeight = this.sudokuType.getBlockHeight();
         int currentRowIndex = (selectedPoint.y / blockHeight) * blockHeight;
-        int maxRowIndex = currentRowIndex + blockHeight;
-        for (; currentRowIndex < maxRowIndex; currentRowIndex++) {
+
+        final int MAX_ROW_INDEX = currentRowIndex + blockHeight;
+        for (; currentRowIndex < MAX_ROW_INDEX; currentRowIndex++) {
             int blockWidth = this.sudokuType.getBlockWidth();
             int currentColumnIndex = (selectedPoint.x / blockWidth) * blockWidth;
-            int maxColumnIndex = currentColumnIndex + blockWidth;
 
-            for (; currentColumnIndex < maxColumnIndex; currentColumnIndex++) {
+            final int MAX_COLUMN_INDEX = currentColumnIndex + blockWidth;
+            for (; currentColumnIndex < MAX_COLUMN_INDEX; currentColumnIndex++) {
                 Cell cellAtPosition = this.sudokuGrid.getCell(currentRowIndex, currentColumnIndex);
                 phrasesToRead.add(Phrase.convertIntegerToPhrase(cellAtPosition.getValue()));
             }

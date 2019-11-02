@@ -57,7 +57,6 @@ public class Solver {
         }
         return false;
     }*/
-
     private boolean solve(Grid grid, Cell cell) {
         if (cell == null) {
             return true;

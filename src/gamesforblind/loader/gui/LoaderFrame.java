@@ -1,9 +1,9 @@
 package gamesforblind.loader.gui;
 
 import gamesforblind.ProgramArgs;
-import gamesforblind.loader.GameLoader;
 import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.enums.SelectedGame;
+import gamesforblind.loader.GameLoader;
 import gamesforblind.loader.gui.listener.LoaderActionListener;
 import gamesforblind.loader.gui.listener.LoaderKeyboardListener;
 

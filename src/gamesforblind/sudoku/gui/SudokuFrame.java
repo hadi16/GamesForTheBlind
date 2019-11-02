@@ -1,12 +1,12 @@
 package gamesforblind.sudoku.gui;
 
-import gamesforblind.ProgramArgs;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.SudokuState;
 import gamesforblind.sudoku.gui.listener.SudokuKeyboardListener;
 import gamesforblind.sudoku.gui.listener.SudokuMouseListener;
 import gamesforblind.sudoku.gui.listener.SudokuWindowListener;
+import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,15 +23,16 @@ public class SudokuFrame extends JFrame {
      * @param sudokuGame
      * @param initialState
      */
-    public SudokuFrame(SudokuGame sudokuGame, SudokuState initialState, SudokuType sudokuType, ProgramArgs programArgs) {
+    public SudokuFrame(SudokuKeyboardInterface keyboardInterface, SudokuGame sudokuGame,
+                       SudokuState initialState, SudokuType sudokuType, boolean playbackMode) {
         this.sudokuPanel = new SudokuPanel(initialState);
         this.frame = new JFrame("Sudoku");
 
         this.initializeGui();
 
-        if (!programArgs.isPlaybackMode()) {
+        if (!playbackMode) {
             this.frame.addMouseListener(new SudokuMouseListener(sudokuGame, this, sudokuType));
-            this.frame.addKeyListener(new SudokuKeyboardListener(sudokuGame, sudokuType));
+            this.frame.addKeyListener(new SudokuKeyboardListener(keyboardInterface, sudokuGame));
             this.frame.addWindowListener(new SudokuWindowListener(sudokuGame));
         }
     }

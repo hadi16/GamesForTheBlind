@@ -19,6 +19,10 @@ public class LoaderSudokuSelectionAction extends LoaderAction {
     @XmlElement
     private final SudokuType sudokuType;
 
+    /**
+     * Warning: DO NOT call this constructor directly.
+     * Needed to allow JAXB (XML serializer) to work, since it needs a zero-argument constructor.
+     */
     @SuppressWarnings("unused")
     private LoaderSudokuSelectionAction() {
         this(null);
