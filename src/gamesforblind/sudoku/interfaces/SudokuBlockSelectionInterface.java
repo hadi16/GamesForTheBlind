@@ -6,9 +6,31 @@ import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Grid;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 import java.util.Optional;
 
 public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
+    private static final Map<SudokuType, Map<Integer, Point>> TYPE_TO_KEY_TO_POINT = Map.of(
+            SudokuType.FOUR_BY_FOUR, Map.of(
+                    KeyEvent.VK_S, new Point(0, 0),
+                    KeyEvent.VK_D, new Point(1, 0),
+                    KeyEvent.VK_X, new Point(0, 1),
+                    KeyEvent.VK_C, new Point(1, 1)
+            ),
+            SudokuType.NINE_BY_NINE, Map.of(
+                    KeyEvent.VK_W, new Point(0, 0),
+                    KeyEvent.VK_E, new Point(1, 0),
+                    KeyEvent.VK_R, new Point(2, 0),
+                    KeyEvent.VK_S, new Point(0, 1),
+                    KeyEvent.VK_D, new Point(1, 1),
+                    KeyEvent.VK_F, new Point(2, 1),
+                    KeyEvent.VK_X, new Point(0, 2),
+                    KeyEvent.VK_C, new Point(1, 2),
+                    KeyEvent.VK_V, new Point(2, 2)
+            )
+    );
+
     private Point selectedBlockPoint;
     private Point selectedSquarePoint;
 
@@ -80,6 +102,17 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
         }
 
         this.selectedSquarePoint = pointToSet;
+    }
+
+    @Override
+    public Map<Integer, Point> getKeyCodeToPointMapping() {
+        Map<Integer, Point> keyCodeToPointMapping = TYPE_TO_KEY_TO_POINT.get(this.sudokuType);
+        if (keyCodeToPointMapping == null) {
+            throw new IllegalArgumentException(
+                    "Invalid Sudoku type passed to block selection interface: " + this.sudokuType
+            );
+        }
+        return keyCodeToPointMapping;
     }
 
     private boolean isSquareHighlighted() {

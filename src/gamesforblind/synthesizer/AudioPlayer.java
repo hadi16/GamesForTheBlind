@@ -47,6 +47,7 @@ public class AudioPlayer implements Runnable {
 
     /**
      * Get the Clip associated with a particular Phrase. If an error occurs, return Optional.empty().
+     *
      * @param phrase The Phrase to get the associated Clip from.
      * @return An Optional containing the Clip if no error occurred (otherwise, empty()).
      */
@@ -70,6 +71,7 @@ public class AudioPlayer implements Runnable {
 
     /**
      * Loops over all of the stored Phrases and gets an opened Clip to play with each Phrase.
+     *
      * @return A HashMap between a Phrase in the game and an opened audio Clip.
      */
     private HashMap<Phrase, Clip> getInitializedClipHashMap() {

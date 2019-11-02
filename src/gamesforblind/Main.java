@@ -13,6 +13,7 @@ public class Main {
      * @param args The command line arguments to the program.
      */
     public static void main(String[] args) {
+        // Allows "COMMAND" + "Q" to trigger the XML log save.
         System.setProperty("apple.eawt.quitStrategy", "CLOSE_ALL_WINDOWS");
 
         if (Constants.BUILD_PHRASES) {

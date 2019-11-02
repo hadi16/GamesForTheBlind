@@ -1,6 +1,5 @@
 package gamesforblind.logger;
 
-import gamesforblind.Constants;
 import gamesforblind.ProgramAction;
 import gamesforblind.sudoku.OriginalSudokuGrid;
 import org.w3c.dom.Document;
@@ -18,13 +17,30 @@ import java.util.Optional;
 
 import static gamesforblind.Constants.LOG_FILES_DIRECTORY;
 
+/**
+ * Class that allows stored Java objects to be written to a XML log file.
+ */
 public class LogWriter {
+    /**
+     * All of the stored ProgramActions & the original state of the Sudoku board in the game.
+     */
     private final LogFactory logFactory;
 
+    /**
+     * Creates a new {@link LogWriter}
+     *
+     * @param logFactory All of the stored ProgramActions & the original state of the Sudoku board in the game.
+     */
     public LogWriter(LogFactory logFactory) {
         this.logFactory = logFactory;
     }
 
+    /**
+     * Uses JAXB to marshall a JAVA object to a XML string.
+     *
+     * @param objectToMarshall The Java object to marshall.
+     * @return The XML body representing the Java object (NO XML prolog included). If an error occurred, just empty().
+     */
     private Optional<String> convertObjectToXmlString(Object objectToMarshall) {
         try {
             Marshaller jaxbMarshaller = JAXBContext.newInstance(objectToMarshall.getClass()).createMarshaller();
@@ -33,6 +49,7 @@ public class LogWriter {
             StringWriter stringWriter = new StringWriter();
             jaxbMarshaller.marshal(objectToMarshall, stringWriter);
 
+            // Remove the XML prolog & return it wrapped in an Optional.
             return Optional.of(
                     stringWriter.toString().replaceAll("<\\?xml(.+?)\\?>", "").trim()
             );
@@ -40,33 +57,53 @@ public class LogWriter {
             e.printStackTrace();
         }
 
+        // If an error occurred, just return empty().
         return Optional.empty();
     }
 
-    private String marshalGameLogToXmlString() {
+    /**
+     * Converts an entire game into a XML string that can be saved.
+     *
+     * @return The XML String representing the stored game to be saved as a log file.
+     */
+    private String marshalLogToXmlString() {
+        // Add a standard XML prolog to the beginning, along with a <log> opening tag.
         StringBuilder xmlStringBuilder = new StringBuilder(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><log>"
         );
 
+        // Serialize the original Sudoku grid.
         OriginalSudokuGrid originalSudokuGrid = this.logFactory.getOriginalSudokuGrid();
         this.convertObjectToXmlString(originalSudokuGrid).ifPresent(xmlStringBuilder::append);
 
+        // Serialize all of the ProgramActions in the game.
         ArrayList<ProgramAction> programActions = this.logFactory.getProgramActionList();
         for (ProgramAction action : programActions) {
             this.convertObjectToXmlString(action).ifPresent(xmlStringBuilder::append);
         }
 
+        // Add a closing <log> tag.
         xmlStringBuilder.append("</log>");
+
+        // I don't want any whitespace between tags (e.g. ">  <") or newlines.
         return xmlStringBuilder.toString()
                 .replaceAll(">\\s*<", "><")
                 .replaceAll("\\n", "")
                 .replaceAll("\\r", "");
     }
 
+    /**
+     * Writes a XML String to a XML file with the name being the current time.
+     *
+     * @param beautifiedLogXmlString The XML log file String to save.
+     * @return true if the save operation was successful (otherwise, false).
+     */
     private boolean writeXmlLogFile(String beautifiedLogXmlString) {
+        // The name of the XML log file is the current date & time.
         File logFile = new File(String.format(
                 "%s/%s.xml", LOG_FILES_DIRECTORY.toString(), LocalDateTime.now().toString()
         ));
+
         FileWriter fileWriter = null;
         try {
             fileWriter = new FileWriter(logFile);
@@ -87,23 +124,25 @@ public class LogWriter {
         return false;
     }
 
+    /**
+     * Saves the current state of the instance variable logFactory to a XML log file.
+     */
     public void saveGameLog() {
-        if (!Constants.SAVE_LOGS) {
-            return;
-        }
-
-        String logXmlString = this.marshalGameLogToXmlString();
+        // Step 1: get the basic XML log Document to save.
+        String logXmlString = this.marshalLogToXmlString();
         Optional<Document> logXmlDocument = XmlHelpers.convertXmlStringToDocument(logXmlString);
 
         if (logXmlDocument.isEmpty()) {
             return;
         }
 
+        // Step 2: get the beautified XML log file String.
         Optional<String> beautifiedLogXmlString = XmlHelpers.beautifyXmlDocument(logXmlDocument.get());
         if (beautifiedLogXmlString.isEmpty()) {
             return;
         }
 
+        // Step 3: save the beautified XML log file String. If successful, print message to stdout.
         if (this.writeXmlLogFile(beautifiedLogXmlString.get())) {
             System.out.println(
                     "Saved " + this.logFactory.getProgramActionList().size() + " actions to the logs directory!"

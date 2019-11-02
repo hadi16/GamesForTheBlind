@@ -7,6 +7,7 @@ import gamesforblind.logger.LogFactory;
 import gamesforblind.logger.LogWriter;
 import gamesforblind.sudoku.action.*;
 import gamesforblind.sudoku.gui.SudokuFrame;
+import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
 
 /**
@@ -35,7 +36,10 @@ public class SudokuGame {
             this.logFactory.setOriginalSudokuGrid(this.sudokuState.getOriginalGrid());
         }
 
-        this.sudokuFrame = new SudokuFrame(this, this.sudokuState, sudokuType, programArgs);
+        SudokuKeyboardInterface keyboardInterface = this.sudokuState.getSudokuKeyboardInterface();
+        this.sudokuFrame = new SudokuFrame(
+                keyboardInterface, this, this.sudokuState, sudokuType, programArgs.isPlaybackMode()
+        );
     }
 
     /**
