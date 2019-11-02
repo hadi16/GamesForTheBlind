@@ -191,9 +191,20 @@ public class SudokuState {
     }
 
     public void readInstructions() {
-        this.audioPlayerExecutor.replacePhraseAndPrint(
-                this.sudokuType.getSudokuBoardSize() == 9 ? Phrase.INSTRUCTIONS_9 : Phrase.INSTRUCTIONS_4
-        );
+        Phrase instructionsPhrase = null;
+        switch (this.sudokuType) {
+            case FOUR_BY_FOUR:
+                instructionsPhrase = Phrase.INSTRUCTIONS_4;
+                break;
+            case SIX_BY_SIX:
+                instructionsPhrase = Phrase.INSTRUCTIONS_6;
+                break;
+            case NINE_BY_NINE:
+                instructionsPhrase = Phrase.INSTRUCTIONS_9;
+                break;
+        }
+
+        this.audioPlayerExecutor.replacePhraseAndPrint(instructionsPhrase);
     }
 
     private void readNoSelectedSquareMessage() {

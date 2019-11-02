@@ -15,10 +15,10 @@ public class ProgramArgs {
         // If the "-p" argument was passed, we are in playback mode.
         this.playbackMode = argsList.contains("-p");
 
-        if (argsList.contains("-b")) {
-            this.selectedInterfaceType = InterfaceType.BLOCK_SELECTION_INTERFACE;
-        } else {
+        if (argsList.contains("-a")) {
             this.selectedInterfaceType = InterfaceType.ARROW_KEY_INTERFACE;
+        } else {
+            this.selectedInterfaceType = InterfaceType.BLOCK_SELECTION_INTERFACE;
         }
     }
 

@@ -128,6 +128,7 @@ public class GameLoader {
                     EXIT_BUTTON, Phrase.SPACE_FOR_EXIT,
                     BACK_BUTTON, Phrase.GO_BACK_TO_GAME_SELECTION,
                     FOUR_BY_FOUR_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_FOUR,
+                    SIX_BY_SIX_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_SIX,
                     NINE_BY_NINE_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_NINE
             );
 
@@ -159,9 +160,10 @@ public class GameLoader {
             ArrayList<InterfaceType> supportedInterfaces = sudokuType.getSupportedSudokuInterfaces();
             InterfaceType selectedInterfaceType = this.programArgs.getSelectedInterfaceType();
             if (!supportedInterfaces.contains(selectedInterfaceType)) {
-                throw new IllegalArgumentException(
+                System.err.println(
                         "Interface type " + selectedInterfaceType + " not supported for Sudoku type " + sudokuType
                 );
+                System.exit(1);
             }
 
             this.loaderFrame.closeLoaderFrames();
