@@ -3,8 +3,7 @@ package gamesforblind.sudoku.generator;
 import java.util.Collection;
 
 /**
- * This class represents a Cell within a Sudoku {@link Grid}. <br><br> It features a couple of
- * convenient methods.
+ * This class represents a Cell within a Sudoku {@link Grid}. It features a couple of convenient methods.
  */
 public class Cell {
     private int value;
@@ -13,13 +12,16 @@ public class Cell {
     private Collection<Cell> boxNeighbors;
     private Cell nextCell;
 
+    /**
+     * Creates a new {@link Cell}.
+     * @param value The numeric value of the {@link Cell}
+     */
     public Cell(int value) {
         this.value = value;
     }
 
     /**
-     * Returns the value of the Cell. <br><br> The value is a digit (1, 2,...) or 0 if the Cell is
-     * empty.
+     * Returns the value of the Cell. The value is a digit (1, 2,...) or 0 if the Cell is empty.
      *
      * @return the value of the Cell.
      */
