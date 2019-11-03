@@ -23,7 +23,7 @@ public class LogFactory {
     private OriginalSudokuGrid originalSudokuGrid;
 
     /**
-     * Creates a new {@link LogFactory}
+     * Creates a new LogFactory
      */
     public LogFactory() {
         if (!LOG_FILES_DIRECTORY.exists()) {

@@ -28,7 +28,7 @@ public class SudokuUnrecognizedKeyAction extends SudokuAction {
     }
 
     /**
-     * Creates a new {@link SudokuUnrecognizedKeyAction}
+     * Creates a new SudokuUnrecognizedKeyAction
      * @param keyCode Key code of unrecognized key that was pressed (check against constants in {@link KeyEvent}).
      */
     public SudokuUnrecognizedKeyAction(int keyCode) {

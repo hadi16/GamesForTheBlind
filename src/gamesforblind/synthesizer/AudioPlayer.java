@@ -34,7 +34,7 @@ public class AudioPlayer implements Runnable {
     private ArrayList<Phrase> phrasesToPlay = new ArrayList<>();
 
     /**
-     * Creates a new {@link AudioPlayer}
+     * Creates a new AudioPlayer
      *
      * @throws LineUnavailableException Thrown when the {@link Clip} in the audio player cannot be started.
      */

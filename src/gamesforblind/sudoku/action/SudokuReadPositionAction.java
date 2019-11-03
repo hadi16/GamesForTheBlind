@@ -29,7 +29,7 @@ public class SudokuReadPositionAction extends SudokuAction {
     }
 
     /**
-     * Creates a new {@link SudokuReadPositionAction}
+     * Creates a new SudokuReadPositionAction
      * @param sudokuSection Whether the user wants the ROW, COLUMN, or BLOCK to be read.
      */
     public SudokuReadPositionAction(SudokuSection sudokuSection) {

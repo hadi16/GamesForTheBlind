@@ -43,7 +43,7 @@ public class SudokuHighlightAction extends SudokuAction {
     }
 
     /**
-     * Creates a new {@link SudokuHighlightAction}
+     * Creates a new SudokuHighlightAction
      * @param pointToHighlight The point that the user wishes to highlight.
      * @param inputType Whether the action was triggered by the mouse or keyboard.
      */

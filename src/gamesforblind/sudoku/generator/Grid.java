@@ -19,9 +19,9 @@ public class Grid {
     private final Cell[][] grid;
 
     /**
-     * Creates a new {@link Grid}
+     * Creates a new Grid
      * @param grid The {@link Cell}s that represent the Sudoku board.
-     * @param sudokuType Whether the {@link Grid} represents a 4x4, 6x6, or 9x9 board.
+     * @param sudokuType Whether the Grid represents a 4x4, 6x6, or 9x9 board.
      */
     private Grid(Cell[][] grid, SudokuType sudokuType) {
         this.grid = grid;
@@ -29,7 +29,7 @@ public class Grid {
     }
 
     /**
-     * Copy constructor for {@link Grid} (makes a deep copy).
+     * Copy constructor for Grid (makes a deep copy).
      * @param originalGrid The original Grid that needs to be copied over.
      */
     public Grid(Grid originalGrid) {
@@ -51,6 +51,7 @@ public class Grid {
      * A factory method which returns a Grid of a given two-dimensional array of integers.
      *
      * @param grid a two-dimensional int-array representation of a Grid
+     * @param sudokuType Whether the Grid represents a 4x4, 6x6, or 9x9 board.
      * @return a Grid instance corresponding to the provided two-dimensional int-array
      */
     public static Grid of(int[][] grid, SudokuType sudokuType) {
@@ -124,6 +125,7 @@ public class Grid {
     /**
      * A static factory method which returns an empty Grid.
      *
+     * @param sudokuType Whether the Grid represents a 4x4, 6x6, or 9x9 board.
      * @return an empty Grid
      */
     public static Grid emptyGrid(SudokuType sudokuType) {
@@ -159,7 +161,7 @@ public class Grid {
     }
 
     /**
-     * Converts the current {@link Grid} instance to a 2D array of ints.
+     * Converts the current Grid instance to a 2D array of ints.
      * @return A 2D array of ints representing the current Sudoku grid.
      */
     public int[][] toIntArray() {
