@@ -20,6 +20,10 @@ public class LoaderGameSelectionAction extends LoaderAction {
     @XmlElement
     private final SelectedGame selectedGame;
 
+    /**
+     * Warning: DO NOT call this constructor directly.
+     * Needed to allow JAXB (XML serializer) to work, since it needs a zero-argument constructor.
+     */
     @SuppressWarnings("unused")
     private LoaderGameSelectionAction() {
         this(null);

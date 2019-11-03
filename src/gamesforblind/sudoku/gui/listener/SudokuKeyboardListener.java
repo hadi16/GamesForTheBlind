@@ -2,9 +2,9 @@ package gamesforblind.sudoku.gui.listener;
 
 import gamesforblind.enums.InputType;
 import gamesforblind.enums.SudokuSection;
-import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.action.*;
+import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -12,109 +12,96 @@ import java.awt.event.KeyListener;
 import java.util.Map;
 
 /**
- * Sudoku keyboard listener class that will receive keyboard inputs and appropriately call the proper
- * action class
+ * Keyboard listener for Sudoku that receives keyboard inputs and appropriately calls the proper action class
  */
 public class SudokuKeyboardListener implements KeyListener {
-    //potentially create the ability to choose own keys for each box later in project
-    private static final Map<Integer, Map<Character, Point>> BOARD_SIZE_TO_CHAR_TO_POINT = Map.of(
-            4, Map.of(
-                    'S', new Point(0, 0),
-                    'D', new Point(1, 0),
-                    'X', new Point(0, 1),
-                    'C', new Point(1, 1)
-            ),
-            9, Map.of(
-                    'W', new Point(0, 0),
-                    'E', new Point(1, 0),
-                    'R', new Point(2, 0),
-                    'S', new Point(0, 1),
-                    'D', new Point(1, 1),
-                    'F', new Point(2, 1),
-                    'X', new Point(0, 2),
-                    'C', new Point(1, 2),
-                    'V', new Point(2, 2)
-            )
-    );
-
+    /**
+     * The current Sudoku game.
+     */
     private final SudokuGame sudokuGame;
-    private final Map<Character, Point> charToPoint;
 
-    public SudokuKeyboardListener(SudokuGame sudokuGame, SudokuType sudokuType) {
-        int sudokuBoardSize = sudokuType.getSudokuBoardSize();
+    /**
+     * A mapping between key codes & corresponding {@link Point}s. Used to have multiple keyboard interfaces.
+     */
+    private final Map<Integer, Point> keyCodeToPoint;
 
-        if (!BOARD_SIZE_TO_CHAR_TO_POINT.containsKey(sudokuBoardSize)) {
-            //gives exception for board selection size (4,9)
-            throw new IllegalArgumentException(
-                    "Improper Sudoku board size passed to keyboard listener: " + sudokuBoardSize
-            );
-        }
-
+    /**
+     * Creates a new {@link SudokuKeyboardListener}
+     *
+     * @param keyboardInterface The given keyboard interface that the user has chosen (arrow keys, etc.).
+     * @param sudokuGame The current Sudoku game.
+     */
+    public SudokuKeyboardListener(SudokuKeyboardInterface keyboardInterface, SudokuGame sudokuGame) {
         this.sudokuGame = sudokuGame;
-        this.charToPoint = BOARD_SIZE_TO_CHAR_TO_POINT.get(sudokuBoardSize);
+        this.keyCodeToPoint = keyboardInterface.getKeyCodeToPointMapping();
     }
 
     /**
-     * used to receive an input key, checks to make sure it's a valid input
+     * Triggered when a key is pressed in the Sudoku game.
+     *
+     * @param e The event that was triggered by the key press.
      */
     @Override
     public void keyPressed(KeyEvent e) {
-        //makes sure input is a number
+        // Case 1: pressed key is a number.
         if (Character.isDigit(e.getKeyChar())) {
-            //calls fill action to input the number, this will call the action to make sure its a valid move
+            // Calls FillAction to input the number (the state will determine whether it is a valid action).
             this.sudokuGame.receiveAction(
                     new SudokuFillAction(Character.getNumericValue(e.getKeyChar()))
             );
             return;
         }
 
-        //for mapped key check,
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            //highlights the correct box for the inputted mapped key
+        int selectedKeyCode = e.getKeyCode();
+
+        // Case 2: the selected key is the SPACE BAR
+        if (selectedKeyCode == KeyEvent.VK_SPACE) {
+            // If it is a SPACE BAR, then pass null to the pointToHighlight.
             this.sudokuGame.receiveAction(
                     new SudokuHighlightAction(null, InputType.KEYBOARD)
             );
             return;
         }
 
-        //for unknown key inputs to send an error
-        char selectedKeyChar = Character.toUpperCase(e.getKeyChar());
-
-        if (selectedKeyChar == 'I') {
+        // Case 3: the selected key is the 'I' key (play the instructions).
+        if (selectedKeyCode == KeyEvent.VK_I) {
             this.sudokuGame.receiveAction(new SudokuInstructionsAction());
             return;
         }
-        if (selectedKeyChar == 'H') {
+
+        // Case 4: the selected key is the 'H' key (triggers a hint).
+        if (selectedKeyCode == KeyEvent.VK_H) {
             this.sudokuGame.receiveAction(new SudokuHintKeyAction());
             return;
         }
 
-        Point currentSelectedPoint = this.charToPoint.get(selectedKeyChar);
-        if (currentSelectedPoint == null) {
-            // Reads the entire row that the player is in
-            final Map<Character, SudokuSection> KEY_TO_SECTION = Map.of(
-                    'J', SudokuSection.ROW,
-                    'K', SudokuSection.COLUMN,
-                    'L', SudokuSection.BLOCK
+        // Case 5: the selected key exists within the passed mapping of key codes & Points.
+        Point currentSelectedPoint = this.keyCodeToPoint.get(selectedKeyCode);
+        if (currentSelectedPoint != null) {
+            this.sudokuGame.receiveAction(
+                    new SudokuHighlightAction(currentSelectedPoint, InputType.KEYBOARD)
             );
-
-            SudokuSection sudokuSection = KEY_TO_SECTION.get(selectedKeyChar);
-            if (sudokuSection != null) {
-                this.sudokuGame.receiveAction(new SudokuReadPositionAction(sudokuSection));
-                return;
-            }
-
-            this.sudokuGame.receiveAction(new SudokuUnrecognizedKeyAction(e.getKeyCode()));
             return;
         }
 
-        //sends the action of the above accepted if statement
-        this.sudokuGame.receiveAction(
-                new SudokuHighlightAction(currentSelectedPoint, InputType.KEYBOARD)
+        final Map<Integer, SudokuSection> KEY_TO_SECTION = Map.of(
+                KeyEvent.VK_J, SudokuSection.ROW,
+                KeyEvent.VK_K, SudokuSection.COLUMN,
+                KeyEvent.VK_L, SudokuSection.BLOCK
         );
+
+        // Case 6: the selected key is a J, K, or L (read row, column, or block, respectively).
+        SudokuSection sudokuSection = KEY_TO_SECTION.get(selectedKeyCode);
+        if (sudokuSection != null) {
+            this.sudokuGame.receiveAction(new SudokuReadPositionAction(sudokuSection));
+            return;
+        }
+
+        // Case 7: the selected key is unrecognized.
+        this.sudokuGame.receiveAction(new SudokuUnrecognizedKeyAction(e.getKeyCode()));
     }
 
-    //honestly no idea lol
+    /* These methods are required to be overridden by the KeyListener, but they are unused. */
     @Override
     public void keyTyped(KeyEvent e) {
     }

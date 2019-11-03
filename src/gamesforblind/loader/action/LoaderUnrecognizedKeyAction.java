@@ -17,6 +17,10 @@ public class LoaderUnrecognizedKeyAction extends LoaderAction {
     @XmlElement
     private final int keyCode;
 
+    /**
+     * Warning: DO NOT call this constructor directly.
+     * Needed to allow JAXB (XML serializer) to work, since it needs a zero-argument constructor.
+     */
     @SuppressWarnings("unused")
     private LoaderUnrecognizedKeyAction() {
         this(0);

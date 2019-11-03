@@ -1,9 +1,9 @@
 package gamesforblind.loader.gui.listener;
 
+import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.loader.GameLoader;
 import gamesforblind.loader.action.LoaderArrowKeyAction;
 import gamesforblind.loader.action.LoaderUnrecognizedKeyAction;
-import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.loader.gui.LoaderFrame;
 
 import java.awt.*;

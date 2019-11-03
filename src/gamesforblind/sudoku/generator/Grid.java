@@ -7,19 +7,31 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-
 /**
  * This class represents a Sudoku Grid consisting of a NxN matrix containing blocks of {@link Cell}s.
  */
 public class Grid {
+    /**
+     * Whether the {@link Grid} represents a 4x4, 6x6, or 9x9 board.
+     */
     private final SudokuType sudokuType;
+
     private final Cell[][] grid;
 
+    /**
+     * Creates a new {@link Grid}
+     * @param grid The {@link Cell}s that represent the Sudoku board.
+     * @param sudokuType Whether the {@link Grid} represents a 4x4, 6x6, or 9x9 board.
+     */
     private Grid(Cell[][] grid, SudokuType sudokuType) {
         this.grid = grid;
         this.sudokuType = sudokuType;
     }
 
+    /**
+     * Copy constructor for {@link Grid} (makes a deep copy).
+     * @param originalGrid The original Grid that needs to be copied over.
+     */
     public Grid(Grid originalGrid) {
         int[][] gridNumbers = new int[originalGrid.grid.length][];
         for (int i = 0; i < gridNumbers.length; i++) {
@@ -44,6 +56,7 @@ public class Grid {
     public static Grid of(int[][] grid, SudokuType sudokuType) {
         int sudokuBoardSize = sudokuType.getSudokuBoardSize();
 
+        // Just checks a few things (null, etc.) & throws null if any are true.
         verifyGrid(grid, sudokuBoardSize);
 
         Cell[][] cells = new Cell[sudokuBoardSize][sudokuBoardSize];
@@ -66,6 +79,8 @@ public class Grid {
                 rows.get(row).add(cell);
                 columns.get(column).add(cell);
 
+                // Modified this to support generation of 6x6 boards. Needed modification
+                // since the blocks are rectangles (2x3), which is unlike 3x3 or 2x2 blocks.
                 int blockHeight = sudokuType.getBlockHeight();
                 boxes.get((row / blockHeight) * blockHeight + column / sudokuType.getBlockWidth()).add(cell);
 
@@ -116,28 +131,37 @@ public class Grid {
         return Grid.of(emptyGrid, sudokuType);
     }
 
-    private static void verifyGrid(int[][] grid, int numSudokuSquares) {
+    /**
+     * A static method that just makes sure that the generated Grid meets certain requirements (e.g. not null).
+     * @param grid The Sudoku grid to check.
+     * @param sudokuBoardSize The number of squares on each dimension of the given Sudoku board (e.g. 9x9 --> 9).
+     */
+    private static void verifyGrid(int[][] grid, int sudokuBoardSize) {
         if (grid == null) {
             throw new IllegalArgumentException("Grid must not be null");
         }
 
-        if (grid.length != numSudokuSquares) {
-            throw new IllegalArgumentException("Grid must have " + numSudokuSquares + " rows");
+        if (grid.length != sudokuBoardSize) {
+            throw new IllegalArgumentException("Grid must have " + sudokuBoardSize + " rows");
         }
 
         for (int[] row : grid) {
-            if (row.length != numSudokuSquares) {
-                throw new IllegalArgumentException("Grid must have " + numSudokuSquares + " columns");
+            if (row.length != sudokuBoardSize) {
+                throw new IllegalArgumentException("Grid must have " + sudokuBoardSize + " columns");
             }
 
             for (int value : row) {
-                if (value < 0 || value > numSudokuSquares) {
-                    throw new IllegalArgumentException("grid must contain values from 0-" + numSudokuSquares);
+                if (value < 0 || value > sudokuBoardSize) {
+                    throw new IllegalArgumentException("grid must contain values from 0-" + sudokuBoardSize);
                 }
             }
         }
     }
 
+    /**
+     * Converts the current {@link Grid} instance to a 2D array of ints.
+     * @return A 2D array of ints representing the current Sudoku grid.
+     */
     public int[][] toIntArray() {
         int[][] mappedGrid = new int[this.grid.length][];
         for (int i = 0; i < this.grid.length; i++) {
@@ -150,9 +174,9 @@ public class Grid {
     }
 
     /**
-     * Returns the size of this Grid. This method is useful if you want to iterate over all {@link
-     * Cell}s. <br><br> To access one cell use {@link #getCell(int, int)}. <br><br> Note: This is the
-     * size of one dimension. This Grid contains size x size {@link Cell}s.
+     * Returns the size of this Grid. This method is useful if you want to iterate over all {@link Cell}s.
+     * To access one cell use {@link #getCell(int, int)}. Note: This is the size of one dimension.
+     * This Grid contains size x size {@link Cell}s.
      *
      * @return the size of this Grid
      */
@@ -161,8 +185,8 @@ public class Grid {
     }
 
     /**
-     * Returns the {@link Cell} at the given position within the Grid. <br><br> This Grid has 0 to
-     * {@link #getSize()} rows and 0 to {@link #getSize()} columns.
+     * Returns the {@link Cell} at the given position within the Grid.
+     * This Grid has 0 to {@link #getSize()} rows and 0 to {@link #getSize()} columns.
      *
      * @param row    the row which contains the {@link Cell}
      * @param column the column which contains the {@link Cell}
@@ -173,34 +197,53 @@ public class Grid {
     }
 
     /**
-     * Checks if a given value is valid for a certain {@link Cell}. <br><br> A value is valid if it
-     * does not already exist in the same row, column and box.
+     * Checks if a given value is valid for a certain {@link Cell}.
+     * A value is valid if it does not already exist in the same row, column and box.
      *
      * @param cell  the {@link Cell} to check
      * @param value the value to validate
      * @return true if the given value is valid or false otherwise
      */
-
     public boolean isValidValueForCell(Cell cell, int value) {
         return this.isValidInRow(cell, value) && this.isValidInColumn(cell, value) && this.isValidInBox(cell, value);
     }
 
-    //checks to see if the number would be valid in the row
+    /**
+     * Checks to see whether the number would be valid in the {@link Cell}'s row.
+     * @param cell The {@link Cell} to validate.
+     * @param value The value of the cell to check.
+     * @return true if the number would be valid in the current row (otherwise, false).
+     */
     private boolean isValidInRow(Cell cell, int value) {
         return !this.getRowValuesOf(cell).contains(value);
     }
 
-    //checks to see if the number would be valid in the column
+    /**
+     * Checks to see whether the number would be valid in the {@link Cell}'s column.
+     * @param cell The {@link Cell} to validate.
+     * @param value The value of the cell to check.
+     * @return true if the number would be valid in the current column (otherwise, false).
+     */
     private boolean isValidInColumn(Cell cell, int value) {
         return !this.getColumnValuesOf(cell).contains(value);
     }
 
-    //checks to see if the number would be valid in a NxN box
+    /**
+     * Checks to see whether the number would be valid in the {@link Cell}'s block.
+     * @param cell The {@link Cell} to validate.
+     * @param value The value of the cell to check.
+     * @return true if the number would be valid in the current block (otherwise, false).
+     */
     private boolean isValidInBox(Cell cell, int value) {
         return !this.getBoxValuesOf(cell).contains(value);
     }
 
-    //gets all values in row
+    /**
+     * Gets all values for the given {@link Cell}'s row.
+     *
+     * @param cell The {@link Cell} to check.
+     * @return A Collection of Integers that represents all of the values in the passed {@link Cell}'s row.
+     */
     private Collection<Integer> getRowValuesOf(Cell cell) {
         List<Integer> rowValues = new ArrayList<>();
         for (Cell neighbor : cell.getRowNeighbors()) {
@@ -209,7 +252,12 @@ public class Grid {
         return rowValues;
     }
 
-    //gets all values in column
+    /**
+     * Gets all values for the given {@link Cell}'s column.
+     *
+     * @param cell The {@link Cell} to check.
+     * @return A Collection of Integers that represents all of the values in the passed {@link Cell}'s column.
+     */
     private Collection<Integer> getColumnValuesOf(Cell cell) {
         List<Integer> columnValues = new ArrayList<>();
         for (Cell neighbor : cell.getColumnNeighbors()) {
@@ -218,7 +266,12 @@ public class Grid {
         return columnValues;
     }
 
-    //gets all values in box
+    /**
+     * Gets all values for the given {@link Cell}'s block.
+     *
+     * @param cell The {@link Cell} to check.
+     * @return A Collection of Integers that represents all of the values in the passed {@link Cell}'s block.
+     */
     private Collection<Integer> getBoxValuesOf(Cell cell) {
         List<Integer> boxValues = new ArrayList<>();
         for (Cell neighbor : cell.getBoxNeighbors()) {
@@ -228,8 +281,7 @@ public class Grid {
     }
 
     /**
-     * Returns the first empty {@link Cell} of this e. <br><br> Note: The result is wrapped by an
-     * {@link Optional}.
+     * Returns the first empty {@link Cell} of this e. Note: The result is wrapped by an {@link Optional}.
      *
      * @return a non-null value containing the first empty {@link Cell} if present
      */
@@ -244,7 +296,7 @@ public class Grid {
 
     /**
      * Returns the next empty {@link Cell} consecutively to the given {@link Cell} in this Grid.
-     * <br><br> Note: The result is wrapped by an {@link Optional}.
+     * Note: The result is wrapped by an {@link Optional}.
      *
      * @param cell the {@link Cell} of which the next empty {@link Cell} should be obtained
      * @return a non-null value containing the next empty {@link Cell} if present

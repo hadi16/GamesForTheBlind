@@ -1,7 +1,6 @@
 package gamesforblind.logger;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -19,7 +18,16 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Optional;
 
+/**
+ * Contains various static helper functions for dealing with XML Strings & Documents.
+ */
 public class XmlHelpers {
+    /**
+     * Converts a XML String to a {@link Document}.
+     *
+     * @param xmlString The XML String to convert.
+     * @return A {@link Document} that is the equivalent of the passed XML String. If an error occurred, return empty().
+     */
     public static Optional<Document> convertXmlStringToDocument(String xmlString) {
         try {
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -30,13 +38,22 @@ public class XmlHelpers {
             e.printStackTrace();
         }
 
+        // If an error occurred, return just empty()
         return Optional.empty();
     }
 
+    /**
+     * "Beautify" a XML {@link Document} (properly indent it).
+     *
+     * @param xmlDocument The XML {@link Document} to beautify.
+     * @return A XML String that has been properly indented/beautified. If an error occurred, return empty().
+     */
     public static Optional<String> beautifyXmlDocument(Document xmlDocument) {
         try {
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+            // Set the indentation amount to 2.
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 
             StreamResult streamResult = new StreamResult(new StringWriter());
@@ -47,23 +64,7 @@ public class XmlHelpers {
             e.printStackTrace();
         }
 
-        return Optional.empty();
-    }
-
-    public static Optional<String> convertXmlNodeToString(Node xmlNode) {
-        try {
-            StringWriter stringWriter = new StringWriter();
-
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.transform(new DOMSource(xmlNode), new StreamResult(stringWriter));
-
-            return Optional.of(stringWriter.toString());
-        } catch (TransformerException e) {
-            e.printStackTrace();
-        }
-
+        // If an error occurred, return just empty()
         return Optional.empty();
     }
 }

@@ -35,7 +35,9 @@ public class SudokuGame {
             this.logFactory.setOriginalSudokuGrid(this.sudokuState.getOriginalGrid());
         }
 
-        this.sudokuFrame = new SudokuFrame(this, this.sudokuState, sudokuType, programArgs);
+        this.sudokuFrame = new SudokuFrame(
+                this, this.sudokuState, sudokuType, programArgs.isPlaybackMode()
+        );
     }
 
     /**
@@ -107,6 +109,5 @@ public class SudokuGame {
      */
     private void sendStateToGui() {
         this.sudokuFrame.receiveSudokuState(this.sudokuState);
-        this.sudokuFrame.repaintSudokuPanel();
     }
 }

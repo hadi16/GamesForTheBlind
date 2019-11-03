@@ -21,7 +21,6 @@ public class Generator {
 
     /**
      * Generates a random {@link Grid} instance with the given number of empty {@link Cell}s.
-     * <br><br>
      * Note: The complexity for a human player increases with an higher amount of empty {@link Cell}s.
      *
      * @param numberOfEmptyCells the number of empty {@link Cell}s
@@ -35,6 +34,12 @@ public class Generator {
         return grid;
     }
 
+    /**
+     * Erases the given amount of cell values from the specified {@link Grid}.
+     *
+     * @param grid The Grid to delete cell values from.
+     * @param numberOfEmptyCells The number of cell values to erase.
+     */
     private void eraseCells(Grid grid, int numberOfEmptyCells) {
         Random random = new Random();
         for (int i = 0; i < numberOfEmptyCells; i++) {
@@ -50,6 +55,10 @@ public class Generator {
         }
     }
 
+    /**
+     * Generates a solved & random {@link Grid}.
+     * @return The generated & solved {@link Grid}.
+     */
     private Grid generate() {
         Grid grid = Grid.emptyGrid(this.sudokuType);
 

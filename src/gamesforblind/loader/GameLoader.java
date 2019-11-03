@@ -38,6 +38,10 @@ public class GameLoader {
      */
     private final Thread audioPlayerThread;
 
+    /**
+     * In playback mode, read the stored actions one-by-one.
+     * In regular mode, store the actions taken in the game one-by-one.
+     */
     private final LogFactory logFactory;
 
     private final LoaderFrame loaderFrame;
@@ -59,9 +63,11 @@ public class GameLoader {
 
         this.programArgs = programArgs;
         this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.PLAY_OR_EXIT);
-        this.logFactory = this.getLogFactory();
+        this.logFactory = this.initializeLogFactory();
         this.loaderFrame = new LoaderFrame(this, programArgs);
 
+        // If we are in playback mode, this step is crucial
+        // (allows us to replay the actions one-by-one in realtime).
         if (this.programArgs.isPlaybackMode()) {
             this.loopThroughSavedProgramActions();
         }
@@ -75,13 +81,16 @@ public class GameLoader {
             if (currentAction instanceof LoaderAction) {
                 this.receiveAction((LoaderAction) currentAction);
             } else if (currentAction instanceof SudokuAction) {
+                // The game should have been initialized by the LoaderSudokuSelectionAction in the XML log file.
                 this.sudokuGame.receiveAction((SudokuAction) currentAction);
             }
 
+            // If we are on the last iteration/action, then no need to sleep anymore.
             if (i == programActions.size() - 1) {
                 break;
             }
 
+            /* Sleep for the duration between the current action & the next action. */
             ProgramAction nextAction = programActions.get(i + 1);
             long millisToSleep = ChronoUnit.MILLIS.between(
                     currentAction.getLocalDateTime(), nextAction.getLocalDateTime()
@@ -95,19 +104,28 @@ public class GameLoader {
         }
     }
 
-    private LogFactory getLogFactory() {
+    /**
+     * Get a new {@link LogFactory} object if the program isn't in playback mode. Otherwise, trigger
+     * the log file selection GUI & initialize the LogFactory with the contents of this XML file.
+     *
+     * @return The initialized {@link LogFactory} object.
+     */
+    private LogFactory initializeLogFactory() {
         if (!this.programArgs.isPlaybackMode()) {
             return new LogFactory();
         }
 
         LogFileSelectionGui logFileSelectionGui = new LogFileSelectionGui();
         Optional<String> maybeLogFilePath = logFileSelectionGui.getSelectedLogFilePath();
+
+        // If the user didn't select a XML log file from the GUI.
         if (maybeLogFilePath.isEmpty()) {
             System.err.println("Could not load XML log file!");
             System.exit(1);
         }
 
-        return new LogReader().restoreLoggedProgramActions(maybeLogFilePath.get());
+        // Let LogReader read in the program actions & Sudoku board from the XML log file.
+        return new LogReader().restoreLoggedProgram(maybeLogFilePath.get());
     }
 
     /**
@@ -121,13 +139,14 @@ public class GameLoader {
             this.logFactory.addProgramAction(action);
         }
 
-        // Case 1: the user pressed one of the arrow keys in the game.
+        // Case 1: the user pressed one of the arrow keys in the loader GUI.
         if (action instanceof LoaderArrowKeyAction) {
             final Map<String, Phrase> BUTTON_TEXT_TO_PHRASE = Map.of(
                     PLAY_SUDOKU_BUTTON, Phrase.SPACE_FOR_SUDOKU,
                     EXIT_BUTTON, Phrase.SPACE_FOR_EXIT,
                     BACK_BUTTON, Phrase.GO_BACK_TO_GAME_SELECTION,
                     FOUR_BY_FOUR_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_FOUR,
+                    SIX_BY_SIX_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_SIX,
                     NINE_BY_NINE_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_NINE
             );
 
@@ -159,9 +178,10 @@ public class GameLoader {
             ArrayList<InterfaceType> supportedInterfaces = sudokuType.getSupportedSudokuInterfaces();
             InterfaceType selectedInterfaceType = this.programArgs.getSelectedInterfaceType();
             if (!supportedInterfaces.contains(selectedInterfaceType)) {
-                throw new IllegalArgumentException(
+                System.err.println(
                         "Interface type " + selectedInterfaceType + " not supported for Sudoku type " + sudokuType
                 );
+                System.exit(1);
             }
 
             this.loaderFrame.closeLoaderFrames();
