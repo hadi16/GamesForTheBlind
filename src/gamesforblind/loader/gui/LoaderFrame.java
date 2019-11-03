@@ -54,7 +54,7 @@ public class LoaderFrame extends JFrame {
     /**
      * Creates a new LoaderFrame.
      *
-     * @param gameLoader The game loader for the program, which is needed for mouse & keyboard listeners.
+     * @param gameLoader  The game loader for the program, which is needed for mouse & keyboard listeners.
      * @param programArgs The program arguments that were passed.
      */
     public LoaderFrame(GameLoader gameLoader, ProgramArgs programArgs) {

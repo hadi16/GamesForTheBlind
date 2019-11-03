@@ -4,6 +4,8 @@ import gamesforblind.enums.SudokuType;
 
 import java.util.Random;
 
+import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
+
 /**
  * A Generator to generate random Sudoku {@link Grid} instances.
  */
@@ -39,7 +41,7 @@ public class Generator {
     /**
      * Erases the given amount of cell values from the specified {@link Grid}.
      *
-     * @param grid The Grid to delete cell values from.
+     * @param grid               The Grid to delete cell values from.
      * @param numberOfEmptyCells The number of cell values to erase.
      */
     private void eraseCells(Grid grid, int numberOfEmptyCells) {
@@ -50,7 +52,7 @@ public class Generator {
 
             Cell cell = grid.getCell(randomRow, randomColumn);
             if (!cell.isEmpty()) {
-                cell.setValue(0);
+                cell.setValue(EMPTY_SUDOKU_SQUARE);
             } else {
                 i--;
             }
@@ -59,6 +61,7 @@ public class Generator {
 
     /**
      * Generates a solved & random {@link Grid}.
+     *
      * @return The generated & solved {@link Grid}.
      */
     private Grid generate() {

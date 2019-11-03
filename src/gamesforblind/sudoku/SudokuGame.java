@@ -23,10 +23,10 @@ public class SudokuGame {
     /**
      * Creates a new SudokuGame.
      *
-     * @param sudokuType Whether the game is a 4x4, 6x6, or 9x9 variant.
+     * @param sudokuType          Whether the game is a 4x4, 6x6, or 9x9 variant.
      * @param audioPlayerExecutor Class used to execute the threaded audio player.
-     * @param logFactory Where all of the logs are stored or read from (depending on whether it's in playback mode).
-     * @param programArgs The program arguments that were passed.
+     * @param logFactory          Where all of the logs are stored or read from (depending on whether it's in playback mode).
+     * @param programArgs         The program arguments that were passed.
      */
     public SudokuGame(
             SudokuType sudokuType, AudioPlayerExecutor audioPlayerExecutor, LogFactory logFactory, ProgramArgs programArgs

@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
+
 /**
  * Contains the main GUI code for Sudoku. Serves as a custom JPanel for Sudoku GUI (extends JPanel).
  */
@@ -43,13 +45,13 @@ public class SudokuPanel extends JPanel {
      * NOTE: only used for the {@link SudokuBlockSelectionInterface}.
      * Highlights the blocks & squares that are currently highlighted in the game.
      *
-     * @param graphics The {@link Graphics} object used for painting.
+     * @param graphics                The {@link Graphics} object used for painting.
      * @param blockSelectionInterface The block interface, which contains the selected block & square {@link Point}s.
-     * @param rowIdx The current row index.
-     * @param columnIdx The current column index.
-     * @param xPos The current x position (amount of pixels in x direction).
-     * @param yPos The current y position (amount of pixels in y direction).
-     * @param squareDimension The pixel dimension of each square on the board.
+     * @param rowIdx                  The current row index.
+     * @param columnIdx               The current column index.
+     * @param xPos                    The current x position (amount of pixels in x direction).
+     * @param yPos                    The current y position (amount of pixels in y direction).
+     * @param squareDimension         The pixel dimension of each square on the board.
      */
     private void paintHighlightedSquares(
             Graphics graphics, SudokuBlockSelectionInterface blockSelectionInterface,
@@ -93,7 +95,7 @@ public class SudokuPanel extends JPanel {
     /**
      * Paints the Sudoku board.
      *
-     * @param graphics The {@link Graphics} object used for painting.
+     * @param graphics        The {@link Graphics} object used for painting.
      * @param squareDimension The pixel dimension of each square on the board.
      * @param initialPosition Amount of pixels to begin painting board from (the row & column labels come before this).
      */
@@ -125,10 +127,10 @@ public class SudokuPanel extends JPanel {
                 graphics.drawRect(xPosition, yPosition, squareDimension, squareDimension);
 
                 // Step 4: fill in the square on the Sudoku board (if not empty).
-                int squareNum = sudokuGrid.getCell(rowIndex, columnIndex).getValue();
-                if (squareNum != 0) {
+                int currentCellValue = sudokuGrid.getCell(rowIndex, columnIndex).getValue();
+                if (currentCellValue != EMPTY_SUDOKU_SQUARE) {
                     graphics.drawString(
-                            Integer.toString(squareNum),
+                            Integer.toString(currentCellValue),
                             xPosition + squareDimension / 3,
                             yPosition + (2 * squareDimension / 3)
                     );
@@ -145,7 +147,7 @@ public class SudokuPanel extends JPanel {
      * Paints the row & column labels for the Sudoku board.
      * We will model this closely after Excel, which uses numbers for row labels & letters for column labels.
      *
-     * @param graphics The {@link Graphics} object used for painting.
+     * @param graphics        The {@link Graphics} object used for painting.
      * @param squareDimension The pixel dimension of each square on the board.
      * @param initialPosition Amount of pixels to begin painting board from.
      */

@@ -19,6 +19,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
+import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
+
 /**
  * Class that contains information about the current state of the Sudoku board.
  * Also handles any calls into the {@link AudioPlayerExecutor} for Sudoku.
@@ -38,10 +40,10 @@ public class SudokuState {
     /**
      * Creates a new SudokuState. Important: only used when the game is in playback mode.
      *
-     * @param interfaceType The keyboard interface type that is being used in the game.
-     * @param sudokuType Whether the Sudoku game is a 4x4, 6x6, or 9x9 variant.
+     * @param interfaceType       The keyboard interface type that is being used in the game.
+     * @param sudokuType          Whether the Sudoku game is a 4x4, 6x6, or 9x9 variant.
      * @param audioPlayerExecutor Calls into the threaded audio player for the game.
-     * @param originalGrid The original state of the Sudoku board, which is used to restore the saved game state.
+     * @param originalGrid        The original state of the Sudoku board, which is used to restore the saved game state.
      */
     public SudokuState(InterfaceType interfaceType, SudokuType sudokuType,
                        AudioPlayerExecutor audioPlayerExecutor, OriginalSudokuGrid originalGrid) {
@@ -59,8 +61,8 @@ public class SudokuState {
     /**
      * Creates a new SudokuState. Important: only used when the game is in regular mode (NOT playback mode).
      *
-     * @param interfaceType The keyboard interface type that is being used in the game.
-     * @param sudokuType Whether the Sudoku game is a 4x4, 6x6, or 9x9 variant.
+     * @param interfaceType       The keyboard interface type that is being used in the game.
+     * @param sudokuType          Whether the Sudoku game is a 4x4, 6x6, or 9x9 variant.
      * @param audioPlayerExecutor Calls into the threaded audio player for the game.
      */
     public SudokuState(InterfaceType interfaceType, SudokuType sudokuType, AudioPlayerExecutor audioPlayerExecutor) {
@@ -79,6 +81,7 @@ public class SudokuState {
 
     /**
      * Gets instance of {@link SudokuKeyboardInterface} that's appropriate to the type of interface the user requested.
+     *
      * @param interfaceType The keyboard interface type that is being used in the game.
      * @return An instance of {@link SudokuKeyboardInterface} that corresponds to the passed {@link InterfaceType}
      */
@@ -118,7 +121,7 @@ public class SudokuState {
                 Cell cellAtPosition = this.sudokuGrid.getCell(rowIdx, columnIdx);
 
                 // Only add it to the list of originally filled squares if the cell isn't empty.
-                if (cellAtPosition.getValue() != 0) {
+                if (cellAtPosition.getValue() != EMPTY_SUDOKU_SQUARE) {
                     originallyFilledSquares.add(new Point(columnIdx, rowIdx));
                 }
             }
@@ -200,7 +203,7 @@ public class SudokuState {
         Cell cellToSet = this.sudokuGrid.getCell(pointToSet.y, pointToSet.x);
 
         // Case 2: the user wishes to delete the cell value.
-        if (numberToFill == 0) {
+        if (numberToFill == EMPTY_SUDOKU_SQUARE) {
             // Case 2a: the user tries to delete an originally filled square on the board.
             if (this.readCannotDeleteOriginal(pointToSet)) {
                 return;
@@ -210,7 +213,7 @@ public class SudokuState {
             this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
                     Phrase.REMOVED_NUM, Phrase.convertIntegerToPhrase(cellToSet.getValue()))
             ));
-            cellToSet.setValue(0);
+            cellToSet.setValue(EMPTY_SUDOKU_SQUARE);
             return;
         }
 
@@ -246,7 +249,7 @@ public class SudokuState {
         }
 
         // Case 5: the cell value is replaced with the passed numeric value.
-        if (cellToSet.getValue() == 0) {
+        if (cellToSet.getValue() == EMPTY_SUDOKU_SQUARE) {
             this.numberOfEmptyCells--;
         }
         cellToSet.setValue(numberToFill);
@@ -316,7 +319,7 @@ public class SudokuState {
         // Case 3: the user has selected a square & it is not an originally filled square.
         for (int cellValue = 1; cellValue <= this.sudokuType.getSudokuBoardSize(); cellValue++) {
             if (this.sudokuGrid.isValidValueForCell(cellToSet, cellValue)) {
-                if (cellToSet.getValue() == 0) {
+                if (cellToSet.getValue() == EMPTY_SUDOKU_SQUARE) {
                     this.numberOfEmptyCells--;
                 }
 
@@ -354,7 +357,7 @@ public class SudokuState {
      * Gets the {@link Phrase} values of all the cells in the same row or column (as the currently selected Point).
      *
      * @param selectedPoint The {@link Point} that is currently selected in the game.
-     * @param readRow If true, reads the values in the same ROW. If false, reads the values in the same column.
+     * @param readRow       If true, reads the values in the same ROW. If false, reads the values in the same column.
      * @return A list of {@link Phrase}s corresponding to all of the numeric values of the cells in the same row/column.
      */
     private ArrayList<Phrase> getRowOrColumnPhrases(Point selectedPoint, boolean readRow) {
@@ -454,7 +457,7 @@ public class SudokuState {
      * Setter that calls the setHighlightedPoint() method within {@link SudokuKeyboardInterface}.
      *
      * @param pointToSet The {@link Point} that the user has sent via an action.
-     * @param inputType Whether this action was sent via a keyboard or mouse input.
+     * @param inputType  Whether this action was sent via a keyboard or mouse input.
      */
     public void setHighlightedPoint(Point pointToSet, InputType inputType) {
         this.sudokuKeyboardInterface.setHighlightedPoint(pointToSet, inputType);

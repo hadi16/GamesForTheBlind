@@ -2,6 +2,8 @@ package gamesforblind.sudoku.generator;
 
 import java.util.Collection;
 
+import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
+
 /**
  * This class represents a Cell within a Sudoku {@link Grid}. It features a couple of convenient methods.
  */
@@ -14,6 +16,7 @@ public class Cell {
 
     /**
      * Creates a new Cell.
+     *
      * @param value The numeric value of the Cell.
      */
     public Cell(int value) {
@@ -44,7 +47,7 @@ public class Cell {
      * @return true if the Cell is empty, false otherwise
      */
     public boolean isEmpty() {
-        return this.value == 0;
+        return this.value == EMPTY_SUDOKU_SQUARE;
     }
 
     /**

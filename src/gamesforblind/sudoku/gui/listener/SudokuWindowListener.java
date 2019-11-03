@@ -27,6 +27,7 @@ public class SudokuWindowListener implements WindowListener {
 
     /**
      * When the window closing event is triggered, just send the exit action to the {@link SudokuGame} instance.
+     *
      * @param e The event that was triggered by the window.
      */
     @Override
