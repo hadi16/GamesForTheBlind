@@ -5,9 +5,12 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Test class for {@link Generator}.
+ */
 public class GeneratorTest {
     /**
-     * Tests that the correct number of {@link Cell}s are being deleted
+     * Tests that the correct number of {@link Cell}s are being deleted.
      */
     @Test
     public void generateCorrectNumEmpty() {

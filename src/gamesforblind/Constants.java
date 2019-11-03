@@ -5,7 +5,7 @@ import java.io.File;
 import java.nio.file.Paths;
 
 /**
- * Holds any constants that are used throughout the whole program.
+ * Holds any constants that are used in the program.
  */
 public class Constants {
     /**
@@ -22,13 +22,15 @@ public class Constants {
             Toolkit.getDefaultToolkit().getScreenSize().getWidth()
     );
 
-    public static final boolean SAVE_LOGS = true;
-
+    /**
+     * The XML log files directory ("logs" under the root project directory).
+     */
     public static final File LOG_FILES_DIRECTORY = new File(
             Paths.get(System.getProperty("user.dir"), "logs/").toString()
     );
 
     // region Loader Button Text Values
+
     /* The various button text values that are used throughout the loader GUI. */
     public static final String PLAY_SUDOKU_BUTTON = "PLAY SUDOKU";
     public static final String EXIT_BUTTON = "EXIT";
