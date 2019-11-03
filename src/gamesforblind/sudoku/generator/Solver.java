@@ -8,12 +8,22 @@ import java.util.Random;
  * A Solver is capable of solving a given Sudoku {@link Grid}.
  */
 public class Solver {
-    private static final int EMPTY = 0;
+    /**
+     * The number of squares on each side of the Sudoku board (e.g. 6x6 --> 6).
+     */
     private final int sudokuBoardSize;
+
+    /**
+     * An EMPTY square on the Sudoku board is just represented by the constant 0.
+     */
+    private static final int EMPTY = 0;
+
     private final int[] values;
 
     /**
      * Constructs a new Solver instance.
+     *
+     * @param sudokuBoardSize The number of squares on each side of the Sudoku board (e.g. 6x6 --> 6).
      */
     public Solver(int sudokuBoardSize) {
         this.sudokuBoardSize = sudokuBoardSize;
@@ -33,9 +43,8 @@ public class Solver {
         }
     }
 
-    /**
+    /*
      * Currently undoing solving stuff, need to use copy constructor - Callum
-     * <p>
      * Custom solver much like above solve method, returns a boolean
      */
     /*public boolean superSolver(Grid grid) {
@@ -57,6 +66,14 @@ public class Solver {
         }
         return false;
     }*/
+
+    /**
+     * Helper method to solve a {@link Cell} of the given Sudoku grid using backtracking.
+     *
+     * @param grid The Sudoku grid to solve.
+     * @param cell The {@link Cell} on the Sudoku grid that needs to be solved.
+     * @return true if the Grid is solvable, otherwise false.
+     */
     private boolean solve(Grid grid, Cell cell) {
         if (cell == null) {
             return true;
@@ -77,6 +94,11 @@ public class Solver {
         return false;
     }
 
+    /**
+     * Generates an array of random values between 1 and {@link #sudokuBoardSize}.
+     *
+     * @return An array of random values between 1 and {@link #sudokuBoardSize}.
+     */
     private int[] generateRandomValues() {
         List<Integer> values = new ArrayList<>(EMPTY);
         for (int i = 0; i < this.sudokuBoardSize; i++) {
@@ -84,8 +106,8 @@ public class Solver {
         }
 
         Random random = new Random();
-        for (int i = 0, j = random.nextInt(this.sudokuBoardSize), tmp = values.get(j); i < values.size();
-             i++, j = random.nextInt(this.sudokuBoardSize), tmp = values.get(j)) {
+        int i = 0, j = random.nextInt(this.sudokuBoardSize), tmp = values.get(j);
+        for (; i < values.size(); i++, j = random.nextInt(this.sudokuBoardSize), tmp = values.get(j)) {
             if (i == j) {
                 continue;
             }
