@@ -20,7 +20,7 @@ public abstract class LoaderListener {
     protected final GameLoader gameLoader;
 
     /**
-     * Creates a new {@link LoaderListener}. This is never called directly ({@link LoaderListener} is abstract).
+     * Creates a new LoaderListener. This is never called directly (LoaderListener is abstract).
      *
      * @param gameLoader The game loader for the program.
      */

@@ -13,6 +13,8 @@ public class Generator {
 
     /**
      * Constructs a new Generator instance.
+     *
+     * @param sudokuType Whether the Sudoku game is a 4x4, 6x6, or 9x9.
      */
     public Generator(SudokuType sudokuType) {
         this.solver = new Solver(sudokuType.getSudokuBoardSize());

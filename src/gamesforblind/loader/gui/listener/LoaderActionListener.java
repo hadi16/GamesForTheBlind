@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
  */
 public class LoaderActionListener extends LoaderListener implements ActionListener {
     /**
-     * Creates a new {@link LoaderActionListener}. Just calls the LoaderListener constructor.
+     * Creates a new LoaderActionListener. Just calls the LoaderListener constructor.
      *
      * @param gameLoader An instance to the game loader, which is needed to instance the superclass.
      */

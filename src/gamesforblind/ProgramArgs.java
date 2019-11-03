@@ -22,7 +22,7 @@ public class ProgramArgs {
     private final InterfaceType selectedInterfaceType;
 
     /**
-     * Create a new {@link ProgramArgs} object.
+     * Create a new ProgramArgs object.
      *
      * @param args The String arguments that were passed to main().
      */

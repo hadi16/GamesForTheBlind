@@ -72,7 +72,9 @@ public class LogReader {
 
             String xmlNodeName = xmlNode.getNodeName();
             Class classToMarshall;
-            if (xmlNodeName.equals(originalGridClass.getName())) {
+
+            // Gets the class name without the package name.
+            if (xmlNodeName.equals(originalGridClass.getSimpleName())) {
                 classToMarshall = originalGridClass;
             } else if (xmlNodeName.toLowerCase().contains("loader")) {
                 // Need the fully qualified name to the class that needs marshalling.

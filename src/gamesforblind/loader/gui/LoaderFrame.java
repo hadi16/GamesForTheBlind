@@ -52,9 +52,10 @@ public class LoaderFrame extends JFrame {
     private int highlightedButtonIndex = 0;
 
     /**
-     * Creates a new {@link LoaderFrame}.
+     * Creates a new LoaderFrame.
      *
      * @param gameLoader The game loader for the program, which is needed for mouse & keyboard listeners.
+     * @param programArgs The program arguments that were passed.
      */
     public LoaderFrame(GameLoader gameLoader, ProgramArgs programArgs) {
         this.programArgs = programArgs;

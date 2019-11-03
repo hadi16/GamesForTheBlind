@@ -27,7 +27,7 @@ public class LoaderUnrecognizedKeyAction extends LoaderAction {
     }
 
     /**
-     * Creates a new {@link LoaderUnrecognizedKeyAction}
+     * Creates a new LoaderUnrecognizedKeyAction
      *
      * @param keyCode The key code of the unrecognized key that was selected.
      */

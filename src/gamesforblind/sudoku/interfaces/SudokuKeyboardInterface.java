@@ -27,7 +27,7 @@ public abstract class SudokuKeyboardInterface {
     private final Grid sudokuGrid;
 
     /**
-     * Creates a new {@link SudokuKeyboardInterface}.
+     * Creates a new SudokuKeyboardInterface.
      *
      * @param sudokuType Whether the Sudoku board is a 4x4, 6x6, or 9x9.
      * @param sudokuGrid The Sudoku board as a {@link Grid} object.

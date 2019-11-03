@@ -30,7 +30,7 @@ public class LoaderGameSelectionAction extends LoaderAction {
     }
 
     /**
-     * Creates a new {@link LoaderGameSelectionAction}
+     * Creates a new LoaderGameSelectionAction
      *
      * @param selectedGame Which game the user has selected. If the user wishes to go back, this is NONE.
      */

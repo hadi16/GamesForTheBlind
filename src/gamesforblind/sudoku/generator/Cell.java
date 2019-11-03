@@ -13,8 +13,8 @@ public class Cell {
     private Cell nextCell;
 
     /**
-     * Creates a new {@link Cell}.
-     * @param value The numeric value of the {@link Cell}
+     * Creates a new Cell.
+     * @param value The numeric value of the Cell.
      */
     public Cell(int value) {
         this.value = value;
