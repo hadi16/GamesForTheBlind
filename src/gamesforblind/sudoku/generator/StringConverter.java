@@ -1,5 +1,7 @@
 package gamesforblind.sudoku.generator;
 
+import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
+
 /**
  * Creates a String representation of a {@link Grid}.
  */
@@ -53,22 +55,22 @@ public class StringConverter {
      * Appends the value of the given {@link Cell} (at given row & column) in the {@link Grid} to the StringBuilder.
      *
      * @param builder The StringBuilder to use for creating the String representation of the board.
-     * @param grid The Sudoku grid to fetch the {@link Cell} from.
-     * @param row The applicable row value.
-     * @param column The applicable column value.
+     * @param grid    The Sudoku grid to fetch the {@link Cell} from.
+     * @param row     The applicable row value.
+     * @param column  The applicable column value.
      */
     private static void printValue(StringBuilder builder, Grid grid, int row, int column) {
         int value = grid.getCell(row, column).getValue();
-        String output = value != 0 ? String.valueOf(value) : " ";
+        String output = value != EMPTY_SUDOKU_SQUARE ? String.valueOf(value) : " ";
         builder.append(" ").append(output).append(" ");
     }
 
     /**
      * Appends the right column border of the board to the StringBuilder.
      *
-     * @param builder The StringBuilder to use for creating the String representation of the board.
-     * @param column The current column number.
-     * @param size The size of the Sudoku {@link Grid}.
+     * @param builder        The StringBuilder to use for creating the String representation of the board.
+     * @param column         The current column number.
+     * @param size           The size of the Sudoku {@link Grid}.
      * @param numberOfBlocks The sqrt of the number of squares on each side of the board. TODO: make this work for 6x6.
      */
     private static void printRightColumnBorder(StringBuilder builder, int column, int size, int numberOfBlocks) {
@@ -86,9 +88,9 @@ public class StringConverter {
     /**
      * Appends the bottom row border of the board to the StringBuilder.
      *
-     * @param builder The StringBuilder to use for creating the String representation of the board.
-     * @param row The current row number.
-     * @param size The size of the Sudoku {@link Grid}.
+     * @param builder        The StringBuilder to use for creating the String representation of the board.
+     * @param row            The current row number.
+     * @param size           The size of the Sudoku {@link Grid}.
      * @param numberOfBlocks The sqrt of the number of squares on each side of the board. TODO: make this work for 6x6.
      */
     private static void printBottomRowBorder(StringBuilder builder, int row, int size, int numberOfBlocks) {

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
+
 /**
  * A Solver is capable of solving a given Sudoku {@link Grid}.
  */
@@ -12,11 +14,6 @@ public class Solver {
      * The number of squares on each side of the Sudoku board (e.g. 6x6 --> 6).
      */
     private final int sudokuBoardSize;
-
-    /**
-     * An EMPTY square on the Sudoku board is just represented by the constant 0.
-     */
-    private static final int EMPTY = 0;
 
     private final int[] values;
 
@@ -87,7 +84,7 @@ public class Solver {
                     return true;
                 }
 
-                cell.setValue(EMPTY);
+                cell.setValue(EMPTY_SUDOKU_SQUARE);
             }
         }
 
@@ -100,7 +97,7 @@ public class Solver {
      * @return An array of random values between 1 and {@link #sudokuBoardSize}.
      */
     private int[] generateRandomValues() {
-        List<Integer> values = new ArrayList<>(EMPTY);
+        List<Integer> values = new ArrayList<>(EMPTY_SUDOKU_SQUARE);
         for (int i = 0; i < this.sudokuBoardSize; i++) {
             values.add(i + 1);
         }

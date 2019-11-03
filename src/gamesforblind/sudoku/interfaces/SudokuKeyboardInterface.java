@@ -48,7 +48,7 @@ public abstract class SudokuKeyboardInterface {
      * Sets the currently highlighted {@link Point} in the game.
      *
      * @param pointToSet The {@link Point} that was stored in a {@link SudokuHighlightAction}.
-     * @param inputType Whether this action was made with a keyboard or a mouse.
+     * @param inputType  Whether this action was made with a keyboard or a mouse.
      */
     public abstract void setHighlightedPoint(Point pointToSet, InputType inputType);
 

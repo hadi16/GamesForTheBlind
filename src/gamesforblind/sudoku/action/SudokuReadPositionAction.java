@@ -30,6 +30,7 @@ public class SudokuReadPositionAction extends SudokuAction {
 
     /**
      * Creates a new SudokuReadPositionAction
+     *
      * @param sudokuSection Whether the user wants the ROW, COLUMN, or BLOCK to be read.
      */
     public SudokuReadPositionAction(SudokuSection sudokuSection) {
@@ -38,6 +39,7 @@ public class SudokuReadPositionAction extends SudokuAction {
 
     /**
      * Getter for sudokuSection
+     *
      * @return Whether the user wants the ROW, COLUMN, or BLOCK to be read.
      */
     public SudokuSection getSudokuSection() {

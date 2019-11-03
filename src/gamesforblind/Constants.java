@@ -15,6 +15,11 @@ public class Constants {
     public static final boolean BUILD_PHRASES = false;
 
     /**
+     * An EMPTY square on the Sudoku board is just represented by the constant 0.
+     */
+    public static final int EMPTY_SUDOKU_SQUARE = 0;
+
+    /**
      * The minimum dimension of each JFrame in the game (the minimum of the height & width of the screen dimensions).
      */
     public static final int FRAME_DIMENSION = (int) Math.min(
