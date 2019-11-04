@@ -332,6 +332,6 @@ public class Grid {
      */
     @Override
     public String toString() {
-        return StringConverter.toString(this, (int) Math.sqrt(this.sudokuType.getSudokuBoardSize()));
+        return StringConverter.toString(this, this.sudokuType);
     }
 }
