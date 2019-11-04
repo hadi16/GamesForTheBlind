@@ -128,7 +128,7 @@ public enum Phrase {
     private final String phraseValue;
 
     /**
-     * Creates a new {@link Phrase}
+     * Creates a new Phrase
      * When no phrase value is passed, just set the phrase value to the name of the enumeration member.
      */
     Phrase() {
@@ -136,7 +136,7 @@ public enum Phrase {
     }
 
     /**
-     * Creates a new {@link Phrase}
+     * Creates a new Phrase
      *
      * @param phraseValue The phrase value to set to the given enumeration member.
      */

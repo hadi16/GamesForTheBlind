@@ -27,7 +27,7 @@ public class LogWriter {
     private final LogFactory logFactory;
 
     /**
-     * Creates a new {@link LogWriter}
+     * Creates a new LogWriter
      *
      * @param logFactory All of the stored ProgramActions & the original state of the Sudoku board in the game.
      */

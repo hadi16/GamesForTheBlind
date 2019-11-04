@@ -29,7 +29,7 @@ public class LoaderArrowKeyAction extends LoaderAction {
     }
 
     /**
-     * Creates a new {@link LoaderArrowKeyAction}
+     * Creates a new LoaderArrowKeyAction
      *
      * @param arrowKeyDirection Which arrow key was pressed in the loader.
      */

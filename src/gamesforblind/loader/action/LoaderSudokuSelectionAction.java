@@ -29,7 +29,7 @@ public class LoaderSudokuSelectionAction extends LoaderAction {
     }
 
     /**
-     * Creates a new {@link LoaderSudokuSelectionAction}
+     * Creates a new LoaderSudokuSelectionAction
      *
      * @param sudokuType The type of Sudoku game that the user has selected (e.g. 4x4 or 9x9).
      */

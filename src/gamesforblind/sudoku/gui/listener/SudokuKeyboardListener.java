@@ -26,10 +26,10 @@ public class SudokuKeyboardListener implements KeyListener {
     private final Map<Integer, Point> keyCodeToPoint;
 
     /**
-     * Creates a new {@link SudokuKeyboardListener}
+     * Creates a new SudokuKeyboardListener
      *
      * @param keyboardInterface The given keyboard interface that the user has chosen (arrow keys, etc.).
-     * @param sudokuGame The current Sudoku game.
+     * @param sudokuGame        The current Sudoku game.
      */
     public SudokuKeyboardListener(SudokuKeyboardInterface keyboardInterface, SudokuGame sudokuGame) {
         this.sudokuGame = sudokuGame;

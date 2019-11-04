@@ -32,9 +32,9 @@ public class SudokuMouseListener implements MouseListener {
     /**
      * Creates a new SudokuMouseListener.
      *
-     * @param sudokuGame The current {@link SudokuGame}
+     * @param sudokuGame  The current {@link SudokuGame}
      * @param sudokuFrame A reference to the class containing the main JFrame (for the Sudoku GUI).
-     * @param sudokuType Whether the given Sudoku board is a 4x4, 6x6, or 9x9.
+     * @param sudokuType  Whether the given Sudoku board is a 4x4, 6x6, or 9x9.
      */
     public SudokuMouseListener(SudokuGame sudokuGame, SudokuFrame sudokuFrame, SudokuType sudokuType) {
         this.sudokuGame = sudokuGame;

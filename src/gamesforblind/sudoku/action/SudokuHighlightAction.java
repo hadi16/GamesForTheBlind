@@ -18,9 +18,9 @@ import java.awt.*;
 public class SudokuHighlightAction extends SudokuAction {
     /**
      * The point that the user wishes to highlight.
-     *
+     * <p>
      * For MOUSE inputs, this is just the Point that the user wishes to select (e.g. (3, 2) for 4th column & 3rd row).
-     *
+     * <p>
      * For KEYBOARD inputs, this is the Point that the triggered key maps to, which differs between the interface
      * types in the game. For example, in the block selection interface, a "W" key in the 9x9 maps to (0, 0),
      * while a "V" key maps to (2, 2).
@@ -29,7 +29,9 @@ public class SudokuHighlightAction extends SudokuAction {
     @XmlJavaTypeAdapter(PointAdapter.class)
     private final Point pointToHighlight;
 
-    /** Whether the action was triggered by the mouse or keyboard. */
+    /**
+     * Whether the action was triggered by the mouse or keyboard.
+     */
     @XmlElement
     private final InputType inputType;
 
@@ -43,9 +45,10 @@ public class SudokuHighlightAction extends SudokuAction {
     }
 
     /**
-     * Creates a new {@link SudokuHighlightAction}
+     * Creates a new SudokuHighlightAction
+     *
      * @param pointToHighlight The point that the user wishes to highlight.
-     * @param inputType Whether the action was triggered by the mouse or keyboard.
+     * @param inputType        Whether the action was triggered by the mouse or keyboard.
      */
     public SudokuHighlightAction(Point pointToHighlight, InputType inputType) {
         this.pointToHighlight = pointToHighlight;
@@ -54,6 +57,7 @@ public class SudokuHighlightAction extends SudokuAction {
 
     /**
      * Getter for pointToHighlight
+     *
      * @return The point that the user wishes to highlight.
      */
     public Point getPointToHighlight() {
@@ -62,6 +66,7 @@ public class SudokuHighlightAction extends SudokuAction {
 
     /**
      * Getter for inputType
+     *
      * @return Whether the action was triggered by the mouse or keyboard.
      */
     public InputType getInputType() {

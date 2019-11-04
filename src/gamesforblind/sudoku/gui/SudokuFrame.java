@@ -26,9 +26,9 @@ public class SudokuFrame extends JFrame {
     /**
      * Creates a new SudokuFrame.
      *
-     * @param sudokuGame The current Sudoku game.
+     * @param sudokuGame   The current Sudoku game.
      * @param initialState The initial state of the game, which is used to initialize the SudokuPanel.
-     * @param sudokuType Whether the Sudoku board is a 4x4, 6x6, or 9x9.
+     * @param sudokuType   Whether the Sudoku board is a 4x4, 6x6, or 9x9.
      * @param playbackMode true if loading saved game from logs (otherwise, false).
      */
     public SudokuFrame(SudokuGame sudokuGame, SudokuState initialState, SudokuType sudokuType, boolean playbackMode) {
@@ -59,6 +59,7 @@ public class SudokuFrame extends JFrame {
 
     /**
      * Sets the Sudoku state for the enclosed {@link SudokuPanel} & calls repaint() on it.
+     *
      * @param sudokuState The {@link SudokuState} to set.
      */
     public void receiveSudokuState(SudokuState sudokuState) {

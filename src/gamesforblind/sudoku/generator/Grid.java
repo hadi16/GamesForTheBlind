@@ -19,9 +19,10 @@ public class Grid {
     private final Cell[][] grid;
 
     /**
-     * Creates a new {@link Grid}
-     * @param grid The {@link Cell}s that represent the Sudoku board.
-     * @param sudokuType Whether the {@link Grid} represents a 4x4, 6x6, or 9x9 board.
+     * Creates a new Grid
+     *
+     * @param grid       The {@link Cell}s that represent the Sudoku board.
+     * @param sudokuType Whether the Grid represents a 4x4, 6x6, or 9x9 board.
      */
     private Grid(Cell[][] grid, SudokuType sudokuType) {
         this.grid = grid;
@@ -29,7 +30,8 @@ public class Grid {
     }
 
     /**
-     * Copy constructor for {@link Grid} (makes a deep copy).
+     * Copy constructor for Grid (makes a deep copy).
+     *
      * @param originalGrid The original Grid that needs to be copied over.
      */
     public Grid(Grid originalGrid) {
@@ -50,7 +52,8 @@ public class Grid {
     /**
      * A factory method which returns a Grid of a given two-dimensional array of integers.
      *
-     * @param grid a two-dimensional int-array representation of a Grid
+     * @param grid       a two-dimensional int-array representation of a Grid
+     * @param sudokuType Whether the Grid represents a 4x4, 6x6, or 9x9 board.
      * @return a Grid instance corresponding to the provided two-dimensional int-array
      */
     public static Grid of(int[][] grid, SudokuType sudokuType) {
@@ -124,6 +127,7 @@ public class Grid {
     /**
      * A static factory method which returns an empty Grid.
      *
+     * @param sudokuType Whether the Grid represents a 4x4, 6x6, or 9x9 board.
      * @return an empty Grid
      */
     public static Grid emptyGrid(SudokuType sudokuType) {
@@ -133,7 +137,8 @@ public class Grid {
 
     /**
      * A static method that just makes sure that the generated Grid meets certain requirements (e.g. not null).
-     * @param grid The Sudoku grid to check.
+     *
+     * @param grid            The Sudoku grid to check.
      * @param sudokuBoardSize The number of squares on each dimension of the given Sudoku board (e.g. 9x9 --> 9).
      */
     private static void verifyGrid(int[][] grid, int sudokuBoardSize) {
@@ -159,7 +164,8 @@ public class Grid {
     }
 
     /**
-     * Converts the current {@link Grid} instance to a 2D array of ints.
+     * Converts the current Grid instance to a 2D array of ints.
+     *
      * @return A 2D array of ints representing the current Sudoku grid.
      */
     public int[][] toIntArray() {
@@ -210,7 +216,8 @@ public class Grid {
 
     /**
      * Checks to see whether the number would be valid in the {@link Cell}'s row.
-     * @param cell The {@link Cell} to validate.
+     *
+     * @param cell  The {@link Cell} to validate.
      * @param value The value of the cell to check.
      * @return true if the number would be valid in the current row (otherwise, false).
      */
@@ -220,7 +227,8 @@ public class Grid {
 
     /**
      * Checks to see whether the number would be valid in the {@link Cell}'s column.
-     * @param cell The {@link Cell} to validate.
+     *
+     * @param cell  The {@link Cell} to validate.
      * @param value The value of the cell to check.
      * @return true if the number would be valid in the current column (otherwise, false).
      */
@@ -230,7 +238,8 @@ public class Grid {
 
     /**
      * Checks to see whether the number would be valid in the {@link Cell}'s block.
-     * @param cell The {@link Cell} to validate.
+     *
+     * @param cell  The {@link Cell} to validate.
      * @param value The value of the cell to check.
      * @return true if the number would be valid in the current block (otherwise, false).
      */
@@ -323,6 +332,6 @@ public class Grid {
      */
     @Override
     public String toString() {
-        return StringConverter.toString(this, (int) Math.sqrt(this.sudokuType.getSudokuBoardSize()));
+        return StringConverter.toString(this, this.sudokuType);
     }
 }

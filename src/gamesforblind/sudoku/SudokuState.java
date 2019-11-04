@@ -13,11 +13,18 @@ import gamesforblind.synthesizer.AudioPlayerExecutor;
 import gamesforblind.synthesizer.Phrase;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
+import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
+
+/**
+ * Class that contains information about the current state of the Sudoku board.
+ * Also handles any calls into the {@link AudioPlayerExecutor} for Sudoku.
+ */
 public class SudokuState {
     private final OriginalSudokuGrid originalGrid;
     private final SudokuType sudokuType;
@@ -30,6 +37,14 @@ public class SudokuState {
     private int numberOfEmptyCells;
     private boolean gameOver = false;
 
+    /**
+     * Creates a new SudokuState. Important: only used when the game is in playback mode.
+     *
+     * @param interfaceType       The keyboard interface type that is being used in the game.
+     * @param sudokuType          Whether the Sudoku game is a 4x4, 6x6, or 9x9 variant.
+     * @param audioPlayerExecutor Calls into the threaded audio player for the game.
+     * @param originalGrid        The original state of the Sudoku board, which is used to restore the saved game state.
+     */
     public SudokuState(InterfaceType interfaceType, SudokuType sudokuType,
                        AudioPlayerExecutor audioPlayerExecutor, OriginalSudokuGrid originalGrid) {
         this.sudokuType = sudokuType;
@@ -43,6 +58,13 @@ public class SudokuState {
         this.sudokuKeyboardInterface = this.initializeKeyboardInterface(interfaceType);
     }
 
+    /**
+     * Creates a new SudokuState. Important: only used when the game is in regular mode (NOT playback mode).
+     *
+     * @param interfaceType       The keyboard interface type that is being used in the game.
+     * @param sudokuType          Whether the Sudoku game is a 4x4, 6x6, or 9x9 variant.
+     * @param audioPlayerExecutor Calls into the threaded audio player for the game.
+     */
     public SudokuState(InterfaceType interfaceType, SudokuType sudokuType, AudioPlayerExecutor audioPlayerExecutor) {
         this.sudokuType = sudokuType;
         this.audioPlayerExecutor = audioPlayerExecutor;
@@ -57,9 +79,16 @@ public class SudokuState {
         this.sudokuKeyboardInterface = this.initializeKeyboardInterface(interfaceType);
     }
 
+    /**
+     * Gets instance of {@link SudokuKeyboardInterface} that's appropriate to the type of interface the user requested.
+     *
+     * @param interfaceType The keyboard interface type that is being used in the game.
+     * @return An instance of {@link SudokuKeyboardInterface} that corresponds to the passed {@link InterfaceType}
+     */
     private SudokuKeyboardInterface initializeKeyboardInterface(InterfaceType interfaceType) {
         switch (interfaceType) {
             case ARROW_KEY_INTERFACE:
+                // TODO: implement the arrow key interface.
                 throw new IllegalArgumentException("Arrow key interface not implemented yet!");
             case BLOCK_SELECTION_INTERFACE:
                 return new SudokuBlockSelectionInterface(this.sudokuType, this.sudokuGrid);
@@ -68,10 +97,21 @@ public class SudokuState {
         }
     }
 
+    /**
+     * Gets the number of empty cells that we initially want in the game.
+     *
+     * @param sudokuBoardSize The number of squares on each side of the board (e.g. 9x9 board --> 9)
+     * @return The number of initial empty cells that I want in the game.
+     */
     private int getInitialNumberOfEmptyCells(int sudokuBoardSize) {
         return (sudokuBoardSize * sudokuBoardSize) / 3;
     }
 
+    /**
+     * Gets the list of initially filled squares in the Sudoku board. This should be called in the constructor.
+     *
+     * @return A list of {@link Point}s representing all of the initially filled squares in the Sudoku board.
+     */
     private ArrayList<Point> initializeOriginallyFilledSquares() {
         ArrayList<Point> originallyFilledSquares = new ArrayList<>();
 
@@ -79,7 +119,9 @@ public class SudokuState {
         for (int rowIdx = 0; rowIdx < sudokuBoardSize; rowIdx++) {
             for (int columnIdx = 0; columnIdx < sudokuBoardSize; columnIdx++) {
                 Cell cellAtPosition = this.sudokuGrid.getCell(rowIdx, columnIdx);
-                if (cellAtPosition.getValue() != 0) {
+
+                // Only add it to the list of originally filled squares if the cell isn't empty.
+                if (cellAtPosition.getValue() != EMPTY_SUDOKU_SQUARE) {
                     originallyFilledSquares.add(new Point(columnIdx, rowIdx));
                 }
             }
@@ -88,31 +130,50 @@ public class SudokuState {
         return originallyFilledSquares;
     }
 
+    /**
+     * Gets a list of {@link Phrase}s in this format:
+     * - If no empty squares are left to fill, return a list containing a single element (the congrats message).
+     * - Otherwise, if more than one left to fill: "There are __ empty squares left on the board."
+     * - Else: "There is 1 empty square left on the board."
+     *
+     * @return A list of {@link Phrase}s representing how many empty squares are left (or the congrats message).
+     */
     private ArrayList<Phrase> getRemainingNumberOfEmptySquaresPhraseList() {
-        ArrayList<Phrase> phrasesToRead;
+        // Case 1: return the congrats message.
         if (this.numberOfEmptyCells == 0) {
-            phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
-        } else if (this.numberOfEmptyCells == 1) {
-            phrasesToRead = new ArrayList<>(Arrays.asList(
+            return new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
+        }
+
+        // Case 2: return the singular version of empty squares left.
+        if (this.numberOfEmptyCells == 1) {
+            return new ArrayList<>(Arrays.asList(
                     Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_1, Phrase.ONE, Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_2
-            ));
-        } else {
-            phrasesToRead = new ArrayList<>(Arrays.asList(
-                    Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_1,
-                    Phrase.convertIntegerToPhrase(this.numberOfEmptyCells),
-                    Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_2
             ));
         }
 
-        return phrasesToRead;
+        // Case 3: return the plural version of empty squares left.
+        return new ArrayList<>(Arrays.asList(
+                Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_1,
+                Phrase.convertIntegerToPhrase(this.numberOfEmptyCells),
+                Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_2
+        ));
     }
 
-    private boolean readCannotDeleteOriginal(Point point) {
-        if (!this.originallyFilledSquares.contains(point)) {
+    /**
+     * If the user tries to delete an originally selected square, read a message that
+     * "You cannot delete an originally set square on the board", along with message on current cell value.
+     *
+     * @param pointToCheck The {@link Point} to check.
+     * @return true if the passed {@link Point} was one of the originally set squares. Otherwise, false.
+     */
+    private boolean readCannotDeleteOriginal(Point pointToCheck) {
+        // Case 1: the point to check was not one of the originally filled squares on the board.
+        if (!this.originallyFilledSquares.contains(pointToCheck)) {
             return false;
         }
 
-        Cell cellToSet = this.sudokuGrid.getCell(point.y, point.x);
+        // Case 2: the point to check was one of the originally filled squares on the board.
+        Cell cellToSet = this.sudokuGrid.getCell(pointToCheck.y, pointToCheck.x);
 
         // Square will always contain a number from 1-9 or 1-4 (never 0), since it is an originally set square.
         this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
@@ -124,8 +185,15 @@ public class SudokuState {
         return true;
     }
 
+    /**
+     * Sets the currently selected {@link Point} to a given number (if the number is valid for the cell).
+     *
+     * @param numberToFill The number to fill the currently selected Point with.
+     */
     public void setSquareNumber(int numberToFill) {
         Optional<Point> maybePointToSet = this.sudokuKeyboardInterface.getSelectedPoint();
+
+        // Case 1: no Point is selected on the board.
         if (maybePointToSet.isEmpty()) {
             this.readNoSelectedSquareMessage();
             return;
@@ -134,19 +202,24 @@ public class SudokuState {
         Point pointToSet = maybePointToSet.get();
         Cell cellToSet = this.sudokuGrid.getCell(pointToSet.y, pointToSet.x);
 
-        if (numberToFill == 0) {
+        // Case 2: the user wishes to delete the cell value.
+        if (numberToFill == EMPTY_SUDOKU_SQUARE) {
+            // Case 2a: the user tries to delete an originally filled square on the board.
             if (this.readCannotDeleteOriginal(pointToSet)) {
                 return;
             }
 
+            // Case 2b: the cell value is deleted.
             this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
                     Phrase.REMOVED_NUM, Phrase.convertIntegerToPhrase(cellToSet.getValue()))
             ));
-            cellToSet.setValue(0);
+            cellToSet.setValue(EMPTY_SUDOKU_SQUARE);
             return;
         }
 
         int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
+
+        // Case 3: the user tries to fill a square with an invalid value (e.g. 6 on a 4x4 board).
         if (!(numberToFill > 0 && numberToFill <= sudokuBoardSize)) {
             this.audioPlayerExecutor.replacePhraseAndPrint(
                     sudokuBoardSize == 9 ? Phrase.INVALID_NUMBER_TO_FILL_9 : Phrase.INVALID_NUMBER_TO_FILL_4
@@ -169,12 +242,14 @@ public class SudokuState {
             }
         }*/
 
+        // Case 4: the numeric value is not valid for the selected cell.
         if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
             this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CELL_VALUE_INVALID);
             return;
         }
 
-        if (cellToSet.getValue() == 0) {
+        // Case 5: the cell value is replaced with the passed numeric value.
+        if (cellToSet.getValue() == EMPTY_SUDOKU_SQUARE) {
             this.numberOfEmptyCells--;
         }
         cellToSet.setValue(numberToFill);
@@ -183,6 +258,7 @@ public class SudokuState {
             this.gameOver = true;
         }
 
+        // Tell the user which number was placed along with the number of remaining empty squares on the board.
         ArrayList<Phrase> phrasesToRead = new ArrayList<>(
                 Arrays.asList(Phrase.PLACED_NUM, Phrase.convertIntegerToPhrase(numberToFill))
         );
@@ -190,6 +266,9 @@ public class SudokuState {
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
 
+    /**
+     * Reads the instructions for the 4x4, 6x6, or 9x9 game.
+     */
     public void readInstructions() {
         Phrase instructionsPhrase = null;
         switch (this.sudokuType) {
@@ -207,20 +286,29 @@ public class SudokuState {
         this.audioPlayerExecutor.replacePhraseAndPrint(instructionsPhrase);
     }
 
+    /**
+     * Reads a message that the user needs to first select a square on the board,
+     * followed by telling them how many squares they have left to fill.
+     */
     private void readNoSelectedSquareMessage() {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.NO_SELECTED_SQUARE));
         phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
 
+    /**
+     * Fills the currently selected square on the board with a valid value (gives the user a hint).
+     */
     public void giveHint() {
         Optional<Point> maybePointToSet = this.sudokuKeyboardInterface.getSelectedPoint();
 
+        // Case 1: no point is currently selected on the board.
         if (maybePointToSet.isEmpty()) {
             this.readNoSelectedSquareMessage();
             return;
         }
 
+        // Case 2: the user attempted to fill an originally filled square on the board.
         Point pointToSet = maybePointToSet.get();
         if (this.readCannotDeleteOriginal(pointToSet)) {
             return;
@@ -228,25 +316,36 @@ public class SudokuState {
 
         Cell cellToSet = this.sudokuGrid.getCell(pointToSet.y, pointToSet.x);
 
+        // Case 3: the user has selected a square & it is not an originally filled square.
         for (int cellValue = 1; cellValue <= this.sudokuType.getSudokuBoardSize(); cellValue++) {
             if (this.sudokuGrid.isValidValueForCell(cellToSet, cellValue)) {
+                if (cellToSet.getValue() == EMPTY_SUDOKU_SQUARE) {
+                    this.numberOfEmptyCells--;
+                }
+
                 cellToSet.setValue(cellValue);
-                this.numberOfEmptyCells--;
                 break;
             }
         }
 
+        // Read out the new value of this cell along with the amount of cells left to fill.
         ArrayList<Phrase> phrasesToRead = new ArrayList<>(
                 Collections.singletonList(Phrase.convertIntegerToPhrase(cellToSet.getValue()))
         );
         phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
 
+        // If there are no cells left to fill, the game is over.
         if (this.numberOfEmptyCells == 0) {
             this.gameOver = true;
         }
     }
 
+    /**
+     * Reads a message that an unrecognized key was pressed, followed by which key it was.
+     *
+     * @param keyCode Key code of the unrecognized key that was pressed (compare against values in {@link KeyEvent}).
+     */
     public void readUnrecognizedKey(int keyCode) {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>(Arrays.asList(
                 Phrase.UNRECOGNIZED_KEY, Phrase.keyCodeToPhrase(keyCode)
@@ -254,9 +353,19 @@ public class SudokuState {
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
 
+    /**
+     * Gets the {@link Phrase} values of all the cells in the same row or column (as the currently selected Point).
+     *
+     * @param selectedPoint The {@link Point} that is currently selected in the game.
+     * @param readRow       If true, reads the values in the same ROW. If false, reads the values in the same column.
+     * @return A list of {@link Phrase}s corresponding to all of the numeric values of the cells in the same row/column.
+     */
     private ArrayList<Phrase> getRowOrColumnPhrases(Point selectedPoint, boolean readRow) {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>();
+
+        // Begin with "You have the following numbers in the same row (or column)"
         phrasesToRead.add(readRow ? Phrase.IN_ROW : Phrase.IN_COLUMN);
+
         for (int rowOrColumnIdx = 0; rowOrColumnIdx < this.sudokuType.getSudokuBoardSize(); rowOrColumnIdx++) {
             Cell cellToRead;
             if (readRow) {
@@ -270,15 +379,25 @@ public class SudokuState {
         return phrasesToRead;
     }
 
+    /**
+     * Gets the {@link Phrase} values of all the cells in the same block (as the currently selected Point).
+     *
+     * @param selectedPoint The {@link Point} that is currently selected in the game.
+     * @return A list of {@link Phrase}s corresponding to all of the numeric values of the cells in the same block.
+     */
     private ArrayList<Phrase> getBlockPhrases(Point selectedPoint) {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>();
+
+        // Begin with "You have the following numbers in the same block"
         phrasesToRead.add(Phrase.IN_BLOCK);
 
+        // Need to divide by blockHeight first to get the truncated quotient [e.g. (7 / 3) * 3 = 2 * 3 = 6]
         int blockHeight = this.sudokuType.getBlockHeight();
         int currentRowIndex = (selectedPoint.y / blockHeight) * blockHeight;
 
         final int MAX_ROW_INDEX = currentRowIndex + blockHeight;
         for (; currentRowIndex < MAX_ROW_INDEX; currentRowIndex++) {
+            // Need to divide by blockWidth first to get the truncated quotient [e.g. (5 / 3) * 3 = 1 * 3 = 3]
             int blockWidth = this.sudokuType.getBlockWidth();
             int currentColumnIndex = (selectedPoint.x / blockWidth) * blockWidth;
 
@@ -292,6 +411,9 @@ public class SudokuState {
         return phrasesToRead;
     }
 
+    /**
+     * Reads the value of the currently selected {@link Cell} on the Sudoku board (if one is selected).
+     */
     public void readSelectedSquare() {
         Optional<Cell> maybeSelectedCell = this.sudokuKeyboardInterface.getSelectedCell();
         if (maybeSelectedCell.isPresent()) {
@@ -300,9 +422,15 @@ public class SudokuState {
         }
     }
 
+    /**
+     * Reads the values from the row, column, or block of the currently selected {@link Point}.
+     *
+     * @param sectionToRead Whether to read a row, column, or block.
+     */
     public void readBoardSection(SudokuSection sectionToRead) {
         Optional<Point> maybeSelectedPoint = this.sudokuKeyboardInterface.getSelectedPoint();
 
+        // If no point is currently selected, inform the user & return.
         if (maybeSelectedPoint.isEmpty()) {
             this.readNoSelectedSquareMessage();
             return;
@@ -325,30 +453,66 @@ public class SudokuState {
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
 
+    /**
+     * Setter that calls the setHighlightedPoint() method within {@link SudokuKeyboardInterface}.
+     *
+     * @param pointToSet The {@link Point} that the user has sent via an action.
+     * @param inputType  Whether this action was sent via a keyboard or mouse input.
+     */
     public void setHighlightedPoint(Point pointToSet, InputType inputType) {
         this.sudokuKeyboardInterface.setHighlightedPoint(pointToSet, inputType);
     }
 
+    /**
+     * Getter for sudokuBoardSize within sudokuType
+     *
+     * @return The number of squares on each side of the Sudoku board (e.g. 9x9 board --> 9).
+     */
     public int getSudokuBoardSize() {
         return this.sudokuType.getSudokuBoardSize();
     }
 
+    /**
+     * Getter for sudokuGrid
+     *
+     * @return The current state of the Sudoku {@link Grid} in the game.
+     */
     public Grid getSudokuGrid() {
         return this.sudokuGrid;
     }
 
+    /**
+     * Getter for originallyFilledSquares
+     *
+     * @return A list of all the {@link Point}s that were originally filled on the Sudoku board.
+     */
     public ArrayList<Point> getOriginallyFilledSquares() {
         return this.originallyFilledSquares;
     }
 
+    /**
+     * Getter for gameOver
+     *
+     * @return true if the game is over (otherwise false).
+     */
     public boolean isGameOver() {
         return this.gameOver;
     }
 
+    /**
+     * Getter for originalGrid
+     *
+     * @return The original state of the Sudoku board, which is used for logging functionality in the game.
+     */
     public OriginalSudokuGrid getOriginalGrid() {
         return this.originalGrid;
     }
 
+    /**
+     * Getter for sudokuKeyboardInterface
+     *
+     * @return The keyboard interface that is being used in the game.
+     */
     public SudokuKeyboardInterface getSudokuKeyboardInterface() {
         return this.sudokuKeyboardInterface;
     }

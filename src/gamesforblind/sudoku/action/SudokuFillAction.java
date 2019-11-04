@@ -27,7 +27,8 @@ public class SudokuFillAction extends SudokuAction {
     }
 
     /**
-     * Creates a new {@link SudokuFillAction}.
+     * Creates a new SudokuFillAction.
+     *
      * @param numberToFill The number that the user wants to input into the selected Sudoku square.
      */
     public SudokuFillAction(int numberToFill) {
@@ -36,6 +37,7 @@ public class SudokuFillAction extends SudokuAction {
 
     /**
      * Getter for numberToFill
+     *
      * @return The number that the user wants to input into the selected Sudoku square.
      */
     public int getNumberToFill() {
