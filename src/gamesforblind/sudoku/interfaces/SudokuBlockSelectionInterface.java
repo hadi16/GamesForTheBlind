@@ -18,7 +18,7 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
     /**
      * The keys 'S', 'D', 'X', and 'C' create a 4x4 square on the keyboard,
      * which maps to the points (0, 0), (1, 0), (0, 1), and (1, 1) respectively.
-     *
+     * <p>
      * (This principle is closely modeled for the 9x9 key mappings).
      */
     private static final Map<SudokuType, Map<Integer, Point>> TYPE_TO_KEY_TO_POINT = Map.of(
@@ -43,7 +43,7 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
 
     /**
      * The currently selected block.
-     *
+     * <p>
      * x & y are always between 0 & block height/width - 1. For the 9x9, this would be 0 - 2.
      * For the 9x9, the lower rightmost block has a value of (2, 2), while the center block has a value of (1, 1).
      */
@@ -52,9 +52,9 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
     /**
      * The currently selected square within the selected block.
      * Note: if this is not null, then {@link #selectedBlockPoint} should not be null.
-     *
+     * <p>
      * x & y are always between 0 & block height/width - 1. For the 9x9, this would be 0 - 2.
-     *
+     * <p>
      * For the 9x9, the lower rightmost square within ANY block has a value of (2, 2),
      * while the center block within ANY block has a value of (1, 1).
      */
@@ -97,7 +97,7 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
      * Sets the currently highlighted {@link Point} in the game.
      *
      * @param pointToSet The {@link Point} that was stored in a {@link SudokuHighlightAction}.
-     * @param inputType Whether this action was made with a keyboard or a mouse.
+     * @param inputType  Whether this action was made with a keyboard or a mouse.
      */
     @Override
     public void setHighlightedPoint(Point pointToSet, InputType inputType) {
@@ -162,7 +162,7 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
     /**
      * For the block selection interface, I want to return a mapping that is appropriate for the given board type.
      * For example, the 4x4 boards map the keys 'S', 'D', 'X', and 'C'.
-     *
+     * <p>
      * Some keyCodes (as defined in {@link KeyEvent}) map to a given {@link Point} as determined by this mapping.
      * Note: this is done with key codes instead of characters to allow for the arrow keys to be mapped.
      *

@@ -27,7 +27,7 @@ public abstract class SudokuKeyboardInterface {
     private final Grid sudokuGrid;
 
     /**
-     * Creates a new {@link SudokuKeyboardInterface}.
+     * Creates a new SudokuKeyboardInterface.
      *
      * @param sudokuType Whether the Sudoku board is a 4x4, 6x6, or 9x9.
      * @param sudokuGrid The Sudoku board as a {@link Grid} object.
@@ -48,7 +48,7 @@ public abstract class SudokuKeyboardInterface {
      * Sets the currently highlighted {@link Point} in the game.
      *
      * @param pointToSet The {@link Point} that was stored in a {@link SudokuHighlightAction}.
-     * @param inputType Whether this action was made with a keyboard or a mouse.
+     * @param inputType  Whether this action was made with a keyboard or a mouse.
      */
     public abstract void setHighlightedPoint(Point pointToSet, InputType inputType);
 

@@ -52,7 +52,9 @@ public class GameLoader {
     private SudokuGame sudokuGame;
 
     /**
-     * Creates a new {@link GameLoader} (this is only called directly from main()).
+     * Creates a new GameLoader (this is only called directly from main()).
+     *
+     * @param programArgs The program arguments that were passed.
      */
     public GameLoader(ProgramArgs programArgs) {
         // Initialize the audio player & start the audio player thread.
@@ -73,6 +75,10 @@ public class GameLoader {
         }
     }
 
+    /**
+     * Helper method to loop through all of the stored {@link ProgramAction}s in realtime.
+     * Enables realtime playback functionality for Sudoku.
+     */
     private void loopThroughSavedProgramActions() {
         ArrayList<ProgramAction> programActions = this.logFactory.getProgramActionList();
         for (int i = 0; i < programActions.size(); i++) {

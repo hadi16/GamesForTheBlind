@@ -20,7 +20,7 @@ public class AudioFileBuilder {
     private final File phraseDirectory;
 
     /**
-     * Creates a new {@link AudioFileBuilder}. Creates the phrase directory if it doesn't already exist.
+     * Creates a new AudioFileBuilder. Creates the phrase directory if it doesn't already exist.
      */
     public AudioFileBuilder() {
         this.phraseDirectory = new File(Phrase.PHRASE_FILES_DIRECTORY.toString());

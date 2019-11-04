@@ -12,7 +12,7 @@ public class AudioPlayerExecutor {
     private final AudioPlayer audioPlayer;
 
     /**
-     * Creates a new {@link AudioPlayerExecutor}.
+     * Creates a new AudioPlayerExecutor.
      *
      * @param audioPlayer The program's audio player.
      */

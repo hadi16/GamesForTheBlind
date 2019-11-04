@@ -23,7 +23,7 @@ public abstract class ProgramAction {
     protected final LocalDateTime localDateTime;
 
     /**
-     * Creates a new {@link ProgramAction}.
+     * Creates a new ProgramAction.
      * Note: this is never called directly, since this class is marked as abstract.
      */
     public ProgramAction() {

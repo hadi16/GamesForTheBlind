@@ -23,7 +23,7 @@ public class LoaderKeyboardListener extends LoaderListener implements KeyEventDi
     private final LoaderFrame loaderFrame;
 
     /**
-     * Creates a new {@link LoaderKeyboardListener}.
+     * Creates a new LoaderKeyboardListener.
      *
      * @param gameLoader  Reference to the game loader. Needed to send the appropriate action performed by the user.
      * @param loaderFrame The {@link LoaderFrame} instance for the loader GUI.

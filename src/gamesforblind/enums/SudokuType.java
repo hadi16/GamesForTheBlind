@@ -42,7 +42,7 @@ public enum SudokuType {
     private final ArrayList<InterfaceType> supportedSudokuInterfaces;
 
     /**
-     * Creates a new {@link SudokuType}.
+     * Creates a new SudokuType.
      *
      * @param blockWidth                The number of columns in each block.
      * @param blockHeight               The number of rows in each block.

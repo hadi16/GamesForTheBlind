@@ -14,7 +14,7 @@ public class LogFileSelectionGui extends JFrame {
     private final String selectedLogFilePath;
 
     /**
-     * Creates a new {@link LogFileSelectionGui}.
+     * Creates a new LogFileSelectionGui.
      */
     public LogFileSelectionGui() {
         this.selectedLogFilePath = this.openLogFileGuiAndReturnPath();
