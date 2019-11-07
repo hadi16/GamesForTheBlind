@@ -60,7 +60,7 @@ public class SudokuPanel extends JPanel {
         Point selectedBlockPoint = blockSelectionInterface.getSelectedBlockPoint();
         Point selectedSquarePoint = blockSelectionInterface.getSelectedSquarePoint();
 
-        graphics.setColor(Color.YELLOW);
+        graphics.setColor(Color.GREEN);
 
         // Since this block interface is only supported on 4x4 & 9x9 boards, this works fine.
         int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
@@ -103,13 +103,14 @@ public class SudokuPanel extends JPanel {
         Grid sudokuGrid = this.sudokuState.getSudokuGrid();
         SudokuKeyboardInterface keyboardInterface = this.sudokuState.getSudokuKeyboardInterface();
 
+
         int yPosition = initialPosition;
         for (int rowIndex = 0; rowIndex < this.sudokuBoardSize; rowIndex++) {
             int xPosition = initialPosition;
 
             for (int columnIndex = 0; columnIndex < this.sudokuBoardSize; columnIndex++) {
                 // Step 1: paint this square as an originally filled square (if applicable).
-                graphics.setColor(Color.GRAY);
+                graphics.setColor(Color.LIGHT_GRAY);
                 if (this.originallyFilledSquares.contains(new Point(columnIndex, rowIndex))) {
                     graphics.fillRect(xPosition, yPosition, squareDimension, squareDimension);
                 }
@@ -140,6 +141,46 @@ public class SudokuPanel extends JPanel {
             }
 
             yPosition += squareDimension;
+        }
+
+
+        if(sudokuBoardSize == 9)
+        {
+            int xInitialPosition = initialPosition;
+            int yInitialPosition = initialPosition;
+            int tripleBlock = squareDimension*3;
+
+            //graphics.setColor(Color.BLACK);
+            for(int i = 0; i < 3; i++){
+                for( int j = 0; j < 3; j++){
+                    graphics.drawRect(xInitialPosition + 1, yInitialPosition+1, (squareDimension*3), (squareDimension*3));
+                    graphics.drawRect(xInitialPosition - 1, yInitialPosition-1, (squareDimension*3), (squareDimension*3));
+                    xInitialPosition += tripleBlock;
+                }
+
+                yInitialPosition += tripleBlock;
+                xInitialPosition = initialPosition;
+            }
+        }
+        else if(sudokuBoardSize == 4)
+        {
+            int xInitialPosition = initialPosition;
+            int yInitialPosition = initialPosition;
+            int block =squareDimension*2;
+
+            for(int i = 0; i < 2; i++){
+                for( int j = 0; j < 2; j++){
+                    graphics.drawRect(xInitialPosition +1, yInitialPosition+1, (squareDimension*2), (squareDimension*2));
+                    graphics.drawRect(xInitialPosition -1, yInitialPosition-1, (squareDimension*2), (squareDimension*2));
+                    xInitialPosition += block;
+                }
+
+                yInitialPosition += block;
+                xInitialPosition = initialPosition;
+            }
+        }
+        else
+        {
         }
     }
 
@@ -191,7 +232,7 @@ public class SudokuPanel extends JPanel {
         final int TOTAL_BOARD_LENGTH = Math.min(bounds.height, bounds.width);
 
         // The font used throughout the entire Sudoku GUI.
-        graphics.setFont(new Font("Arial", Font.PLAIN, TOTAL_BOARD_LENGTH / 15));
+        graphics.setFont(new Font("Arial", Font.BOLD, TOTAL_BOARD_LENGTH / 13));
 
         int squaresPerSide = this.sudokuBoardSize + 1;
         int squareDimension = (TOTAL_BOARD_LENGTH - squaresPerSide) / squaresPerSide;
