@@ -464,15 +464,6 @@ public class SudokuState {
     }
 
     /**
-     * Getter for sudokuBoardSize within sudokuType
-     *
-     * @return The number of squares on each side of the Sudoku board (e.g. 9x9 board --> 9).
-     */
-    public int getSudokuBoardSize() {
-        return this.sudokuType.getSudokuBoardSize();
-    }
-
-    /**
      * Getter for sudokuGrid
      *
      * @return The current state of the Sudoku {@link Grid} in the game.
@@ -515,5 +506,14 @@ public class SudokuState {
      */
     public SudokuKeyboardInterface getSudokuKeyboardInterface() {
         return this.sudokuKeyboardInterface;
+    }
+
+    /**
+     * Getter for sudokuType
+     *
+     * @return Whether the Sudoku game is a 4x4, 6x6, or 9x9 variant.
+     */
+    public SudokuType getSudokuType() {
+        return this.sudokuType;
     }
 }
