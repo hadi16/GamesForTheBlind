@@ -133,11 +133,27 @@ public class SudokuPanel extends JPanel {
                     //draw the numbers over top the colored in squares
                     if (currentCellValue != EMPTY_SUDOKU_SQUARE) {
                         graphics.setColor(brightYellow);
-                        graphics.drawString(
-                                Integer.toString(currentCellValue),
-                                xPosition + squareDimension /5,
-                                yPosition +  (9*squareDimension/10)
-                        );
+                        if (this.sudokuBoardSize == 9) {
+                            graphics.drawString(
+                                    Integer.toString(currentCellValue),
+                                    xPosition + squareDimension / 5,
+                                    yPosition + (9 * squareDimension / 10)
+                            );
+                        } else if (this.sudokuBoardSize == 6) {
+                            //pre made for 6, will need to be fixed once functional
+                            //TODO
+                            graphics.drawString(
+                                    Integer.toString(currentCellValue),
+                                    xPosition + (1* squareDimension / 1),
+                                    yPosition + (1 * squareDimension / 1)
+                            );
+                        } else if (this.sudokuBoardSize == 4) {
+                            graphics.drawString(
+                                    Integer.toString(currentCellValue),
+                                    xPosition + (17 * squareDimension / 110),
+                                    yPosition + (100 * squareDimension / 105)
+                            );
+                        }
                     }
                 }
 
@@ -237,10 +253,23 @@ public class SudokuPanel extends JPanel {
         Rectangle bounds = graphics.getClipBounds();
         final int TOTAL_BOARD_LENGTH = Math.min(bounds.height, bounds.width);
 
-        // sets the font, initially for the border lettes, then a larger font for the cell values
-        Font borderFont = new Font("Arial", Font.BOLD, TOTAL_BOARD_LENGTH/13);
-        Font inboxesFont = new Font("Arial", Font.BOLD, TOTAL_BOARD_LENGTH/9);
-        graphics.setFont(borderFont);
+        // sets the font, initially for the border letters, then a larger font for the cell values for each board size
+        Font borderFont9 = new Font("Arial", Font.BOLD, TOTAL_BOARD_LENGTH/13);
+        Font inboxesFont9 = new Font("Arial", Font.BOLD, TOTAL_BOARD_LENGTH/9);
+        Font borderFont6 = new Font("Arial", Font.BOLD, TOTAL_BOARD_LENGTH/6);//TODO
+        Font inboxesFont6 = new Font("Arial", Font.BOLD, TOTAL_BOARD_LENGTH/4);//TODO
+        Font borderFont4 = new Font("Arial", Font.BOLD, TOTAL_BOARD_LENGTH/6);
+        Font inboxesFont4 = new Font("Arial", Font.BOLD, TOTAL_BOARD_LENGTH/4);
+
+        if(this.sudokuBoardSize == 9){
+            graphics.setFont(borderFont9);
+        }
+        else if(this.sudokuBoardSize == 4){
+            graphics.setFont(borderFont4);
+        }else if(this.sudokuBoardSize == 6){
+        //preemptive new font for 6x6
+            graphics.setFont(borderFont6);//TODO
+        }
 
         int squaresPerSide = this.sudokuBoardSize + 1;
         int squareDimension = (TOTAL_BOARD_LENGTH - squaresPerSide) / squaresPerSide;
@@ -250,7 +279,15 @@ public class SudokuPanel extends JPanel {
         // Step 1: paint the row & column labels.
         this.paintBoardLabels(graphics, squareDimension, INITIAL_POSITION);
 
-        graphics.setFont(inboxesFont);
+        if(this.sudokuBoardSize == 9){
+            graphics.setFont(inboxesFont9);
+        }
+        else if(this.sudokuBoardSize == 4){
+            graphics.setFont(inboxesFont4);
+        }else if(this.sudokuBoardSize == 6){
+            //preemptive new font for 6x6//
+            graphics.setFont(inboxesFont6);//TODO
+        }
         // Step 2: paint the main Sudoku board (which includes highlighted squares).
         this.paintMainBoard(graphics, squareDimension, INITIAL_POSITION + squareDimension);
 
