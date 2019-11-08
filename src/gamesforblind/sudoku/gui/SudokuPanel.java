@@ -40,7 +40,9 @@ public class SudokuPanel extends JPanel {
         this.sudokuBoardSize = initialState.getSudokuBoardSize();
         this.originallyFilledSquares = initialState.getOriginallyFilledSquares();
     }
-
+    Color brightBlue =  new Color (89,202,232);//bright blue
+    Color brightOrange = new Color(249, 135, 15);//bright orange
+    Color brightYellow =  new Color(255, 247, 53);//bright yellow
     /**
      * NOTE: only used for the {@link SudokuBlockSelectionInterface}.
      * Highlights the blocks & squares that are currently highlighted in the game.
@@ -103,16 +105,27 @@ public class SudokuPanel extends JPanel {
         Grid sudokuGrid = this.sudokuState.getSudokuGrid();
         SudokuKeyboardInterface keyboardInterface = this.sudokuState.getSudokuKeyboardInterface();
 
-
         int yPosition = initialPosition;
         for (int rowIndex = 0; rowIndex < this.sudokuBoardSize; rowIndex++) {
             int xPosition = initialPosition;
 
             for (int columnIndex = 0; columnIndex < this.sudokuBoardSize; columnIndex++) {
                 // Step 1: paint this square as an originally filled square (if applicable).
-                graphics.setColor(Color.LIGHT_GRAY);
+                graphics.setColor(brightBlue);
                 if (this.originallyFilledSquares.contains(new Point(columnIndex, rowIndex))) {
                     graphics.fillRect(xPosition, yPosition, squareDimension, squareDimension);
+                }
+
+
+
+                // Step 3: fill in the square on the Sudoku board (if not empty).
+                int currentCellValue = sudokuGrid.getCell(rowIndex, columnIndex).getValue();
+                if (currentCellValue != EMPTY_SUDOKU_SQUARE) {
+
+                    //draws a background under the cell to show it's been answered
+                    graphics.setColor(brightBlue);
+                    graphics.fillRect( xPosition, yPosition, squareDimension, squareDimension);
+
                 }
 
                 // Step 2: if this is the block interface, paint the highlighted blocks or squares on the board.
@@ -121,36 +134,36 @@ public class SudokuPanel extends JPanel {
                     this.paintHighlightedSquares(
                             graphics, blockInterface, rowIndex, columnIndex, xPosition, yPosition, squareDimension
                     );
+                    if (currentCellValue != EMPTY_SUDOKU_SQUARE) {
+                        graphics.setColor(brightYellow);
+                        graphics.drawString(
+                                Integer.toString(currentCellValue),
+                                xPosition + squareDimension / 3,
+                                yPosition + (2 * squareDimension / 3));
+                    }
                 }
 
-                // Step 3: draw the basic square that holds a number on the Sudoku board.
+
+
+                // Step 4: draw the basic square that holds a number on the Sudoku board.
                 graphics.setColor(Color.BLACK);
                 graphics.drawRect(xPosition, yPosition, squareDimension, squareDimension);
-
-                // Step 4: fill in the square on the Sudoku board (if not empty).
-                int currentCellValue = sudokuGrid.getCell(rowIndex, columnIndex).getValue();
-                if (currentCellValue != EMPTY_SUDOKU_SQUARE) {
-                    graphics.drawString(
-                            Integer.toString(currentCellValue),
-                            xPosition + squareDimension / 3,
-                            yPosition + (2 * squareDimension / 3)
-                    );
-                }
 
                 xPosition += squareDimension;
             }
 
+
             yPosition += squareDimension;
+
         }
 
-
+        graphics.setColor(Color.BLACK);
         if(sudokuBoardSize == 9)
         {
             int xInitialPosition = initialPosition;
             int yInitialPosition = initialPosition;
             int tripleBlock = squareDimension*3;
 
-            //graphics.setColor(Color.BLACK);
             for(int i = 0; i < 3; i++){
                 for( int j = 0; j < 3; j++){
                     graphics.drawRect(xInitialPosition + 1, yInitialPosition+1, (squareDimension*3), (squareDimension*3));
@@ -179,10 +192,10 @@ public class SudokuPanel extends JPanel {
                 xInitialPosition = initialPosition;
             }
         }
-        else
-        {
-        }
     }
+
+
+
 
     /**
      * Paints the row & column labels for the Sudoku board.
