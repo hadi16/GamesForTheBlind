@@ -3,6 +3,7 @@ package gamesforblind.sudoku.generator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import gamesforblind.sudoku.generator.Grid;
 
 import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
 
@@ -40,29 +41,19 @@ public class Solver {
         }
     }
 
-    /*
-     * Currently undoing solving stuff, need to use copy constructor - Callum
-     * Custom solver much like above solve method, returns a boolean
+    /**
+     * used for checking if current Grid's are solveable and uses backtracking to achieve it
+     * @param grid
+     * @return
      */
-    /*public boolean superSolver(Grid grid) {
-        return this.superSolver(grid, grid.getFirstEmptyCell().orElse(null));
+    public boolean superSolver(Grid grid){
+        boolean solvable = this.solve(grid, grid.getFirstEmptyCell().orElse(null));//sudokuBoardSize); //
+        if (!solvable) {
+            return false;
+        }
+        return true;
     }
 
-    // Custom solver to run recursively on input and make sure a solution is available
-    private boolean superSolver(Grid grid, Cell cell) {
-        if (cell == null) {
-            return true;
-        }
-        for (int value : this.values) {
-            if (grid.isValidValueForCell(cell, value)) {
-                if (this.superSolver(grid, grid.getNextEmptyCellOf(cell).orElse(null))) {
-                    return true;
-                }
-                cell.setValue(EMPTY);
-            }
-        }
-        return false;
-    }*/
 
     /**
      * Helper method to solve a {@link Cell} of the given Sudoku grid using backtracking.
