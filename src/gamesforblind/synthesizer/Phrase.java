@@ -74,7 +74,9 @@ public enum Phrase {
     SELECT_SUDOKU_FOUR("Press the SPACE BAR to play the 4 by 4 version of Sudoku."),
     SELECT_SUDOKU_SIX("Press the SPACE BAR to play the 6 by 6 version of Sudoku."),
     SELECT_SUDOKU_NINE("Press the SPACE BAR to play the 9 by 9 version of Sudoku."),
-    WHICH_SUDOKU_GAME("Which Sudoku game would you like to play, 4 by 4, 6 by 6, or 9 by 9? " +
+    WHICH_SUDOKU_GAME_ALL("Which Sudoku game would you like to play, 4 by 4, 6 by 6, or 9 by 9? " +
+            "Use the arrow keys to make your selection."),
+    WHICH_SUDOKU_GAME_NO_SIX("Which Sudoku game would you like to play, 4 by 4 or 9 by 9? " +
             "Use the arrow keys to make your selection."),
     PLAY_OR_EXIT("Would you like to play Sudoku or exit? Use the arrow keys to make your selection."),
     EXITING("The game is exiting. Goodbye!"),

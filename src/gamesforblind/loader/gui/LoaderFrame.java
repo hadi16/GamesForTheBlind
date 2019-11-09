@@ -2,6 +2,7 @@ package gamesforblind.loader.gui;
 
 import gamesforblind.ProgramArgs;
 import gamesforblind.enums.ArrowKeyDirection;
+import gamesforblind.enums.InterfaceType;
 import gamesforblind.enums.SelectedGame;
 import gamesforblind.loader.GameLoader;
 import gamesforblind.loader.gui.listener.LoaderActionListener;
@@ -10,6 +11,7 @@ import gamesforblind.loader.gui.listener.LoaderKeyboardListener;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static gamesforblind.Constants.*;
 
@@ -114,16 +116,23 @@ public class LoaderFrame extends JFrame {
 
         // Case 2: I am in the Sudoku selection screen (return a JPanel with "BACK", "4x4", and "9x9" buttons).
         if (selectedGame == SelectedGame.SUDOKU) {
+            // Want the buttons laid out IN THIS ORDER.
+            ArrayList<String> buttonNameList = new ArrayList<>(Arrays.asList(
+                    BACK_BUTTON, FOUR_BY_FOUR_SUDOKU_BUTTON, SIX_BY_SIX_SUDOKU_BUTTON, NINE_BY_NINE_SUDOKU_BUTTON
+            ));
+
+            // 6x6 boards are unsupported in the block selection interface.
+            if (this.programArgs.getSelectedInterfaceType() == InterfaceType.BLOCK_SELECTION_INTERFACE) {
+                buttonNameList.remove(SIX_BY_SIX_SUDOKU_BUTTON);
+            }
+
             final Dimension BUTTON_SIZE = new Dimension(
-                    FRAME_DIMENSION / 4, FRAME_DIMENSION / HEIGHT_DIVISOR
+                    FRAME_DIMENSION / buttonNameList.size(), FRAME_DIMENSION / HEIGHT_DIVISOR
             );
             JPanel sudokuOptionsPanel = new JPanel();
             sudokuOptionsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, FRAME_DIMENSION / 15, 0));
 
-            sudokuOptionsPanel.add(this.getUIButton(BACK_BUTTON, BUTTON_SIZE));
-            sudokuOptionsPanel.add(this.getUIButton(FOUR_BY_FOUR_SUDOKU_BUTTON, BUTTON_SIZE));
-            sudokuOptionsPanel.add(this.getUIButton(SIX_BY_SIX_SUDOKU_BUTTON, BUTTON_SIZE));
-            sudokuOptionsPanel.add(this.getUIButton(NINE_BY_NINE_SUDOKU_BUTTON, BUTTON_SIZE));
+            buttonNameList.forEach(buttonName -> sudokuOptionsPanel.add(this.getUIButton(buttonName, BUTTON_SIZE)));
 
             return sudokuOptionsPanel;
         }
