@@ -100,7 +100,7 @@ public class SudokuPanel extends JPanel {
                     // Case 1: the Point is highlighted & empty.
                     graphics.setColor(Color.GREEN);
                     graphics.fillRect(xPosition, yPosition, squareDimension, squareDimension);
-                } else {
+                } else if (currentCellValue != EMPTY_SUDOKU_SQUARE) {
                     if (highlightedPoints.contains(currentPoint)) {
                         // Case 2: the Point is highlighted & not empty.
                         graphics.setColor(Color.GREEN);
