@@ -87,11 +87,14 @@ public enum Phrase {
     /* Sudoku: Error Phrases */
     NO_SELECTED_SQUARE("You didn't select a square first."),
     CANNOT_DELETE_ORIGINAL("You cannot delete an originally set square on the board."),
+    CANNOT_DELETE_EMPTY("You are trying to delete an already empty square."),
     CELL_VALUE_INVALID("This value is invalid for the cell."),
+    PLACED_CELL_UNSOLVABLE("Placing this value here would make the board unsolvable."),
     SELECTED_BOTH("You have already selected both a block & square on the board."),
 
     /* Sudoku: invalid number to fill Phrases */
     INVALID_NUMBER_TO_FILL_4("The number to fill must be between 1 and 4"),
+    INVALID_NUMBER_TO_FILL_6("The number to fill must be between 1 and 6"),
     INVALID_NUMBER_TO_FILL_9("The number to fill must be between 1 and 9"),
 
     /* Sudoku: Instructions Phrases. */
