@@ -8,6 +8,7 @@ import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Generator;
 import gamesforblind.sudoku.generator.Grid;
 import gamesforblind.sudoku.interfaces.SudokuArrowKeyInterface;
+import gamesforblind.sudoku.generator.Solver;
 import gamesforblind.sudoku.interfaces.SudokuBlockSelectionInterface;
 import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
@@ -227,21 +228,6 @@ public class SudokuState {
             return;
         }
 
-        /* Working on this - Callum */
-        /*Solver solver = new Solver(this.sudokuBoardSize);
-
-        cellToSet.setValue(numberToFill);//update cell for checking
-        Grid gridBackup = this.getSudokuGrid();//create test grid
-
-        if (!solver.superSolver(gridBackup)) {
-            if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
-                this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CELL_VALUE_INVALID);
-
-                cellToSet.setValue(0); // Reset the value to empty in real grid, it is set elsewhere if correct
-                return;
-            }
-        }*/
-
         // Case 4: the numeric value is not valid for the selected cell.
         if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
             this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CELL_VALUE_INVALID);
@@ -252,7 +238,20 @@ public class SudokuState {
         if (cellToSet.getValue() == EMPTY_SUDOKU_SQUARE) {
             this.numberOfEmptyCells--;
         }
+
         cellToSet.setValue(numberToFill);
+
+        Grid solvableGrid = new Grid(sudokuGrid);
+        Solver testSolve = new Solver(sudokuBoardSize);
+        //testSolve.solve(solvableGrid);
+        if (testSolve.superSolver(solvableGrid)){
+            //is a solveable puzzle
+        }
+       else{//not solveable puzzle so set it back to 0
+            cellToSet.setValue(0);
+            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CELL_VALUE_INVALID);
+            return;
+        }
 
         if (this.numberOfEmptyCells == 0) {
             this.gameOver = true;
