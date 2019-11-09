@@ -7,6 +7,7 @@ import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Generator;
 import gamesforblind.sudoku.generator.Grid;
+import gamesforblind.sudoku.interfaces.SudokuArrowKeyInterface;
 import gamesforblind.sudoku.interfaces.SudokuBlockSelectionInterface;
 import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
@@ -88,8 +89,7 @@ public class SudokuState {
     private SudokuKeyboardInterface initializeKeyboardInterface(InterfaceType interfaceType) {
         switch (interfaceType) {
             case ARROW_KEY_INTERFACE:
-                // TODO: implement the arrow key interface.
-                throw new IllegalArgumentException("Arrow key interface not implemented yet!");
+                return new SudokuArrowKeyInterface(this.sudokuType, this.sudokuGrid);
             case BLOCK_SELECTION_INTERFACE:
                 return new SudokuBlockSelectionInterface(this.sudokuType, this.sudokuGrid);
             default:
