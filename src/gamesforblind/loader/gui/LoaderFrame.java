@@ -145,7 +145,7 @@ public class LoaderFrame extends JFrame {
             this.loaderFrame.dispose();
         }
 
-        this.loaderFrame = new JFrame();
+        this.loaderFrame = new JFrame("Game Loader Menu");
 
         JComponent selectedGameComponent = this.getSelectedGameComponent(selectedGame);
         selectedGameComponent.setVisible(true);
