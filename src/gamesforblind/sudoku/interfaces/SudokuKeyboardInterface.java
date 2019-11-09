@@ -8,6 +8,7 @@ import gamesforblind.sudoku.generator.Grid;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 
@@ -59,6 +60,13 @@ public abstract class SudokuKeyboardInterface {
      * @return A mapping between key codes as defined in {@link KeyEvent} & given {@link Point}s.
      */
     public abstract Map<Integer, Point> getKeyCodeToPointMapping();
+
+    /**
+     * Gets a list of {@link Point}s that should be highlighted in green on the Sudoku board.
+     *
+     * @return List of {@link Point}s that should be highlighted by the Sudoku GUI.
+     */
+    public abstract ArrayList<Point> getHighlightedPointList();
 
     /**
      * Gets the currently selected {@link Cell} in the game. Note: value is wrapped by an {@link Optional}.

@@ -7,6 +7,8 @@ import gamesforblind.sudoku.generator.Grid;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -57,7 +59,13 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
             return;
         }
 
-        this.selectedPoint = new Point(this.selectedPoint.x + pointToSet.x, this.selectedPoint.y + pointToSet.y);
+        int boardSize = this.sudokuType.getSudokuBoardSize();
+        Point selectedPoint = new Point(this.selectedPoint.x + pointToSet.x, this.selectedPoint.y + pointToSet.y);
+
+        // Make sure that the moved Point is in bounds.
+        if (selectedPoint.x >= 0 && selectedPoint.y >= 0 && selectedPoint.x < boardSize && selectedPoint.y < boardSize) {
+            this.selectedPoint = selectedPoint;
+        }
     }
 
     /**
@@ -75,5 +83,16 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
                 KeyEvent.VK_UP, new Point(0, -1),
                 KeyEvent.VK_DOWN, new Point(0, 1)
         );
+    }
+
+    /**
+     * Gets a list of {@link Point}s that should be highlighted in green on the Sudoku board.
+     * For the arrow key GUI, this is always a single square on the board.
+     *
+     * @return List of {@link Point}s that should be highlighted by the GUI (for this interface, always single point).
+     */
+    @Override
+    public ArrayList<Point> getHighlightedPointList() {
+        return new ArrayList<>(Collections.singletonList(this.selectedPoint));
     }
 }

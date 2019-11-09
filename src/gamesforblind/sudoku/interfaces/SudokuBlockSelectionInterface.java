@@ -8,6 +8,8 @@ import gamesforblind.sudoku.generator.Grid;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -68,6 +70,40 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
      */
     public SudokuBlockSelectionInterface(SudokuType sudokuType, Grid sudokuGrid) {
         super(sudokuType, sudokuGrid);
+    }
+
+    /**
+     * Gets a list of {@link Point}s that should be highlighted in green on the Sudoku board.
+     * For the block selection GUI, this can be nothing, a single square, or a single block.
+     *
+     * @return List of {@link Point}s that should be highlighted by the Sudoku GUI.
+     */
+    @Override
+    public ArrayList<Point> getHighlightedPointList() {
+        // Case 1: nothing is selected.
+        if (this.selectedBlockPoint == null && this.selectedSquarePoint == null) {
+            return new ArrayList<>();
+        }
+
+        // Case 2: individual square is selected
+        Optional<Point> maybeSelectedPoint = this.getSelectedPoint();
+        if (maybeSelectedPoint.isPresent()) {
+            return new ArrayList<>(Collections.singletonList(maybeSelectedPoint.get()));
+        }
+
+        // Case 3: block is selected
+        ArrayList<Point> highlightedPointList = new ArrayList<>();
+        int blockWidth = this.sudokuType.getBlockWidth();
+        int blockHeight = this.sudokuType.getBlockHeight();
+        for (int rowIndex = 0; rowIndex < blockHeight; rowIndex++) {
+            for (int columnIndex = 0; columnIndex < blockWidth; columnIndex++) {
+                highlightedPointList.add(new Point(
+                        this.selectedBlockPoint.x * blockWidth + columnIndex,
+                        this.selectedBlockPoint.y * blockHeight + rowIndex
+                ));
+            }
+        }
+        return highlightedPointList;
     }
 
     /**
@@ -186,23 +222,5 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
      */
     private boolean isSquareHighlighted() {
         return this.selectedBlockPoint != null && this.selectedSquarePoint != null;
-    }
-
-    /**
-     * Getter for selectedBlockPoint
-     *
-     * @return The currently selected block {@link Point}.
-     */
-    public Point getSelectedBlockPoint() {
-        return this.selectedBlockPoint;
-    }
-
-    /**
-     * Getter for selectedSquarePoint
-     *
-     * @return The currently selected square {@link Point}.
-     */
-    public Point getSelectedSquarePoint() {
-        return this.selectedSquarePoint;
     }
 }
