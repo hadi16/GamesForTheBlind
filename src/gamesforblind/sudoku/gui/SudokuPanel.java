@@ -144,23 +144,20 @@ public class SudokuPanel extends JPanel {
         graphics.setColor(Color.GREEN);
         SudokuKeyboardInterface keyboardInterface = this.sudokuState.getSudokuKeyboardInterface();
 
-        // Case 1: the block selection interface is being used.
+        // Case 1: the block selection interface is being used & block is selected.
         if (keyboardInterface instanceof SudokuBlockSelectionInterface) {
             var sudokuBlockSelectionInterface = (SudokuBlockSelectionInterface) keyboardInterface;
             Point selectedBlockPoint = sudokuBlockSelectionInterface.getSelectedBlockPoint();
+            Point selectedSquarePoint = sudokuBlockSelectionInterface.getSelectedSquarePoint();
 
-            // Case 1a: no block is currently selected (paint the square instead, if applicable).
-            if (selectedBlockPoint == null) {
-                this.paintHighlightedSquare(graphics, rowIdx, columnIdx, xPos, yPos, squareDimension);
+            // If a square has already been selected, don't paint the block.
+            if (selectedBlockPoint != null && selectedSquarePoint == null) {
+                this.paintHighlightedBlock(graphics, selectedBlockPoint, rowIdx, columnIdx, xPos, yPos, squareDimension);
                 return;
             }
-
-            // Case 1b: a block is currently selected.
-            this.paintHighlightedBlock(graphics, selectedBlockPoint, rowIdx, columnIdx, xPos, yPos, squareDimension);
-            return;
         }
 
-        // Case 2: the other interface is being used (arrow key interface).
+        // Case 2: a square is selected in either interface type.
         this.paintHighlightedSquare(graphics, rowIdx, columnIdx, xPos, yPos, squareDimension);
     }
 
