@@ -245,7 +245,7 @@ public class SudokuState {
         Solver testSolve = new Solver(sudokuBoardSize);
         //testSolve.solve(solvableGrid);
         if (testSolve.superSolver(solvableGrid)){
-            //TODO?//it is a solveable puzzle
+            //is a solveable puzzle
         }
        else{//not solveable puzzle so set it back to 0
             cellToSet.setValue(0);
