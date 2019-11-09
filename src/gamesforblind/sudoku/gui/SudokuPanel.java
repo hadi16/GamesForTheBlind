@@ -9,6 +9,7 @@ import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
 
@@ -50,53 +51,52 @@ public class SudokuPanel extends JPanel {
 
     /**
      * NOTE: only used for the {@link SudokuBlockSelectionInterface}.
-     * Highlights the blocks & squares that are currently highlighted in the game.
+     * Highlights the currently selected block in the game.
      *
-     * @param graphics                The {@link Graphics} object used for painting.
-     * @param blockSelectionInterface The block interface, which contains the selected block & square {@link Point}s.
-     * @param rowIdx                  The current row index.
-     * @param columnIdx               The current column index.
-     * @param xPos                    The current x position (amount of pixels in x direction).
-     * @param yPos                    The current y position (amount of pixels in y direction).
-     * @param squareDimension         The pixel dimension of each square on the board.
+     * @param graphics           The {@link Graphics} object used for painting.
+     * @param selectedBlockPoint The block that is currently selected (cannot be null).
+     * @param rowIdx             The current row index.
+     * @param columnIdx          The current column index.
+     * @param xPos               The current x position (amount of pixels in x direction).
+     * @param yPos               The current y position (amount of pixels in y direction).
+     * @param squareDim          The pixel dimension of each square on the board.
      */
-    private void paintHighlightedSquares(
-            Graphics graphics, SudokuBlockSelectionInterface blockSelectionInterface,
-            int rowIdx, int columnIdx, int xPos, int yPos, int squareDimension
+    private void paintHighlightedBlock(
+            Graphics graphics, Point selectedBlockPoint, int rowIdx, int columnIdx, int xPos, int yPos, int squareDim
     ) {
-        Point selectedBlockPoint = blockSelectionInterface.getSelectedBlockPoint();
-        Point selectedSquarePoint = blockSelectionInterface.getSelectedSquarePoint();
-
-        graphics.setColor(Color.GREEN);
-
         // Since this block interface is only supported on 4x4 & 9x9 boards, height or width is the same.
         int blockHeight = this.sudokuType.getBlockHeight();
 
-        // Case 1: the selected block is highlighted.
-        if (selectedSquarePoint == null && selectedBlockPoint != null) {
-            int minRowIdx = selectedBlockPoint.y * blockHeight;
-            int maxRowIdx = (selectedBlockPoint.y + 1) * blockHeight - 1;
+        int minRowIdx = selectedBlockPoint.y * blockHeight;
+        int maxRowIdx = (selectedBlockPoint.y + 1) * blockHeight - 1;
 
-            int minColumnIdx = selectedBlockPoint.x * blockHeight;
-            int maxColumnIdx = (selectedBlockPoint.x + 1) * blockHeight - 1;
+        int minColumnIdx = selectedBlockPoint.x * blockHeight;
+        int maxColumnIdx = (selectedBlockPoint.x + 1) * blockHeight - 1;
 
-            if (rowIdx >= minRowIdx && rowIdx <= maxRowIdx && columnIdx >= minColumnIdx && columnIdx <= maxColumnIdx) {
+        if (rowIdx >= minRowIdx && rowIdx <= maxRowIdx && columnIdx >= minColumnIdx && columnIdx <= maxColumnIdx) {
+            graphics.fillRect(xPos, yPos, squareDim, squareDim);
+        }
+    }
+
+    /**
+     * Highlights the currently selected Sudoku square.
+     *
+     * @param graphics        The {@link Graphics} object used for painting.
+     * @param rowIdx          The current row index.
+     * @param columnIdx       The current column index.
+     * @param xPos            The current x position (amount of pixels in x direction).
+     * @param yPos            The current y position (amount of pixels in y direction).
+     * @param squareDimension The pixel dimension of each square on the board.
+     */
+    private void paintHighlightedSquare(
+            Graphics graphics, int rowIdx, int columnIdx, int xPos, int yPos, int squareDimension
+    ) {
+        Optional<Point> maybeSelectedPoint = this.sudokuState.getSudokuKeyboardInterface().getSelectedPoint();
+        maybeSelectedPoint.ifPresent(selectedPoint -> {
+            if (selectedPoint.y == rowIdx && selectedPoint.x == columnIdx) {
                 graphics.fillRect(xPos, yPos, squareDimension, squareDimension);
             }
-            return;
-        }
-
-        // Case 2: the selected square is highlighted.
-        if (selectedSquarePoint != null) {
-            int selectedRowIndex = selectedBlockPoint.y * blockHeight + selectedSquarePoint.y;
-            int selectedColumnIndex = selectedBlockPoint.x * blockHeight + selectedSquarePoint.x;
-
-            if (selectedRowIndex == rowIdx && selectedColumnIndex == columnIdx) {
-                graphics.fillRect(xPos, yPos, squareDimension, squareDimension);
-            }
-        }
-
-        // Implicit third case: no square OR block is highlighted.
+        });
     }
 
     /**
@@ -128,6 +128,43 @@ public class SudokuPanel extends JPanel {
     }
 
     /**
+     * Highlights relevant areas of the board in green (e.g. square, block).
+     * NOTE: the only GUI method that needs to check for which type of keyboard interface is being used.
+     *
+     * @param graphics        The {@link Graphics} object used for painting.
+     * @param rowIdx          The current row index.
+     * @param columnIdx       The current column index.
+     * @param xPos            The current x position (amount of pixels in x direction).
+     * @param yPos            The current y position (amount of pixels in y direction).
+     * @param squareDimension The pixel dimension of each square on the board.
+     */
+    private void paintAllHighlights(
+            Graphics graphics, int rowIdx, int columnIdx, int xPos, int yPos, int squareDimension
+    ) {
+        graphics.setColor(Color.GREEN);
+        SudokuKeyboardInterface keyboardInterface = this.sudokuState.getSudokuKeyboardInterface();
+
+        // Case 1: the block selection interface is being used.
+        if (keyboardInterface instanceof SudokuBlockSelectionInterface) {
+            var sudokuBlockSelectionInterface = (SudokuBlockSelectionInterface) keyboardInterface;
+            Point selectedBlockPoint = sudokuBlockSelectionInterface.getSelectedBlockPoint();
+
+            // Case 1a: no block is currently selected (paint the square instead, if applicable).
+            if (selectedBlockPoint == null) {
+                this.paintHighlightedSquare(graphics, rowIdx, columnIdx, xPos, yPos, squareDimension);
+                return;
+            }
+
+            // Case 1b: a block is currently selected.
+            this.paintHighlightedBlock(graphics, selectedBlockPoint, rowIdx, columnIdx, xPos, yPos, squareDimension);
+            return;
+        }
+
+        // Case 2: the other interface is being used (arrow key interface).
+        this.paintHighlightedSquare(graphics, rowIdx, columnIdx, xPos, yPos, squareDimension);
+    }
+
+    /**
      * Paints the Sudoku board.
      *
      * @param graphics        The {@link Graphics} object used for painting.
@@ -135,14 +172,11 @@ public class SudokuPanel extends JPanel {
      * @param initialPosition Amount of pixels to begin painting board from (the row & column labels come before this).
      */
     private void paintMainBoard(Graphics graphics, int squareDimension, int initialPosition) {
-        graphics.setFont(
-                new Font("Arial", Font.BOLD, this.totalBoardLength / this.sudokuType.getSudokuBoardSize())
-        );
-
-        Grid sudokuGrid = this.sudokuState.getSudokuGrid();
-        SudokuKeyboardInterface keyboardInterface = this.sudokuState.getSudokuKeyboardInterface();
-
         int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
+        Grid sudokuGrid = this.sudokuState.getSudokuGrid();
+
+        graphics.setFont(new Font("Arial", Font.BOLD, this.totalBoardLength / sudokuBoardSize));
+
         int yPosition = initialPosition;
         for (int rowIndex = 0; rowIndex < sudokuBoardSize; rowIndex++) {
             int xPosition = initialPosition;
@@ -162,25 +196,20 @@ public class SudokuPanel extends JPanel {
                     graphics.fillRect(xPosition, yPosition, squareDimension, squareDimension);
                 }
 
-                // Step 3: if this is the block interface, paint the highlighted blocks or squares on the board.
-                if (keyboardInterface instanceof SudokuBlockSelectionInterface) {
-                    var blockInterface = (SudokuBlockSelectionInterface) keyboardInterface;
-                    this.paintHighlightedSquares(
-                            graphics, blockInterface, rowIndex, columnIndex, xPosition, yPosition, squareDimension
-                    );
+                // Step 3: highlight relevant areas of the board in green (e.g. square, block).
+                this.paintAllHighlights(graphics, rowIndex, columnIndex, xPosition, yPosition, squareDimension);
 
-                    // Draw the numbers over top the colored in squares
-                    if (currentCellValue != EMPTY_SUDOKU_SQUARE) {
-                        graphics.setColor(BRIGHT_YELLOW);
-                        graphics.drawString(
-                                Integer.toString(currentCellValue),
-                                xPosition + (sudokuBoardSize + 13) * squareDimension / 110,
-                                yPosition + (1044 - 11 * sudokuBoardSize) * squareDimension / 1050
-                        );
-                    }
+                // Step 4: draw the numbers over top the colored in squares
+                if (currentCellValue != EMPTY_SUDOKU_SQUARE) {
+                    graphics.setColor(BRIGHT_YELLOW);
+                    graphics.drawString(
+                            Integer.toString(currentCellValue),
+                            xPosition + (sudokuBoardSize + 13) * squareDimension / 110,
+                            yPosition + (1044 - 11 * sudokuBoardSize) * squareDimension / 1050
+                    );
                 }
 
-                // Step 4: draw the basic square that holds a number on the Sudoku board.
+                // Step 5: draw the basic square that holds a number on the Sudoku board.
                 graphics.setColor(Color.BLACK);
                 graphics.drawRect(xPosition, yPosition, squareDimension, squareDimension);
 

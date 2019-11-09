@@ -32,12 +32,12 @@ public class ProgramArgs {
         // If the "-p" argument was passed, we are in playback mode.
         this.playbackMode = argsList.contains("-p");
 
-        // If the "-a" argument was passed, set the interface to the new arrow key interface.
-        // Otherwise, we are in the old block selection interface.
-        if (argsList.contains("-a")) {
-            this.selectedInterfaceType = InterfaceType.ARROW_KEY_INTERFACE;
-        } else {
+        // If the "-b" argument was passed, set the interface to the old block selection interface.
+        // Otherwise, we are in the arrow key interface.
+        if (argsList.contains("-b")) {
             this.selectedInterfaceType = InterfaceType.BLOCK_SELECTION_INTERFACE;
+        } else {
+            this.selectedInterfaceType = InterfaceType.ARROW_KEY_INTERFACE;
         }
     }
 
