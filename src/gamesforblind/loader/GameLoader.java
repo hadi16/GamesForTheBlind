@@ -168,9 +168,17 @@ public class GameLoader {
         if (action instanceof LoaderGameSelectionAction) {
             LoaderGameSelectionAction gameAction = (LoaderGameSelectionAction) action;
 
-            this.audioPlayerExecutor.replacePhraseAndPrint(
-                    gameAction.getSelectedGame() == SelectedGame.SUDOKU ? Phrase.WHICH_SUDOKU_GAME : Phrase.PLAY_OR_EXIT
-            );
+            Phrase relevantPhrase;
+            if (gameAction.getSelectedGame() == SelectedGame.SUDOKU) {
+                if (this.programArgs.getSelectedInterfaceType() == InterfaceType.ARROW_KEY_INTERFACE) {
+                    relevantPhrase = Phrase.WHICH_SUDOKU_GAME_ALL;
+                } else {
+                    relevantPhrase = Phrase.WHICH_SUDOKU_GAME_NO_SIX;
+                }
+            } else {
+                relevantPhrase = Phrase.PLAY_OR_EXIT;
+            }
+            this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrase);
 
             this.loaderFrame.setLoaderGuiBasedOnSelectedGame(gameAction.getSelectedGame());
             return;

@@ -62,8 +62,8 @@ public class SudokuPanel extends JPanel {
         final int BLOCK_WIDTH_DIM = squareDimension * BLOCK_WIDTH;
         final int BLOCK_HEIGHT_DIM = squareDimension * BLOCK_HEIGHT;
 
-        for (int i = 0; i < BLOCK_WIDTH; i++) {
-            for (int j = 0; j < BLOCK_HEIGHT; j++) {
+        for (int i = 0; i < BLOCK_HEIGHT; i++) {
+            for (int j = 0; j < BLOCK_WIDTH; j++) {
                 int xPosition = initialPosition + i * BLOCK_WIDTH_DIM;
                 int yPosition = initialPosition + j * BLOCK_HEIGHT_DIM;
 
