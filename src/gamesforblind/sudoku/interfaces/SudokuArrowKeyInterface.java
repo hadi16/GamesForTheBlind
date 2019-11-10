@@ -1,12 +1,16 @@
 package gamesforblind.sudoku.interfaces;
 
+import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.enums.InputType;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
+import gamesforblind.sudoku.action.SudokuHotKeyAction;
 import gamesforblind.sudoku.generator.Grid;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,7 +34,15 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
      * @param sudokuGrid The Sudoku board as a {@link Grid} object.
      */
     public SudokuArrowKeyInterface(SudokuType sudokuType, Grid sudokuGrid) {
-        super(sudokuType, sudokuGrid);
+        super(
+                sudokuType, sudokuGrid,
+                Map.of(
+                        KeyEvent.VK_LEFT, new SudokuHotKeyAction(ArrowKeyDirection.LEFT),
+                        KeyEvent.VK_RIGHT, new SudokuHotKeyAction(ArrowKeyDirection.RIGHT),
+                        KeyEvent.VK_UP, new SudokuHotKeyAction(ArrowKeyDirection.UP),
+                        KeyEvent.VK_DOWN, new SudokuHotKeyAction(ArrowKeyDirection.DOWN)
+                )
+        );
     }
 
     /**
@@ -57,7 +69,39 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
             return;
         }
 
-        this.selectedPoint = new Point(this.selectedPoint.x + pointToSet.x, this.selectedPoint.y + pointToSet.y);
+        int boardSize = this.sudokuType.getSudokuBoardSize();
+        Point selectedPoint = new Point(this.selectedPoint.x + pointToSet.x, this.selectedPoint.y + pointToSet.y);
+
+        // Make sure that the moved Point is in bounds.
+        if (selectedPoint.x >= 0 && selectedPoint.y >= 0 && selectedPoint.x < boardSize && selectedPoint.y < boardSize) {
+            this.selectedPoint = selectedPoint;
+        }
+    }
+
+    /**
+     * Sets the currently highlighted {@link Point} in the game with a hot key.
+     *
+     * @param arrowKeyDirection The {@link ArrowKeyDirection} that was pressed with this hot key (e.g. left arrow key).
+     */
+    @Override
+    public void setHighlightedPoint(ArrowKeyDirection arrowKeyDirection) {
+        int maxPointIndex = this.sudokuType.getSudokuBoardSize() - 1;
+
+        // Highlight square accordingly (e.g. LEFT --> all the way to the left)
+        switch (arrowKeyDirection) {
+            case LEFT:
+                this.selectedPoint = new Point(0, this.selectedPoint.y);
+                break;
+            case RIGHT:
+                this.selectedPoint = new Point(maxPointIndex, this.selectedPoint.y);
+                break;
+            case UP:
+                this.selectedPoint = new Point(this.selectedPoint.x, 0);
+                break;
+            case DOWN:
+                this.selectedPoint = new Point(this.selectedPoint.x, maxPointIndex);
+                break;
+        }
     }
 
     /**
@@ -75,5 +119,16 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
                 KeyEvent.VK_UP, new Point(0, -1),
                 KeyEvent.VK_DOWN, new Point(0, 1)
         );
+    }
+
+    /**
+     * Gets a list of {@link Point}s that should be highlighted in green on the Sudoku board.
+     * For the arrow key GUI, this is always a single square on the board.
+     *
+     * @return List of {@link Point}s that should be highlighted by the GUI (for this interface, always single point).
+     */
+    @Override
+    public ArrayList<Point> getHighlightedPointList() {
+        return new ArrayList<>(Collections.singletonList(this.selectedPoint));
     }
 }

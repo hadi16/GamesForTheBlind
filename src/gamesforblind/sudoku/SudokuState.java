@@ -1,14 +1,11 @@
 package gamesforblind.sudoku;
 
-import gamesforblind.enums.InputType;
-import gamesforblind.enums.InterfaceType;
-import gamesforblind.enums.SudokuSection;
-import gamesforblind.enums.SudokuType;
+import gamesforblind.enums.*;
 import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Generator;
 import gamesforblind.sudoku.generator.Grid;
-import gamesforblind.sudoku.interfaces.SudokuArrowKeyInterface;
 import gamesforblind.sudoku.generator.Solver;
+import gamesforblind.sudoku.interfaces.SudokuArrowKeyInterface;
 import gamesforblind.sudoku.interfaces.SudokuBlockSelectionInterface;
 import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
@@ -203,14 +200,20 @@ public class SudokuState {
         Point pointToSet = maybePointToSet.get();
         Cell cellToSet = this.sudokuGrid.getCell(pointToSet.y, pointToSet.x);
 
-        // Case 2: the user wishes to delete the cell value.
+        // Case 2: the user tries to delete an empty cell.
+        if (numberToFill == EMPTY_SUDOKU_SQUARE && cellToSet.getValue() == EMPTY_SUDOKU_SQUARE) {
+            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CANNOT_DELETE_EMPTY);
+            return;
+        }
+
+        // Case 3: the user wishes to delete the cell value.
         if (numberToFill == EMPTY_SUDOKU_SQUARE) {
-            // Case 2a: the user tries to delete an originally filled square on the board.
+            // Case 3a: the user tries to delete an originally filled square on the board.
             if (this.readCannotDeleteOriginal(pointToSet)) {
                 return;
             }
 
-            // Case 2b: the cell value is deleted.
+            // Case 3b: the cell value is deleted.
             this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
                     Phrase.REMOVED_NUM, Phrase.convertIntegerToPhrase(cellToSet.getValue()))
             ));
@@ -218,38 +221,43 @@ public class SudokuState {
             return;
         }
 
-        int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
+        final int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
 
-        // Case 3: the user tries to fill a square with an invalid value (e.g. 6 on a 4x4 board).
+        // Case 4: the user tries to fill a square with an invalid value (e.g. 6 on a 4x4 board).
         if (!(numberToFill > 0 && numberToFill <= sudokuBoardSize)) {
-            this.audioPlayerExecutor.replacePhraseAndPrint(
-                    sudokuBoardSize == 9 ? Phrase.INVALID_NUMBER_TO_FILL_9 : Phrase.INVALID_NUMBER_TO_FILL_4
-            );
+            switch (this.sudokuType) {
+                case FOUR_BY_FOUR:
+                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.INVALID_NUMBER_TO_FILL_4);
+                    break;
+                case SIX_BY_SIX:
+                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.INVALID_NUMBER_TO_FILL_6);
+                    break;
+                case NINE_BY_NINE:
+                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.INVALID_NUMBER_TO_FILL_9);
+                    break;
+            }
             return;
         }
 
-        // Case 4: the numeric value is not valid for the selected cell.
+        // Case 5: the numeric value is not valid for the selected cell.
         if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
             this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CELL_VALUE_INVALID);
             return;
         }
 
-        // Case 5: the cell value is replaced with the passed numeric value.
+        // Case 6: the cell value is replaced with the passed numeric value.
         if (cellToSet.getValue() == EMPTY_SUDOKU_SQUARE) {
             this.numberOfEmptyCells--;
         }
 
         cellToSet.setValue(numberToFill);
 
-        Grid solvableGrid = new Grid(sudokuGrid);
-        Solver testSolve = new Solver(sudokuBoardSize);
-        //testSolve.solve(solvableGrid);
-        if (testSolve.superSolver(solvableGrid)){
-            //is a solveable puzzle
-        }
-       else{//not solveable puzzle so set it back to 0
-            cellToSet.setValue(0);
-            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CELL_VALUE_INVALID);
+        // Case 7: the board would not be solvable from this new state (uses deep copy of current grid).
+        Solver solver = new Solver(sudokuBoardSize);
+        if (!solver.isSolvable(new Grid(this.sudokuGrid))) {
+            cellToSet.setValue(EMPTY_SUDOKU_SQUARE);
+            this.numberOfEmptyCells++;
+            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.PLACED_CELL_UNSOLVABLE);
             return;
         }
 
@@ -460,6 +468,15 @@ public class SudokuState {
      */
     public void setHighlightedPoint(Point pointToSet, InputType inputType) {
         this.sudokuKeyboardInterface.setHighlightedPoint(pointToSet, inputType);
+    }
+
+    /**
+     * For HOT KEYS: setter that calls the setHighlightedPoint() method within {@link SudokuKeyboardInterface}.
+     *
+     * @param arrowKeyDirection The {@link ArrowKeyDirection} that was pressed with this hot key (e.g. left arrow key).
+     */
+    public void setHighlightedPoint(ArrowKeyDirection arrowKeyDirection) {
+        this.sudokuKeyboardInterface.setHighlightedPoint(arrowKeyDirection);
     }
 
     /**
