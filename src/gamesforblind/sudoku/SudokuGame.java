@@ -98,7 +98,16 @@ public class SudokuGame {
             return;
         }
 
-        // Case 5: the user wants to highlight a square/block on the board.
+        // Case 5: the user hits a hot key (e.g. Ctrl + LEFT)
+        if (sudokuAction instanceof SudokuHotKeyAction) {
+            SudokuHotKeyAction sudokuHotKeyAction = (SudokuHotKeyAction) sudokuAction;
+            this.sudokuState.setHighlightedPoint(sudokuHotKeyAction.getArrowKeyDirection());
+            this.sudokuState.readSelectedSquare();
+            this.sendStateToGui();
+            return;
+        }
+
+        // Case 6: the user wants to highlight a square/block on the board.
         if (sudokuAction instanceof SudokuHighlightAction) {
             SudokuHighlightAction highlightAction = (SudokuHighlightAction) sudokuAction;
             this.sudokuState.setHighlightedPoint(highlightAction.getPointToHighlight(), highlightAction.getInputType());
@@ -107,7 +116,7 @@ public class SudokuGame {
             return;
         }
 
-        // Case 5: the user wants to fill a square on the board.
+        // Case 7: the user wants to fill a square on the board.
         if (sudokuAction instanceof SudokuFillAction) {
             SudokuFillAction sudokuFillAction = (SudokuFillAction) sudokuAction;
             this.sudokuState.setSquareNumber(sudokuFillAction.getNumberToFill());
@@ -115,7 +124,7 @@ public class SudokuGame {
             return;
         }
 
-        // Case 6: the user wants the current row/column/block to be read.
+        // Case 8: the user wants the current row/column/block to be read.
         if (sudokuAction instanceof SudokuReadPositionAction) {
             SudokuReadPositionAction sudokuReadPositionAction = (SudokuReadPositionAction) sudokuAction;
             this.sudokuState.readBoardSection(sudokuReadPositionAction.getSudokuSection());
@@ -123,7 +132,7 @@ public class SudokuGame {
             return;
         }
 
-        // Case 7: error
+        // Case 9: error
         System.err.println("An unrecognized form of a Sudoku action was received by the game!");
     }
 

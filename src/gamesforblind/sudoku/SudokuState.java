@@ -1,9 +1,6 @@
 package gamesforblind.sudoku;
 
-import gamesforblind.enums.InputType;
-import gamesforblind.enums.InterfaceType;
-import gamesforblind.enums.SudokuSection;
-import gamesforblind.enums.SudokuType;
+import gamesforblind.enums.*;
 import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Generator;
 import gamesforblind.sudoku.generator.Grid;
@@ -471,6 +468,15 @@ public class SudokuState {
      */
     public void setHighlightedPoint(Point pointToSet, InputType inputType) {
         this.sudokuKeyboardInterface.setHighlightedPoint(pointToSet, inputType);
+    }
+
+    /**
+     * For HOT KEYS: setter that calls the setHighlightedPoint() method within {@link SudokuKeyboardInterface}.
+     *
+     * @param arrowKeyDirection The {@link ArrowKeyDirection} that was pressed with this hot key (e.g. left arrow key).
+     */
+    public void setHighlightedPoint(ArrowKeyDirection arrowKeyDirection) {
+        this.sudokuKeyboardInterface.setHighlightedPoint(arrowKeyDirection);
     }
 
     /**

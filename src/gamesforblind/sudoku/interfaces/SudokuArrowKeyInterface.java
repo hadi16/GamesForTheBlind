@@ -1,8 +1,10 @@
 package gamesforblind.sudoku.interfaces;
 
+import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.enums.InputType;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
+import gamesforblind.sudoku.action.SudokuHotKeyAction;
 import gamesforblind.sudoku.generator.Grid;
 
 import java.awt.*;
@@ -32,7 +34,15 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
      * @param sudokuGrid The Sudoku board as a {@link Grid} object.
      */
     public SudokuArrowKeyInterface(SudokuType sudokuType, Grid sudokuGrid) {
-        super(sudokuType, sudokuGrid);
+        super(
+                sudokuType, sudokuGrid,
+                Map.of(
+                        KeyEvent.VK_LEFT, new SudokuHotKeyAction(ArrowKeyDirection.LEFT),
+                        KeyEvent.VK_RIGHT, new SudokuHotKeyAction(ArrowKeyDirection.RIGHT),
+                        KeyEvent.VK_UP, new SudokuHotKeyAction(ArrowKeyDirection.UP),
+                        KeyEvent.VK_DOWN, new SudokuHotKeyAction(ArrowKeyDirection.DOWN)
+                )
+        );
     }
 
     /**
@@ -65,6 +75,32 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
         // Make sure that the moved Point is in bounds.
         if (selectedPoint.x >= 0 && selectedPoint.y >= 0 && selectedPoint.x < boardSize && selectedPoint.y < boardSize) {
             this.selectedPoint = selectedPoint;
+        }
+    }
+
+    /**
+     * Sets the currently highlighted {@link Point} in the game with a hot key.
+     *
+     * @param arrowKeyDirection The {@link ArrowKeyDirection} that was pressed with this hot key (e.g. left arrow key).
+     */
+    @Override
+    public void setHighlightedPoint(ArrowKeyDirection arrowKeyDirection) {
+        int maxPointIndex = this.sudokuType.getSudokuBoardSize() - 1;
+
+        // Highlight square accordingly (e.g. LEFT --> all the way to the left)
+        switch (arrowKeyDirection) {
+            case LEFT:
+                this.selectedPoint = new Point(0, this.selectedPoint.y);
+                break;
+            case RIGHT:
+                this.selectedPoint = new Point(maxPointIndex, this.selectedPoint.y);
+                break;
+            case UP:
+                this.selectedPoint = new Point(this.selectedPoint.x, 0);
+                break;
+            case DOWN:
+                this.selectedPoint = new Point(this.selectedPoint.x, maxPointIndex);
+                break;
         }
     }
 

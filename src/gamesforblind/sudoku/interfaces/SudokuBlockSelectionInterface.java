@@ -1,5 +1,6 @@
 package gamesforblind.sudoku.interfaces;
 
+import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.enums.InputType;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
@@ -69,7 +70,8 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
      * @param sudokuGrid The Sudoku {@link Grid}.
      */
     public SudokuBlockSelectionInterface(SudokuType sudokuType, Grid sudokuGrid) {
-        super(sudokuType, sudokuGrid);
+        // No hotkeys in the block selection interface.
+        super(sudokuType, sudokuGrid, Map.of());
     }
 
     /**
@@ -193,6 +195,15 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
 
         // Case 2d: both the selected block point & selected square point are null.
         this.selectedSquarePoint = pointToSet;
+    }
+
+    /**
+     * For the block selection interface, there are no hot keys (do nothing).
+     *
+     * @param arrowKeyDirection The {@link ArrowKeyDirection} that was pressed with this hot key (e.g. left arrow key).
+     */
+    @Override
+    public void setHighlightedPoint(ArrowKeyDirection arrowKeyDirection) {
     }
 
     /**
