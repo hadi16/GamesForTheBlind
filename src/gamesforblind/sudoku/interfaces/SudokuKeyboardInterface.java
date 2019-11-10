@@ -1,8 +1,10 @@
 package gamesforblind.sudoku.interfaces;
 
+import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.enums.InputType;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
+import gamesforblind.sudoku.action.SudokuHotKeyAction;
 import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Grid;
 
@@ -18,6 +20,12 @@ import java.util.Optional;
  */
 public abstract class SudokuKeyboardInterface {
     /**
+     * Mapping between key codes (as defined in {@link KeyEvent}) to hot key actions.
+     * Note: the CTRL key must be pressed down to trigger any hot key.
+     */
+    public final Map<Integer, SudokuHotKeyAction> keyCodeToHotKeyAction;
+
+    /**
      * Whether the Sudoku board is a 4x4, 6x6, or 9x9.
      */
     protected final SudokuType sudokuType;
@@ -30,12 +38,16 @@ public abstract class SudokuKeyboardInterface {
     /**
      * Creates a new SudokuKeyboardInterface.
      *
-     * @param sudokuType Whether the Sudoku board is a 4x4, 6x6, or 9x9.
-     * @param sudokuGrid The Sudoku board as a {@link Grid} object.
+     * @param sudokuType            Whether the Sudoku board is a 4x4, 6x6, or 9x9.
+     * @param sudokuGrid            The Sudoku board as a {@link Grid} object.
+     * @param keyCodeToHotKeyAction Mapping between key codes (as defined in {@link KeyEvent}) to hot key actions.
      */
-    protected SudokuKeyboardInterface(SudokuType sudokuType, Grid sudokuGrid) {
+    protected SudokuKeyboardInterface(
+            SudokuType sudokuType, Grid sudokuGrid, Map<Integer, SudokuHotKeyAction> keyCodeToHotKeyAction
+    ) {
         this.sudokuType = sudokuType;
         this.sudokuGrid = sudokuGrid;
+        this.keyCodeToHotKeyAction = keyCodeToHotKeyAction;
     }
 
     /**
@@ -52,6 +64,13 @@ public abstract class SudokuKeyboardInterface {
      * @param inputType  Whether this action was made with a keyboard or a mouse.
      */
     public abstract void setHighlightedPoint(Point pointToSet, InputType inputType);
+
+    /**
+     * Sets the currently highlighted {@link Point} in the game with a hot key.
+     *
+     * @param arrowKeyDirection The {@link ArrowKeyDirection} that was pressed with this hot key (e.g. left arrow key).
+     */
+    public abstract void setHighlightedPoint(ArrowKeyDirection arrowKeyDirection);
 
     /**
      * Some keyCodes (as defined in {@link KeyEvent}) map to a given {@link Point} as determined by this mapping.
