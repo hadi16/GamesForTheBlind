@@ -1,5 +1,6 @@
 package gamesforblind.sudoku.interfaces;
 
+import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.enums.InputType;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
@@ -8,6 +9,8 @@ import gamesforblind.sudoku.generator.Grid;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -67,7 +70,42 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
      * @param sudokuGrid The Sudoku {@link Grid}.
      */
     public SudokuBlockSelectionInterface(SudokuType sudokuType, Grid sudokuGrid) {
-        super(sudokuType, sudokuGrid);
+        // No hotkeys in the block selection interface.
+        super(sudokuType, sudokuGrid, Map.of());
+    }
+
+    /**
+     * Gets a list of {@link Point}s that should be highlighted in green on the Sudoku board.
+     * For the block selection GUI, this can be nothing, a single square, or a single block.
+     *
+     * @return List of {@link Point}s that should be highlighted by the Sudoku GUI.
+     */
+    @Override
+    public ArrayList<Point> getHighlightedPointList() {
+        // Case 1: nothing is selected.
+        if (this.selectedBlockPoint == null && this.selectedSquarePoint == null) {
+            return new ArrayList<>();
+        }
+
+        // Case 2: individual square is selected
+        Optional<Point> maybeSelectedPoint = this.getSelectedPoint();
+        if (maybeSelectedPoint.isPresent()) {
+            return new ArrayList<>(Collections.singletonList(maybeSelectedPoint.get()));
+        }
+
+        // Case 3: block is selected
+        ArrayList<Point> highlightedPointList = new ArrayList<>();
+        int blockWidth = this.sudokuType.getBlockWidth();
+        int blockHeight = this.sudokuType.getBlockHeight();
+        for (int rowIndex = 0; rowIndex < blockHeight; rowIndex++) {
+            for (int columnIndex = 0; columnIndex < blockWidth; columnIndex++) {
+                highlightedPointList.add(new Point(
+                        this.selectedBlockPoint.x * blockWidth + columnIndex,
+                        this.selectedBlockPoint.y * blockHeight + rowIndex
+                ));
+            }
+        }
+        return highlightedPointList;
     }
 
     /**
@@ -160,6 +198,15 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
     }
 
     /**
+     * For the block selection interface, there are no hot keys (do nothing).
+     *
+     * @param arrowKeyDirection The {@link ArrowKeyDirection} that was pressed with this hot key (e.g. left arrow key).
+     */
+    @Override
+    public void setHighlightedPoint(ArrowKeyDirection arrowKeyDirection) {
+    }
+
+    /**
      * For the block selection interface, I want to return a mapping that is appropriate for the given board type.
      * For example, the 4x4 boards map the keys 'S', 'D', 'X', and 'C'.
      * <p>
@@ -186,23 +233,5 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
      */
     private boolean isSquareHighlighted() {
         return this.selectedBlockPoint != null && this.selectedSquarePoint != null;
-    }
-
-    /**
-     * Getter for selectedBlockPoint
-     *
-     * @return The currently selected block {@link Point}.
-     */
-    public Point getSelectedBlockPoint() {
-        return this.selectedBlockPoint;
-    }
-
-    /**
-     * Getter for selectedSquarePoint
-     *
-     * @return The currently selected square {@link Point}.
-     */
-    public Point getSelectedSquarePoint() {
-        return this.selectedSquarePoint;
     }
 }
