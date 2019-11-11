@@ -63,12 +63,20 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
      */
     @Override
     public void setHighlightedPoint(Point pointToSet, InputType inputType) {
+        // Case 1: the user presses the space bar.
+        if (pointToSet == null) {
+            this.selectedPoint = new Point(0, 0);
+            return;
+        }
+
+        // Case 2: the user clicks the mouse.
         if (inputType == InputType.MOUSE) {
             // Offset needed for the row (1, 2, etc.) & column labels ('A', 'B', etc.)
             this.selectedPoint = new Point(pointToSet.x - 1, pointToSet.y - 1);
             return;
         }
 
+        // Case 3: the user presses an arrow key.
         int boardSize = this.sudokuType.getSudokuBoardSize();
         Point selectedPoint = new Point(this.selectedPoint.x + pointToSet.x, this.selectedPoint.y + pointToSet.y);
 
