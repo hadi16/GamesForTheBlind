@@ -40,29 +40,15 @@ public class Solver {
         }
     }
 
-    /*
-     * Currently undoing solving stuff, need to use copy constructor - Callum
-     * Custom solver much like above solve method, returns a boolean
+    /**
+     * Used for checking if the passed {@link Grid} is solvable. Uses backtracking.
+     *
+     * @param grid The {@link Grid} to check.
+     * @return true if the given Grid is solvable (otherwise false).
      */
-    /*public boolean superSolver(Grid grid) {
-        return this.superSolver(grid, grid.getFirstEmptyCell().orElse(null));
+    public boolean isSolvable(Grid grid) {
+        return this.solve(grid, grid.getFirstEmptyCell().orElse(null));
     }
-
-    // Custom solver to run recursively on input and make sure a solution is available
-    private boolean superSolver(Grid grid, Cell cell) {
-        if (cell == null) {
-            return true;
-        }
-        for (int value : this.values) {
-            if (grid.isValidValueForCell(cell, value)) {
-                if (this.superSolver(grid, grid.getNextEmptyCellOf(cell).orElse(null))) {
-                    return true;
-                }
-                cell.setValue(EMPTY);
-            }
-        }
-        return false;
-    }*/
 
     /**
      * Helper method to solve a {@link Cell} of the given Sudoku grid using backtracking.

@@ -1,9 +1,8 @@
 package gamesforblind.sudoku.gui;
 
+import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.SudokuState;
 import gamesforblind.sudoku.generator.Grid;
-import gamesforblind.sudoku.interfaces.SudokuBlockSelectionInterface;
-import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,10 +14,13 @@ import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
  * Contains the main GUI code for Sudoku. Serves as a custom JPanel for Sudoku GUI (extends JPanel).
  */
 public class SudokuPanel extends JPanel {
+    private static final Color BRIGHT_BLUE = new Color(89, 202, 232);
+    private static final Color BRIGHT_YELLOW = new Color(255, 247, 53);
+
     /**
-     * The number of squares on each side of the Sudoku board (e.g. 9x9 --> 9).
+     * Whether the Sudoku game is a 4x4, 6x6, or 9x9 variant.
      */
-    private final int sudokuBoardSize;
+    private final SudokuType sudokuType;
 
     /**
      * Which squares were originally filled on the board to highlight them in a special color for sighted users.
@@ -31,65 +33,44 @@ public class SudokuPanel extends JPanel {
     private SudokuState sudokuState;
 
     /**
+     * This is reset every time the board is repainted (based on the bounds of the GUI window).
+     */
+    private int totalBoardLength;
+
+    /**
      * Creates a new SudokuPanel.
      *
      * @param initialState The initial state of the Sudoku game.
      */
     public SudokuPanel(SudokuState initialState) {
         this.sudokuState = initialState;
-        this.sudokuBoardSize = initialState.getSudokuBoardSize();
+        this.sudokuType = initialState.getSudokuType();
         this.originallyFilledSquares = initialState.getOriginallyFilledSquares();
     }
 
     /**
-     * NOTE: only used for the {@link SudokuBlockSelectionInterface}.
-     * Highlights the blocks & squares that are currently highlighted in the game.
+     * Paints the bolded block borders.
      *
-     * @param graphics                The {@link Graphics} object used for painting.
-     * @param blockSelectionInterface The block interface, which contains the selected block & square {@link Point}s.
-     * @param rowIdx                  The current row index.
-     * @param columnIdx               The current column index.
-     * @param xPos                    The current x position (amount of pixels in x direction).
-     * @param yPos                    The current y position (amount of pixels in y direction).
-     * @param squareDimension         The pixel dimension of each square on the board.
+     * @param graphics        The {@link Graphics} object used for painting.
+     * @param squareDimension The pixel dimension of each square on the board.
+     * @param initialPosition Amount of pixels to begin painting board from (the row & column labels come before this).
      */
-    private void paintHighlightedSquares(
-            Graphics graphics, SudokuBlockSelectionInterface blockSelectionInterface,
-            int rowIdx, int columnIdx, int xPos, int yPos, int squareDimension
-    ) {
-        Point selectedBlockPoint = blockSelectionInterface.getSelectedBlockPoint();
-        Point selectedSquarePoint = blockSelectionInterface.getSelectedSquarePoint();
+    private void paintBlockBorders(Graphics graphics, int squareDimension, int initialPosition) {
+        final int BLOCK_WIDTH = this.sudokuType.getBlockWidth();
+        final int BLOCK_HEIGHT = this.sudokuType.getBlockHeight();
 
-        graphics.setColor(Color.GREEN);
+        final int BLOCK_WIDTH_DIM = squareDimension * BLOCK_WIDTH;
+        final int BLOCK_HEIGHT_DIM = squareDimension * BLOCK_HEIGHT;
 
-        // Since this block interface is only supported on 4x4 & 9x9 boards, this works fine.
-        int numberOfBlocks = (int) Math.sqrt(this.sudokuBoardSize);
+        for (int i = 0; i < BLOCK_HEIGHT; i++) {
+            for (int j = 0; j < BLOCK_WIDTH; j++) {
+                int xPosition = initialPosition + i * BLOCK_WIDTH_DIM;
+                int yPosition = initialPosition + j * BLOCK_HEIGHT_DIM;
 
-        // Case 1: the selected block is highlighted.
-        if (selectedSquarePoint == null && selectedBlockPoint != null) {
-            int minRowIdx = selectedBlockPoint.y * numberOfBlocks;
-            int maxRowIdx = (selectedBlockPoint.y + 1) * numberOfBlocks - 1;
-
-            int minColumnIdx = selectedBlockPoint.x * numberOfBlocks;
-            int maxColumnIdx = (selectedBlockPoint.x + 1) * numberOfBlocks - 1;
-
-            if (rowIdx >= minRowIdx && rowIdx <= maxRowIdx && columnIdx >= minColumnIdx && columnIdx <= maxColumnIdx) {
-                graphics.fillRect(xPos, yPos, squareDimension, squareDimension);
-            }
-            return;
-        }
-
-        // Case 2: the selected square is highlighted.
-        if (selectedSquarePoint != null) {
-            int selectedRowIndex = selectedBlockPoint.y * numberOfBlocks + selectedSquarePoint.y;
-            int selectedColumnIndex = selectedBlockPoint.x * numberOfBlocks + selectedSquarePoint.x;
-
-            if (selectedRowIndex == rowIdx && selectedColumnIndex == columnIdx) {
-                graphics.fillRect(xPos, yPos, squareDimension, squareDimension);
+                graphics.drawRect(xPosition + 1, yPosition + 1, BLOCK_WIDTH_DIM, BLOCK_HEIGHT_DIM);
+                graphics.drawRect(xPosition - 1, yPosition - 1, BLOCK_WIDTH_DIM, BLOCK_HEIGHT_DIM);
             }
         }
-
-        // Implicit third case: no square OR block is highlighted.
     }
 
     /**
@@ -100,87 +81,51 @@ public class SudokuPanel extends JPanel {
      * @param initialPosition Amount of pixels to begin painting board from (the row & column labels come before this).
      */
     private void paintMainBoard(Graphics graphics, int squareDimension, int initialPosition) {
+        int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
         Grid sudokuGrid = this.sudokuState.getSudokuGrid();
-        SudokuKeyboardInterface keyboardInterface = this.sudokuState.getSudokuKeyboardInterface();
 
+        graphics.setFont(new Font("Arial", Font.BOLD, this.totalBoardLength / sudokuBoardSize));
 
-        int yPosition = initialPosition;
-        for (int rowIndex = 0; rowIndex < this.sudokuBoardSize; rowIndex++) {
-            int xPosition = initialPosition;
+        ArrayList<Point> highlightedPoints = this.sudokuState.getSudokuKeyboardInterface().getHighlightedPointList();
+        for (int rowIndex = 0; rowIndex < sudokuBoardSize; rowIndex++) {
+            int yPosition = initialPosition + rowIndex * squareDimension;
 
-            for (int columnIndex = 0; columnIndex < this.sudokuBoardSize; columnIndex++) {
-                // Step 1: paint this square as an originally filled square (if applicable).
-                graphics.setColor(Color.LIGHT_GRAY);
-                if (this.originallyFilledSquares.contains(new Point(columnIndex, rowIndex))) {
+            for (int columnIndex = 0; columnIndex < sudokuBoardSize; columnIndex++) {
+                int xPosition = initialPosition + columnIndex * squareDimension;
+
+                // Step 1: fill in the square with the appropriate color (e.g. green for highlighted).
+                Point currentPoint = new Point(columnIndex, rowIndex);
+                int currentCellValue = sudokuGrid.getCell(rowIndex, columnIndex).getValue();
+                if (currentCellValue == EMPTY_SUDOKU_SQUARE && highlightedPoints.contains(currentPoint)) {
+                    // Case 1: the Point is highlighted & empty.
+                    graphics.setColor(Color.GREEN);
+                    graphics.fillRect(xPosition, yPosition, squareDimension, squareDimension);
+                } else if (currentCellValue != EMPTY_SUDOKU_SQUARE) {
+                    if (highlightedPoints.contains(currentPoint)) {
+                        // Case 2: the Point is highlighted & not empty.
+                        graphics.setColor(Color.GREEN);
+                    } else {
+                        // Case 3: the Point is not highlighted & not empty.
+                        graphics.setColor(BRIGHT_BLUE);
+                    }
+
                     graphics.fillRect(xPosition, yPosition, squareDimension, squareDimension);
                 }
 
-                // Step 2: if this is the block interface, paint the highlighted blocks or squares on the board.
-                if (keyboardInterface instanceof SudokuBlockSelectionInterface) {
-                    var blockInterface = (SudokuBlockSelectionInterface) keyboardInterface;
-                    this.paintHighlightedSquares(
-                            graphics, blockInterface, rowIndex, columnIndex, xPosition, yPosition, squareDimension
+                // Step 2: draw the numbers over top the colored in squares
+                if (currentCellValue != EMPTY_SUDOKU_SQUARE) {
+                    graphics.setColor(BRIGHT_YELLOW);
+                    graphics.drawString(
+                            Integer.toString(currentCellValue),
+                            xPosition + (sudokuBoardSize + 13) * squareDimension / 110,
+                            yPosition + (1044 - 11 * sudokuBoardSize) * squareDimension / 1050
                     );
                 }
 
                 // Step 3: draw the basic square that holds a number on the Sudoku board.
                 graphics.setColor(Color.BLACK);
                 graphics.drawRect(xPosition, yPosition, squareDimension, squareDimension);
-
-                // Step 4: fill in the square on the Sudoku board (if not empty).
-                int currentCellValue = sudokuGrid.getCell(rowIndex, columnIndex).getValue();
-                if (currentCellValue != EMPTY_SUDOKU_SQUARE) {
-                    graphics.drawString(
-                            Integer.toString(currentCellValue),
-                            xPosition + squareDimension / 3,
-                            yPosition + (2 * squareDimension / 3)
-                    );
-                }
-
-                xPosition += squareDimension;
             }
-
-            yPosition += squareDimension;
-        }
-
-
-        if(sudokuBoardSize == 9)
-        {
-            int xInitialPosition = initialPosition;
-            int yInitialPosition = initialPosition;
-            int tripleBlock = squareDimension*3;
-
-            //graphics.setColor(Color.BLACK);
-            for(int i = 0; i < 3; i++){
-                for( int j = 0; j < 3; j++){
-                    graphics.drawRect(xInitialPosition + 1, yInitialPosition+1, (squareDimension*3), (squareDimension*3));
-                    graphics.drawRect(xInitialPosition - 1, yInitialPosition-1, (squareDimension*3), (squareDimension*3));
-                    xInitialPosition += tripleBlock;
-                }
-
-                yInitialPosition += tripleBlock;
-                xInitialPosition = initialPosition;
-            }
-        }
-        else if(sudokuBoardSize == 4)
-        {
-            int xInitialPosition = initialPosition;
-            int yInitialPosition = initialPosition;
-            int block =squareDimension*2;
-
-            for(int i = 0; i < 2; i++){
-                for( int j = 0; j < 2; j++){
-                    graphics.drawRect(xInitialPosition +1, yInitialPosition+1, (squareDimension*2), (squareDimension*2));
-                    graphics.drawRect(xInitialPosition -1, yInitialPosition-1, (squareDimension*2), (squareDimension*2));
-                    xInitialPosition += block;
-                }
-
-                yInitialPosition += block;
-                xInitialPosition = initialPosition;
-            }
-        }
-        else
-        {
         }
     }
 
@@ -193,28 +138,29 @@ public class SudokuPanel extends JPanel {
      * @param initialPosition Amount of pixels to begin painting board from.
      */
     private void paintBoardLabels(Graphics graphics, int squareDimension, int initialPosition) {
+        int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
+
         graphics.setColor(Color.BLACK);
+        graphics.setFont(
+                new Font("Arial", Font.BOLD, (93 - 7 * sudokuBoardSize) * this.totalBoardLength / 390)
+        );
 
         // Step 1: print the row labels (numbers 1, 2, 3, etc.)
-        int yPosition = initialPosition + squareDimension;
-        for (int rowIndex = 0; rowIndex < this.sudokuBoardSize; rowIndex++) {
+        for (int rowIndex = 0; rowIndex < sudokuBoardSize; rowIndex++) {
             graphics.drawString(
                     Integer.toString(rowIndex + 1),
-                    initialPosition + squareDimension / 3,
-                    yPosition + (2 * squareDimension / 3)
+                    initialPosition + (11 * squareDimension / 24),
+                    initialPosition + (squareDimension * rowIndex) + (11 * squareDimension / 6)
             );
-            yPosition += squareDimension;
         }
 
         // Step 2: print the column labels (letters 'A', 'B', 'C', etc.)
-        int xPosition = initialPosition + squareDimension;
-        for (int columnIndex = 0; columnIndex < this.sudokuBoardSize; columnIndex++) {
+        for (int columnIndex = 0; columnIndex < sudokuBoardSize; columnIndex++) {
             graphics.drawString(
                     Character.toString((char) columnIndex + 'A'),
-                    xPosition + squareDimension / 3,
-                    initialPosition + (2 * squareDimension / 3)
+                    initialPosition + (51 * squareDimension * columnIndex / 50) + (29 * squareDimension / 24),
+                    initialPosition + (11 * squareDimension / 12)
             );
-            xPosition += squareDimension;
         }
     }
 
@@ -228,22 +174,22 @@ public class SudokuPanel extends JPanel {
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
 
-        Rectangle bounds = graphics.getClipBounds();
-        final int TOTAL_BOARD_LENGTH = Math.min(bounds.height, bounds.width);
+        Rectangle clipBounds = graphics.getClipBounds();
+        this.totalBoardLength = Math.min(clipBounds.height, clipBounds.width);
 
-        // The font used throughout the entire Sudoku GUI.
-        graphics.setFont(new Font("Arial", Font.BOLD, TOTAL_BOARD_LENGTH / 13));
+        int squaresPerSide = this.sudokuType.getSudokuBoardSize() + 1;
+        int squareDimension = (this.totalBoardLength - squaresPerSide) / squaresPerSide;
 
-        int squaresPerSide = this.sudokuBoardSize + 1;
-        int squareDimension = (TOTAL_BOARD_LENGTH - squaresPerSide) / squaresPerSide;
+        final int INITIAL_POSITION = (this.totalBoardLength - (squareDimension * squaresPerSide)) / 2;
 
-        final int INITIAL_POSITION = (TOTAL_BOARD_LENGTH - (squareDimension * squaresPerSide)) / 2;
-
-        // Step 1: paint the row & column labels.
+        // Step 1: paint the row & column labels (font size is slightly smaller).
         this.paintBoardLabels(graphics, squareDimension, INITIAL_POSITION);
 
         // Step 2: paint the main Sudoku board (which includes highlighted squares).
         this.paintMainBoard(graphics, squareDimension, INITIAL_POSITION + squareDimension);
+
+        // Step 3: paint the bolded block borders.
+        this.paintBlockBorders(graphics, squareDimension, INITIAL_POSITION + squareDimension);
     }
 
     /**

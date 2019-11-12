@@ -111,8 +111,7 @@ public class StringConverter {
             return;
         }
 
-        int numberOfBlocks = sudokuType.getBlockHeight();
-        if (row % numberOfBlocks == 0) {
+        if (row % sudokuType.getBlockHeight() == 0) {
             switch (sudokuType) {
                 case FOUR_BY_FOUR:
                     builder.append("╠═══╪═══╬═══╪═══╣\n");
