@@ -55,6 +55,21 @@ public class SudokuFrame extends JFrame {
         this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.frame.setSize(FRAME_DIMENSION, FRAME_DIMENSION);
         this.frame.setVisible(true);
+
+        JMenuBar menuBar = new JMenuBar();
+
+        JMenu x = new JMenu("Menu");
+        // add menu items to menu
+        x.add(new JMenuItem("Hint"));
+        x.add(new JMenuItem("Restart"));
+        x.add(new JMenuItem("Instructions"));
+        x.add(new JMenuItem("Return to Main Menu"));
+
+        // add menu to menu bar
+        menuBar.add(x);
+
+        // add menu bar to frame
+        this.frame.setJMenuBar(menuBar);
     }
 
     /**
@@ -75,4 +90,5 @@ public class SudokuFrame extends JFrame {
     public Rectangle getFrameBounds() {
         return new Rectangle(this.frame.getBounds());
     }
+
 }
