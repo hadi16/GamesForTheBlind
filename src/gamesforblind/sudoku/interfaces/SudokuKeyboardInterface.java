@@ -1,13 +1,16 @@
 package gamesforblind.sudoku.interfaces;
 
+import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.enums.InputType;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
+import gamesforblind.sudoku.action.SudokuHotKeyAction;
 import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Grid;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,6 +19,12 @@ import java.util.Optional;
  * Allows multiple keyboard interfaces to exist seamlessly in the game.
  */
 public abstract class SudokuKeyboardInterface {
+    /**
+     * Mapping between key codes (as defined in {@link KeyEvent}) to hot key actions.
+     * Note: the CTRL key must be pressed down to trigger any hot key.
+     */
+    public final Map<Integer, SudokuHotKeyAction> keyCodeToHotKeyAction;
+
     /**
      * Whether the Sudoku board is a 4x4, 6x6, or 9x9.
      */
@@ -29,12 +38,16 @@ public abstract class SudokuKeyboardInterface {
     /**
      * Creates a new SudokuKeyboardInterface.
      *
-     * @param sudokuType Whether the Sudoku board is a 4x4, 6x6, or 9x9.
-     * @param sudokuGrid The Sudoku board as a {@link Grid} object.
+     * @param sudokuType            Whether the Sudoku board is a 4x4, 6x6, or 9x9.
+     * @param sudokuGrid            The Sudoku board as a {@link Grid} object.
+     * @param keyCodeToHotKeyAction Mapping between key codes (as defined in {@link KeyEvent}) to hot key actions.
      */
-    protected SudokuKeyboardInterface(SudokuType sudokuType, Grid sudokuGrid) {
+    protected SudokuKeyboardInterface(
+            SudokuType sudokuType, Grid sudokuGrid, Map<Integer, SudokuHotKeyAction> keyCodeToHotKeyAction
+    ) {
         this.sudokuType = sudokuType;
         this.sudokuGrid = sudokuGrid;
+        this.keyCodeToHotKeyAction = keyCodeToHotKeyAction;
     }
 
     /**
@@ -53,12 +66,26 @@ public abstract class SudokuKeyboardInterface {
     public abstract void setHighlightedPoint(Point pointToSet, InputType inputType);
 
     /**
+     * Sets the currently highlighted {@link Point} in the game with a hot key.
+     *
+     * @param arrowKeyDirection The {@link ArrowKeyDirection} that was pressed with this hot key (e.g. left arrow key).
+     */
+    public abstract void setHighlightedPoint(ArrowKeyDirection arrowKeyDirection);
+
+    /**
      * Some keyCodes (as defined in {@link KeyEvent}) map to a given {@link Point} as determined by this mapping.
      * Note: this is done with key codes instead of characters to allow for the arrow keys to be mapped.
      *
      * @return A mapping between key codes as defined in {@link KeyEvent} & given {@link Point}s.
      */
     public abstract Map<Integer, Point> getKeyCodeToPointMapping();
+
+    /**
+     * Gets a list of {@link Point}s that should be highlighted in green on the Sudoku board.
+     *
+     * @return List of {@link Point}s that should be highlighted by the Sudoku GUI.
+     */
+    public abstract ArrayList<Point> getHighlightedPointList();
 
     /**
      * Gets the currently selected {@link Cell} in the game. Note: value is wrapped by an {@link Optional}.

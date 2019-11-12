@@ -26,6 +26,12 @@ public class SudokuKeyboardListener implements KeyListener {
     private final Map<Integer, Point> keyCodeToPoint;
 
     /**
+     * Mapping between key codes (as defined in {@link KeyEvent}) to hot key actions.
+     * Note: the CTRL key must be pressed down to trigger any hot key.
+     */
+    private final Map<Integer, SudokuHotKeyAction> keyCodeToHotKeyAction;
+
+    /**
      * Creates a new SudokuKeyboardListener
      *
      * @param keyboardInterface The given keyboard interface that the user has chosen (arrow keys, etc.).
@@ -34,6 +40,7 @@ public class SudokuKeyboardListener implements KeyListener {
     public SudokuKeyboardListener(SudokuKeyboardInterface keyboardInterface, SudokuGame sudokuGame) {
         this.sudokuGame = sudokuGame;
         this.keyCodeToPoint = keyboardInterface.getKeyCodeToPointMapping();
+        this.keyCodeToHotKeyAction = keyboardInterface.keyCodeToHotKeyAction;
     }
 
     /**
@@ -43,7 +50,19 @@ public class SudokuKeyboardListener implements KeyListener {
      */
     @Override
     public void keyPressed(KeyEvent e) {
-        // Case 1: pressed key is a number.
+        // Case 1: hot key was registered (using the Ctrl key).
+        // If no hot key mappings exist, don't check (e.g. block selection interface).
+        if (!this.keyCodeToHotKeyAction.isEmpty() && e.isControlDown()) {
+            SudokuHotKeyAction sudokuHotKeyAction = this.keyCodeToHotKeyAction.get(e.getKeyCode());
+            if (sudokuHotKeyAction != null) {
+                this.sudokuGame.receiveAction(sudokuHotKeyAction);
+            }
+
+            // Prevents the game from saying that CTRL is an unrecognized key.
+            return;
+        }
+
+        // Case 2: pressed key is a number.
         if (Character.isDigit(e.getKeyChar())) {
             // Calls FillAction to input the number (the state will determine whether it is a valid action).
             this.sudokuGame.receiveAction(
@@ -54,7 +73,7 @@ public class SudokuKeyboardListener implements KeyListener {
 
         int selectedKeyCode = e.getKeyCode();
 
-        // Case 2: the selected key is the SPACE BAR
+        // Case 3: the selected key is the SPACE BAR
         if (selectedKeyCode == KeyEvent.VK_SPACE) {
             // If it is a SPACE BAR, then pass null to the pointToHighlight.
             this.sudokuGame.receiveAction(
@@ -63,19 +82,19 @@ public class SudokuKeyboardListener implements KeyListener {
             return;
         }
 
-        // Case 3: the selected key is the 'I' key (play the instructions).
+        // Case 4: the selected key is the 'I' key (play the instructions).
         if (selectedKeyCode == KeyEvent.VK_I) {
             this.sudokuGame.receiveAction(new SudokuInstructionsAction());
             return;
         }
 
-        // Case 4: the selected key is the 'H' key (triggers a hint).
+        // Case 5: the selected key is the 'H' key (triggers a hint).
         if (selectedKeyCode == KeyEvent.VK_H) {
             this.sudokuGame.receiveAction(new SudokuHintKeyAction());
             return;
         }
 
-        // Case 5: the selected key exists within the passed mapping of key codes & Points.
+        // Case 6: the selected key exists within the passed mapping of key codes & Points.
         Point currentSelectedPoint = this.keyCodeToPoint.get(selectedKeyCode);
         if (currentSelectedPoint != null) {
             this.sudokuGame.receiveAction(
@@ -90,14 +109,14 @@ public class SudokuKeyboardListener implements KeyListener {
                 KeyEvent.VK_L, SudokuSection.BLOCK
         );
 
-        // Case 6: the selected key is a J, K, or L (read row, column, or block, respectively).
+        // Case 7: the selected key is a J, K, or L (read row, column, or block, respectively).
         SudokuSection sudokuSection = KEY_TO_SECTION.get(selectedKeyCode);
         if (sudokuSection != null) {
             this.sudokuGame.receiveAction(new SudokuReadPositionAction(sudokuSection));
             return;
         }
 
-        // Case 7: the selected key is unrecognized.
+        // Case 8: the selected key is unrecognized.
         this.sudokuGame.receiveAction(new SudokuUnrecognizedKeyAction(e.getKeyCode()));
     }
 
