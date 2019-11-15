@@ -1,6 +1,8 @@
 package gamesforblind.sudoku;
 
+import gamesforblind.ProgramArgs;
 import gamesforblind.enums.*;
+import gamesforblind.logger.LogFactory;
 import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Generator;
 import gamesforblind.sudoku.generator.Grid;
@@ -468,6 +470,19 @@ public class SudokuState {
      */
     public void setHighlightedPoint(Point pointToSet, InputType inputType) {
         this.sudokuKeyboardInterface.setHighlightedPoint(pointToSet, inputType);
+    }
+
+    /**
+     * Starts a new game is restart is selected
+     *
+     * @param sudokuType The {@link SudokuType} of the previous game
+     * @param aE The {@link AudioPlayerExecutor} from the previous game
+     * @param logFactory The {@link LogFactory} from the previous game
+     * @param programArgs The {@link ProgramArgs} of the previous game
+     *
+     */
+    public void reset(SudokuType sudokuType, AudioPlayerExecutor aE, LogFactory logFactory, ProgramArgs programArgs){
+        new SudokuGame( sudokuType, aE, logFactory, programArgs );
     }
 
     /**
