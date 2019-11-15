@@ -516,6 +516,15 @@ public class SudokuState {
     }
 
     /**
+     * Getter for audioPlayerExecutor
+     *
+     * @return The current audioPlayerExecutor
+     */
+    public AudioPlayerExecutor getAudioPlayerExecutor() {
+        return this.audioPlayerExecutor;
+    }
+
+    /**
      * Getter for sudokuKeyboardInterface
      *
      * @return The keyboard interface that is being used in the game.
