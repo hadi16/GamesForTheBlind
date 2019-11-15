@@ -23,6 +23,8 @@ public class SudokuFrame extends JFrame {
      */
     private final SudokuPanel sudokuPanel;
 
+    private final SudokuGame sudokuGame;
+
     /**
      * Creates a new SudokuFrame.
      *
@@ -35,7 +37,11 @@ public class SudokuFrame extends JFrame {
         this.sudokuPanel = new SudokuPanel(initialState);
         this.frame = new JFrame("Sudoku");
 
-        this.initializeGui();
+        this.sudokuGame = sudokuGame;
+
+        this.initializeGui(sudokuGame);
+
+
 
         // If we are in playback mode, I don't want any new mouse clicks or keyboard presses to be registered.
         if (!playbackMode) {
@@ -49,13 +55,27 @@ public class SudokuFrame extends JFrame {
      * Used for creating the on-screen GUI.
      * This will start at a dimension of 500 by 500 pixels, but is fully resizable by dragging the window.
      */
-    private void initializeGui() {
+    private void initializeGui(SudokuGame sudokuGame) {
         this.frame.add(this.sudokuPanel);
 
         this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.frame.setSize(FRAME_DIMENSION, FRAME_DIMENSION);
         this.frame.setVisible(true);
+
+        JMenuBar menuBar = new JMenuBar();
+
+        SudokuMenu menu = new SudokuMenu();
+
+        // add menu to menu bar
+        menuBar.add(menu.initialize(sudokuGame));
+
+
+        // add menu bar to frame
+        this.frame.setJMenuBar(menuBar);
+
+
     }
+
 
     /**
      * Sets the Sudoku state for the enclosed {@link SudokuPanel} & calls repaint() on it.
@@ -75,4 +95,14 @@ public class SudokuFrame extends JFrame {
     public Rectangle getFrameBounds() {
         return new Rectangle(this.frame.getBounds());
     }
+
+    /**
+     * Closes the previous game's {@link JFrame}
+     */
+    public void closeFrames() {
+
+        this.frame.setVisible(false);
+        this.frame.dispose();
+    }
+
 }
