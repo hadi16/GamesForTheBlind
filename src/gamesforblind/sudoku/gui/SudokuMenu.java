@@ -7,12 +7,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-
+/**
+// Class that creates the menu, adds the listeners to that menu items.
+ */
 public class SudokuMenu  {
 
-    public JMenu initialize (SudokuGame sudokuGame){
-    JMenu x = new JMenu("Menu");
 
+    /**
+     * sets up the menu, adds all the items and listeners to the items.
+     *
+     * @param sudokuGame   The current Sudoku game.
+     */
+    public JMenu initialize (SudokuGame sudokuGame){
+
+    JMenu x = new JMenu("Menu");
 
     // add menu items to menu
     JMenuItem hint = new JMenuItem("Hint");
@@ -43,13 +51,25 @@ public class SudokuMenu  {
         returnHome.addActionListener(menuItemListener);
 
         return x;
-}
+    }
 }
 
+
+/**
+ Class that implements the listeners and sends the proper action to SudokuGame
+ */
 class MenuItemListener implements ActionListener {
 
+    /**
+     * A reference to the Game that contains current SudokuGame.
+     */
     private final SudokuGame sudokuGame;
 
+    /**
+     * Deals with sending the correct action to the current Sudoku game
+     *
+     * @param sudokuGame   The current Sudoku game.
+     */
     public MenuItemListener(SudokuGame sudokuGame) {
         this.sudokuGame = sudokuGame;
     }
