@@ -104,21 +104,21 @@ public enum Phrase {
     INSTRUCTIONS_4("Welcome to Sudoku! Each of the four blocks must contain the numbers 1 through 4 " +
             "within its square. Each number can only appear once in a row, column or box. Each four-square column, " +
             "or four-square row, within the entire board, must also have the numbers 1 through 4, without repetition." +
-            "To hear the numbers in the currently selected number's row press J, to hear the numbers in the "+
+            "To hear the numbers in the currently selected number's row press J, to hear the numbers in the " +
             " currently selected number's column press K, to hear all of the numbers in the current block press L." +
             "If you have selected an empty square and are stuck, press H to automatically fill in the square."),
 
     INSTRUCTIONS_6("Welcome to Sudoku! Each of the six blocks must contain the numbers 1 through 6 " +
             "within its square. Each number can only appear once in a row, column or box. Each six-square column, " +
-            "or six-square row, within the entire board, must also have the numbers 1 through 6, without repetition."+
-            "To hear the numbers in the currently selected number's row press J, to hear the numbers in the "+
+            "or six-square row, within the entire board, must also have the numbers 1 through 6, without repetition." +
+            "To hear the numbers in the currently selected number's row press J, to hear the numbers in the " +
             " currently selected number's column press K, to hear all of the numbers in the current block press L." +
             "If you have selected an empty square and are stuck, press H to automatically fill in the square."),
 
     INSTRUCTIONS_9("Welcome to Sudoku! Each of the nine blocks must contain the numbers 1 through 9 " +
             "within its square. Each number can only appear once in a row, column or box. Each nine-square column, " +
-            "or nine-square row, within the entire board, must also have the numbers 1 through 9, without repetition."+
-            "To hear the numbers in the currently selected number's row press J, to hear the numbers in the "+
+            "or nine-square row, within the entire board, must also have the numbers 1 through 9, without repetition." +
+            "To hear the numbers in the currently selected number's row press J, to hear the numbers in the " +
             " currently selected number's column press K, to hear all of the numbers in the current block press L." +
             "If you have selected an empty square and are stuck, press H to automatically fill in the square."),
     /* Sudoku: Empty Squares Left */
