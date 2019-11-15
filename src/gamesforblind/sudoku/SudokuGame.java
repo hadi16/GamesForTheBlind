@@ -73,8 +73,10 @@ public class SudokuGame {
             }
         }
 
-        // If the game is over, don't accept any more actions (EXCEPT to exit).
+        // If the game is over, go to main menu
         if (this.sudokuState.isGameOver()) {
+            this.sudokuFrame.closeFrames();
+            new GameLoader(this.programArgs);
             return;
         }
 
@@ -132,7 +134,39 @@ public class SudokuGame {
             return;
         }
 
-        // Case 9: error
+        // Case 9: the user uses the menu to navigate
+        if (sudokuAction instanceof SudokuMenuAction) {
+            SudokuMenuAction sudokuMenuAction = (SudokuMenuAction) sudokuAction;
+
+            switch(sudokuMenuAction.getAction()){
+                case 1:
+                    //hint
+                    this.sudokuState.giveHint();
+                    this.sendStateToGui();
+                    break;
+                case 2:
+                    //instructions
+                    this.sudokuState.readInstructions();
+                    break;
+                case 3:
+                    //language not complete yet
+                    break;
+                case 4:
+                    //restart
+                    this.sudokuFrame.closeFrames();
+                    this.sudokuState.reset(sudokuState.getSudokuType(), sudokuState.getAudioPlayerExecutor(),
+                            this.logFactory, this.programArgs);
+                    break;
+                case 5:
+                    //return to main menu
+                    this.sudokuFrame.closeFrames();
+                    new GameLoader(this.programArgs);
+                    break;
+            }
+            return;
+        }
+
+        // Case 10: error
         System.err.println("An unrecognized form of a Sudoku action was received by the game!");
     }
 
