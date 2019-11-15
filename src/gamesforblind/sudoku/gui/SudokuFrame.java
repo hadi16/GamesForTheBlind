@@ -96,4 +96,13 @@ public class SudokuFrame extends JFrame {
         return new Rectangle(this.frame.getBounds());
     }
 
+    /**
+     * Closes the previous game's {@link JFrame}
+     */
+    public void closeFrames() {
+
+        this.frame.setVisible(false);
+        this.frame.dispose();
+    }
+
 }
