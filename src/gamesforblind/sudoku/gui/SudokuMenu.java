@@ -1,97 +1,45 @@
 package gamesforblind.sudoku.gui;
 
+import gamesforblind.enums.SudokuMenuItem;
 import gamesforblind.sudoku.SudokuGame;
-import gamesforblind.sudoku.action.SudokuMenuAction;
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import gamesforblind.sudoku.gui.listener.SudokuMenuItemListener;
 
+import javax.swing.*;
 
 /**
-// Class that creates the menu, adds the listeners to that menu items.
+ * // Class that creates the menu, adds the listeners to that menu items.
  */
-public class SudokuMenu  {
-
-
+public class SudokuMenu {
     /**
      * sets up the menu, adds all the items and listeners to the items.
      *
-     * @param sudokuGame   The current Sudoku game.
+     * @param sudokuGame The current Sudoku game.
      */
-    public JMenu initialize (SudokuGame sudokuGame){
+    public JMenu getInitializedMenu(SudokuGame sudokuGame) {
+        JMenu mainMenu = new JMenu("Menu");
+        SudokuMenuItemListener sudokuMenuItemListener = new SudokuMenuItemListener(sudokuGame);
 
-    JMenu x = new JMenu("Menu");
+        /* Add menu items to menu */
+        JMenuItem hintItem = new JMenuItem(SudokuMenuItem.HINT.toString());
+        hintItem.addActionListener(sudokuMenuItemListener);
+        mainMenu.add(hintItem);
 
-    // add menu items to menu
-    JMenuItem hint = new JMenuItem("Hint");
-        x.add(hint);
-        hint.setActionCommand("Hint");
+        JMenuItem instructionsItem = new JMenuItem(SudokuMenuItem.INSTRUCTIONS.toString());
+        instructionsItem.addActionListener(sudokuMenuItemListener);
+        mainMenu.add(instructionsItem);
 
-    JMenuItem instructions = new JMenuItem("Instructions");
-        x.add(instructions);
-        instructions.setActionCommand("Instructions");
+        JMenuItem languageItem = new JMenuItem(SudokuMenuItem.LANGUAGE.toString());
+        languageItem.addActionListener(sudokuMenuItemListener);
+        mainMenu.add(languageItem);
 
-    JMenuItem language = new JMenuItem("Language");
-        x.add(language);
-        language.setActionCommand("Language");
+        JMenuItem restartItem = new JMenuItem(SudokuMenuItem.RESTART.toString());
+        restartItem.addActionListener(sudokuMenuItemListener);
+        mainMenu.add(restartItem);
 
-    JMenuItem restart = new JMenuItem("Restart");
-        x.add(restart);
-        restart.setActionCommand("Restart");
+        JMenuItem returnToMenuItem = new JMenuItem(SudokuMenuItem.RETURN_TO_MAIN_MENU.toString());
+        returnToMenuItem.addActionListener(sudokuMenuItemListener);
+        mainMenu.add(returnToMenuItem);
 
-    JMenuItem returnHome = new JMenuItem("Return to Main Menu");
-        x.add(returnHome);
-        returnHome.setActionCommand("Return to Main Menu");
-
-        MenuItemListener menuItemListener = new MenuItemListener(sudokuGame);
-        hint.addActionListener(menuItemListener);
-        instructions.addActionListener(menuItemListener);
-        language.addActionListener(menuItemListener);
-        restart.addActionListener(menuItemListener);
-        returnHome.addActionListener(menuItemListener);
-
-        return x;
+        return mainMenu;
     }
 }
-
-
-/**
- Class that implements the listeners and sends the proper action to SudokuGame
- */
-class MenuItemListener implements ActionListener {
-
-    /**
-     * A reference to the Game that contains current SudokuGame.
-     */
-    private final SudokuGame sudokuGame;
-
-    /**
-     * Deals with sending the correct action to the current Sudoku game
-     *
-     * @param sudokuGame   The current Sudoku game.
-     */
-    public MenuItemListener(SudokuGame sudokuGame) {
-        this.sudokuGame = sudokuGame;
-    }
-        public void actionPerformed(ActionEvent e) {
-
-            if(e.getActionCommand().equals("Hint")){
-                this.sudokuGame.receiveAction(new SudokuMenuAction(1));
-            }
-            if(e.getActionCommand().equals("Instructions")){
-                this.sudokuGame.receiveAction(new SudokuMenuAction(2));
-            }
-            if(e.getActionCommand().equals("Language")){
-                this.sudokuGame.receiveAction(new SudokuMenuAction(3));
-            }
-            if(e.getActionCommand().equals("Restart")){
-                this.sudokuGame.receiveAction(new SudokuMenuAction(4));
-            }
-            if(e.getActionCommand().equals("Return to Main Menu")){
-                this.sudokuGame.receiveAction(new SudokuMenuAction(5));
-            }
-        }
-    }
-
-
-

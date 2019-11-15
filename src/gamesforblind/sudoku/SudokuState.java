@@ -475,14 +475,15 @@ public class SudokuState {
     /**
      * Starts a new game is restart is selected
      *
-     * @param sudokuType The {@link SudokuType} of the previous game
-     * @param aE The {@link AudioPlayerExecutor} from the previous game
-     * @param logFactory The {@link LogFactory} from the previous game
-     * @param programArgs The {@link ProgramArgs} of the previous game
-     *
+     * @param sudokuType    The {@link SudokuType} of the previous game
+     * @param audioExecutor The {@link AudioPlayerExecutor} from the previous game
+     * @param logFactory    The {@link LogFactory} from the previous game
+     * @param programArgs   The {@link ProgramArgs} of the previous game
      */
-    public void reset(SudokuType sudokuType, AudioPlayerExecutor aE, LogFactory logFactory, ProgramArgs programArgs){
-        new SudokuGame( sudokuType, aE, logFactory, programArgs );
+    public void reset(
+            SudokuType sudokuType, AudioPlayerExecutor audioExecutor, LogFactory logFactory, ProgramArgs programArgs
+    ) {
+        new SudokuGame(sudokuType, audioExecutor, logFactory, programArgs);
     }
 
     /**

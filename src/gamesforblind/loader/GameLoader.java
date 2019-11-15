@@ -75,6 +75,25 @@ public class GameLoader {
         }
     }
 
+    public GameLoader(ProgramArgs programArgs, AudioPlayerExecutor audioPlayerExecutor) {
+        // TODO: get the audio player thread reference.
+        this.audioPlayerThread = null;
+
+
+        this.audioPlayerExecutor = audioPlayerExecutor;
+
+        this.programArgs = programArgs;
+        this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.PLAY_OR_EXIT);
+        this.logFactory = this.initializeLogFactory();
+        this.loaderFrame = new LoaderFrame(this, programArgs);
+
+        // If we are in playback mode, this step is crucial
+        // (allows us to replay the actions one-by-one in realtime).
+        if (this.programArgs.isPlaybackMode()) {
+            this.loopThroughSavedProgramActions();
+        }
+    }
+
     /**
      * Helper method to loop through all of the stored {@link ProgramAction}s in realtime.
      * Enables realtime playback functionality for Sudoku.
@@ -221,7 +240,10 @@ public class GameLoader {
 
             // Wait for the audio player thread to end.
             try {
-                this.audioPlayerThread.join();
+                // TODO: remove the need to check for null
+                if (this.audioPlayerThread != null) {
+                    this.audioPlayerThread.join();
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
