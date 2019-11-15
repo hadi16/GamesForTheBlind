@@ -75,6 +75,7 @@ public class SudokuGame {
 
         // If the game is over, don't accept any more actions (EXCEPT to exit).
         if (this.sudokuState.isGameOver()) {
+            new GameLoader(this.programArgs);
             return;
         }
 
