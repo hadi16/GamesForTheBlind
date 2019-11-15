@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Action that is sent when a user wishes to input a number into the currently selected board square.
+ * Action that is sent when a user wishes to use the menu.
  */
 @XmlRootElement(name = "SudokuMenuAction")
 @XmlAccessorType(XmlAccessType.NONE)
@@ -36,7 +36,7 @@ public class SudokuMenuAction extends SudokuAction {
     /**
      * Getter for action
      *
-     * @return The number that the user wants
+     * @return The number of the action
      */
     public int getAction() {
         return this.action;
