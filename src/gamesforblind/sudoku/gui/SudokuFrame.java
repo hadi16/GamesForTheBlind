@@ -8,8 +8,6 @@ import gamesforblind.sudoku.gui.listener.SudokuMouseListener;
 import gamesforblind.sudoku.gui.listener.SudokuWindowListener;
 
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 import java.awt.*;
 
 import static gamesforblind.Constants.FRAME_DIMENSION;
@@ -25,6 +23,8 @@ public class SudokuFrame extends JFrame {
      */
     private final SudokuPanel sudokuPanel;
 
+    private final SudokuGame sudokuGame;
+
     /**
      * Creates a new SudokuFrame.
      *
@@ -37,7 +37,11 @@ public class SudokuFrame extends JFrame {
         this.sudokuPanel = new SudokuPanel(initialState);
         this.frame = new JFrame("Sudoku");
 
-        this.initializeGui();
+        this.sudokuGame = sudokuGame;
+
+        this.initializeGui(sudokuGame);
+
+
 
         // If we are in playback mode, I don't want any new mouse clicks or keyboard presses to be registered.
         if (!playbackMode) {
@@ -51,7 +55,7 @@ public class SudokuFrame extends JFrame {
      * Used for creating the on-screen GUI.
      * This will start at a dimension of 500 by 500 pixels, but is fully resizable by dragging the window.
      */
-    private void initializeGui() {
+    private void initializeGui(SudokuGame sudokuGame) {
         this.frame.add(this.sudokuPanel);
 
         this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -63,7 +67,8 @@ public class SudokuFrame extends JFrame {
         SudokuMenu menu = new SudokuMenu();
 
         // add menu to menu bar
-        menuBar.add(menu.initialize());
+        menuBar.add(menu.initialize(sudokuGame));
+
 
         // add menu bar to frame
         this.frame.setJMenuBar(menuBar);
