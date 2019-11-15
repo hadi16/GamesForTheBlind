@@ -8,6 +8,8 @@ import gamesforblind.sudoku.gui.listener.SudokuMouseListener;
 import gamesforblind.sudoku.gui.listener.SudokuWindowListener;
 
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.awt.*;
 
 import static gamesforblind.Constants.FRAME_DIMENSION;
@@ -58,19 +60,17 @@ public class SudokuFrame extends JFrame {
 
         JMenuBar menuBar = new JMenuBar();
 
-        JMenu x = new JMenu("Menu");
-        // add menu items to menu
-        x.add(new JMenuItem("Hint"));
-        x.add(new JMenuItem("Restart"));
-        x.add(new JMenuItem("Instructions"));
-        x.add(new JMenuItem("Return to Main Menu"));
+        SudokuMenu menu = new SudokuMenu();
 
         // add menu to menu bar
-        menuBar.add(x);
+        menuBar.add(menu.initialize());
 
         // add menu bar to frame
         this.frame.setJMenuBar(menuBar);
+
+
     }
+
 
     /**
      * Sets the Sudoku state for the enclosed {@link SudokuPanel} & calls repaint() on it.
