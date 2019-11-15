@@ -157,6 +157,8 @@ public class SudokuGame {
                     break;
                 case 5:
                     //return to main menu
+                    this.sudokuFrame.closeFrames();
+                    new GameLoader(this.programArgs);
                     break;
             }
             return;
