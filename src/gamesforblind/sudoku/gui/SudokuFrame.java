@@ -23,6 +23,9 @@ public class SudokuFrame extends JFrame {
      */
     private final SudokuPanel sudokuPanel;
 
+    /**
+     * A reference to the Game that contains current SudokuGame.
+     */
     private final SudokuGame sudokuGame;
 
     /**
