@@ -76,9 +76,10 @@ public class SudokuKeyboardListener implements KeyListener {
         // Case 3: the selected key is the SPACE BAR
         if (selectedKeyCode == KeyEvent.VK_SPACE) {
             // If it is a SPACE BAR, then pass null to the pointToHighlight.
-            this.sudokuGame.receiveAction(
+            this.sudokuGame.receiveAction(new SudokuReadCurrentSquareAction(1));
+            /*this.sudokuGame.receiveAction(
                     new SudokuHighlightAction(null, InputType.KEYBOARD)
-            );
+            );*/
             return;
         }
 

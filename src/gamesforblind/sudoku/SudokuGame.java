@@ -166,7 +166,14 @@ public class SudokuGame {
             return;
         }
 
-        // Case 10: error
+        // Case 10: the user wants the current square to be read.
+        if (sudokuAction instanceof SudokuReadCurrentSquareAction) {
+            this.sudokuState.readSelectedSquare();
+            this.sendStateToGui();
+            return;
+        }
+
+        // Case 11: error
         System.err.println("An unrecognized form of a Sudoku action was received by the game!");
     }
 
