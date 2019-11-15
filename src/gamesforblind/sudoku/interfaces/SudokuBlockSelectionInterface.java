@@ -181,19 +181,14 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
             return;
         }
 
-        // Case 2b: the point to set is not null, but there is a cell that is already selected (do nothing).
-        Optional<Cell> selectedCell = this.getSelectedCell();
-        if (selectedCell.isPresent()) {
-            return;
-        }
 
-        // Case 2c: the selected block point is null (meaning the selected square point must also be null).
+        // Case 2b: the selected block point is null (meaning the selected square point must also be null).
         if (this.selectedBlockPoint == null) {
             this.selectedBlockPoint = pointToSet;
             return;
         }
 
-        // Case 2d: both the selected block point & selected square point are null.
+        // Case 2c: both the selected block point & selected square point are null.
         this.selectedSquarePoint = pointToSet;
     }
 
