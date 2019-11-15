@@ -1,5 +1,7 @@
 package gamesforblind.sudoku.action;
 
+import gamesforblind.enums.SudokuMenuItem;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -11,35 +13,28 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "SudokuMenuAction")
 @XmlAccessorType(XmlAccessType.NONE)
 public class SudokuMenuAction extends SudokuAction {
-    /**
-     * The number that the user wants to input into the selected Sudoku square.
-     */
     @XmlElement
-    private final int action;
+    private final SudokuMenuItem sudokuMenuItem;
 
     /**
      * Warning: DO NOT call this constructor directly.
      * Needed to allow JAXB (XML serializer) to work, since it needs a zero-argument constructor.
      */
     @SuppressWarnings("unused")
-    private SudokuMenuAction() {this(1); }
-
-    /**
-     * Creates a new SudokuFillAction.
-     *
-     * @param action
-     */
-    public SudokuMenuAction(int action) {
-        this.action = action;
+    private SudokuMenuAction() {
+        this(null);
     }
 
     /**
-     * Getter for action
+     * Creates a new SudokuMenuAction.
      *
-     * @return The number of the action
+     * @return
      */
-    public int getAction() {
-        return this.action;
+    public SudokuMenuAction(SudokuMenuItem sudokuMenuItem) {
+        this.sudokuMenuItem = sudokuMenuItem;
+    }
 
+    public SudokuMenuItem getSudokuMenuItem() {
+        return this.sudokuMenuItem;
     }
 }

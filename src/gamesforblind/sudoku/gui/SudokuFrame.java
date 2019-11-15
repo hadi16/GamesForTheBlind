@@ -24,11 +24,6 @@ public class SudokuFrame extends JFrame {
     private final SudokuPanel sudokuPanel;
 
     /**
-     * A reference to the Game that contains current SudokuGame.
-     */
-    private final SudokuGame sudokuGame;
-
-    /**
      * Creates a new SudokuFrame.
      *
      * @param sudokuGame   The current Sudoku game.
@@ -40,11 +35,7 @@ public class SudokuFrame extends JFrame {
         this.sudokuPanel = new SudokuPanel(initialState);
         this.frame = new JFrame("Sudoku");
 
-        this.sudokuGame = sudokuGame;
-
         this.initializeGui(sudokuGame);
-
-
 
         // If we are in playback mode, I don't want any new mouse clicks or keyboard presses to be registered.
         if (!playbackMode) {
@@ -67,18 +58,13 @@ public class SudokuFrame extends JFrame {
 
         JMenuBar menuBar = new JMenuBar();
 
+        // Add menu to menu bar
         SudokuMenu menu = new SudokuMenu();
+        menuBar.add(menu.getInitializedMenu(sudokuGame));
 
-        // add menu to menu bar
-        menuBar.add(menu.initialize(sudokuGame));
-
-
-        // add menu bar to frame
+        // Add menu bar to frame
         this.frame.setJMenuBar(menuBar);
-
-
     }
-
 
     /**
      * Sets the Sudoku state for the enclosed {@link SudokuPanel} & calls repaint() on it.
@@ -103,9 +89,7 @@ public class SudokuFrame extends JFrame {
      * Closes the previous game's {@link JFrame}
      */
     public void closeFrames() {
-
         this.frame.setVisible(false);
         this.frame.dispose();
     }
-
 }

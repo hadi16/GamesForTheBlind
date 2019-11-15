@@ -4,7 +4,6 @@ import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.enums.InputType;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
-import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Grid;
 
 import java.awt.*;
