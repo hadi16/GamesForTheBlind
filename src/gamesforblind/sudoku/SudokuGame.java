@@ -138,29 +138,33 @@ public class SudokuGame {
         if (sudokuAction instanceof SudokuMenuAction) {
             SudokuMenuAction sudokuMenuAction = (SudokuMenuAction) sudokuAction;
 
-            switch(sudokuMenuAction.getAction()){
-                case 1:
-                    //hint
+            switch (sudokuMenuAction.getSudokuMenuItem()) {
+                case HINT:
+                    // Case 9a: give a hint.
                     this.sudokuState.giveHint();
                     this.sendStateToGui();
                     break;
-                case 2:
-                    //instructions
+                case INSTRUCTIONS:
+                    // Case 9b: read off instructions.
                     this.sudokuState.readInstructions();
                     break;
-                case 3:
-                    //language not complete yet
+                case LANGUAGE:
+                    // TODO Case 9c: set language
                     break;
-                case 4:
-                    //restart
+                case RESTART:
+                    //Case 9d: restart the game.
                     this.sudokuFrame.closeFrames();
-                    this.sudokuState.reset(sudokuState.getSudokuType(), sudokuState.getAudioPlayerExecutor(),
-                            this.logFactory, this.programArgs);
+                    this.sudokuState.reset(
+                            this.sudokuState.getSudokuType(),
+                            this.sudokuState.getAudioPlayerExecutor(),
+                            this.logFactory,
+                            this.programArgs
+                    );
                     break;
-                case 5:
-                    //return to main menu
+                case RETURN_TO_MAIN_MENU:
+                    // Case 9e: Return to main menu.
                     this.sudokuFrame.closeFrames();
-                    new GameLoader(this.programArgs);
+                    new GameLoader(this.programArgs, this.sudokuState.getAudioPlayerExecutor());
                     break;
             }
             return;
