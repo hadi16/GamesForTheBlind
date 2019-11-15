@@ -151,6 +151,9 @@ public class SudokuGame {
                     break;
                 case 4:
                     //restart
+                    this.sudokuFrame.closeFrames();
+                    this.sudokuState.reset(sudokuState.getSudokuType(), sudokuState.getAudioPlayerExecutor(),
+                            this.logFactory, this.programArgs);
                     break;
                 case 5:
                     //return to main menu
