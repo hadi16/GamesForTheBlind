@@ -132,7 +132,32 @@ public class SudokuGame {
             return;
         }
 
-        // Case 9: error
+        // Case 9: the user uses the menu to navigate
+        if (sudokuAction instanceof SudokuMenuAction) {
+            SudokuMenuAction sudokuMenuAction = (SudokuMenuAction) sudokuAction;
+
+            switch(sudokuMenuAction.getAction()){
+                case 1:
+                    this.sudokuState.giveHint();
+                    this.sendStateToGui();
+                    break;
+                case 2:
+                    this.sudokuState.readInstructions();
+                    break;
+                case 3:
+                    //language not complete yet
+                    break;
+                case 4:
+                    //restart
+                    break;
+                case 5:
+                    //return to main menu
+                    break;
+            }
+            return;
+        }
+
+        // Case 10: error
         System.err.println("An unrecognized form of a Sudoku action was received by the game!");
     }
 

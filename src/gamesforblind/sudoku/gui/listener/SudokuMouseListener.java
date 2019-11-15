@@ -4,7 +4,9 @@ import gamesforblind.enums.InputType;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
+import gamesforblind.sudoku.action.SudokuMenuAction;
 import gamesforblind.sudoku.gui.SudokuFrame;
+import gamesforblind.sudoku.gui.SudokuMenu;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -50,6 +52,7 @@ public class SudokuMouseListener implements MouseListener {
      */
     @Override
     public void mouseClicked(MouseEvent e) {
+
         Point selectedPoint = e.getPoint();
         Rectangle frameBounds = this.sudokuFrame.getFrameBounds();
 
