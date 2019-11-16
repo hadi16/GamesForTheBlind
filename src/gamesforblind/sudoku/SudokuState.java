@@ -1,8 +1,6 @@
 package gamesforblind.sudoku;
 
-import gamesforblind.ProgramArgs;
 import gamesforblind.enums.*;
-import gamesforblind.logger.LogFactory;
 import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Generator;
 import gamesforblind.sudoku.generator.Grid;
@@ -13,6 +11,7 @@ import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
 import gamesforblind.synthesizer.Phrase;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -27,16 +26,16 @@ import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
  * Also handles any calls into the {@link AudioPlayerExecutor} for Sudoku.
  */
 public class SudokuState {
-    private final OriginalSudokuGrid originalGrid;
     private final SudokuType sudokuType;
     private final SudokuKeyboardInterface sudokuKeyboardInterface;
-
     private final AudioPlayerExecutor audioPlayerExecutor;
-    private final Grid sudokuGrid;
-    private final ArrayList<Point> originallyFilledSquares;
+
+    private OriginalSudokuGrid originalGrid;
+    private Grid sudokuGrid;
+    private ArrayList<Point> originallyFilledSquares;
 
     private int numberOfEmptyCells;
-    private boolean gameOver = false;
+    private boolean gameOver;
 
     /**
      * Creates a new SudokuState. Important: only used when the game is in playback mode.
@@ -48,12 +47,14 @@ public class SudokuState {
      */
     public SudokuState(InterfaceType interfaceType, SudokuType sudokuType,
                        AudioPlayerExecutor audioPlayerExecutor, OriginalSudokuGrid originalGrid) {
+        this.gameOver = false;
+
         this.sudokuType = sudokuType;
         this.audioPlayerExecutor = audioPlayerExecutor;
-        this.originalGrid = originalGrid;
 
         this.numberOfEmptyCells = this.getInitialNumberOfEmptyCells(sudokuType.getSudokuBoardSize());
         this.sudokuGrid = Grid.of(originalGrid.getGrid(), sudokuType);
+        this.originalGrid = originalGrid;
         this.originallyFilledSquares = this.initializeOriginallyFilledSquares();
 
         this.sudokuKeyboardInterface = this.initializeKeyboardInterface(interfaceType);
@@ -67,17 +68,39 @@ public class SudokuState {
      * @param audioPlayerExecutor Calls into the threaded audio player for the game.
      */
     public SudokuState(InterfaceType interfaceType, SudokuType sudokuType, AudioPlayerExecutor audioPlayerExecutor) {
+        this.gameOver = false;
+
         this.sudokuType = sudokuType;
         this.audioPlayerExecutor = audioPlayerExecutor;
 
-        this.numberOfEmptyCells = this.getInitialNumberOfEmptyCells(sudokuType.getSudokuBoardSize());
-
-        this.sudokuGrid = new Generator(sudokuType).generate(this.numberOfEmptyCells);
+        this.numberOfEmptyCells = this.getInitialNumberOfEmptyCells(this.sudokuType.getSudokuBoardSize());
+        this.sudokuGrid = new Generator(this.sudokuType).generate(this.numberOfEmptyCells);
         this.originalGrid = OriginalSudokuGrid.of(this.sudokuGrid.toIntArray());
-
         this.originallyFilledSquares = this.initializeOriginallyFilledSquares();
 
         this.sudokuKeyboardInterface = this.initializeKeyboardInterface(interfaceType);
+    }
+
+    /**
+     * Resets the Sudoku state (provides restart functionality for the game).
+     *
+     * @param originalGrid If we are in playback mode, the {@link OriginalSudokuGrid} to restore (otherwise, null).
+     */
+    public void resetSudokuState(@Nullable OriginalSudokuGrid originalGrid) {
+        this.gameOver = false;
+        this.numberOfEmptyCells = this.getInitialNumberOfEmptyCells(this.sudokuType.getSudokuBoardSize());
+
+        if (originalGrid != null) {
+            // Case 1: we are in playback mode
+            this.sudokuGrid = Grid.of(originalGrid.getGrid(), this.sudokuType);
+            this.originalGrid = originalGrid;
+        } else {
+            // Case 2: we are not in playback mode (just generate a new random Sudoku board).
+            this.sudokuGrid = new Generator(this.sudokuType).generate(this.numberOfEmptyCells);
+            this.originalGrid = OriginalSudokuGrid.of(this.sudokuGrid.toIntArray());
+        }
+
+        this.originallyFilledSquares = this.initializeOriginallyFilledSquares();
     }
 
     /**
@@ -89,9 +112,9 @@ public class SudokuState {
     private SudokuKeyboardInterface initializeKeyboardInterface(InterfaceType interfaceType) {
         switch (interfaceType) {
             case ARROW_KEY_INTERFACE:
-                return new SudokuArrowKeyInterface(this.sudokuType, this.sudokuGrid);
+                return new SudokuArrowKeyInterface(this);
             case BLOCK_SELECTION_INTERFACE:
-                return new SudokuBlockSelectionInterface(this.sudokuType, this.sudokuGrid);
+                return new SudokuBlockSelectionInterface(this);
             default:
                 throw new IllegalArgumentException("Incorrect interface type passed to Sudoku state: " + interfaceType);
         }
@@ -208,14 +231,13 @@ public class SudokuState {
             return;
         }
 
-        // Case 3: the user wishes to delete the cell value.
-        if (numberToFill == EMPTY_SUDOKU_SQUARE) {
-            // Case 3a: the user tries to delete an originally filled square on the board.
-            if (this.readCannotDeleteOriginal(pointToSet)) {
-                return;
-            }
+        // Case 3: the user tries to delete/change an originally set square on the board.
+        if (this.readCannotDeleteOriginal(pointToSet)) {
+            return;
+        }
 
-            // Case 3b: the cell value is deleted.
+        // Case 4: the user wishes to delete the cell value.
+        if (numberToFill == EMPTY_SUDOKU_SQUARE) {
             this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
                     Phrase.REMOVED_NUM, Phrase.convertIntegerToPhrase(cellToSet.getValue()))
             ));
@@ -225,7 +247,7 @@ public class SudokuState {
 
         final int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
 
-        // Case 4: the user tries to fill a square with an invalid value (e.g. 6 on a 4x4 board).
+        // Case 5: the user tries to fill a square with an invalid value (e.g. 6 on a 4x4 board).
         if (!(numberToFill > 0 && numberToFill <= sudokuBoardSize)) {
             switch (this.sudokuType) {
                 case FOUR_BY_FOUR:
@@ -241,20 +263,20 @@ public class SudokuState {
             return;
         }
 
-        // Case 5: the numeric value is not valid for the selected cell.
+        // Case 6: the numeric value is not valid for the selected cell.
         if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
             this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CELL_VALUE_INVALID);
             return;
         }
 
-        // Case 6: the cell value is replaced with the passed numeric value.
+        // Case 7: the cell value is replaced with the passed numeric value.
         if (cellToSet.getValue() == EMPTY_SUDOKU_SQUARE) {
             this.numberOfEmptyCells--;
         }
 
         cellToSet.setValue(numberToFill);
 
-        // Case 7: the board would not be solvable from this new state (uses deep copy of current grid).
+        // Case 8: the board would not be solvable from this new state (uses deep copy of current grid).
         Solver solver = new Solver(sudokuBoardSize);
         if (!solver.isSolvable(new Grid(this.sudokuGrid))) {
             cellToSet.setValue(EMPTY_SUDOKU_SQUARE);
@@ -473,20 +495,6 @@ public class SudokuState {
     }
 
     /**
-     * Starts a new game is restart is selected
-     *
-     * @param sudokuType    The {@link SudokuType} of the previous game
-     * @param audioExecutor The {@link AudioPlayerExecutor} from the previous game
-     * @param logFactory    The {@link LogFactory} from the previous game
-     * @param programArgs   The {@link ProgramArgs} of the previous game
-     */
-    public void reset(
-            SudokuType sudokuType, AudioPlayerExecutor audioExecutor, LogFactory logFactory, ProgramArgs programArgs
-    ) {
-        new SudokuGame(sudokuType, audioExecutor, logFactory, programArgs);
-    }
-
-    /**
      * For HOT KEYS: setter that calls the setHighlightedPoint() method within {@link SudokuKeyboardInterface}.
      *
      * @param arrowKeyDirection The {@link ArrowKeyDirection} that was pressed with this hot key (e.g. left arrow key).
@@ -505,15 +513,6 @@ public class SudokuState {
     }
 
     /**
-     * Getter for originallyFilledSquares
-     *
-     * @return A list of all the {@link Point}s that were originally filled on the Sudoku board.
-     */
-    public ArrayList<Point> getOriginallyFilledSquares() {
-        return this.originallyFilledSquares;
-    }
-
-    /**
      * Getter for gameOver
      *
      * @return true if the game is over (otherwise false).
@@ -529,15 +528,6 @@ public class SudokuState {
      */
     public OriginalSudokuGrid getOriginalGrid() {
         return this.originalGrid;
-    }
-
-    /**
-     * Getter for audioPlayerExecutor
-     *
-     * @return The current audioPlayerExecutor
-     */
-    public AudioPlayerExecutor getAudioPlayerExecutor() {
-        return this.audioPlayerExecutor;
     }
 
     /**

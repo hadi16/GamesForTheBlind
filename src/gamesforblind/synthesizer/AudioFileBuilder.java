@@ -25,7 +25,9 @@ public class AudioFileBuilder {
     public AudioFileBuilder() {
         this.phraseDirectory = new File(Phrase.PHRASE_FILES_DIRECTORY.toString());
         if (!this.phraseDirectory.exists()) {
-            this.phraseDirectory.mkdirs();
+            if (!this.phraseDirectory.mkdirs()) {
+                throw new IllegalArgumentException("Could not create the directory to store the audio phrases!");
+            }
         }
     }
 
@@ -48,8 +50,12 @@ public class AudioFileBuilder {
         // All of the remaining audio files in the list need to be deleted.
         for (File oldPhraseAudioFile : audioFiles) {
             if (!oldPhraseAudioFile.isDirectory()) {
-                oldPhraseAudioFile.delete();
-                System.out.println("Deleted audio file: " + oldPhraseAudioFile.getPath());
+                String oldAudioFilePath = oldPhraseAudioFile.getPath();
+                if (oldPhraseAudioFile.delete()) {
+                    System.out.println("Deleted audio file: " + oldAudioFilePath);
+                } else {
+                    System.err.println("Could not delete audio file: " + oldAudioFilePath);
+                }
             }
         }
     }

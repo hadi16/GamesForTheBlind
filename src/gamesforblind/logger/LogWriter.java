@@ -72,9 +72,11 @@ public class LogWriter {
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><log>"
         );
 
-        // Serialize the original Sudoku grid.
-        OriginalSudokuGrid originalSudokuGrid = this.logFactory.getOriginalSudokuGrid();
-        this.convertObjectToXmlString(originalSudokuGrid).ifPresent(xmlStringBuilder::append);
+        // Serialize the logged Sudoku grids.
+        ArrayList<OriginalSudokuGrid> originalSudokuGrids = this.logFactory.getOriginalSudokuGridList();
+        for (OriginalSudokuGrid originalGrid : originalSudokuGrids) {
+            this.convertObjectToXmlString(originalGrid).ifPresent(xmlStringBuilder::append);
+        }
 
         // Serialize all of the ProgramActions in the game.
         ArrayList<ProgramAction> programActions = this.logFactory.getProgramActionList();

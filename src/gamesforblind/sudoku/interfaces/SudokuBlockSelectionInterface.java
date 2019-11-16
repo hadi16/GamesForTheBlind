@@ -3,8 +3,8 @@ package gamesforblind.sudoku.interfaces;
 import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.enums.InputType;
 import gamesforblind.enums.SudokuType;
+import gamesforblind.sudoku.SudokuState;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
-import gamesforblind.sudoku.generator.Grid;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -65,12 +65,11 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
     /**
      * Creates a new SudokuBlockSelectionInterface object.
      *
-     * @param sudokuType Whether the board is a 4x4, 6x6, or 9x9.
-     * @param sudokuGrid The Sudoku {@link Grid}.
+     * @param sudokuState The state of the Sudoku game.
      */
-    public SudokuBlockSelectionInterface(SudokuType sudokuType, Grid sudokuGrid) {
+    public SudokuBlockSelectionInterface(SudokuState sudokuState) {
         // No hotkeys in the block selection interface.
-        super(sudokuType, sudokuGrid, Map.of());
+        super(sudokuState, Map.of());
     }
 
     /**
@@ -93,9 +92,10 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
         }
 
         // Case 3: block is selected
+        SudokuType sudokuType = this.sudokuState.getSudokuType();
         ArrayList<Point> highlightedPointList = new ArrayList<>();
-        int blockWidth = this.sudokuType.getBlockWidth();
-        int blockHeight = this.sudokuType.getBlockHeight();
+        int blockWidth = sudokuType.getBlockWidth();
+        int blockHeight = sudokuType.getBlockHeight();
         for (int rowIndex = 0; rowIndex < blockHeight; rowIndex++) {
             for (int columnIndex = 0; columnIndex < blockWidth; columnIndex++) {
                 highlightedPointList.add(new Point(
@@ -120,9 +120,10 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
 
         // This helps generalize to any board, including ones that don't have blocks
         // that are the square of a given number (example: 6x6).
-        int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
-        int numberOfBlocksWidth = sudokuBoardSize / this.sudokuType.getBlockWidth();
-        int numberOfBlocksHeight = sudokuBoardSize / this.sudokuType.getBlockHeight();
+        SudokuType sudokuType = this.sudokuState.getSudokuType();
+        int sudokuBoardSize = sudokuType.getSudokuBoardSize();
+        int numberOfBlocksWidth = sudokuBoardSize / sudokuType.getBlockWidth();
+        int numberOfBlocksHeight = sudokuBoardSize / sudokuType.getBlockHeight();
 
         return Optional.of(new Point(
                 this.selectedBlockPoint.x * numberOfBlocksWidth + this.selectedSquarePoint.x,
@@ -145,8 +146,13 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
 
             // This helps generalize to any board, including ones that don't have blocks
             // that are the square of a given number (example: 6x6).
-            int numberOfBlocksWidth = this.sudokuType.getSudokuBoardSize() / this.sudokuType.getBlockWidth();
-            int numberOfBlocksHeight = this.sudokuType.getSudokuBoardSize() / this.sudokuType.getBlockHeight();
+            SudokuType sudokuType = this.sudokuState.getSudokuType();
+            int numberOfBlocksWidth = sudokuType.getSudokuBoardSize() / sudokuType.getBlockWidth();
+            int numberOfBlocksHeight = sudokuType.getSudokuBoardSize() / sudokuType.getBlockHeight();
+
+            if (!this.selectedPointInBounds(pointToSet)) {
+                return;
+            }
 
             Point blockPointToSet = new Point(
                     pointToSet.x / numberOfBlocksWidth, pointToSet.y / numberOfBlocksHeight
@@ -211,10 +217,11 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
      */
     @Override
     public Map<Integer, Point> getKeyCodeToPointMapping() {
-        Map<Integer, Point> keyCodeToPointMapping = TYPE_TO_KEY_TO_POINT.get(this.sudokuType);
+        SudokuType sudokuType = this.sudokuState.getSudokuType();
+        Map<Integer, Point> keyCodeToPointMapping = TYPE_TO_KEY_TO_POINT.get(sudokuType);
         if (keyCodeToPointMapping == null) {
             throw new IllegalArgumentException(
-                    "Invalid Sudoku type passed to block selection interface: " + this.sudokuType
+                    "Invalid Sudoku type passed to block selection interface: " + sudokuType
             );
         }
         return keyCodeToPointMapping;

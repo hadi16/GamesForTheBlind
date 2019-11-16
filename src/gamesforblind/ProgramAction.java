@@ -20,12 +20,14 @@ public abstract class ProgramAction {
      */
     @XmlElement
     @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+    @SuppressWarnings("WeakerAccess")
     protected final LocalDateTime localDateTime;
 
     /**
      * Creates a new ProgramAction.
      * Note: this is never called directly, since this class is marked as abstract.
      */
+    @SuppressWarnings("WeakerAccess")
     public ProgramAction() {
         this.localDateTime = LocalDateTime.now();
     }

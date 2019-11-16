@@ -15,6 +15,7 @@ import gamesforblind.synthesizer.AudioPlayerExecutor;
  * It receives actions & sends these actions to the {@link SudokuState} for the game.
  */
 public class SudokuGame {
+    private final GameLoader gameLoader;
     private final SudokuState sudokuState;
     private final SudokuFrame sudokuFrame;
     private final LogFactory logFactory;
@@ -23,14 +24,15 @@ public class SudokuGame {
     /**
      * Creates a new SudokuGame.
      *
+     * @param gameLoader          The "main menu" for the games, which is needed when reopening this menu.
      * @param sudokuType          Whether the game is a 4x4, 6x6, or 9x9 variant.
      * @param audioPlayerExecutor Class used to execute the threaded audio player.
-     * @param logFactory          Where all of the logs are stored or read from (depending on whether it's in playback mode).
+     * @param logFactory          Where all of the logs are stored or read from (depending on whether in playback mode).
      * @param programArgs         The program arguments that were passed.
      */
-    public SudokuGame(
-            SudokuType sudokuType, AudioPlayerExecutor audioPlayerExecutor, LogFactory logFactory, ProgramArgs programArgs
-    ) {
+    public SudokuGame(GameLoader gameLoader, SudokuType sudokuType, AudioPlayerExecutor audioPlayerExecutor,
+                      LogFactory logFactory, ProgramArgs programArgs) {
+        this.gameLoader = gameLoader;
         this.programArgs = programArgs;
         this.logFactory = logFactory;
 
@@ -38,12 +40,12 @@ public class SudokuGame {
         if (programArgs.isPlaybackMode()) {
             // Case 1: the program is in playback mode (call state constructor with the original state of the board).
             this.sudokuState = new SudokuState(
-                    selectedInterfaceType, sudokuType, audioPlayerExecutor, logFactory.getOriginalSudokuGrid()
+                    selectedInterfaceType, sudokuType, audioPlayerExecutor, logFactory.popOriginalGridFromFront()
             );
         } else {
             // Case 2: the program is not in playback mode (set the log factory's original Sudoku state).
             this.sudokuState = new SudokuState(selectedInterfaceType, sudokuType, audioPlayerExecutor);
-            this.logFactory.setOriginalSudokuGrid(this.sudokuState.getOriginalGrid());
+            this.logFactory.addOriginalSudokuGrid(this.sudokuState.getOriginalGrid());
         }
 
         this.sudokuFrame = new SudokuFrame(
@@ -76,7 +78,7 @@ public class SudokuGame {
         // If the game is over, go to main menu
         if (this.sudokuState.isGameOver()) {
             this.sudokuFrame.closeFrames();
-            new GameLoader(this.programArgs);
+            this.gameLoader.openLoaderInterface();
             return;
         }
 
@@ -89,7 +91,7 @@ public class SudokuGame {
         // Case 3: the user wants a hint.
         if (sudokuAction instanceof SudokuHintKeyAction) {
             this.sudokuState.giveHint();
-            this.sendStateToGui();
+            this.sudokuFrame.repaintSudokuPanel();
             return;
         }
 
@@ -105,7 +107,7 @@ public class SudokuGame {
             SudokuHotKeyAction sudokuHotKeyAction = (SudokuHotKeyAction) sudokuAction;
             this.sudokuState.setHighlightedPoint(sudokuHotKeyAction.getArrowKeyDirection());
             this.sudokuState.readSelectedSquare();
-            this.sendStateToGui();
+            this.sudokuFrame.repaintSudokuPanel();
             return;
         }
 
@@ -114,7 +116,7 @@ public class SudokuGame {
             SudokuHighlightAction highlightAction = (SudokuHighlightAction) sudokuAction;
             this.sudokuState.setHighlightedPoint(highlightAction.getPointToHighlight(), highlightAction.getInputType());
             this.sudokuState.readSelectedSquare();
-            this.sendStateToGui();
+            this.sudokuFrame.repaintSudokuPanel();
             return;
         }
 
@@ -122,7 +124,7 @@ public class SudokuGame {
         if (sudokuAction instanceof SudokuFillAction) {
             SudokuFillAction sudokuFillAction = (SudokuFillAction) sudokuAction;
             this.sudokuState.setSquareNumber(sudokuFillAction.getNumberToFill());
-            this.sendStateToGui();
+            this.sudokuFrame.repaintSudokuPanel();
             return;
         }
 
@@ -130,7 +132,7 @@ public class SudokuGame {
         if (sudokuAction instanceof SudokuReadPositionAction) {
             SudokuReadPositionAction sudokuReadPositionAction = (SudokuReadPositionAction) sudokuAction;
             this.sudokuState.readBoardSection(sudokuReadPositionAction.getSudokuSection());
-            this.sendStateToGui();
+            this.sudokuFrame.repaintSudokuPanel();
             return;
         }
 
@@ -142,7 +144,7 @@ public class SudokuGame {
                 case HINT:
                     // Case 9a: give a hint.
                     this.sudokuState.giveHint();
-                    this.sendStateToGui();
+                    this.sudokuFrame.repaintSudokuPanel();
                     break;
                 case INSTRUCTIONS:
                     // Case 9b: read off instructions.
@@ -152,19 +154,20 @@ public class SudokuGame {
                     // TODO Case 9c: set language
                     break;
                 case RESTART:
-                    //Case 9d: restart the game.
-                    this.sudokuFrame.closeFrames();
-                    this.sudokuState.reset(
-                            this.sudokuState.getSudokuType(),
-                            this.sudokuState.getAudioPlayerExecutor(),
-                            this.logFactory,
-                            this.programArgs
-                    );
+                    // Case 9d: restart the game.
+                    if (this.programArgs.isPlaybackMode()) {
+                        this.sudokuState.resetSudokuState(this.logFactory.popOriginalGridFromFront());
+                    } else {
+                        this.sudokuState.resetSudokuState(null);
+                        this.logFactory.addOriginalSudokuGrid(this.sudokuState.getOriginalGrid());
+                    }
+
+                    this.sudokuFrame.repaintSudokuPanel();
                     break;
                 case RETURN_TO_MAIN_MENU:
                     // Case 9e: Return to main menu.
                     this.sudokuFrame.closeFrames();
-                    new GameLoader(this.programArgs, this.sudokuState.getAudioPlayerExecutor());
+                    this.gameLoader.openLoaderInterface();
                     break;
             }
             return;
@@ -172,12 +175,5 @@ public class SudokuGame {
 
         // Case 10: error
         System.err.println("An unrecognized form of a Sudoku action was received by the game!");
-    }
-
-    /**
-     * Sends the updated state to the Sudoku GUI (also calls repaint() on the Sudoku panel).
-     */
-    private void sendStateToGui() {
-        this.sudokuFrame.receiveSudokuState(this.sudokuState);
     }
 }

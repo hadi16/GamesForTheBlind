@@ -48,6 +48,8 @@ public class SudokuFrame extends JFrame {
     /**
      * Used for creating the on-screen GUI.
      * This will start at a dimension of 500 by 500 pixels, but is fully resizable by dragging the window.
+     *
+     * @param sudokuGame The Sudoku game.
      */
     private void initializeGui(SudokuGame sudokuGame) {
         this.frame.add(this.sudokuPanel);
@@ -67,12 +69,9 @@ public class SudokuFrame extends JFrame {
     }
 
     /**
-     * Sets the Sudoku state for the enclosed {@link SudokuPanel} & calls repaint() on it.
-     *
-     * @param sudokuState The {@link SudokuState} to set.
+     * Calls repaint() on the enclosed Sudoku panel reference.
      */
-    public void receiveSudokuState(SudokuState sudokuState) {
-        this.sudokuPanel.setSudokuState(sudokuState);
+    public void repaintSudokuPanel() {
         this.sudokuPanel.repaint();
     }
 

@@ -2,7 +2,7 @@ package gamesforblind.sudoku.interfaces;
 
 import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.enums.InputType;
-import gamesforblind.enums.SudokuType;
+import gamesforblind.sudoku.SudokuState;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
 import gamesforblind.sudoku.action.SudokuHotKeyAction;
 import gamesforblind.sudoku.generator.Cell;
@@ -25,28 +25,16 @@ public abstract class SudokuKeyboardInterface {
      */
     public final Map<Integer, SudokuHotKeyAction> keyCodeToHotKeyAction;
 
-    /**
-     * Whether the Sudoku board is a 4x4, 6x6, or 9x9.
-     */
-    protected final SudokuType sudokuType;
-
-    /**
-     * The Sudoku board as a {@link Grid} object.
-     */
-    private final Grid sudokuGrid;
+    protected final SudokuState sudokuState;
 
     /**
      * Creates a new SudokuKeyboardInterface.
      *
-     * @param sudokuType            Whether the Sudoku board is a 4x4, 6x6, or 9x9.
-     * @param sudokuGrid            The Sudoku board as a {@link Grid} object.
+     * @param sudokuState           The state of the Sudoku game.
      * @param keyCodeToHotKeyAction Mapping between key codes (as defined in {@link KeyEvent}) to hot key actions.
      */
-    protected SudokuKeyboardInterface(
-            SudokuType sudokuType, Grid sudokuGrid, Map<Integer, SudokuHotKeyAction> keyCodeToHotKeyAction
-    ) {
-        this.sudokuType = sudokuType;
-        this.sudokuGrid = sudokuGrid;
+    protected SudokuKeyboardInterface(SudokuState sudokuState, Map<Integer, SudokuHotKeyAction> keyCodeToHotKeyAction) {
+        this.sudokuState = sudokuState;
         this.keyCodeToHotKeyAction = keyCodeToHotKeyAction;
     }
 
@@ -99,8 +87,19 @@ public abstract class SudokuKeyboardInterface {
             return Optional.empty();
         }
 
-        return Optional.of(
-                this.sudokuGrid.getCell(selectedPoint.get().y, selectedPoint.get().x)
-        );
+        Grid sudokuGrid = this.sudokuState.getSudokuGrid();
+        return Optional.of(sudokuGrid.getCell(selectedPoint.get().y, selectedPoint.get().x));
+    }
+
+    /**
+     * Determines if passed {@link Point} is in bounds. Ultimately prevents an {@link ArrayIndexOutOfBoundsException}.
+     * Each {@link Point} coordinate should be between 0 & sudokuBoardSize.
+     *
+     * @param pointToSet The point that the user wishes to set (may be out of bounds).
+     * @return true if the given {@link Point} is in bounds (otherwise, false).
+     */
+    protected boolean selectedPointInBounds(Point pointToSet) {
+        int boardSize = this.sudokuState.getSudokuType().getSudokuBoardSize();
+        return pointToSet.x >= 0 && pointToSet.y >= 0 && pointToSet.x < boardSize && pointToSet.y < boardSize;
     }
 }

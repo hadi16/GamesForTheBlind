@@ -18,9 +18,9 @@ public class LogFactory {
     private final ArrayList<ProgramAction> programActionList = new ArrayList<>();
 
     /**
-     * Need the original Sudoku board, since they are typically randomly generated.
+     * Need the original Sudoku boards, since they are typically randomly generated.
      */
-    private OriginalSudokuGrid originalSudokuGrid;
+    private final ArrayList<OriginalSudokuGrid> originalSudokuGridList = new ArrayList<>();
 
     /**
      * Creates a new LogFactory
@@ -28,7 +28,9 @@ public class LogFactory {
     public LogFactory() {
         if (!LOG_FILES_DIRECTORY.exists()) {
             // Recursively create any folders that are needed to create the log files directory.
-            LOG_FILES_DIRECTORY.mkdirs();
+            if (!LOG_FILES_DIRECTORY.mkdirs()) {
+                throw new IllegalArgumentException("The log files directory could not be created properly!");
+            }
         }
     }
 
@@ -42,21 +44,34 @@ public class LogFactory {
     }
 
     /**
-     * Getter for originalSudokuGrid
+     * Removes a stored {@link OriginalSudokuGrid} from the front of the enclosed list of {@link OriginalSudokuGrid}s.
      *
-     * @return An object that holds the original state of the {@link Grid} in the logged game.
+     * @return An original state of the {@link Grid} in a logged game.
      */
-    public OriginalSudokuGrid getOriginalSudokuGrid() {
-        return this.originalSudokuGrid;
+    public OriginalSudokuGrid popOriginalGridFromFront() {
+        if (this.originalSudokuGridList.isEmpty()) {
+            throw new IllegalArgumentException("There are no more original Sudoku grids left to get!");
+        }
+
+        return this.originalSudokuGridList.remove(0);
     }
 
     /**
-     * Setter for originalSudokuGrid
+     * Adds an {@link OriginalSudokuGrid} to the end of the list.
      *
-     * @param originalSudokuGrid The object that holds the original state of the {@link Grid} in the logged game.
+     * @param originalGridToAdd The object that holds an original state of the {@link Grid} in a logged game.
      */
-    public void setOriginalSudokuGrid(OriginalSudokuGrid originalSudokuGrid) {
-        this.originalSudokuGrid = originalSudokuGrid;
+    public void addOriginalSudokuGrid(OriginalSudokuGrid originalGridToAdd) {
+        this.originalSudokuGridList.add(originalGridToAdd);
+    }
+
+    /**
+     * Getter for originalSudokuGridList
+     *
+     * @return The list of {@link OriginalSudokuGrid}s that were logged in the series of played Sudoku games.
+     */
+    public ArrayList<OriginalSudokuGrid> getOriginalSudokuGridList() {
+        return this.originalSudokuGridList;
     }
 
     /**
