@@ -2,11 +2,12 @@ package gamesforblind.sudoku.gui.listener;
 
 import gamesforblind.enums.SudokuMenuItem;
 import gamesforblind.sudoku.SudokuGame;
-import gamesforblind.sudoku.action.SudokuMenuAction;
+import gamesforblind.sudoku.action.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 
 /**
  * The {@link ActionListener} for each of the {@link JMenuItem}s in the Sudoku menu.
@@ -34,16 +35,17 @@ public class SudokuMenuItemListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String selectedMenuText = e.getActionCommand();
 
-        SudokuMenuItem selectedMenuItem = null;
-        for (SudokuMenuItem menuItem : SudokuMenuItem.values()) {
-            if (selectedMenuText.equals(menuItem.toString())) {
-                selectedMenuItem = menuItem;
-                break;
-            }
-        }
+        // TODO: Support the language option.
+        final Map<String, SudokuAction> SELECTED_MENU_TEXT_TO_ACTION = Map.of(
+                SudokuMenuItem.HINT.toString(), new SudokuHintKeyAction(),
+                SudokuMenuItem.INSTRUCTIONS.toString(), new SudokuInstructionsAction(),
+                SudokuMenuItem.RETURN_TO_MAIN_MENU.toString(), new SudokuMainMenuAction(),
+                SudokuMenuItem.RESTART.toString(), new SudokuRestartAction()
+        );
 
-        if (selectedMenuItem != null) {
-            this.sudokuGame.receiveAction(new SudokuMenuAction(selectedMenuItem));
+        SudokuAction sudokuAction = SELECTED_MENU_TEXT_TO_ACTION.get(selectedMenuText);
+        if (sudokuAction != null) {
+            this.sudokuGame.receiveAction(sudokuAction);
         }
     }
 }

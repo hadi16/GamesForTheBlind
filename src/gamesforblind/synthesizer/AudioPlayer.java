@@ -141,8 +141,8 @@ public class AudioPlayer implements Runnable {
      */
     @Override
     public void run() {
-        // Terminate the thread only when isActive is set to false.
-        while (this.isActive) {
+        // Checking for empty phrases to play makes sure the goodbye message plays.
+        while (this.isActive || !this.phrasesToPlay.isEmpty()) {
             if (!this.activeClip.isRunning()) {
                 this.activeClip.stop();
 
@@ -158,6 +158,10 @@ public class AudioPlayer implements Runnable {
                 e.printStackTrace();
             }
         }
+
+        // Ensures that the goodbye message plays in its entirety.
+        // noinspection StatementWithEmptyBody
+        while (this.activeClip.isRunning());
     }
 
     /**
