@@ -167,7 +167,7 @@ public enum Phrase {
      * @return A Phrase that represents the passed key code from the keyboard.
      */
     public static Phrase keyCodeToPhrase(int keyCode) {
-        final Map<Integer, Phrase> KEY_CODE_TO_PHRASE = ofEntries(
+        @SuppressWarnings("JavacQuirks") final Map<Integer, Phrase> KEY_CODE_TO_PHRASE = ofEntries(
                 /* Numeric keyboard values */
                 entry(KeyEvent.VK_0,                Phrase.ZERO),
                 entry(KeyEvent.VK_1,                Phrase.ONE),
@@ -295,6 +295,7 @@ public enum Phrase {
      * @return A SHA-256 hash of the current phraseValue.
      */
     private String getPhaseHashValue() {
+        // noinspection UnstableApiUsage
         return Hashing.sha256().hashString(this.phraseValue, StandardCharsets.UTF_8).toString();
     }
 

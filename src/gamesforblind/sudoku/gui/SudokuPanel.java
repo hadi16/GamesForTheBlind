@@ -23,14 +23,9 @@ public class SudokuPanel extends JPanel {
     private final SudokuType sudokuType;
 
     /**
-     * Which squares were originally filled on the board to highlight them in a special color for sighted users.
+     * The Sudoku board state.
      */
-    private final ArrayList<Point> originallyFilledSquares;
-
-    /**
-     * The current Sudoku board state.
-     */
-    private SudokuState sudokuState;
+    private final SudokuState sudokuState;
 
     /**
      * This is reset every time the board is repainted (based on the bounds of the GUI window).
@@ -45,7 +40,6 @@ public class SudokuPanel extends JPanel {
     public SudokuPanel(SudokuState initialState) {
         this.sudokuState = initialState;
         this.sudokuType = initialState.getSudokuType();
-        this.originallyFilledSquares = initialState.getOriginallyFilledSquares();
     }
 
     /**
@@ -190,14 +184,5 @@ public class SudokuPanel extends JPanel {
 
         // Step 3: paint the bolded block borders.
         this.paintBlockBorders(graphics, squareDimension, INITIAL_POSITION + squareDimension);
-    }
-
-    /**
-     * Setter for sudokuState
-     *
-     * @param sudokuState The current {@link SudokuState} of the board.
-     */
-    public void setSudokuState(SudokuState sudokuState) {
-        this.sudokuState = sudokuState;
     }
 }

@@ -2,10 +2,14 @@ package gamesforblind.enums;
 
 import org.apache.commons.lang3.StringUtils;
 
+import javax.swing.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * An enumeration for all of the {@link JMenuItem}s in the Sudoku menu.
+ */
 public enum SudokuMenuItem {
     HINT,
     INSTRUCTIONS,
@@ -14,7 +18,11 @@ public enum SudokuMenuItem {
     RETURN_TO_MAIN_MENU;
 
     /**
-     * @return
+     * Overrides the String representation of each enumeration member, which is used in the Sudoku menu GUI.
+     * Replaces the underscores in the name w/ spaces and capitalizes each word in the name
+     * (e.g. RETURN_TO_MAIN_MENU --> "Return To Main Menu").
+     *
+     * @return A more user-friendly String representation of the current enumeration member.
      */
     @Override
     public String toString() {

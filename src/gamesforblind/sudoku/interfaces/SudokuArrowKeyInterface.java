@@ -3,9 +3,9 @@ package gamesforblind.sudoku.interfaces;
 import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.enums.InputType;
 import gamesforblind.enums.SudokuType;
+import gamesforblind.sudoku.SudokuState;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
 import gamesforblind.sudoku.action.SudokuHotKeyAction;
-import gamesforblind.sudoku.generator.Grid;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -30,12 +30,11 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
     /**
      * Creates a new SudokuArrowKeyInterface.
      *
-     * @param sudokuType Whether the Sudoku board is a 4x4, 6x6, or 9x9.
-     * @param sudokuGrid The Sudoku board as a {@link Grid} object.
+     * @param sudokuState The state of the Sudoku game.
      */
-    public SudokuArrowKeyInterface(SudokuType sudokuType, Grid sudokuGrid) {
+    public SudokuArrowKeyInterface(SudokuState sudokuState) {
         super(
-                sudokuType, sudokuGrid,
+                sudokuState,
                 Map.of(
                         KeyEvent.VK_LEFT, new SudokuHotKeyAction(ArrowKeyDirection.LEFT),
                         KeyEvent.VK_RIGHT, new SudokuHotKeyAction(ArrowKeyDirection.RIGHT),
@@ -72,16 +71,16 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
         // Case 2: the user clicks the mouse.
         if (inputType == InputType.MOUSE) {
             // Offset needed for the row (1, 2, etc.) & column labels ('A', 'B', etc.)
-            this.selectedPoint = new Point(pointToSet.x - 1, pointToSet.y - 1);
+            Point selectedPoint = new Point(pointToSet.x - 1, pointToSet.y - 1);
+            if (this.selectedPointInBounds(selectedPoint)) {
+                this.selectedPoint = selectedPoint;
+            }
             return;
         }
 
         // Case 3: the user presses an arrow key.
-        int boardSize = this.sudokuType.getSudokuBoardSize();
         Point selectedPoint = new Point(this.selectedPoint.x + pointToSet.x, this.selectedPoint.y + pointToSet.y);
-
-        // Make sure that the moved Point is in bounds.
-        if (selectedPoint.x >= 0 && selectedPoint.y >= 0 && selectedPoint.x < boardSize && selectedPoint.y < boardSize) {
+        if (this.selectedPointInBounds(selectedPoint)) {
             this.selectedPoint = selectedPoint;
         }
     }
@@ -93,7 +92,8 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
      */
     @Override
     public void setHighlightedPoint(ArrowKeyDirection arrowKeyDirection) {
-        int maxPointIndex = this.sudokuType.getSudokuBoardSize() - 1;
+        SudokuType sudokuType = this.sudokuState.getSudokuType();
+        int maxPointIndex = sudokuType.getSudokuBoardSize() - 1;
 
         // Highlight square accordingly (e.g. LEFT --> all the way to the left)
         switch (arrowKeyDirection) {

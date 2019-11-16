@@ -7,19 +7,20 @@ import gamesforblind.sudoku.gui.listener.SudokuMenuItemListener;
 import javax.swing.*;
 
 /**
- * // Class that creates the menu, adds the listeners to that menu items.
+ * Class that creates the main menu & adds the listeners to those menu items.
  */
 public class SudokuMenu {
     /**
-     * sets up the menu, adds all the items and listeners to the items.
+     * Sets up the {@link JMenu}. Adds all the {@link JMenuItem}s & {@link SudokuMenuItemListener} to these items.
      *
      * @param sudokuGame The current Sudoku game.
+     * @return The initialized {@link JMenu} for the Sudoku game.
      */
     public JMenu getInitializedMenu(SudokuGame sudokuGame) {
         JMenu mainMenu = new JMenu("Menu");
         SudokuMenuItemListener sudokuMenuItemListener = new SudokuMenuItemListener(sudokuGame);
 
-        /* Add menu items to menu */
+        /* Add menu items to menu. */
         JMenuItem hintItem = new JMenuItem(SudokuMenuItem.HINT.toString());
         hintItem.addActionListener(sudokuMenuItemListener);
         mainMenu.add(hintItem);

@@ -44,11 +44,11 @@ public class GameLoader {
      */
     private final LogFactory logFactory;
 
-    private final LoaderFrame loaderFrame;
     private final AudioPlayerExecutor audioPlayerExecutor;
 
     private final ProgramArgs programArgs;
 
+    private LoaderFrame loaderFrame;
     private SudokuGame sudokuGame;
 
     /**
@@ -64,9 +64,9 @@ public class GameLoader {
         this.audioPlayerThread.start();
 
         this.programArgs = programArgs;
-        this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.PLAY_OR_EXIT);
         this.logFactory = this.initializeLogFactory();
-        this.loaderFrame = new LoaderFrame(this, programArgs);
+
+        this.openLoaderInterface();
 
         // If we are in playback mode, this step is crucial
         // (allows us to replay the actions one-by-one in realtime).
@@ -75,23 +75,12 @@ public class GameLoader {
         }
     }
 
-    public GameLoader(ProgramArgs programArgs, AudioPlayerExecutor audioPlayerExecutor) {
-        // TODO: get the audio player thread reference.
-        this.audioPlayerThread = null;
-
-
-        this.audioPlayerExecutor = audioPlayerExecutor;
-
-        this.programArgs = programArgs;
+    /**
+     * Opens the GUI for the loader. Allows the game loader to reopen when the user decides to go back to the main menu.
+     */
+    public void openLoaderInterface() {
         this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.PLAY_OR_EXIT);
-        this.logFactory = this.initializeLogFactory();
-        this.loaderFrame = new LoaderFrame(this, programArgs);
-
-        // If we are in playback mode, this step is crucial
-        // (allows us to replay the actions one-by-one in realtime).
-        if (this.programArgs.isPlaybackMode()) {
-            this.loopThroughSavedProgramActions();
-        }
+        this.loaderFrame = new LoaderFrame(this, this.programArgs);
     }
 
     /**
@@ -219,7 +208,7 @@ public class GameLoader {
 
             this.loaderFrame.closeLoaderFrames();
             this.sudokuGame = new SudokuGame(
-                    sudokuType, this.audioPlayerExecutor, this.logFactory, this.programArgs
+                    this, sudokuType, this.audioPlayerExecutor, this.logFactory, this.programArgs
             );
             return;
         }
@@ -240,10 +229,7 @@ public class GameLoader {
 
             // Wait for the audio player thread to end.
             try {
-                // TODO: remove the need to check for null
-                if (this.audioPlayerThread != null) {
-                    this.audioPlayerThread.join();
-                }
+                this.audioPlayerThread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

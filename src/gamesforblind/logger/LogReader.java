@@ -116,10 +116,10 @@ public class LogReader {
             // Step 2: convert each XML node to a Java object.
             Optional<Object> logItems = this.convertXmlLogNodeToObject(xmlNode);
 
-            // Step 3: if an action, add it to the list of actions. Otherwise, set the OriginalSudokuGrid object.
+            // Step 3: if an action, add it to the list of actions. Otherwise, add it to the list of OriginalSudokuGrids
             logItems.ifPresent(logItem -> {
                 if (logItem instanceof OriginalSudokuGrid) {
-                    logFactory.setOriginalSudokuGrid((OriginalSudokuGrid) logItem);
+                    logFactory.addOriginalSudokuGrid((OriginalSudokuGrid) logItem);
                 } else if (logItem instanceof ProgramAction) {
                     logFactory.addProgramAction((ProgramAction) logItem);
                 }
