@@ -226,12 +226,16 @@ public class GameLoader {
         // Case 5: the user has decided to exit the loader GUI.
         if (action instanceof LoaderExitAction) {
             this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.EXITING);
+
+            // I don't want to actually exit the game if it is in playback mode (see the ending state of the game).
+            if (this.programArgs.isPlaybackMode()) {
+                return;
+            }
+
             this.audioPlayerExecutor.terminateAudioPlayer();
 
-            if (!this.programArgs.isPlaybackMode()) {
-                LogWriter logWriter = new LogWriter(this.logFactory);
-                logWriter.saveGameLog();
-            }
+            LogWriter logWriter = new LogWriter(this.logFactory);
+            logWriter.saveGameLog();
 
             // Wait for the audio player thread to end.
             try {

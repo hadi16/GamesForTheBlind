@@ -4,8 +4,8 @@ import gamesforblind.ProgramArgs;
 import gamesforblind.enums.InterfaceType;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.loader.GameLoader;
+import gamesforblind.loader.action.LoaderExitAction;
 import gamesforblind.logger.LogFactory;
-import gamesforblind.logger.LogWriter;
 import gamesforblind.sudoku.action.*;
 import gamesforblind.sudoku.gui.SudokuFrame;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
@@ -67,12 +67,8 @@ public class SudokuGame {
 
         // Case 1: the user wishes to exit the game.
         if (sudokuAction instanceof SudokuExitAction) {
-            // I don't want to actually exit the game if it is in playback mode (see the ending state of the game).
-            if (!this.programArgs.isPlaybackMode()) {
-                LogWriter logWriter = new LogWriter(this.logFactory);
-                logWriter.saveGameLog();
-                System.exit(0);
-            }
+            this.gameLoader.receiveAction(new LoaderExitAction());
+            return;
         }
 
         // If the game is over, go to main menu
@@ -136,44 +132,27 @@ public class SudokuGame {
             return;
         }
 
-        // Case 9: the user uses the menu to navigate
-        if (sudokuAction instanceof SudokuMenuAction) {
-            SudokuMenuAction sudokuMenuAction = (SudokuMenuAction) sudokuAction;
-
-            switch (sudokuMenuAction.getSudokuMenuItem()) {
-                case HINT:
-                    // Case 9a: give a hint.
-                    this.sudokuState.giveHint();
-                    this.sudokuFrame.repaintSudokuPanel();
-                    break;
-                case INSTRUCTIONS:
-                    // Case 9b: read off instructions.
-                    this.sudokuState.readInstructions();
-                    break;
-                case LANGUAGE:
-                    // TODO Case 9c: set language
-                    break;
-                case RESTART:
-                    // Case 9d: restart the game.
-                    if (this.programArgs.isPlaybackMode()) {
-                        this.sudokuState.resetSudokuState(this.logFactory.popOriginalGridFromFront());
-                    } else {
-                        this.sudokuState.resetSudokuState(null);
-                        this.logFactory.addOriginalSudokuGrid(this.sudokuState.getOriginalGrid());
-                    }
-
-                    this.sudokuFrame.repaintSudokuPanel();
-                    break;
-                case RETURN_TO_MAIN_MENU:
-                    // Case 9e: Return to main menu.
-                    this.sudokuFrame.closeFrames();
-                    this.gameLoader.openLoaderInterface();
-                    break;
-            }
+        // Case 9: return to main menu.
+        if (sudokuAction instanceof SudokuMainMenuAction) {
+            this.sudokuFrame.closeFrames();
+            this.gameLoader.openLoaderInterface();
             return;
         }
 
-        // Case 10: error
+        // Case 10: restart the current Sudoku board.
+        if (sudokuAction instanceof SudokuRestartAction) {
+            if (this.programArgs.isPlaybackMode()) {
+                this.sudokuState.resetSudokuState(this.logFactory.popOriginalGridFromFront());
+            } else {
+                this.sudokuState.resetSudokuState(null);
+                this.logFactory.addOriginalSudokuGrid(this.sudokuState.getOriginalGrid());
+            }
+
+            this.sudokuFrame.repaintSudokuPanel();
+            return;
+        }
+
+        // Case 11: error
         System.err.println("An unrecognized form of a Sudoku action was received by the game!");
     }
 }

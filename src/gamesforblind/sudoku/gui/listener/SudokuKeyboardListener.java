@@ -9,6 +9,7 @@ import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -32,6 +33,11 @@ public class SudokuKeyboardListener implements KeyListener {
     private final Map<Integer, SudokuHotKeyAction> keyCodeToHotKeyAction;
 
     /**
+     * For returning to main menu or restarting the game, I want to make sure that the user pressed the given key TWICE.
+     */
+    private final ArrayList<Integer> pressedKeyCodeList = new ArrayList<>();
+
+    /**
      * Creates a new SudokuKeyboardListener
      *
      * @param keyboardInterface The given keyboard interface that the user has chosen (arrow keys, etc.).
@@ -50,6 +56,9 @@ public class SudokuKeyboardListener implements KeyListener {
      */
     @Override
     public void keyPressed(KeyEvent e) {
+        int selectedKeyCode = e.getKeyCode();
+        this.pressedKeyCodeList.add(selectedKeyCode);
+
         // Case 1: hot key was registered (using the Ctrl key).
         // If no hot key mappings exist, don't check (e.g. block selection interface).
         if (!this.keyCodeToHotKeyAction.isEmpty() && e.isControlDown()) {
@@ -70,8 +79,6 @@ public class SudokuKeyboardListener implements KeyListener {
             );
             return;
         }
-
-        int selectedKeyCode = e.getKeyCode();
 
         // Case 3: the selected key is the SPACE BAR
         if (selectedKeyCode == KeyEvent.VK_SPACE) {
@@ -116,7 +123,31 @@ public class SudokuKeyboardListener implements KeyListener {
             return;
         }
 
-        // Case 8: the selected key is unrecognized.
+        int numberOfPressedKeys = this.pressedKeyCodeList.size();
+
+        // Case 8: the user wants to return to the main menu.
+        if (selectedKeyCode == KeyEvent.VK_M) {
+            // The last element is the CURRENT key pressed, so I want the second to last element.
+            if (numberOfPressedKeys > 1 && this.pressedKeyCodeList.get(numberOfPressedKeys - 2) == KeyEvent.VK_M) {
+                this.sudokuGame.receiveAction(new SudokuMainMenuAction());
+                this.pressedKeyCodeList.clear();
+            }
+
+            return;
+        }
+
+        // Case 9: the user wants to restart the current Sudoku board.
+        if (selectedKeyCode == KeyEvent.VK_Q) {
+            // The last element is the CURRENT key pressed, so I want the second to last element.
+            if (numberOfPressedKeys > 1 && this.pressedKeyCodeList.get(numberOfPressedKeys - 2) == KeyEvent.VK_Q) {
+                this.sudokuGame.receiveAction(new SudokuRestartAction());
+                this.pressedKeyCodeList.clear();
+            }
+
+            return;
+        }
+
+        // Case 10: the selected key is unrecognized.
         this.sudokuGame.receiveAction(new SudokuUnrecognizedKeyAction(e.getKeyCode()));
     }
 
