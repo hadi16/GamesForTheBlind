@@ -12,6 +12,7 @@ import gamesforblind.loader.gui.listener.LoaderActionListener;
 import gamesforblind.loader.gui.listener.LoaderKeyboardListener;
 import gamesforblind.logger.LogFactory;
 import gamesforblind.logger.LogReader;
+import gamesforblind.logger.LogWriter;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.action.SudokuAction;
 import gamesforblind.synthesizer.AudioPlayer;
@@ -226,6 +227,11 @@ public class GameLoader {
         if (action instanceof LoaderExitAction) {
             this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.EXITING);
             this.audioPlayerExecutor.terminateAudioPlayer();
+
+            if (!this.programArgs.isPlaybackMode()) {
+                LogWriter logWriter = new LogWriter(this.logFactory);
+                logWriter.saveGameLog();
+            }
 
             // Wait for the audio player thread to end.
             try {

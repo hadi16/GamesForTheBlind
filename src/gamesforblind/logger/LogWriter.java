@@ -146,9 +146,15 @@ public class LogWriter {
 
         // Step 3: save the beautified XML log file String. If successful, print message to stdout.
         if (this.writeXmlLogFile(beautifiedLogXmlString.get())) {
-            System.out.println(
-                    "Saved " + this.logFactory.getProgramActionList().size() + " actions to the logs directory!"
-            );
+            int numberOfLoggedSudokuBoards = this.logFactory.getOriginalSudokuGridList().size();
+            if (numberOfLoggedSudokuBoards != 0) {
+                System.out.println("Saved " + numberOfLoggedSudokuBoards + " Sudoku board(s) to the logs directory!");
+            }
+
+            int numberOfLoggedActions = this.logFactory.getProgramActionList().size();
+            if (numberOfLoggedActions != 0) {
+                System.out.println("Saved " + numberOfLoggedActions + " action(s) to the logs directory!");
+            }
         }
     }
 }
