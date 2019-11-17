@@ -7,7 +7,7 @@
 
     <groupId>edu.up</groupId>
     <artifactId>Games_For_Blind</artifactId>
-    <version>1.0</version>
+    <version>1.0.0.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -69,42 +69,41 @@
                 </configuration>
             </plugin>
 
-            <!-- For the generated JAR file. -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.1</version>
                 <configuration>
                     <outputDirectory>${project.build.directory}/dist</outputDirectory>
                     <archive>
                         <manifest>
-                            <!-- JAR file entry point. -->
-                            <mainClass>gamesforblind.Main</mainClass>
                             <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib</classpathPrefix>
+                            <mainClass>gamesforblind.Main</mainClass>
                         </manifest>
                     </archive>
+                    <mainClass>gamesforblind.Main</mainClass>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
                 </configuration>
-            </plugin>
-
-            <!-- For the JAR dependencies. -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.1</version>
                 <executions>
                     <execution>
-                        <id>copy-dependencies</id>
+                        <id>assemble-all</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>copy-dependencies</goal>
+                            <goal>single</goal>
                         </goals>
-
-                        <configuration>
-                            <includeScope>runtime</includeScope>
-                            <outputDirectory>${project.build.directory}/dist/lib/</outputDirectory>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -158,6 +157,46 @@
                         <GOOGLE_APPLICATION_CREDENTIALS>google_api_key.json</GOOGLE_APPLICATION_CREDENTIALS>
                     </environmentVariables>
                 </configuration>
+            </plugin>
+
+            <!-- Create executable Windows file. -->
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>1.7.25</version>
+                <executions>
+                    <execution>
+                        <id>l4j-clui</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <headerType>gui</headerType>
+                            <jar>${project.build.directory}/dist/${project.artifactId}-${project.version}-jar-with-dependencies.jar</jar>
+                            <outfile>${project.build.directory}/dist/${project.artifactId}-${project.version}.exe</outfile>
+                            <classPath>
+                                <mainClass>gamesforblind.Main</mainClass>
+                            </classPath>
+                            <jre>
+                                <minVersion>12</minVersion>
+                                <jdkPreference>preferJre</jdkPreference>
+                            </jre>
+                            <versionInfo>
+                                <copyright>2019</copyright>
+                                <fileVersion>${project.version}</fileVersion>
+                                <txtFileVersion>${project.version}</txtFileVersion>
+                                <fileDescription>${project.name}</fileDescription>
+                                <productVersion>${project.version}</productVersion>
+                                <txtProductVersion>${project.version}</txtProductVersion>
+                                <productName>${project.name}</productName>
+                                <internalName>${project.name}</internalName>
+                                <originalFilename>${project.artifactId}-${project.version}.exe</originalFilename>
+                                <companyName>University of Portland</companyName>
+                            </versionInfo>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
