@@ -70,17 +70,6 @@
             </plugin>
 
             <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>default-jar</id>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.1</version>
@@ -92,7 +81,6 @@
                             <mainClass>gamesforblind.Main</mainClass>
                         </manifest>
                     </archive>
-                    <mainClass>gamesforblind.Main</mainClass>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
@@ -195,6 +183,29 @@
                                 <companyName>University of Portland</companyName>
                             </versionInfo>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>de.perdian.maven.plugins</groupId>
+                <artifactId>macosappbundler-maven-plugin</artifactId>
+                <version>1.3.0</version>
+                <configuration>
+                    <plist>
+                        <CFBundleDisplayName>Games For The Blind</CFBundleDisplayName>
+                        <JVMMainClassName>gamesforblind.Main</JVMMainClassName>
+                        <JVMVersion>12</JVMVersion>
+                        <CFBundleDisplayName>Games For The Blind</CFBundleDisplayName>
+                        <CFBundleName>Games For The Blind</CFBundleName>
+                    </plist>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
