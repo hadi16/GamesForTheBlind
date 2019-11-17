@@ -11,7 +11,6 @@ import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
 import gamesforblind.synthesizer.Phrase;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -86,7 +85,7 @@ public class SudokuState {
      *
      * @param originalGrid If we are in playback mode, the {@link OriginalSudokuGrid} to restore (otherwise, null).
      */
-    public void resetSudokuState(@Nullable OriginalSudokuGrid originalGrid) {
+    public void resetSudokuState(OriginalSudokuGrid originalGrid) {
         this.gameOver = false;
         this.numberOfEmptyCells = this.getInitialNumberOfEmptyCells(this.sudokuType.getSudokuBoardSize());
 
