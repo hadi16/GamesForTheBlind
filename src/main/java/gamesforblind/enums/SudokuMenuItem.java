@@ -1,7 +1,5 @@
 package gamesforblind.enums;
 
-import org.apache.commons.lang3.StringUtils;
-
 import javax.swing.*;
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +25,9 @@ public enum SudokuMenuItem {
     @Override
     public String toString() {
         List<String> lowercaseWordList = Arrays.asList(this.name().toLowerCase().split("_"));
-        var capitalizedWordList = lowercaseWordList.stream().map(StringUtils::capitalize).collect(Collectors.toList());
+        List<String> capitalizedWordList = lowercaseWordList.stream().map(
+                word -> word.substring(0, 1).toUpperCase() + word.substring(1)
+        ).collect(Collectors.toList());
         return String.join(" ", capitalizedWordList);
     }
 }
