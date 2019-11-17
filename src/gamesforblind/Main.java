@@ -1,7 +1,6 @@
 package gamesforblind;
 
 import gamesforblind.loader.GameLoader;
-import gamesforblind.synthesizer.AudioFileBuilder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,12 +29,6 @@ public class Main {
      */
     public static void main(String[] args) {
         setUIAttributes();
-
-        if (Constants.BUILD_PHRASES) {
-            AudioFileBuilder audioFileBuilder = new AudioFileBuilder();
-            audioFileBuilder.createPhraseAudioFiles();
-            audioFileBuilder.deleteOldPhraseAudioFiles();
-        }
 
         new GameLoader(new ProgramArgs(args));
     }

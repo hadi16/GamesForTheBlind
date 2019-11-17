@@ -15,6 +15,21 @@ import java.util.Arrays;
  */
 public class AudioFileBuilder {
     /**
+     * The entry point to the audio file builder.
+     *
+     * @param args Command line arguments that were passed by the user.
+     */
+    public static void main(String[] args) {
+        System.out.println("Generating & deleting audio files...");
+
+        AudioFileBuilder audioFileBuilder = new AudioFileBuilder();
+        audioFileBuilder.createPhraseAudioFiles();
+        audioFileBuilder.deleteOldPhraseAudioFiles();
+
+        System.out.println("Completed audio file generation & deletion!");
+    }
+
+    /**
      * The directory that contains all of the Phrases in the program.
      */
     private final File phraseDirectory;
@@ -22,7 +37,7 @@ public class AudioFileBuilder {
     /**
      * Creates a new AudioFileBuilder. Creates the phrase directory if it doesn't already exist.
      */
-    public AudioFileBuilder() {
+    private AudioFileBuilder() {
         this.phraseDirectory = new File(Phrase.PHRASE_FILES_DIRECTORY.toString());
         if (!this.phraseDirectory.exists()) {
             if (!this.phraseDirectory.mkdirs()) {
@@ -34,7 +49,7 @@ public class AudioFileBuilder {
     /**
      * Deletes old Phrase audio files that are no longer needed in the program.
      */
-    public void deleteOldPhraseAudioFiles() {
+    private void deleteOldPhraseAudioFiles() {
         File[] filesInDirectory = this.phraseDirectory.listFiles();
         if (filesInDirectory == null) {
             return;
@@ -63,7 +78,7 @@ public class AudioFileBuilder {
     /**
      * Creates Phrase audio files by calling into the Google Cloud Text-to-Speech Java API.
      */
-    public void createPhraseAudioFiles() {
+    private void createPhraseAudioFiles() {
         try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
             for (Phrase phrase : Phrase.values()) {
                 File phraseFile = phrase.getPhraseAudioFile();
