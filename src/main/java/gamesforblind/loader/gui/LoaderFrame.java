@@ -193,10 +193,12 @@ public class LoaderFrame extends JFrame {
 
         if (reset) {
             // Case 1: reset the button colors
+            highlightedButton.setFocusPainted(false);
             highlightedButton.setForeground(Color.BLACK);
             highlightedButton.setBackground(null);
         } else {
             // Case 2: highlight the button colors.
+            highlightedButton.setFocusPainted(true);
             highlightedButton.setForeground(DARK_GOLD);
             highlightedButton.setBackground(Color.YELLOW);
         }
