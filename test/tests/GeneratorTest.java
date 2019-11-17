@@ -1,6 +1,9 @@
-package gamesforblind.sudoku.generator;
+package tests;
 
 import gamesforblind.enums.SudokuType;
+import gamesforblind.sudoku.generator.Cell;
+import gamesforblind.sudoku.generator.Generator;
+import gamesforblind.sudoku.generator.Grid;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

@@ -1,8 +1,9 @@
 package gamesforblind.synthesizer;
 
 import javax.sound.sampled.*;
-import java.io.File;
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -55,8 +56,9 @@ public class AudioPlayer implements Runnable {
         try {
             Clip phraseClip = AudioSystem.getClip();
 
-            File phraseAudioFile = phrase.getPhraseAudioFile().getAbsoluteFile();
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(phraseAudioFile);
+            InputStream phraseAudioStream = phrase.getPhraseInputStream();
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(phraseAudioStream);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedInputStream);
 
             // The Clip should be opened so that it can be immediately played.
             phraseClip.open(audioInputStream);

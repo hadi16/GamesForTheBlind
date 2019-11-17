@@ -5,9 +5,15 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>agape</groupId>
-    <artifactId>games-for-the-blind</artifactId>
+    <groupId>edu.up</groupId>
+    <artifactId>Games_For_Blind</artifactId>
     <version>1.0</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
@@ -23,6 +29,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>test</scope>
             <version>4.9</version>
         </dependency>
         <dependency>
@@ -40,7 +47,14 @@
 
     <build>
         <sourceDirectory>${basedir}/src</sourceDirectory>
+        <testSourceDirectory>${basedir}/test</testSourceDirectory>
         <outputDirectory>${basedir}/out</outputDirectory>
+        <testOutputDirectory>${basedir}/out_test</testOutputDirectory>
+        <resources>
+            <resource>
+                <directory>${basedir}/resources</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -51,6 +65,48 @@
                     <target>12</target>
                 </configuration>
             </plugin>
+
+            <!-- For the generated JAR file. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/dist</outputDirectory>
+                    <archive>
+                        <manifest>
+                            <!-- JAR file entry point. -->
+                            <mainClass>gamesforblind.Main</mainClass>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib</classpathPrefix>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!-- For the JAR dependencies. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+
+                        <configuration>
+                            <!-- Exclude JUnit (need runtime dependency only). -->
+                            <includeScope>runtime</includeScope>
+                            <outputDirectory>${project.build.directory}/dist/lib/</outputDirectory>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 </project>

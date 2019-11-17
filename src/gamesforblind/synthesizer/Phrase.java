@@ -4,6 +4,7 @@ import com.google.common.hash.Hashing;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -134,9 +135,9 @@ public enum Phrase {
     REMOVED_NUM("You have removed the number");
 
     /**
-     * The directory for all of the Phrase audio files ("phrases" folder under the root of the project).
+     * The directory for all of the Phrase audio files ("resources/phrases" folder under the root of the project).
      */
-    public static final Path PHRASE_FILES_DIRECTORY = Paths.get(System.getProperty("user.dir"), "phrases/");
+    public static final Path PHRASE_FILES_DIRECTORY = Paths.get(System.getProperty("user.dir"), "resources/phrases/");
 
     /**
      * The Phrase's String value, which is the phrase that needs to be fetched via the Google Cloud API.
@@ -300,11 +301,25 @@ public enum Phrase {
     }
 
     /**
-     * @return The file associated with the current Phrase.
+     * Used for calling into Google Cloud Text-to-Speech & generating the audio files.
+     *
+     * @return The {@link File} associated with the current Phrase.
      */
     public File getPhraseAudioFile() {
         return new File(
                 String.format("%s/%s.wav", PHRASE_FILES_DIRECTORY.toString(), this.getPhaseHashValue())
+        );
+    }
+
+    /**
+     * Used when reading audio files in the game. Uses "resources" so that it works in a JAR file.
+     *
+     * @return The {@link InputStream} to the given Phrase.
+     */
+    public InputStream getPhraseInputStream() {
+        // Audio file is a resource, which is under "phrases/<SHA_256_value>.wav"
+        return ClassLoader.getSystemClassLoader().getResourceAsStream(
+                String.format("phrases/%s.wav", this.getPhaseHashValue())
         );
     }
 }

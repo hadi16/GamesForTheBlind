@@ -2,6 +2,7 @@
 .vscode/
 lib/
 out/
+target/
 logs/
 
 *.iml
