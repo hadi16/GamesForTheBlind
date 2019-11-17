@@ -9,12 +9,6 @@ import java.nio.file.Paths;
  */
 public class Constants {
     /**
-     * If set to true, audio files are created & removed based on the phrase values in the Phrase enumeration.
-     * This should be set to false when deployed, since games should be strictly offline-only.
-     */
-    public static final boolean BUILD_PHRASES = false;
-
-    /**
      * An EMPTY square on the Sudoku board is just represented by the constant 0.
      */
     public static final int EMPTY_SUDOKU_SQUARE = 0;
