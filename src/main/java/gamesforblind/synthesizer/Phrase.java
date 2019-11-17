@@ -1,13 +1,14 @@
 package gamesforblind.synthesizer;
 
-import com.google.common.hash.Hashing;
-
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Objects;
 
@@ -294,11 +295,17 @@ public enum Phrase {
     /**
      * Helper method to retrieve a SHA-256 hash of the current phraseValue.
      *
-     * @return A SHA-256 hash of the current phraseValue.
+     * @return A SHA-256 hash of the current phraseValue (empty string if exception thrown).
      */
     private String getPhaseHashValue() {
-        // noinspection UnstableApiUsage
-        return Hashing.sha256().hashString(this.phraseValue, StandardCharsets.UTF_8).toString();
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(this.phraseValue.getBytes(StandardCharsets.UTF_8));
+            return String.format("%064x", new BigInteger(1, messageDigest.digest()));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     /**
