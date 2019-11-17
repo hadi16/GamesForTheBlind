@@ -136,7 +136,9 @@ public enum Phrase {
     /**
      * The directory for all of the Phrase audio files ("resources/phrases" folder under the root of the project).
      */
-    public static final Path PHRASE_FILES_DIRECTORY = Paths.get(System.getProperty("user.dir"), "resources/phrases/");
+    public static final Path PHRASE_FILES_DIRECTORY = Paths.get(
+            System.getProperty("user.dir"), "src/main/resources/phrases/"
+    );
 
     /**
      * The Phrase's String value, which is the phrase that needs to be fetched via the Google Cloud API.
