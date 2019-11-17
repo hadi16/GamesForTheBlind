@@ -1,4 +1,4 @@
-package tests;
+package java;
 
 import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.generator.Cell;

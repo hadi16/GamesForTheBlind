@@ -1,7 +1,6 @@
 .idea/
 .vscode/
 lib/
-out/
 target/
 logs/
 
