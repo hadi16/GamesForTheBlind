@@ -52,17 +52,6 @@
     </dependencies>
 
     <build>
-        <sourceDirectory>${basedir}/src</sourceDirectory>
-        <testSourceDirectory>${basedir}/test</testSourceDirectory>
-        <outputDirectory>${basedir}/out</outputDirectory>
-        <testOutputDirectory>${basedir}/out-test</testOutputDirectory>
-
-        <resources>
-            <resource>
-                <directory>${basedir}/resources</directory>
-            </resource>
-        </resources>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -84,7 +73,7 @@
                     <archive>
                         <manifest>
                             <!-- JAR file entry point. -->
-                            <mainClass>gamesforblind.Main</mainClass>
+                            <mainClass>main.java.gamesforblind.Main</mainClass>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib</classpathPrefix>
                         </manifest>
@@ -133,7 +122,7 @@
                     <arguments>
                         <argument>-classpath</argument>
                         <classpath/>
-                        <argument>gamesforblind.synthesizer.AudioFileBuilder</argument>
+                        <argument>main.java.gamesforblind.synthesizer.AudioFileBuilder</argument>
                     </arguments>
 
                     <environmentVariables>
