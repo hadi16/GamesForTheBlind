@@ -1,5 +1,6 @@
 package gamesforblind.loader;
 
+import builder.Phrase;
 import gamesforblind.ProgramAction;
 import gamesforblind.ProgramArgs;
 import gamesforblind.enums.InterfaceType;
@@ -17,7 +18,6 @@ import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.action.SudokuAction;
 import gamesforblind.synthesizer.AudioPlayer;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
-import gamesforblind.synthesizer.Phrase;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.time.temporal.ChronoUnit;

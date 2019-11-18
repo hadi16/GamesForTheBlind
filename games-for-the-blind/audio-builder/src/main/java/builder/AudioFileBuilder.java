@@ -1,4 +1,4 @@
-package gamesforblind.synthesizer;
+package builder;
 
 import com.google.cloud.texttospeech.v1.*;
 import com.google.protobuf.ByteString;

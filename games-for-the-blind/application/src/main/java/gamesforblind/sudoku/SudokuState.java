@@ -1,5 +1,6 @@
 package gamesforblind.sudoku;
 
+import builder.Phrase;
 import gamesforblind.enums.*;
 import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Generator;
@@ -9,7 +10,6 @@ import gamesforblind.sudoku.interfaces.SudokuArrowKeyInterface;
 import gamesforblind.sudoku.interfaces.SudokuBlockSelectionInterface;
 import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
-import gamesforblind.synthesizer.Phrase;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;

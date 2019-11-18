@@ -1,5 +1,7 @@
 package gamesforblind.synthesizer;
 
+import builder.Phrase;
+
 import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
 import java.io.IOException;
