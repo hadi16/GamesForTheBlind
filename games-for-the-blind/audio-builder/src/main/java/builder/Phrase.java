@@ -1,4 +1,4 @@
-package gamesforblind.synthesizer;
+package builder;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -138,7 +138,7 @@ public enum Phrase {
      * The directory for all of the Phrase audio files ("resources/phrases" folder under the root of the project).
      */
     public static final Path PHRASE_FILES_DIRECTORY = Paths.get(
-            System.getProperty("user.dir"), "src/main/resources/phrases/"
+            System.getProperty("user.dir"), "../application/src/main/resources/phrases/"
     );
 
     /**
