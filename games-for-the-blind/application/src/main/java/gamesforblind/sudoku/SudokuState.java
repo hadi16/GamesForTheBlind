@@ -1,6 +1,6 @@
 package gamesforblind.sudoku;
 
-import builder.Phrase;
+import phrase.Phrase;
 import gamesforblind.enums.*;
 import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Generator;

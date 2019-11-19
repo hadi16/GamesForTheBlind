@@ -1,4 +1,4 @@
-package builder;
+package phrase;
 
 import java.awt.event.KeyEvent;
 import java.io.File;

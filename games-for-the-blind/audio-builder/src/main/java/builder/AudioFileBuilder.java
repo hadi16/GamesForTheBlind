@@ -2,6 +2,7 @@ package builder;
 
 import com.google.cloud.texttospeech.v1.*;
 import com.google.protobuf.ByteString;
+import phrase.Phrase;
 
 import java.io.File;
 import java.io.FileOutputStream;

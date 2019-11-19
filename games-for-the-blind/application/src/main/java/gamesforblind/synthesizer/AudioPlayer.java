@@ -1,6 +1,6 @@
 package gamesforblind.synthesizer;
 
-import builder.Phrase;
+import phrase.Phrase;
 
 import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
