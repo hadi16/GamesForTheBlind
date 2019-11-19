@@ -51,7 +51,6 @@ Hot keys include:
 * 'K' : read the column 
 * 'I' : read the instructions
 * 'H' : solve the current square
-Page Break
  
 Example: Place a ‘3’ into the top-right square in the bottom-left block in a 4x4 board: 
 1. Use the arrow keys to navigate to the desired square (down, down, right).
