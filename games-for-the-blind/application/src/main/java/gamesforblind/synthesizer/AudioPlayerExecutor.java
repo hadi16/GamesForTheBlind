@@ -1,6 +1,6 @@
 package gamesforblind.synthesizer;
 
-import builder.Phrase;
+import phrase.Phrase;
 
 import java.util.ArrayList;
 
