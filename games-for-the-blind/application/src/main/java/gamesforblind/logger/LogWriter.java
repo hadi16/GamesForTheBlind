@@ -103,7 +103,10 @@ public class LogWriter {
     private boolean writeXmlLogFile(String beautifiedLogXmlString) {
         // The name of the XML log file is the current date & time.
         File logFile = new File(String.format(
-                "%s/%s.xml", LOG_FILES_DIRECTORY.toString(), LocalDateTime.now().toString()
+                "%s/%s.xml",
+                LOG_FILES_DIRECTORY.toString(),
+                // Colons are not allowed in Windows file names.
+                LocalDateTime.now().toString().replace(":", "#")
         ));
 
         FileWriter fileWriter = null;
