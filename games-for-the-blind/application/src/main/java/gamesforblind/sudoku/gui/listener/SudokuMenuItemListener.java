@@ -32,6 +32,7 @@ public class SudokuMenuItemListener implements ActionListener {
      *
      * @param e The {@link ActionEvent} that was triggered in the GUI.
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         String selectedMenuText = e.getActionCommand();
 
