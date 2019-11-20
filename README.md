@@ -39,20 +39,25 @@ A 9x9 Sudoku board is broken into nine blocks. Each block contains squares for n
  
 **How to Play Sudoku Using Mouse:** Simply click on the square where you would like to place a number and press the corresponding number on the number pad. 
  
-**How to Play Sudoku Using Keyboard:** For a 4x4 board, imagine the ‘X’, ‘C’, ‘S,’ and ‘D’ keys as the board with each key as a square. Once one of those keys is pressed, imagine those same keys as the squares where each number will be placed. To check if a space is empty or determine which number is in each square, simply press the key again to hear the number or that the square is blank. If the square is empty, no number will be read. Press the desired key and then press the number that you think belongs there. If the number is correct, it will be placed in the square. If the number is incorrect, that space will remain empty. To return the board to its default, zoomed-out position, press the space bar.  
+**How to Play Sudoku Using Keyboard:** The starting position is the top left of the board for all the board sizes.  Navigating the board is done by using the arrow keys and the hot keys. To check if a space is empty or determine which number is in each square, simply pass over the squares to hear the number or that the square is blank. If the square is empty, no number will be read. Press the desired key and then press the number that you think belongs there. If the number is correct, it will be placed in the square. If the number is incorrect, that space will remain empty.
  
-To play with a 6x6 or a 9x9 board, repeat these same instructions with the following modifications: 
-* For the 6x6 board, use the ‘S’, ‘D’, ‘F’, ‘X’, ‘C,’ and V’ keys. 
-* For the 9x9 board, use the ‘W’, ‘E’, ‘R’, ‘S,’ ‘D’, ‘F’, ‘X’, ‘C’, and ‘V’ keys.
-Page Break
+Hot keys include:
+* Space: go to the home position (top left square)
+* Command-left: move to the leftmost column in the current row
+* Command-right: move to the rightmost column in the current row
+* Command-up: move to the top row in the current column
+* Command-down: move to the bottom row in the current column
+* 'J' : read the row 
+* 'K' : read the column 
+* 'I' : read the instructions
+* 'H' : solve the current square
  
 Example: Place a ‘3’ into the top-right square in the bottom-left block in a 4x4 board: 
-1. Press the ‘X’ key to go to the bottom-left block. 
-2. Press the ‘D’ key to hear what is in the top-right square. 
+1. Use the arrow keys to navigate to the desired square (down, down, right).
 3. Audio feedback will play to disclose what number is in this square. 
 4. Assuming that the square is empty, press the number ‘3’ on the number pad to insert a 3. 
 5. If this placement is correct, there will be audio feedback that acknowledges that the number 3 was placed correctly. 
-6. Press the space bar to return to the fully zoomed-out position. 
+6. Press the space bar to return to the home position (top left square). 
 
 ## Mastermind User Manual
 **Rules of Mastermind:** The goal of Mastermind is to correctly guess a pre-determined code. Typically, this code is made up of a series of colored pegs; however, in this version of Mastermind, numbered pegs will be used instead. To guess the code, the player must place four numbers from 1-6 (numbers may be used more than once) into four spaces. After making the guess, the player is notified about how much of their guess is correct. This is done by adding four small pegs off to the side. A black peg means that a numbered peg is the right number in the right place. A white peg means that a peg with that number is in the code, but not in the correct place. No peg means that a peg is not the correct number nor is it in the correct place. This is repeated until the code is correctly guessed. 
