@@ -30,11 +30,6 @@ import static gamesforblind.Constants.*;
  */
 public class GameLoader {
     /**
-     * The Scanner that is used throughout the entire program (needed for keyboard input).
-     */
-    private final Scanner keyboard = new Scanner(System.in);
-
-    /**
      * The audio player thread (needed to wait for finish before gracefully exiting the program).
      */
     private final Thread audioPlayerThread;
@@ -244,7 +239,6 @@ public class GameLoader {
                 e.printStackTrace();
             }
 
-            this.keyboard.close();
             System.exit(0);
         }
     }
