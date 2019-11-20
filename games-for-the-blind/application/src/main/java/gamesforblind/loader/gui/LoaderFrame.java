@@ -7,6 +7,7 @@ import gamesforblind.enums.SelectedGame;
 import gamesforblind.loader.GameLoader;
 import gamesforblind.loader.gui.listener.LoaderActionListener;
 import gamesforblind.loader.gui.listener.LoaderKeyboardListener;
+import gamesforblind.loader.gui.listener.LoaderWindowListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,6 +54,8 @@ public class LoaderFrame extends JFrame {
      */
     private int highlightedButtonIndex = 0;
 
+    private final LoaderWindowListener loaderWindowListener;
+
     /**
      * Creates a new LoaderFrame.
      *
@@ -64,6 +67,7 @@ public class LoaderFrame extends JFrame {
 
         // Initialize the listener instance variables & add the keyboard listener (mouse listener set later).
         this.loaderActionListener = new LoaderActionListener(gameLoader);
+        this.loaderWindowListener = new LoaderWindowListener(gameLoader);
         this.loaderKeyboardListener = new LoaderKeyboardListener(gameLoader, this);
 
         if (!programArgs.isPlaybackMode()) {
@@ -172,8 +176,9 @@ public class LoaderFrame extends JFrame {
         frameContainer.add(selectedGameComponent, BorderLayout.PAGE_START);
         frameContainer.add(exitButton, BorderLayout.PAGE_END);
 
-        // The "EXIT" button should be the only way to close the program.
-        this.loaderFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        // Call the logger save when the close button is clicked.
+        this.loaderFrame.addWindowListener(this.loaderWindowListener);
+        this.loaderFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.loaderFrame.setSize((int) (FRAME_DIMENSION * 1.7), FRAME_DIMENSION);
         this.loaderFrame.setVisible(true);
