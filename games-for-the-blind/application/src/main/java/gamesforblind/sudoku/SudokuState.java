@@ -442,13 +442,18 @@ public class SudokuState {
     }
 
     /**
-     * Reads the value of the currently selected {@link Cell} on the Sudoku board (if one is selected).
+     * Reads the location & value of the currently selected {@link Cell} on the Sudoku board (if one is selected).
      */
     public void readSelectedSquare() {
-        Optional<Cell> maybeSelectedCell = this.sudokuKeyboardInterface.getSelectedCell();
-        if (maybeSelectedCell.isPresent()) {
-            Cell selectedCell = maybeSelectedCell.get();
-            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.convertIntegerToPhrase(selectedCell.getValue()));
+        Optional<Point> maybeSelectedPoint = this.sudokuKeyboardInterface.getSelectedPoint();
+        if (maybeSelectedPoint.isPresent()) {
+            Point selectedPoint = maybeSelectedPoint.get();
+            Cell selectedCell = this.sudokuGrid.getCell(selectedPoint.y, selectedPoint.x);
+
+            this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
+                    Phrase.convertPointToPhrase(selectedPoint),
+                    Phrase.convertIntegerToPhrase(selectedCell.getValue())
+            )));
         }
     }
 
