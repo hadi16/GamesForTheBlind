@@ -1,5 +1,6 @@
 package phrase;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.InputStream;
@@ -82,6 +83,17 @@ public enum Phrase {
             "Use the arrow keys to make your selection."),
     PLAY_OR_EXIT("Would you like to play Sudoku or exit? Use the arrow keys to make your selection."),
     EXITING("The game is exiting. Goodbye!"),
+    
+    /* Sudoku: locations */
+    A1, A2, A3, A4, A5, A6, A7, A8, A9,
+    B1, B2, B3, B4, B5, B6, B7, B8, B9,
+    C1, C2, C3, C4, C5, C6, C7, C8, C9,
+    D1, D2, D3, D4, D5, D6, D7, D8, D9,
+    E1, E2, E3, E4, E5, E6, E7, E8, E9,
+    F1, F2, F3, F4, F5, F6, F7, F8, F9,
+    G1, G2, G3, G4, G5, G6, G7, G8, G9,
+    H1, H2, H3, H4, H5, H6, H7, H8, H9,
+    I1, I2, I3, I4, I5, I6, I7, I8, I9,
 
     /* Sudoku: numbers in same row/column/block */
     IN_ROW("You have the following numbers in the same row:"),
@@ -122,6 +134,7 @@ public enum Phrase {
             "To hear the numbers in the currently selected number's row press J, to hear the numbers in the " +
             " currently selected number's column press K, to hear all of the numbers in the current block press L." +
             "If you have selected an empty square and are stuck, press H to automatically fill in the square."),
+
     /* Sudoku: Empty Squares Left */
     EMPTY_PIECES_OF_BOARD_PLURAL_1("There are"),
     EMPTY_PIECES_OF_BOARD_PLURAL_2("empty squares left on the board."),
@@ -261,7 +274,7 @@ public enum Phrase {
      * @return The numeric Phrase that corresponds to the given number that was passed.
      */
     public static Phrase convertIntegerToPhrase(int numberToConvert) {
-        final Phrase[] NUM_PHRASE_LIST = new Phrase[]{
+        final Phrase[] NUM_PHRASE_ARRAY = new Phrase[]{
                 Phrase.EMPTY,           Phrase.ONE,             Phrase.TWO,             Phrase.THREE,
                 Phrase.FOUR,            Phrase.FIVE,            Phrase.SIX,             Phrase.SEVEN,
                 Phrase.EIGHT,           Phrase.NINE,            Phrase.TEN,             Phrase.ELEVEN,
@@ -276,11 +289,35 @@ public enum Phrase {
         if (numberToConvert < 0) {
             throw new IllegalArgumentException("The number to convert must be greater than or equal to 0!");
         }
-        if (numberToConvert >= NUM_PHRASE_LIST.length) {
-            throw new IllegalArgumentException("The number to convert must be less than " + NUM_PHRASE_LIST.length);
+        if (numberToConvert >= NUM_PHRASE_ARRAY.length) {
+            throw new IllegalArgumentException("The number to convert must be less than " + NUM_PHRASE_ARRAY.length);
         }
 
-        return NUM_PHRASE_LIST[numberToConvert];
+        return NUM_PHRASE_ARRAY[numberToConvert];
+    }
+
+    /**
+     * Converts a selected {@link Point} on the Sudoku board to a Phrase.
+     *
+     * @param selectedPoint The currently selected {@link Point} in the game.
+     * @return The location on the board as a Phrase (e.g. "A2", "B3", etc.)
+     */
+    public static Phrase convertPointToPhrase(Point selectedPoint) {
+        final Phrase[][] LOCATIONS_PHRASE_LIST = new Phrase[][]{
+                new Phrase[] {A1, A2, A3, A4, A5, A6, A7, A8, A9},
+                new Phrase[] {B1, B2, B3, B4, B5, B6, B7, B8, B9},
+                new Phrase[] {C1, C2, C3, C4, C5, C6, C7, C8, C9},
+                new Phrase[] {D1, D2, D3, D4, D5, D6, D7, D8, D9},
+                new Phrase[] {E1, E2, E3, E4, E5, E6, E7, E8, E9},
+                new Phrase[] {F1, F2, F3, F4, F5, F6, F7, F8, F9},
+                new Phrase[] {G1, G2, G3, G4, G5, G6, G7, G8, G9},
+                new Phrase[] {H1, H2, H3, H4, H5, H6, H7, H8, H9},
+                new Phrase[] {I1, I2, I3, I4, I5, I6, I7, I8, I9},
+        };
+
+        // x value: 0 maps to "A", 1 maps to "B", etc.
+        // y value: 0 maps to "1", 1 maps to "2", etc.
+        return LOCATIONS_PHRASE_LIST[selectedPoint.x][selectedPoint.y];
     }
 
     /**
