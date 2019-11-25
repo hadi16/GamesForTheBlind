@@ -1,5 +1,7 @@
 package gamesforblind.adapter;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalTime;
 
@@ -14,7 +16,7 @@ public class LocalTimeAdapter extends XmlAdapter<AdaptedLocalTime, LocalTime> {
      * @return A {@link LocalTime}, which is equivalent to the passed {@link AdaptedLocalTime} object.
      */
     @Override
-    public LocalTime unmarshal(AdaptedLocalTime adapted) {
+    public LocalTime unmarshal(@NotNull AdaptedLocalTime adapted) {
         return LocalTime.of(adapted.getHour(), adapted.getMinute(), adapted.getSecond(), adapted.getNano());
     }
 
@@ -25,7 +27,7 @@ public class LocalTimeAdapter extends XmlAdapter<AdaptedLocalTime, LocalTime> {
      * @return An {@link AdaptedLocalTime}, which is equivalent to the passed {@link LocalTime} object.
      */
     @Override
-    public AdaptedLocalTime marshal(LocalTime localTime) {
+    public AdaptedLocalTime marshal(@NotNull LocalTime localTime) {
         AdaptedLocalTime adapted = new AdaptedLocalTime();
         adapted.setHour((byte) localTime.getHour());
         adapted.setMinute((byte) localTime.getMinute());

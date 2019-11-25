@@ -2,6 +2,7 @@ package gamesforblind.logger;
 
 import gamesforblind.ProgramAction;
 import gamesforblind.sudoku.OriginalSudokuGrid;
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -27,7 +28,7 @@ public class LogReader {
      * @return A list of {@link Node}s in the game representing either the {@link OriginalSudokuGrid}
      * or an individual {@link ProgramAction} that was taken in the game.
      */
-    private ArrayList<Node> getLogFileXmlNodeList(String logFilePath) {
+    private ArrayList<Node> getLogFileXmlNodeList(@NotNull String logFilePath) {
         // Step 1: read in the XML log file's raw contents as a String.
         String logXmlString;
         try {
@@ -66,7 +67,7 @@ public class LogReader {
      * @return A Java object that is an instance of {@link OriginalSudokuGrid} or {@link ProgramAction}.
      * If an error occurred, just return empty().
      */
-    private Optional<Object> convertXmlLogNodeToObject(Node xmlNode) {
+    private Optional<Object> convertXmlLogNodeToObject(@NotNull Node xmlNode) {
         try {
             Class originalGridClass = OriginalSudokuGrid.class;
 
@@ -103,7 +104,7 @@ public class LogReader {
      * @param logFilePath The path to the XML log file, as a String.
      * @return A {@link LogFactory} object containing the log file's saved state.
      */
-    public LogFactory restoreLoggedProgram(String logFilePath) {
+    public LogFactory restoreLoggedProgram(@NotNull String logFilePath) {
         // Step 1: Get the list of XML Nodes from the log file.
         ArrayList<Node> xmlNodeList = this.getLogFileXmlNodeList(logFilePath);
 

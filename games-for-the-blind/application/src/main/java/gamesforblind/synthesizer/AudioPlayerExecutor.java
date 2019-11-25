@@ -1,5 +1,6 @@
 package gamesforblind.synthesizer;
 
+import org.jetbrains.annotations.NotNull;
 import phrase.Phrase;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class AudioPlayerExecutor {
      *
      * @param audioPlayer The program's audio player.
      */
-    public AudioPlayerExecutor(AudioPlayer audioPlayer) {
+    public AudioPlayerExecutor(@NotNull AudioPlayer audioPlayer) {
         this.audioPlayer = audioPlayer;
     }
 
@@ -27,7 +28,7 @@ public class AudioPlayerExecutor {
      *
      * @param phrase The Phrase to replace in the program's audio player.
      */
-    public void replacePhraseAndPrint(Phrase phrase) {
+    public void replacePhraseAndPrint(@NotNull Phrase phrase) {
         System.out.println(phrase.getPhraseValue());
         this.audioPlayer.replacePhraseToPlay(phrase);
     }
@@ -37,7 +38,7 @@ public class AudioPlayerExecutor {
      *
      * @param phrases The list of Phrases to replace in the program's audio player.
      */
-    public void replacePhraseAndPrint(ArrayList<Phrase> phrases) {
+    public void replacePhraseAndPrint(@NotNull ArrayList<Phrase> phrases) {
         // Prints all of the phrases on a single line, separated with a space (" ").
         ArrayList<String> phraseStringList = new ArrayList<>();
         phrases.forEach(phrase -> phraseStringList.add(phrase.getPhraseValue()));

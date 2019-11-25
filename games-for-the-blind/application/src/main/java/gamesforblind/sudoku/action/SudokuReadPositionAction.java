@@ -1,6 +1,7 @@
 package gamesforblind.sudoku.action;
 
 import gamesforblind.enums.SudokuSection;
+import org.jetbrains.annotations.NotNull;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -23,7 +24,7 @@ public class SudokuReadPositionAction extends SudokuAction {
      * Warning: DO NOT call this constructor directly.
      * Needed to allow JAXB (XML serializer) to work, since it needs a zero-argument constructor.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "ConstantConditions"})
     private SudokuReadPositionAction() {
         this(null);
     }
@@ -33,7 +34,7 @@ public class SudokuReadPositionAction extends SudokuAction {
      *
      * @param sudokuSection Whether the user wants the ROW, COLUMN, or BLOCK to be read.
      */
-    public SudokuReadPositionAction(SudokuSection sudokuSection) {
+    public SudokuReadPositionAction(@NotNull SudokuSection sudokuSection) {
         this.sudokuSection = sudokuSection;
     }
 

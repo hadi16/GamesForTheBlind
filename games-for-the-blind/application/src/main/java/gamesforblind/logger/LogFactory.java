@@ -3,6 +3,7 @@ package gamesforblind.logger;
 import gamesforblind.ProgramAction;
 import gamesforblind.sudoku.OriginalSudokuGrid;
 import gamesforblind.sudoku.generator.Grid;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -39,7 +40,7 @@ public class LogFactory {
      *
      * @param actionToAdd The {@link ProgramAction} to add to the list.
      */
-    public void addProgramAction(ProgramAction actionToAdd) {
+    public void addProgramAction(@NotNull ProgramAction actionToAdd) {
         this.programActionList.add(actionToAdd);
     }
 
@@ -61,7 +62,7 @@ public class LogFactory {
      *
      * @param originalGridToAdd The object that holds an original state of the {@link Grid} in a logged game.
      */
-    public void addOriginalSudokuGrid(OriginalSudokuGrid originalGridToAdd) {
+    public void addOriginalSudokuGrid(@NotNull OriginalSudokuGrid originalGridToAdd) {
         this.originalSudokuGridList.add(originalGridToAdd);
     }
 

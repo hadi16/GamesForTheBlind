@@ -1,6 +1,7 @@
 package gamesforblind.loader.action;
 
 import gamesforblind.enums.SudokuType;
+import org.jetbrains.annotations.NotNull;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -23,7 +24,7 @@ public class LoaderSudokuSelectionAction extends LoaderAction {
      * Warning: DO NOT call this constructor directly.
      * Needed to allow JAXB (XML serializer) to work, since it needs a zero-argument constructor.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "ConstantConditions"})
     private LoaderSudokuSelectionAction() {
         this(null);
     }
@@ -33,7 +34,7 @@ public class LoaderSudokuSelectionAction extends LoaderAction {
      *
      * @param sudokuType The type of Sudoku game that the user has selected (e.g. 4x4 or 9x9).
      */
-    public LoaderSudokuSelectionAction(SudokuType sudokuType) {
+    public LoaderSudokuSelectionAction(@NotNull SudokuType sudokuType) {
         this.sudokuType = sudokuType;
     }
 

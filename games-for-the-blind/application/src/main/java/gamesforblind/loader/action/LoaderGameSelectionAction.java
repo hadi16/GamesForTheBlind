@@ -1,6 +1,7 @@
 package gamesforblind.loader.action;
 
 import gamesforblind.enums.SelectedGame;
+import org.jetbrains.annotations.NotNull;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -24,7 +25,7 @@ public class LoaderGameSelectionAction extends LoaderAction {
      * Warning: DO NOT call this constructor directly.
      * Needed to allow JAXB (XML serializer) to work, since it needs a zero-argument constructor.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "ConstantConditions"})
     private LoaderGameSelectionAction() {
         this(null);
     }
@@ -34,7 +35,7 @@ public class LoaderGameSelectionAction extends LoaderAction {
      *
      * @param selectedGame Which game the user has selected. If the user wishes to go back, this is NONE.
      */
-    public LoaderGameSelectionAction(SelectedGame selectedGame) {
+    public LoaderGameSelectionAction(@NotNull SelectedGame selectedGame) {
         this.selectedGame = selectedGame;
     }
 

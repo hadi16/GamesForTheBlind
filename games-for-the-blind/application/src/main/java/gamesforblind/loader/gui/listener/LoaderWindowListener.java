@@ -2,6 +2,7 @@ package gamesforblind.loader.gui.listener;
 
 import gamesforblind.loader.GameLoader;
 import gamesforblind.loader.action.LoaderExitAction;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -21,7 +22,7 @@ public class LoaderWindowListener implements WindowListener {
      *
      * @param gameLoader The current {@link GameLoader}.
      */
-    public LoaderWindowListener(GameLoader gameLoader) {
+    public LoaderWindowListener(@NotNull GameLoader gameLoader) {
         this.gameLoader = gameLoader;
     }
 

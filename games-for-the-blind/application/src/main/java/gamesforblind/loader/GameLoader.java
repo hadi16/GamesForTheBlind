@@ -17,6 +17,7 @@ import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.action.SudokuAction;
 import gamesforblind.synthesizer.AudioPlayer;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
+import org.jetbrains.annotations.NotNull;
 import phrase.Phrase;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -52,7 +53,7 @@ public class GameLoader {
      *
      * @param programArgs The program arguments that were passed.
      */
-    public GameLoader(ProgramArgs programArgs) {
+    public GameLoader(@NotNull ProgramArgs programArgs) {
         // Initialize the audio player & start the audio player thread.
         AudioPlayer audioPlayer = this.initializeAudioPlayer();
         this.audioPlayerExecutor = new AudioPlayerExecutor(audioPlayer);
@@ -144,100 +145,31 @@ public class GameLoader {
      *
      * @param loaderAction The action that was sent to the game loader.
      */
-    public void receiveAction(LoaderAction loaderAction) {
+    public void receiveAction(@NotNull LoaderAction loaderAction) {
         if (!this.programArgs.isPlaybackMode()) {
             this.logFactory.addProgramAction(loaderAction);
         }
 
         final Map<Class, Runnable> LOADER_ACTION_TO_RUNNABLE = Map.of(
                 // Case 1: the user pressed one of the arrow keys in the loader GUI.
-                LoaderArrowKeyAction.class, () -> {
-                    final Map<String, Phrase> BUTTON_TEXT_TO_PHRASE = Map.of(
-                            PLAY_SUDOKU_BUTTON, Phrase.SPACE_FOR_SUDOKU,
-                            EXIT_BUTTON, Phrase.SPACE_FOR_EXIT,
-                            BACK_BUTTON, Phrase.GO_BACK_TO_GAME_SELECTION,
-                            FOUR_BY_FOUR_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_FOUR,
-                            SIX_BY_SIX_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_SIX,
-                            NINE_BY_NINE_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_NINE
-                    );
-
-                    LoaderArrowKeyAction loaderArrowKeyAction = (LoaderArrowKeyAction) loaderAction;
-                    this.loaderFrame.changeHighlightedButton(loaderArrowKeyAction.getArrowKeyDirection());
-                    this.audioPlayerExecutor.replacePhraseAndPrint(
-                            BUTTON_TEXT_TO_PHRASE.get(this.loaderFrame.getCurrentlyHighlightedButtonText())
-                    );
-                },
+                LoaderArrowKeyAction.class,
+                () -> this.highlightDifferentLoaderButton((LoaderArrowKeyAction) loaderAction),
 
                 // Case 2: the user changed the currently selected game in the loader GUI.
-                LoaderGameSelectionAction.class, () -> {
-                    LoaderGameSelectionAction gameAction = (LoaderGameSelectionAction) loaderAction;
-
-                    Phrase relevantPhrase;
-                    if (gameAction.getSelectedGame() == SelectedGame.SUDOKU) {
-                        if (this.programArgs.getSelectedInterfaceType() == InterfaceType.ARROW_KEY_INTERFACE) {
-                            relevantPhrase = Phrase.WHICH_SUDOKU_GAME_ALL;
-                        } else {
-                            relevantPhrase = Phrase.WHICH_SUDOKU_GAME_NO_SIX;
-                        }
-                    } else {
-                        relevantPhrase = Phrase.PLAY_OR_EXIT;
-                    }
-                    this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrase);
-
-                    this.loaderFrame.setLoaderGuiBasedOnSelectedGame(gameAction.getSelectedGame());
-                },
+                LoaderGameSelectionAction.class,
+                () -> this.changeCurrentGame((LoaderGameSelectionAction) loaderAction),
 
                 // Case 3: the user selected one of the Sudoku board sizes in the loader GUI (4x4 or 9x9).
-                LoaderSudokuSelectionAction.class, () -> {
-                    LoaderSudokuSelectionAction loaderSudokuSelection = (LoaderSudokuSelectionAction) loaderAction;
-                    SudokuType sudokuType = loaderSudokuSelection.getSudokuType();
-
-                    ArrayList<InterfaceType> supportedInterfaces = sudokuType.getSupportedSudokuInterfaces();
-                    InterfaceType interfaceType = this.programArgs.getSelectedInterfaceType();
-                    if (!supportedInterfaces.contains(interfaceType)) {
-                        System.err.println(
-                                "Interface type " + interfaceType + " not supported for Sudoku type " + sudokuType
-                        );
-                        System.exit(1);
-                    }
-
-                    this.loaderFrame.closeLoaderFrames();
-                    this.sudokuGame = new SudokuGame(
-                            this, sudokuType, this.audioPlayerExecutor, this.logFactory, this.programArgs
-                    );
-                },
+                LoaderSudokuSelectionAction.class,
+                () -> this.loadSudokuGame((LoaderSudokuSelectionAction) loaderAction),
 
                 // Case 4: the user pressed an unrecognized key on the keyboard.
-                LoaderUnrecognizedKeyAction.class, () -> {
-                    LoaderUnrecognizedKeyAction unrecognizedKeyAction = (LoaderUnrecognizedKeyAction) loaderAction;
-                    this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
-                            Phrase.UNRECOGNIZED_KEY, Phrase.keyCodeToPhrase(unrecognizedKeyAction.getKeyCode())
-                    )));
-                },
+                LoaderUnrecognizedKeyAction.class,
+                () -> this.readUnrecognizedKey((LoaderUnrecognizedKeyAction) loaderAction),
 
                 // Case 5: the user has decided to exit the loader GUI.
-                LoaderExitAction.class, () -> {
-                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.EXITING);
-
-                    // I don't want to exit the game if it is in playback mode (see the ending state of the game).
-                    if (this.programArgs.isPlaybackMode()) {
-                        return;
-                    }
-
-                    this.audioPlayerExecutor.terminateAudioPlayer();
-
-                    LogWriter logWriter = new LogWriter(this.logFactory);
-                    logWriter.saveGameLog();
-
-                    // Wait for the audio player thread to end.
-                    try {
-                        this.audioPlayerThread.join();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    System.exit(0);
-                }
+                LoaderExitAction.class,
+                this::exitApplication
         );
 
         Runnable functionToExecute = LOADER_ACTION_TO_RUNNABLE.get(loaderAction.getClass());
@@ -246,6 +178,110 @@ public class GameLoader {
         } else {
             System.err.println("An unrecognized form of loader action was received!");
         }
+    }
+
+    /**
+     * Highlights a different button within the loader interface.
+     *
+     * @param loaderArrowKeyAction The {@link LoaderArrowKeyAction} that was sent to the loader.
+     */
+    private void highlightDifferentLoaderButton(@NotNull LoaderArrowKeyAction loaderArrowKeyAction) {
+        final Map<String, Phrase> BUTTON_TEXT_TO_PHRASE = Map.of(
+                PLAY_SUDOKU_BUTTON, Phrase.SPACE_FOR_SUDOKU,
+                EXIT_BUTTON, Phrase.SPACE_FOR_EXIT,
+                BACK_BUTTON, Phrase.GO_BACK_TO_GAME_SELECTION,
+                FOUR_BY_FOUR_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_FOUR,
+                SIX_BY_SIX_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_SIX,
+                NINE_BY_NINE_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_NINE
+        );
+
+        this.loaderFrame.changeHighlightedButton(loaderArrowKeyAction.getArrowKeyDirection());
+        this.audioPlayerExecutor.replacePhraseAndPrint(
+                BUTTON_TEXT_TO_PHRASE.get(this.loaderFrame.getCurrentlyHighlightedButtonText())
+        );
+    }
+
+    /**
+     * Changes the current game in the loader.
+     *
+     * @param loaderGameSelectionAction The {@link LoaderGameSelectionAction} that was sent to the loader.
+     */
+    private void changeCurrentGame(@NotNull LoaderGameSelectionAction loaderGameSelectionAction) {
+        SelectedGame selectedGame = loaderGameSelectionAction.getSelectedGame();
+
+        Phrase relevantPhrase;
+        if (selectedGame == SelectedGame.SUDOKU) {
+            if (this.programArgs.getSelectedInterfaceType() == InterfaceType.ARROW_KEY_INTERFACE) {
+                relevantPhrase = Phrase.WHICH_SUDOKU_GAME_ALL;
+            } else {
+                relevantPhrase = Phrase.WHICH_SUDOKU_GAME_NO_SIX;
+            }
+        } else {
+            relevantPhrase = Phrase.PLAY_OR_EXIT;
+        }
+        this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrase);
+
+        this.loaderFrame.setLoaderGuiBasedOnSelectedGame(selectedGame);
+    }
+
+    /**
+     * Loads the Sudoku game type that the user requested.
+     *
+     * @param loaderSudokuSelectionAction The {@link LoaderSudokuSelectionAction} that was sent to the game.
+     */
+    private void loadSudokuGame(@NotNull LoaderSudokuSelectionAction loaderSudokuSelectionAction) {
+        SudokuType sudokuType = loaderSudokuSelectionAction.getSudokuType();
+
+        List<InterfaceType> supportedInterfaces = sudokuType.getSupportedSudokuInterfaces();
+        InterfaceType interfaceType = this.programArgs.getSelectedInterfaceType();
+        if (!supportedInterfaces.contains(interfaceType)) {
+            System.err.println(
+                    "Interface type " + interfaceType + " not supported for Sudoku type " + sudokuType
+            );
+            System.exit(1);
+        }
+
+        this.loaderFrame.closeLoaderFrames();
+        this.sudokuGame = new SudokuGame(
+                this, sudokuType, this.audioPlayerExecutor, this.logFactory, this.programArgs
+        );
+    }
+
+    /**
+     * Reads an unrecognized key that was pressed in the loader.
+     *
+     * @param loaderUnrecognizedKeyAction The {@link LoaderUnrecognizedKeyAction} that was sent to the loader.
+     */
+    private void readUnrecognizedKey(@NotNull LoaderUnrecognizedKeyAction loaderUnrecognizedKeyAction) {
+        this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
+                Phrase.UNRECOGNIZED_KEY, Phrase.keyCodeToPhrase(loaderUnrecognizedKeyAction.getKeyCode())
+        )));
+    }
+
+    /**
+     * Exit from the application. If we are in playback mode, don't exit (to see the ending state of the game).
+     */
+    public void exitApplication() {
+        this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.EXITING);
+
+        // I don't want to exit the game if it is in playback mode (see the ending state of the game).
+        if (this.programArgs.isPlaybackMode()) {
+            return;
+        }
+
+        this.audioPlayerExecutor.terminateAudioPlayer();
+
+        LogWriter logWriter = new LogWriter(this.logFactory);
+        logWriter.saveGameLog();
+
+        // Wait for the audio player thread to end.
+        try {
+            this.audioPlayerThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.exit(0);
     }
 
     /**

@@ -1,6 +1,7 @@
 package gamesforblind;
 
 import gamesforblind.enums.InterfaceType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +27,7 @@ public class ProgramArgs {
      *
      * @param args The String arguments that were passed to main().
      */
-    public ProgramArgs(String[] args) {
+    public ProgramArgs(@NotNull String[] args) {
         ArrayList<String> argsList = new ArrayList<>(Arrays.asList(args));
 
         // If the "-p" argument was passed, we are in playback mode.

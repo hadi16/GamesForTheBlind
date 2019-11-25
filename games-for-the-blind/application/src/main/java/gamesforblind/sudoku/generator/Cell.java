@@ -1,5 +1,7 @@
 package gamesforblind.sudoku.generator;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 
 import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
@@ -64,7 +66,7 @@ public class Cell {
      *
      * @param rowNeighbors a {@link Collection} of row neighbors
      */
-    public void setRowNeighbors(Collection<Cell> rowNeighbors) {
+    public void setRowNeighbors(@NotNull Collection<Cell> rowNeighbors) {
         this.rowNeighbors = rowNeighbors;
     }
 
@@ -82,7 +84,7 @@ public class Cell {
      *
      * @param columnNeighbors a {@link Collection} of column neighbors
      */
-    public void setColumnNeighbors(Collection<Cell> columnNeighbors) {
+    public void setColumnNeighbors(@NotNull Collection<Cell> columnNeighbors) {
         this.columnNeighbors = columnNeighbors;
     }
 
@@ -100,7 +102,7 @@ public class Cell {
      *
      * @param boxNeighbors a {@link Collection} of box neighbors
      */
-    public void setBoxNeighbors(Collection<Cell> boxNeighbors) {
+    public void setBoxNeighbors(@NotNull Collection<Cell> boxNeighbors) {
         this.boxNeighbors = boxNeighbors;
     }
 
@@ -121,7 +123,7 @@ public class Cell {
      *
      * @param nextCell the next Cell consecutive to this Cell.
      */
-    public void setNextCell(Cell nextCell) {
+    public void setNextCell(@NotNull Cell nextCell) {
         this.nextCell = nextCell;
     }
 }

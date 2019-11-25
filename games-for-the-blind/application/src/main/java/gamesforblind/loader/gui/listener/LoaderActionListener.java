@@ -1,6 +1,7 @@
 package gamesforblind.loader.gui.listener;
 
 import gamesforblind.loader.GameLoader;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +16,7 @@ public class LoaderActionListener extends LoaderListener implements ActionListen
      *
      * @param gameLoader An instance to the game loader, which is needed to instance the superclass.
      */
-    public LoaderActionListener(GameLoader gameLoader) {
+    public LoaderActionListener(@NotNull GameLoader gameLoader) {
         super(gameLoader);
     }
 
@@ -25,7 +26,7 @@ public class LoaderActionListener extends LoaderListener implements ActionListen
      * @param e The mouse event that was triggered.
      */
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(@NotNull ActionEvent e) {
         // Just call into the superclass' method for sending an action to the game loader.
         // This allows for consistency between the mouse listener & keyboard listener in the game loader.
         this.sendSelectionActionBasedOnButtonText(e.getActionCommand());

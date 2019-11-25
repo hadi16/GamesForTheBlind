@@ -1,6 +1,7 @@
 package gamesforblind.sudoku.action;
 
 import gamesforblind.enums.ArrowKeyDirection;
+import org.jetbrains.annotations.NotNull;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -23,7 +24,7 @@ public class SudokuHotKeyAction extends SudokuAction {
      * Warning: DO NOT call this constructor directly.
      * Needed to allow JAXB (XML serializer) to work, since it needs a zero-argument constructor.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "ConstantConditions"})
     private SudokuHotKeyAction() {
         this(null);
     }
@@ -33,7 +34,7 @@ public class SudokuHotKeyAction extends SudokuAction {
      *
      * @param arrowKeyDirection The {@link ArrowKeyDirection} that was pressed with this hot key (e.g. left arrow key).
      */
-    public SudokuHotKeyAction(ArrowKeyDirection arrowKeyDirection) {
+    public SudokuHotKeyAction(@NotNull ArrowKeyDirection arrowKeyDirection) {
         this.arrowKeyDirection = arrowKeyDirection;
     }
 

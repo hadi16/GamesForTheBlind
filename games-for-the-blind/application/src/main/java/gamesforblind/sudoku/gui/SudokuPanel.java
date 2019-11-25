@@ -3,6 +3,7 @@ package gamesforblind.sudoku.gui;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.SudokuState;
 import gamesforblind.sudoku.generator.Grid;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +38,7 @@ public class SudokuPanel extends JPanel {
      *
      * @param initialState The initial state of the Sudoku game.
      */
-    public SudokuPanel(SudokuState initialState) {
+    public SudokuPanel(@NotNull SudokuState initialState) {
         this.sudokuState = initialState;
         this.sudokuType = initialState.getSudokuType();
     }
@@ -49,7 +50,7 @@ public class SudokuPanel extends JPanel {
      * @param squareDimension The pixel dimension of each square on the board.
      * @param initialPosition Amount of pixels to begin painting board from (the row & column labels come before this).
      */
-    private void paintBlockBorders(Graphics graphics, int squareDimension, int initialPosition) {
+    private void paintBlockBorders(@NotNull Graphics graphics, int squareDimension, int initialPosition) {
         final int BLOCK_WIDTH = this.sudokuType.getBlockWidth();
         final int BLOCK_HEIGHT = this.sudokuType.getBlockHeight();
 
@@ -74,7 +75,7 @@ public class SudokuPanel extends JPanel {
      * @param squareDimension The pixel dimension of each square on the board.
      * @param initialPosition Amount of pixels to begin painting board from (the row & column labels come before this).
      */
-    private void paintMainBoard(Graphics graphics, int squareDimension, int initialPosition) {
+    private void paintMainBoard(@NotNull Graphics graphics, int squareDimension, int initialPosition) {
         int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
         Grid sudokuGrid = this.sudokuState.getSudokuGrid();
 
@@ -131,7 +132,7 @@ public class SudokuPanel extends JPanel {
      * @param squareDimension The pixel dimension of each square on the board.
      * @param initialPosition Amount of pixels to begin painting board from.
      */
-    private void paintBoardLabels(Graphics graphics, int squareDimension, int initialPosition) {
+    private void paintBoardLabels(@NotNull Graphics graphics, int squareDimension, int initialPosition) {
         int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
 
         graphics.setColor(Color.BLACK);
@@ -165,7 +166,7 @@ public class SudokuPanel extends JPanel {
      * @param graphics The {@link Graphics} object used for painting.
      */
     @Override
-    protected void paintComponent(Graphics graphics) {
+    protected void paintComponent(@NotNull Graphics graphics) {
         super.paintComponent(graphics);
 
         Rectangle clipBounds = graphics.getClipBounds();

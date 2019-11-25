@@ -1,8 +1,11 @@
 package gamesforblind.enums;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Enumeration for the different types of Sudoku that are supported in the game (e.g. 4x4 and 9x9).
@@ -39,7 +42,7 @@ public enum SudokuType {
      * The overall dimension of the Sudoku board (e.g. 9x9 --> 9).
      */
     private final int sudokuBoardSize;
-    private final ArrayList<InterfaceType> supportedSudokuInterfaces;
+    private final List<InterfaceType> supportedSudokuInterfaces;
 
     /**
      * Creates a new SudokuType.
@@ -47,15 +50,13 @@ public enum SudokuType {
      * @param blockWidth                The number of columns in each block.
      * @param blockHeight               The number of rows in each block.
      * @param sudokuBoardSize           The overall dimension of the Sudoku board (e.g. 9x9 --> 9).
-     * @param supportedSudokuInterfaces The supported keyboard interface types.
+     * @param supportedInterfaces The supported keyboard interface types.
      */
-    SudokuType(
-            int blockWidth, int blockHeight, int sudokuBoardSize, ArrayList<InterfaceType> supportedSudokuInterfaces
-    ) {
+    SudokuType(int blockWidth, int blockHeight, int sudokuBoardSize, @NotNull List<InterfaceType> supportedInterfaces) {
         this.blockWidth = blockWidth;
         this.blockHeight = blockHeight;
         this.sudokuBoardSize = sudokuBoardSize;
-        this.supportedSudokuInterfaces = supportedSudokuInterfaces;
+        this.supportedSudokuInterfaces = supportedInterfaces;
     }
 
     /**
@@ -82,7 +83,7 @@ public enum SudokuType {
     /**
      * @return The supported keyboard interface types.
      */
-    public ArrayList<InterfaceType> getSupportedSudokuInterfaces() {
+    public List<InterfaceType> getSupportedSudokuInterfaces() {
         return this.supportedSudokuInterfaces;
     }
 }
