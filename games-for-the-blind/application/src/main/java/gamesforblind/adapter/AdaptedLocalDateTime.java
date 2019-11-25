@@ -1,5 +1,7 @@
 package gamesforblind.adapter;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -45,7 +47,7 @@ public class AdaptedLocalDateTime {
      *
      * @param date The date to set (a {@link LocalDate}).
      */
-    public void setDate(LocalDate date) {
+    public void setDate(@NotNull LocalDate date) {
         this.date = date;
     }
 
@@ -63,7 +65,7 @@ public class AdaptedLocalDateTime {
      *
      * @param time The time to set (a {@link LocalTime}).
      */
-    public void setTime(LocalTime time) {
+    public void setTime(@NotNull LocalTime time) {
         this.time = time;
     }
 }

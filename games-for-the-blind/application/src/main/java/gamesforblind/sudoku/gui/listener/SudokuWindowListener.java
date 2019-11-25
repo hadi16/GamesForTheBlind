@@ -2,6 +2,7 @@ package gamesforblind.sudoku.gui.listener;
 
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.action.SudokuExitAction;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -21,7 +22,7 @@ public class SudokuWindowListener implements WindowListener {
      *
      * @param sudokuGame The current {@link SudokuGame}.
      */
-    public SudokuWindowListener(SudokuGame sudokuGame) {
+    public SudokuWindowListener(@NotNull SudokuGame sudokuGame) {
         this.sudokuGame = sudokuGame;
     }
 

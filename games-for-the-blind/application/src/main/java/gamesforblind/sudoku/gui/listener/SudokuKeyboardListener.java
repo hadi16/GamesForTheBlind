@@ -5,6 +5,7 @@ import gamesforblind.enums.SudokuSection;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.action.*;
 import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -43,7 +44,7 @@ public class SudokuKeyboardListener implements KeyListener {
      * @param keyboardInterface The given keyboard interface that the user has chosen (arrow keys, etc.).
      * @param sudokuGame        The current Sudoku game.
      */
-    public SudokuKeyboardListener(SudokuKeyboardInterface keyboardInterface, SudokuGame sudokuGame) {
+    public SudokuKeyboardListener(@NotNull SudokuKeyboardInterface keyboardInterface, @NotNull SudokuGame sudokuGame) {
         this.sudokuGame = sudokuGame;
         this.keyCodeToPoint = keyboardInterface.getKeyCodeToPointMapping();
         this.keyCodeToHotKeyAction = keyboardInterface.keyCodeToHotKeyAction;
@@ -55,7 +56,7 @@ public class SudokuKeyboardListener implements KeyListener {
      * @param e The event that was triggered by the key press.
      */
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(@NotNull KeyEvent e) {
         int selectedKeyCode = e.getKeyCode();
         this.pressedKeyCodeList.add(selectedKeyCode);
 

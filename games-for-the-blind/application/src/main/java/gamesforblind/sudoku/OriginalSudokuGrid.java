@@ -1,5 +1,7 @@
 package gamesforblind.sudoku;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -24,7 +26,7 @@ public class OriginalSudokuGrid {
      * @param originalGrid The 2D array of ints to initialize the class with.
      * @return A OriginalSudokuGrid containing the passed 2D array of ints.
      */
-    public static OriginalSudokuGrid of(int[][] originalGrid) {
+    public static OriginalSudokuGrid of(@NotNull int[][] originalGrid) {
         OriginalSudokuGrid originalSudokuGrid = new OriginalSudokuGrid();
         originalSudokuGrid.grid = originalGrid;
         return originalSudokuGrid;

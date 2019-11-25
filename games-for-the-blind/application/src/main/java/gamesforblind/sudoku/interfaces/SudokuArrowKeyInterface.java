@@ -6,6 +6,8 @@ import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.SudokuState;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
 import gamesforblind.sudoku.action.SudokuHotKeyAction;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -32,7 +34,7 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
      *
      * @param sudokuState The state of the Sudoku game.
      */
-    public SudokuArrowKeyInterface(SudokuState sudokuState) {
+    public SudokuArrowKeyInterface(@NotNull SudokuState sudokuState) {
         super(
                 sudokuState,
                 Map.of(
@@ -61,7 +63,7 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
      * @param inputType  Whether this action was made with a keyboard or a mouse.
      */
     @Override
-    public void setHighlightedPoint(Point pointToSet, InputType inputType) {
+    public void setHighlightedPoint(@Nullable Point pointToSet, @NotNull InputType inputType) {
         // Case 1: the user presses the space bar.
         if (pointToSet == null) {
             this.selectedPoint = new Point(0, 0);
@@ -91,7 +93,7 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
      * @param arrowKeyDirection The {@link ArrowKeyDirection} that was pressed with this hot key (e.g. left arrow key).
      */
     @Override
-    public void setHighlightedPoint(ArrowKeyDirection arrowKeyDirection) {
+    public void setHighlightedPoint(@NotNull ArrowKeyDirection arrowKeyDirection) {
         SudokuType sudokuType = this.sudokuState.getSudokuType();
         int maxPointIndex = sudokuType.getSudokuBoardSize() - 1;
 

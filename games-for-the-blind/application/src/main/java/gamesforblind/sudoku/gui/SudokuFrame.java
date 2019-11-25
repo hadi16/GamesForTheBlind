@@ -6,6 +6,7 @@ import gamesforblind.sudoku.SudokuState;
 import gamesforblind.sudoku.gui.listener.SudokuKeyboardListener;
 import gamesforblind.sudoku.gui.listener.SudokuMouseListener;
 import gamesforblind.sudoku.gui.listener.SudokuWindowListener;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,7 +32,12 @@ public class SudokuFrame extends JFrame {
      * @param sudokuType   Whether the Sudoku board is a 4x4, 6x6, or 9x9.
      * @param playbackMode true if loading saved game from logs (otherwise, false).
      */
-    public SudokuFrame(SudokuGame sudokuGame, SudokuState initialState, SudokuType sudokuType, boolean playbackMode) {
+    public SudokuFrame(
+            @NotNull SudokuGame sudokuGame,
+            @NotNull SudokuState initialState,
+            @NotNull SudokuType sudokuType,
+            boolean playbackMode
+    ) {
         this.sudokuPanel = new SudokuPanel(initialState);
         this.frame = new JFrame("Sudoku");
 
@@ -51,7 +57,7 @@ public class SudokuFrame extends JFrame {
      *
      * @param sudokuGame The Sudoku game.
      */
-    private void initializeGui(SudokuGame sudokuGame) {
+    private void initializeGui(@NotNull SudokuGame sudokuGame) {
         this.frame.add(this.sudokuPanel);
 
         this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);

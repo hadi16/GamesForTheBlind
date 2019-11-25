@@ -1,6 +1,7 @@
 package gamesforblind.sudoku.generator;
 
 import gamesforblind.enums.SudokuType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -18,7 +19,7 @@ public class Generator {
      *
      * @param sudokuType Whether the Sudoku game is a 4x4, 6x6, or 9x9.
      */
-    public Generator(SudokuType sudokuType) {
+    public Generator(@NotNull SudokuType sudokuType) {
         this.solver = new Solver(sudokuType.getSudokuBoardSize());
         this.sudokuType = sudokuType;
     }
@@ -44,7 +45,7 @@ public class Generator {
      * @param grid               The Grid to delete cell values from.
      * @param numberOfEmptyCells The number of cell values to erase.
      */
-    private void eraseCells(Grid grid, int numberOfEmptyCells) {
+    private void eraseCells(@NotNull Grid grid, int numberOfEmptyCells) {
         Random random = new Random();
         for (int i = 0; i < numberOfEmptyCells; i++) {
             int randomRow = random.nextInt(this.sudokuType.getSudokuBoardSize());

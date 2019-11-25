@@ -1,5 +1,6 @@
 package gamesforblind.logger;
 
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -28,7 +29,7 @@ public class XmlHelpers {
      * @param xmlString The XML String to convert.
      * @return A {@link Document} that is the equivalent of the passed XML String. If an error occurred, return empty().
      */
-    public static Optional<Document> convertXmlStringToDocument(String xmlString) {
+    public static Optional<Document> convertXmlStringToDocument(@NotNull String xmlString) {
         try {
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             InputSource inputSource = new InputSource();
@@ -48,7 +49,7 @@ public class XmlHelpers {
      * @param xmlDocument The XML {@link Document} to beautify.
      * @return A XML String that has been properly indented/beautified. If an error occurred, return empty().
      */
-    public static Optional<String> beautifyXmlDocument(Document xmlDocument) {
+    public static Optional<String> beautifyXmlDocument(@NotNull Document xmlDocument) {
         try {
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");

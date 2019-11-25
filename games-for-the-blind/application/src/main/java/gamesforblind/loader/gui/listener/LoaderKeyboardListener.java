@@ -5,6 +5,7 @@ import gamesforblind.loader.GameLoader;
 import gamesforblind.loader.action.LoaderArrowKeyAction;
 import gamesforblind.loader.action.LoaderUnrecognizedKeyAction;
 import gamesforblind.loader.gui.LoaderFrame;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -28,7 +29,7 @@ public class LoaderKeyboardListener extends LoaderListener implements KeyEventDi
      * @param gameLoader  Reference to the game loader. Needed to send the appropriate action performed by the user.
      * @param loaderFrame The {@link LoaderFrame} instance for the loader GUI.
      */
-    public LoaderKeyboardListener(GameLoader gameLoader, LoaderFrame loaderFrame) {
+    public LoaderKeyboardListener(@NotNull GameLoader gameLoader, @NotNull LoaderFrame loaderFrame) {
         super(gameLoader);
         this.loaderFrame = loaderFrame;
     }
@@ -40,7 +41,7 @@ public class LoaderKeyboardListener extends LoaderListener implements KeyEventDi
      * @return Whether the {@link KeyEvent} was fully dispatched (see {@link KeyEventDispatcher} docs for details).
      */
     @Override
-    public boolean dispatchKeyEvent(KeyEvent e) {
+    public boolean dispatchKeyEvent(@NotNull KeyEvent e) {
         if (e.getID() == KeyEvent.KEY_PRESSED) {
             this.sendActionBasedOnKeyPressed(e);
         }
@@ -55,7 +56,7 @@ public class LoaderKeyboardListener extends LoaderListener implements KeyEventDi
      *
      * @param e The event that was triggered by the user pressing a key in the game.
      */
-    private void sendActionBasedOnKeyPressed(KeyEvent e) {
+    private void sendActionBasedOnKeyPressed(@NotNull KeyEvent e) {
         // Case 1: the user has selected the currently highlighted button.
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             // TODO: get the highlighted button text directly from the KeyEvent (causes bugs w/ current implementation).
