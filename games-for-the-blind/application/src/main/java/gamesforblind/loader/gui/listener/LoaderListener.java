@@ -6,6 +6,7 @@ import gamesforblind.loader.GameLoader;
 import gamesforblind.loader.action.LoaderExitAction;
 import gamesforblind.loader.action.LoaderGameSelectionAction;
 import gamesforblind.loader.action.LoaderSudokuSelectionAction;
+import org.jetbrains.annotations.NotNull;
 
 import static gamesforblind.Constants.*;
 
@@ -24,7 +25,7 @@ public abstract class LoaderListener {
      *
      * @param gameLoader The game loader for the program.
      */
-    protected LoaderListener(GameLoader gameLoader) {
+    protected LoaderListener(@NotNull GameLoader gameLoader) {
         this.gameLoader = gameLoader;
     }
 
@@ -36,7 +37,7 @@ public abstract class LoaderListener {
      *
      * @param buttonText The text of the selected button in the loader GUI.
      */
-    protected void sendSelectionActionBasedOnButtonText(String buttonText) {
+    protected void sendSelectionActionBasedOnButtonText(@NotNull String buttonText) {
         switch (buttonText) {
             // Cases for when the user can select between playing Sudoku & exiting the program.
             case PLAY_SUDOKU_BUTTON:

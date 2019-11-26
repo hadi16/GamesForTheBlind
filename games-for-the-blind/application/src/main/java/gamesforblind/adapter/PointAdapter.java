@@ -1,5 +1,7 @@
 package gamesforblind.adapter;
 
+import org.jetbrains.annotations.Nullable;
+
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.awt.*;
 
@@ -13,8 +15,9 @@ public class PointAdapter extends XmlAdapter<AdaptedPoint, Point> {
      * @param adaptedPoint The {@link AdaptedPoint} to convert.
      * @return A {@link Point}, which is equivalent to the passed {@link AdaptedPoint} object.
      */
+    @Nullable
     @Override
-    public Point unmarshal(AdaptedPoint adaptedPoint) {
+    public Point unmarshal(@Nullable AdaptedPoint adaptedPoint) {
         // null points are used in SudokuHighlightAction
         if (adaptedPoint == null) {
             return null;
@@ -29,8 +32,9 @@ public class PointAdapter extends XmlAdapter<AdaptedPoint, Point> {
      * @param point The {@link Point} to convert.
      * @return An {@link AdaptedPoint}, which is equivalent to the passed {@link Point} object.
      */
+    @Nullable
     @Override
-    public AdaptedPoint marshal(Point point) {
+    public AdaptedPoint marshal(@Nullable Point point) {
         // null points are used in SudokuHighlightAction
         if (point == null) {
             return null;

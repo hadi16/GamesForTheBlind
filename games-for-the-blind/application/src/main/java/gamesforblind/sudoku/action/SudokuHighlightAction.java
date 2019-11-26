@@ -2,6 +2,8 @@ package gamesforblind.sudoku.action;
 
 import gamesforblind.adapter.PointAdapter;
 import gamesforblind.enums.InputType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -39,7 +41,7 @@ public class SudokuHighlightAction extends SudokuAction {
      * Warning: DO NOT call this constructor directly.
      * Needed to allow JAXB (XML serializer) to work, since it needs a zero-argument constructor.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "ConstantConditions"})
     private SudokuHighlightAction() {
         this(null, null);
     }
@@ -50,7 +52,7 @@ public class SudokuHighlightAction extends SudokuAction {
      * @param pointToHighlight The point that the user wishes to highlight.
      * @param inputType        Whether the action was triggered by the mouse or keyboard.
      */
-    public SudokuHighlightAction(Point pointToHighlight, InputType inputType) {
+    public SudokuHighlightAction(@Nullable Point pointToHighlight, @NotNull InputType inputType) {
         this.pointToHighlight = pointToHighlight;
         this.inputType = inputType;
     }

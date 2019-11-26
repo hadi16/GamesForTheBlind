@@ -1,5 +1,7 @@
 package gamesforblind.loader.gui;
 
+import org.jetbrains.annotations.Nullable;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.Optional;
@@ -25,6 +27,7 @@ public class LogFileSelectionGui extends JFrame {
      *
      * @return The path to the selected log file as a String (or null if operation was cancelled).
      */
+    @Nullable
     private String openLogFileGuiAndReturnPath() {
         JFrame openDialog = new JFrame();
         openDialog.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
