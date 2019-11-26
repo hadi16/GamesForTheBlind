@@ -2,6 +2,7 @@ package gamesforblind.logger;
 
 import gamesforblind.ProgramAction;
 import gamesforblind.sudoku.OriginalSudokuGrid;
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 
 import javax.xml.bind.JAXBContext;
@@ -41,7 +42,7 @@ public class LogWriter {
      * @param objectToMarshall The Java object to marshall.
      * @return The XML body representing the Java object (NO XML prolog included). If an error occurred, just empty().
      */
-    private Optional<String> convertObjectToXmlString(Object objectToMarshall) {
+    private Optional<String> convertObjectToXmlString(@NotNull Object objectToMarshall) {
         try {
             Marshaller jaxbMarshaller = JAXBContext.newInstance(objectToMarshall.getClass()).createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -100,7 +101,7 @@ public class LogWriter {
      * @param beautifiedLogXmlString The XML log file String to save.
      * @return true if the save operation was successful (otherwise, false).
      */
-    private boolean writeXmlLogFile(String beautifiedLogXmlString) {
+    private boolean writeXmlLogFile(@NotNull String beautifiedLogXmlString) {
         // The name of the XML log file is the current date & time.
         File logFile = new File(String.format(
                 "%s/%s.xml",

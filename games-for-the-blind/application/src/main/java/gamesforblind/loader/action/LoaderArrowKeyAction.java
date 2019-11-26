@@ -1,6 +1,7 @@
 package gamesforblind.loader.action;
 
 import gamesforblind.enums.ArrowKeyDirection;
+import org.jetbrains.annotations.NotNull;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -23,7 +24,7 @@ public class LoaderArrowKeyAction extends LoaderAction {
      * Warning: DO NOT call this constructor directly.
      * Needed to allow JAXB (XML serializer) to work, since it needs a zero-argument constructor.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "ConstantConditions"})
     private LoaderArrowKeyAction() {
         this(null);
     }
@@ -33,7 +34,7 @@ public class LoaderArrowKeyAction extends LoaderAction {
      *
      * @param arrowKeyDirection Which arrow key was pressed in the loader.
      */
-    public LoaderArrowKeyAction(ArrowKeyDirection arrowKeyDirection) {
+    public LoaderArrowKeyAction(@NotNull ArrowKeyDirection arrowKeyDirection) {
         this.arrowKeyDirection = arrowKeyDirection;
     }
 

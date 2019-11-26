@@ -3,6 +3,7 @@ package gamesforblind.sudoku.gui.listener;
 import gamesforblind.enums.SudokuMenuItem;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.action.*;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -23,7 +24,7 @@ public class SudokuMenuItemListener implements ActionListener {
      *
      * @param sudokuGame The {@link SudokuGame}, which receives actions in the game.
      */
-    public SudokuMenuItemListener(SudokuGame sudokuGame) {
+    public SudokuMenuItemListener(@NotNull SudokuGame sudokuGame) {
         this.sudokuGame = sudokuGame;
     }
 
@@ -32,7 +33,8 @@ public class SudokuMenuItemListener implements ActionListener {
      *
      * @param e The {@link ActionEvent} that was triggered in the GUI.
      */
-    public void actionPerformed(ActionEvent e) {
+    @Override
+    public void actionPerformed(@NotNull ActionEvent e) {
         String selectedMenuText = e.getActionCommand();
 
         // TODO: Support the language option.

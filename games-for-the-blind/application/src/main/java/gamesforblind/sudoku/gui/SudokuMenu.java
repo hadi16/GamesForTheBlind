@@ -3,6 +3,7 @@ package gamesforblind.sudoku.gui;
 import gamesforblind.enums.SudokuMenuItem;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.gui.listener.SudokuMenuItemListener;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
@@ -16,7 +17,7 @@ public class SudokuMenu {
      * @param sudokuGame The current Sudoku game.
      * @return The initialized {@link JMenu} for the Sudoku game.
      */
-    public JMenu getInitializedMenu(SudokuGame sudokuGame) {
+    public JMenu getInitializedMenu(@NotNull SudokuGame sudokuGame) {
         JMenu mainMenu = new JMenu("Menu");
         SudokuMenuItemListener sudokuMenuItemListener = new SudokuMenuItemListener(sudokuGame);
 

@@ -1,5 +1,7 @@
 package gamesforblind.sudoku;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import phrase.Phrase;
 import gamesforblind.enums.*;
 import gamesforblind.sudoku.generator.Cell;
@@ -44,8 +46,12 @@ public class SudokuState {
      * @param audioPlayerExecutor Calls into the threaded audio player for the game.
      * @param originalGrid        The original state of the Sudoku board, which is used to restore the saved game state.
      */
-    public SudokuState(InterfaceType interfaceType, SudokuType sudokuType,
-                       AudioPlayerExecutor audioPlayerExecutor, OriginalSudokuGrid originalGrid) {
+    public SudokuState(
+            @NotNull InterfaceType interfaceType,
+            @NotNull SudokuType sudokuType,
+            @NotNull AudioPlayerExecutor audioPlayerExecutor,
+            @NotNull OriginalSudokuGrid originalGrid
+    ) {
         this.gameOver = false;
 
         this.sudokuType = sudokuType;
@@ -66,7 +72,11 @@ public class SudokuState {
      * @param sudokuType          Whether the Sudoku game is a 4x4, 6x6, or 9x9 variant.
      * @param audioPlayerExecutor Calls into the threaded audio player for the game.
      */
-    public SudokuState(InterfaceType interfaceType, SudokuType sudokuType, AudioPlayerExecutor audioPlayerExecutor) {
+    public SudokuState(
+            @NotNull InterfaceType interfaceType,
+            @NotNull SudokuType sudokuType,
+            @NotNull AudioPlayerExecutor audioPlayerExecutor
+    ) {
         this.gameOver = false;
 
         this.sudokuType = sudokuType;
@@ -85,7 +95,7 @@ public class SudokuState {
      *
      * @param originalGrid If we are in playback mode, the {@link OriginalSudokuGrid} to restore (otherwise, null).
      */
-    public void resetSudokuState(OriginalSudokuGrid originalGrid) {
+    public void resetSudokuState(@Nullable OriginalSudokuGrid originalGrid) {
         this.gameOver = false;
         this.numberOfEmptyCells = this.getInitialNumberOfEmptyCells(this.sudokuType.getSudokuBoardSize());
 
@@ -108,7 +118,7 @@ public class SudokuState {
      * @param interfaceType The keyboard interface type that is being used in the game.
      * @return An instance of {@link SudokuKeyboardInterface} that corresponds to the passed {@link InterfaceType}
      */
-    private SudokuKeyboardInterface initializeKeyboardInterface(InterfaceType interfaceType) {
+    private SudokuKeyboardInterface initializeKeyboardInterface(@NotNull InterfaceType interfaceType) {
         switch (interfaceType) {
             case ARROW_KEY_INTERFACE:
                 return new SudokuArrowKeyInterface(this);
@@ -188,7 +198,7 @@ public class SudokuState {
      * @param pointToCheck The {@link Point} to check.
      * @return true if the passed {@link Point} was one of the originally set squares. Otherwise, false.
      */
-    private boolean readCannotDeleteOriginal(Point pointToCheck) {
+    private boolean readCannotDeleteOriginal(@NotNull Point pointToCheck) {
         // Case 1: the point to check was not one of the originally filled squares on the board.
         if (!this.originallyFilledSquares.contains(pointToCheck)) {
             return false;
@@ -390,7 +400,7 @@ public class SudokuState {
      * @param readRow       If true, reads the values in the same ROW. If false, reads the values in the same column.
      * @return A list of {@link Phrase}s corresponding to all of the numeric values of the cells in the same row/column.
      */
-    private ArrayList<Phrase> getRowOrColumnPhrases(Point selectedPoint, boolean readRow) {
+    private ArrayList<Phrase> getRowOrColumnPhrases(@NotNull Point selectedPoint, boolean readRow) {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>();
 
         // Begin with "You have the following numbers in the same row (or column)"
@@ -415,7 +425,7 @@ public class SudokuState {
      * @param selectedPoint The {@link Point} that is currently selected in the game.
      * @return A list of {@link Phrase}s corresponding to all of the numeric values of the cells in the same block.
      */
-    private ArrayList<Phrase> getBlockPhrases(Point selectedPoint) {
+    private ArrayList<Phrase> getBlockPhrases(@NotNull Point selectedPoint) {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>();
 
         // Begin with "You have the following numbers in the same block"
@@ -442,13 +452,18 @@ public class SudokuState {
     }
 
     /**
-     * Reads the value of the currently selected {@link Cell} on the Sudoku board (if one is selected).
+     * Reads the location & value of the currently selected {@link Cell} on the Sudoku board (if one is selected).
      */
     public void readSelectedSquare() {
-        Optional<Cell> maybeSelectedCell = this.sudokuKeyboardInterface.getSelectedCell();
-        if (maybeSelectedCell.isPresent()) {
-            Cell selectedCell = maybeSelectedCell.get();
-            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.convertIntegerToPhrase(selectedCell.getValue()));
+        Optional<Point> maybeSelectedPoint = this.sudokuKeyboardInterface.getSelectedPoint();
+        if (maybeSelectedPoint.isPresent()) {
+            Point selectedPoint = maybeSelectedPoint.get();
+            Cell selectedCell = this.sudokuGrid.getCell(selectedPoint.y, selectedPoint.x);
+
+            this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
+                    Phrase.convertPointToPhrase(selectedPoint),
+                    Phrase.convertIntegerToPhrase(selectedCell.getValue())
+            )));
         }
     }
 
@@ -457,7 +472,7 @@ public class SudokuState {
      *
      * @param sectionToRead Whether to read a row, column, or block.
      */
-    public void readBoardSection(SudokuSection sectionToRead) {
+    public void readBoardSection(@NotNull SudokuSection sectionToRead) {
         Optional<Point> maybeSelectedPoint = this.sudokuKeyboardInterface.getSelectedPoint();
 
         // If no point is currently selected, inform the user & return.
@@ -489,7 +504,7 @@ public class SudokuState {
      * @param pointToSet The {@link Point} that the user has sent via an action.
      * @param inputType  Whether this action was sent via a keyboard or mouse input.
      */
-    public void setHighlightedPoint(Point pointToSet, InputType inputType) {
+    public void setHighlightedPoint(@NotNull Point pointToSet, @NotNull InputType inputType) {
         this.sudokuKeyboardInterface.setHighlightedPoint(pointToSet, inputType);
     }
 

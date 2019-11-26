@@ -1,5 +1,7 @@
 package gamesforblind.adapter;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalDate;
 
@@ -14,7 +16,7 @@ public class LocalDateAdapter extends XmlAdapter<AdaptedLocalDate, LocalDate> {
      * @return A {@link LocalDate}, which is equivalent to the passed {@link AdaptedLocalDate} object.
      */
     @Override
-    public LocalDate unmarshal(AdaptedLocalDate adapted) {
+    public LocalDate unmarshal(@NotNull AdaptedLocalDate adapted) {
         return LocalDate.of(adapted.getYear(), adapted.getMonth(), adapted.getDay());
     }
 
@@ -25,7 +27,7 @@ public class LocalDateAdapter extends XmlAdapter<AdaptedLocalDate, LocalDate> {
      * @return An {@link AdaptedLocalDate}, which is equivalent to the passed {@link LocalDate} object.
      */
     @Override
-    public AdaptedLocalDate marshal(LocalDate localDate) {
+    public AdaptedLocalDate marshal(@NotNull LocalDate localDate) {
         AdaptedLocalDate adapted = new AdaptedLocalDate();
         adapted.setYear(localDate.getYear());
         adapted.setMonth((short) localDate.getMonthValue());

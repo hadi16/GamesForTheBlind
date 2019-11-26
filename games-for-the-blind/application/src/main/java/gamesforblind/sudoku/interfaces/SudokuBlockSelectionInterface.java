@@ -5,6 +5,8 @@ import gamesforblind.enums.InputType;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.SudokuState;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -67,7 +69,7 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
      *
      * @param sudokuState The state of the Sudoku game.
      */
-    public SudokuBlockSelectionInterface(SudokuState sudokuState) {
+    public SudokuBlockSelectionInterface(@NotNull SudokuState sudokuState) {
         // No hotkeys in the block selection interface.
         super(sudokuState, Map.of());
     }
@@ -138,8 +140,18 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
      * @param inputType  Whether this action was made with a keyboard or a mouse.
      */
     @Override
-    public void setHighlightedPoint(Point pointToSet, InputType inputType) {
-        /* Case 1: input is via a mouse. */
+    public void setHighlightedPoint(@Nullable Point pointToSet, @NotNull InputType inputType) {
+        /* Case 1: the point to set is null (reset either selected block or square point). */
+        if (pointToSet == null) {
+            if (this.selectedSquarePoint != null) {
+                this.selectedSquarePoint = null;
+            } else {
+                this.selectedBlockPoint = null;
+            }
+            return;
+        }
+
+        /* Case 2: input is via a mouse. */
         if (inputType == InputType.MOUSE) {
             // Offset needed for the row (1, 2, etc.) & column labels ('A', 'B', etc.)
             pointToSet = new Point(pointToSet.x - 1, pointToSet.y - 1);
@@ -161,39 +173,28 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
                     pointToSet.x % numberOfBlocksWidth, pointToSet.y % numberOfBlocksHeight
             );
 
-            // Case 1a: the user wishes to deselect the currently highlighted square.
+            // Case 2a: the user wishes to deselect the currently highlighted square.
             if (blockPointToSet.equals(this.selectedBlockPoint) && squarePointToSet.equals(this.selectedSquarePoint)) {
                 this.selectedBlockPoint = null;
                 this.selectedSquarePoint = null;
                 return;
             }
 
-            // Case 1b: the user wishes to select a square on the Sudoku board.
+            // Case 2b: the user wishes to select a square on the Sudoku board.
             this.selectedBlockPoint = blockPointToSet;
             this.selectedSquarePoint = squarePointToSet;
             return;
         }
 
-        /* Case 2: input is via a keyboard. */
+        /* Case 3: input is via a keyboard. */
 
-        // Case 2a: the point to set is null (reset either selected block or square point).
-        if (pointToSet == null) {
-            if (this.selectedSquarePoint != null) {
-                this.selectedSquarePoint = null;
-            } else {
-                this.selectedBlockPoint = null;
-            }
-            return;
-        }
-
-
-        // Case 2b: the selected block point is null (meaning the selected square point must also be null).
+        // Case 3a: the selected block point is null (meaning the selected square point must also be null).
         if (this.selectedBlockPoint == null) {
             this.selectedBlockPoint = pointToSet;
             return;
         }
 
-        // Case 2c: both the selected block point & selected square point are null.
+        // Case 3b: both the selected block point & selected square point are null.
         this.selectedSquarePoint = pointToSet;
     }
 
@@ -203,7 +204,7 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
      * @param arrowKeyDirection The {@link ArrowKeyDirection} that was pressed with this hot key (e.g. left arrow key).
      */
     @Override
-    public void setHighlightedPoint(ArrowKeyDirection arrowKeyDirection) {
+    public void setHighlightedPoint(@NotNull ArrowKeyDirection arrowKeyDirection) {
     }
 
     /**

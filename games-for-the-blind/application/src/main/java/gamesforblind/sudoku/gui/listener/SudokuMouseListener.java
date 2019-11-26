@@ -5,6 +5,7 @@ import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
 import gamesforblind.sudoku.gui.SudokuFrame;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -36,7 +37,9 @@ public class SudokuMouseListener implements MouseListener {
      * @param sudokuFrame A reference to the class containing the main JFrame (for the Sudoku GUI).
      * @param sudokuType  Whether the given Sudoku board is a 4x4, 6x6, or 9x9.
      */
-    public SudokuMouseListener(SudokuGame sudokuGame, SudokuFrame sudokuFrame, SudokuType sudokuType) {
+    public SudokuMouseListener(
+            @NotNull SudokuGame sudokuGame, @NotNull SudokuFrame sudokuFrame, @NotNull SudokuType sudokuType
+    ) {
         this.sudokuGame = sudokuGame;
         this.sudokuFrame = sudokuFrame;
         this.sudokuBoardSize = sudokuType.getSudokuBoardSize();
@@ -49,7 +52,7 @@ public class SudokuMouseListener implements MouseListener {
      * @param e The event that was triggered by a mouse click.
      */
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(@NotNull MouseEvent e) {
 
         Point selectedPoint = e.getPoint();
         Rectangle frameBounds = this.sudokuFrame.getFrameBounds();

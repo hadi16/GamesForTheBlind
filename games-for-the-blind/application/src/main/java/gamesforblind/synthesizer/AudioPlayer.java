@@ -1,5 +1,6 @@
 package gamesforblind.synthesizer;
 
+import org.jetbrains.annotations.NotNull;
 import phrase.Phrase;
 
 import javax.sound.sampled.*;
@@ -54,7 +55,7 @@ public class AudioPlayer implements Runnable {
      * @param phrase The Phrase to get the associated Clip from.
      * @return An Optional containing the Clip if no error occurred (otherwise, empty()).
      */
-    private Optional<Clip> getPhraseClip(Phrase phrase) {
+    private Optional<Clip> getPhraseClip(@NotNull Phrase phrase) {
         try {
             Clip phraseClip = AudioSystem.getClip();
 
@@ -113,7 +114,7 @@ public class AudioPlayer implements Runnable {
      *
      * @param phrase The {@link Phrase} to replace the phrases to play with.
      */
-    public void replacePhraseToPlay(Phrase phrase) {
+    public void replacePhraseToPlay(@NotNull Phrase phrase) {
         // Since I'm REPLACING the phrases to play, I need to first stop the running clip.
         if (this.activeClip.isRunning()) {
             this.activeClip.stop();
@@ -129,7 +130,7 @@ public class AudioPlayer implements Runnable {
      *
      * @param phrases The {@link ArrayList} of {@link Phrase}s to replace the phrases to play with.
      */
-    public void replacePhraseToPlay(ArrayList<Phrase> phrases) {
+    public void replacePhraseToPlay(@NotNull ArrayList<Phrase> phrases) {
         // Since I'm REPLACING the phrases to play, I need to first stop the running clip.
         if (this.activeClip.isRunning()) {
             this.activeClip.stop();

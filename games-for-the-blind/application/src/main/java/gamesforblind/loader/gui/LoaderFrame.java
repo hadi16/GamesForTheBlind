@@ -7,6 +7,8 @@ import gamesforblind.enums.SelectedGame;
 import gamesforblind.loader.GameLoader;
 import gamesforblind.loader.gui.listener.LoaderActionListener;
 import gamesforblind.loader.gui.listener.LoaderKeyboardListener;
+import gamesforblind.loader.gui.listener.LoaderWindowListener;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,17 +55,20 @@ public class LoaderFrame extends JFrame {
      */
     private int highlightedButtonIndex = 0;
 
+    private final LoaderWindowListener loaderWindowListener;
+
     /**
      * Creates a new LoaderFrame.
      *
      * @param gameLoader  The game loader for the program, which is needed for mouse & keyboard listeners.
      * @param programArgs The program arguments that were passed.
      */
-    public LoaderFrame(GameLoader gameLoader, ProgramArgs programArgs) {
+    public LoaderFrame(@NotNull GameLoader gameLoader, @NotNull ProgramArgs programArgs) {
         this.programArgs = programArgs;
 
         // Initialize the listener instance variables & add the keyboard listener (mouse listener set later).
         this.loaderActionListener = new LoaderActionListener(gameLoader);
+        this.loaderWindowListener = new LoaderWindowListener(gameLoader);
         this.loaderKeyboardListener = new LoaderKeyboardListener(gameLoader, this);
 
         if (!programArgs.isPlaybackMode()) {
@@ -80,7 +85,7 @@ public class LoaderFrame extends JFrame {
      * @param preferredSize The requested size of the button.
      * @return The created JButton for the loader GUI.
      */
-    private JButton getUIButton(String buttonText, Dimension preferredSize) {
+    private JButton getUIButton(@NotNull String buttonText, @NotNull Dimension preferredSize) {
         // Make the size of the button font dependent on the size of the frame.
         final Font BUTTON_FONT = new Font("Arial", Font.BOLD, FRAME_DIMENSION / 13);
 
@@ -103,7 +108,7 @@ public class LoaderFrame extends JFrame {
      * @param selectedGame The currently selected game. If set to NONE, I am in the main screen of the loader GUI.
      * @return The upper portion of the loader GUI.
      */
-    private JComponent getSelectedGameComponent(SelectedGame selectedGame) {
+    private JComponent getSelectedGameComponent(@NotNull SelectedGame selectedGame) {
         final int HEIGHT_DIVISOR = 3;
 
         // Case 1: I am in the main screen (just return the "PLAY_SUDOKU" button).
@@ -147,7 +152,7 @@ public class LoaderFrame extends JFrame {
      *
      * @param selectedGame The game that the user has selected.
      */
-    public void setLoaderGuiBasedOnSelectedGame(SelectedGame selectedGame) {
+    public void setLoaderGuiBasedOnSelectedGame(@NotNull SelectedGame selectedGame) {
         // Dispose the old frame.
         if (this.loaderFrame != null) {
             this.loaderFrame.setVisible(false);
@@ -172,8 +177,9 @@ public class LoaderFrame extends JFrame {
         frameContainer.add(selectedGameComponent, BorderLayout.PAGE_START);
         frameContainer.add(exitButton, BorderLayout.PAGE_END);
 
-        // The "EXIT" button should be the only way to close the program.
-        this.loaderFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        // Call the logger save when the close button is clicked.
+        this.loaderFrame.addWindowListener(this.loaderWindowListener);
+        this.loaderFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.loaderFrame.setSize((int) (FRAME_DIMENSION * 1.7), FRAME_DIMENSION);
         this.loaderFrame.setVisible(true);
@@ -211,7 +217,7 @@ public class LoaderFrame extends JFrame {
      *
      * @param selectedGame The currently selected game.
      */
-    private void setRelevantButtons(SelectedGame selectedGame) {
+    private void setRelevantButtons(@NotNull SelectedGame selectedGame) {
         this.relevantButtons.clear();
 
         Component[] frameContainerComponents = this.loaderFrame.getContentPane().getComponents();
@@ -262,7 +268,7 @@ public class LoaderFrame extends JFrame {
      *
      * @param arrowKeyDirection The arrow key that was pressed by the user.
      */
-    public void changeHighlightedButton(ArrowKeyDirection arrowKeyDirection) {
+    public void changeHighlightedButton(@NotNull ArrowKeyDirection arrowKeyDirection) {
         // Reset the old highlighted button colors.
         this.setHighlightedButtonColors(true);
 

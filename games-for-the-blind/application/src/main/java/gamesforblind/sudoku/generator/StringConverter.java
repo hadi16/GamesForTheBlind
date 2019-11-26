@@ -1,6 +1,7 @@
 package gamesforblind.sudoku.generator;
 
 import gamesforblind.enums.SudokuType;
+import org.jetbrains.annotations.NotNull;
 
 import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
 
@@ -15,7 +16,7 @@ public class StringConverter {
      * @param sudokuType Whether the Sudoku board is a 4x4, 6x6, or 9x9 board.
      * @return A String representation of the passed {@link Grid}.
      */
-    public static String toString(Grid grid, SudokuType sudokuType) {
+    public static String toString(@NotNull Grid grid, @NotNull SudokuType sudokuType) {
         StringBuilder builder = new StringBuilder();
         int gridSize = grid.getSize();
 
@@ -41,7 +42,7 @@ public class StringConverter {
      * @param builder    The StringBuilder to use for creating the String representation of the board.
      * @param sudokuType Whether the Sudoku board is a 4x4, 6x6, or 9x9 board.
      */
-    private static void printTopBorder(StringBuilder builder, SudokuType sudokuType) {
+    private static void printTopBorder(@NotNull StringBuilder builder, @NotNull SudokuType sudokuType) {
         switch (sudokuType) {
             case FOUR_BY_FOUR:
                 builder.append("╔═══╤═══╦═══╤═══╗\n");
@@ -60,7 +61,7 @@ public class StringConverter {
      *
      * @param builder The StringBuilder to use for creating the String representation of the board.
      */
-    private static void printRowBorder(StringBuilder builder) {
+    private static void printRowBorder(@NotNull StringBuilder builder) {
         builder.append("║");
     }
 
@@ -72,7 +73,7 @@ public class StringConverter {
      * @param row     The applicable row value.
      * @param column  The applicable column value.
      */
-    private static void printValue(StringBuilder builder, Grid grid, int row, int column) {
+    private static void printValue(@NotNull StringBuilder builder, @NotNull Grid grid, int row, int column) {
         int value = grid.getCell(row, column).getValue();
         String output = value != EMPTY_SUDOKU_SQUARE ? String.valueOf(value) : " ";
         builder.append(" ").append(output).append(" ");
@@ -86,7 +87,9 @@ public class StringConverter {
      * @param size       The size of the Sudoku {@link Grid}.
      * @param sudokuType Whether the Sudoku board is a 4x4, 6x6, or 9x9 board.
      */
-    private static void printRightColumnBorder(StringBuilder builder, int column, int size, SudokuType sudokuType) {
+    private static void printRightColumnBorder(
+            @NotNull StringBuilder builder, int column, int size, @NotNull SudokuType sudokuType
+    ) {
         if (column == size) {
             return;
         }
@@ -106,7 +109,9 @@ public class StringConverter {
      * @param size       The size of the Sudoku {@link Grid}.
      * @param sudokuType Whether the Sudoku board is a 4x4, 6x6, or 9x9 board.
      */
-    private static void printBottomRowBorder(StringBuilder builder, int row, int size, SudokuType sudokuType) {
+    private static void printBottomRowBorder(
+            @NotNull StringBuilder builder, int row, int size, @NotNull SudokuType sudokuType
+    ) {
         if (row == size) {
             return;
         }
@@ -144,7 +149,7 @@ public class StringConverter {
      * @param builder    The StringBuilder to use for creating the String representation of the board.
      * @param sudokuType Whether the Sudoku board is a 4x4, 6x6, or 9x9 board.
      */
-    private static void printBottomBorder(StringBuilder builder, SudokuType sudokuType) {
+    private static void printBottomBorder(@NotNull StringBuilder builder, @NotNull SudokuType sudokuType) {
         switch (sudokuType) {
             case FOUR_BY_FOUR:
                 builder.append("╚═══╧═══╩═══╧═══╝\n");

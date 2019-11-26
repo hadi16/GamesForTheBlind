@@ -1,5 +1,8 @@
 package gamesforblind.sudoku.generator;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,7 +36,7 @@ public class Solver {
      * @param grid the {@link Grid} to solve
      * @throws IllegalStateException in case the provided {@link Grid} is invalid.
      */
-    public void solve(Grid grid) {
+    public void solve(@NotNull Grid grid) {
         boolean solvable = this.solve(grid, grid.getFirstEmptyCell().orElse(null));
         if (!solvable) {
             throw new IllegalStateException("The provided grid is not solvable.");
@@ -46,7 +49,7 @@ public class Solver {
      * @param grid The {@link Grid} to check.
      * @return true if the given Grid is solvable (otherwise false).
      */
-    public boolean isSolvable(Grid grid) {
+    public boolean isSolvable(@NotNull Grid grid) {
         return this.solve(grid, grid.getFirstEmptyCell().orElse(null));
     }
 
@@ -57,7 +60,7 @@ public class Solver {
      * @param cell The {@link Cell} on the Sudoku grid that needs to be solved.
      * @return true if the Grid is solvable, otherwise false.
      */
-    private boolean solve(Grid grid, Cell cell) {
+    private boolean solve(@NotNull Grid grid, @Nullable Cell cell) {
         if (cell == null) {
             return true;
         }
