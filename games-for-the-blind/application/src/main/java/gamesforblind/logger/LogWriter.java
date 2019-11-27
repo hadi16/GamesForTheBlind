@@ -136,14 +136,14 @@ public class LogWriter {
     public void saveGameLog() {
         // Step 1: get the basic XML log Document to save.
         String logXmlString = this.marshalLogToXmlString();
-        Optional<Document> logXmlDocument = XmlHelpers.convertXmlStringToDocument(logXmlString);
+        Optional<Document> maybeLogXmlDocument = XmlHelpers.convertXmlStringToDocument(logXmlString);
 
-        if (logXmlDocument.isEmpty()) {
+        if (maybeLogXmlDocument.isEmpty()) {
             return;
         }
 
         // Step 2: get the beautified XML log file String.
-        Optional<String> beautifiedLogXmlString = XmlHelpers.beautifyXmlDocument(logXmlDocument.get());
+        Optional<String> beautifiedLogXmlString = XmlHelpers.beautifyXmlDocument(maybeLogXmlDocument.get());
         if (beautifiedLogXmlString.isEmpty()) {
             return;
         }
