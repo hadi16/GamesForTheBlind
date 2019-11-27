@@ -504,7 +504,7 @@ public class SudokuState {
      * @param pointToSet The {@link Point} that the user has sent via an action.
      * @param inputType  Whether this action was sent via a keyboard or mouse input.
      */
-    public void setHighlightedPoint(@NotNull Point pointToSet, @NotNull InputType inputType) {
+    public void setHighlightedPoint(@Nullable Point pointToSet, @NotNull InputType inputType) {
         this.sudokuKeyboardInterface.setHighlightedPoint(pointToSet, inputType);
     }
 
@@ -513,7 +513,7 @@ public class SudokuState {
      *
      * @param arrowKeyDirection The {@link ArrowKeyDirection} that was pressed with this hot key (e.g. left arrow key).
      */
-    public void setHighlightedPoint(ArrowKeyDirection arrowKeyDirection) {
+    public void setHighlightedPoint(@NotNull ArrowKeyDirection arrowKeyDirection) {
         this.sudokuKeyboardInterface.setHighlightedPoint(arrowKeyDirection);
     }
 
