@@ -304,7 +304,7 @@ public enum Phrase {
      * @param selectedPoint The currently selected {@link Point} in the game.
      * @return The location on the board as a Phrase (e.g. "A2", "B3", etc.)
      */
-    public static Phrase convertPointToPhrase(@NotNull Point selectedPoint) {
+    public static Phrase convertPointToLocationPhrase(@NotNull Point selectedPoint) {
         final Phrase[][] LOCATIONS_PHRASE_LIST = new Phrase[][]{
                 new Phrase[] {A1, A2, A3, A4, A5, A6, A7, A8, A9},
                 new Phrase[] {B1, B2, B3, B4, B5, B6, B7, B8, B9},

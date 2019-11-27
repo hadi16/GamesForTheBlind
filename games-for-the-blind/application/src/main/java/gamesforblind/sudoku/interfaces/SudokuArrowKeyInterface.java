@@ -6,15 +6,13 @@ import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.SudokuState;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
 import gamesforblind.sudoku.action.SudokuHotKeyAction;
+import gamesforblind.sudoku.action.SudokuLocationAction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * The new arrow key interface for our Sudoku game. Inherits from {@link SudokuKeyboardInterface}.
@@ -42,7 +40,9 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
                         KeyEvent.VK_RIGHT, new SudokuHotKeyAction(ArrowKeyDirection.RIGHT),
                         KeyEvent.VK_UP, new SudokuHotKeyAction(ArrowKeyDirection.UP),
                         KeyEvent.VK_DOWN, new SudokuHotKeyAction(ArrowKeyDirection.DOWN)
-                )
+                ),
+                // Read off the location of the selected square when the space bar is pressed.
+                new SudokuLocationAction()
         );
     }
 
@@ -59,18 +59,14 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
     /**
      * Sets the currently highlighted {@link Point} in the game.
      *
-     * @param pointToSet The {@link Point} that was stored in a {@link SudokuHighlightAction}.
+     * @param pointToSet The {@link Point} that was stored in a {@link SudokuHighlightAction} (should not be null).
      * @param inputType  Whether this action was made with a keyboard or a mouse.
      */
     @Override
     public void setHighlightedPoint(@Nullable Point pointToSet, @NotNull InputType inputType) {
-        // Case 1: the user presses the space bar.
-        if (pointToSet == null) {
-            this.selectedPoint = new Point(0, 0);
-            return;
-        }
+        Objects.requireNonNull(pointToSet, "Cannot pass null Point to the arrow key interface!");
 
-        // Case 2: the user clicks the mouse.
+        // Case 1: the user clicks the mouse.
         if (inputType == InputType.MOUSE) {
             // Offset needed for the row (1, 2, etc.) & column labels ('A', 'B', etc.)
             Point selectedPoint = new Point(pointToSet.x - 1, pointToSet.y - 1);
@@ -80,7 +76,7 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
             return;
         }
 
-        // Case 3: the user presses an arrow key.
+        // Case 2: the user presses an arrow key.
         Point selectedPoint = new Point(this.selectedPoint.x + pointToSet.x, this.selectedPoint.y + pointToSet.y);
         if (this.selectedPointInBounds(selectedPoint)) {
             this.selectedPoint = selectedPoint;
