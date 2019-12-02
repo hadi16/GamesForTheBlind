@@ -71,7 +71,7 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
      */
     public SudokuBlockSelectionInterface(@NotNull SudokuState sudokuState) {
         // No hotkeys in the block selection interface.
-        super(sudokuState, Map.of());
+        super(sudokuState, Map.of(), new SudokuHighlightAction(null, InputType.KEYBOARD));
     }
 
     /**
@@ -199,7 +199,7 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
     }
 
     /**
-     * For the block selection interface, there are no hot keys (do nothing).
+     * For the block selection interface, there are no hot keys, so do nothing.
      *
      * @param arrowKeyDirection The {@link ArrowKeyDirection} that was pressed with this hot key (e.g. left arrow key).
      */
