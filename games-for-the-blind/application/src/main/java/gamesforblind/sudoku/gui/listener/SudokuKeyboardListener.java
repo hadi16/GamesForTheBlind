@@ -23,6 +23,11 @@ public class SudokuKeyboardListener implements KeyListener {
     private final SudokuGame sudokuGame;
 
     /**
+     * The {@link SudokuAction} to send when the space bar is pressed.
+     */
+    private final SudokuAction spacebarAction;
+
+    /**
      * A mapping between key codes & corresponding {@link Point}s. Used to have multiple keyboard interfaces.
      */
     private final Map<Integer, Point> keyCodeToPoint;
@@ -47,7 +52,8 @@ public class SudokuKeyboardListener implements KeyListener {
     public SudokuKeyboardListener(@NotNull SudokuKeyboardInterface keyboardInterface, @NotNull SudokuGame sudokuGame) {
         this.sudokuGame = sudokuGame;
         this.keyCodeToPoint = keyboardInterface.getKeyCodeToPointMapping();
-        this.keyCodeToHotKeyAction = keyboardInterface.keyCodeToHotKeyAction;
+        this.keyCodeToHotKeyAction = keyboardInterface.getKeyCodeToHotKeyAction();
+        this.spacebarAction = keyboardInterface.getSpacebarAction();
     }
 
     /**
@@ -83,10 +89,7 @@ public class SudokuKeyboardListener implements KeyListener {
 
         // Case 3: the selected key is the SPACE BAR
         if (selectedKeyCode == KeyEvent.VK_SPACE) {
-            // If it is a SPACE BAR, then pass null to the pointToHighlight.
-            this.sudokuGame.receiveAction(
-                    new SudokuHighlightAction(null, InputType.KEYBOARD)
-            );
+            this.sudokuGame.receiveAction(this.spacebarAction);
             return;
         }
 
