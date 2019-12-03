@@ -32,6 +32,7 @@ public class Constants {
 
     /* The various button text values that are used throughout the loader GUI. */
     public static final String PLAY_SUDOKU_BUTTON = "PLAY SUDOKU";
+    public static final String PLAY_MASTERMIND_BUTTON = "PLAY MASTERMIND";
     public static final String EXIT_BUTTON = "EXIT";
 
     /**

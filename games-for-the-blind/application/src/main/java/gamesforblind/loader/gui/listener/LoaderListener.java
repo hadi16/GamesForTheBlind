@@ -43,6 +43,9 @@ public abstract class LoaderListener {
             case PLAY_SUDOKU_BUTTON:
                 this.gameLoader.receiveAction(new LoaderGameSelectionAction(SelectedGame.SUDOKU));
                 break;
+            case PLAY_MASTERMIND_BUTTON:
+                this.gameLoader.receiveAction(new LoaderGameSelectionAction(SelectedGame.MASTERMIND));
+                break;
             case EXIT_BUTTON:
                 this.gameLoader.receiveAction(new LoaderExitAction());
                 break;

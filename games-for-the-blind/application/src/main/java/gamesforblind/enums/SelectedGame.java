@@ -5,5 +5,5 @@ package gamesforblind.enums;
  * NONE is needed for the instances when the user presses the BACK button in the GUI.
  */
 public enum SelectedGame {
-    NONE, SUDOKU
+    NONE, SUDOKU, MASTERMIND
 }
