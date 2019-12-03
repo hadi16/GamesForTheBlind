@@ -75,6 +75,7 @@ public enum Phrase {
     /* Loader */
     SPACE_FOR_EXIT("Press the SPACE BAR to exit."),
     SPACE_FOR_SUDOKU("Press the SPACE BAR to play Sudoku."),
+    SPACE_FOR_MASTERMIND("Press the SPACE BAR to play Mastermind."),
     GO_BACK_TO_GAME_SELECTION("Press the SPACE BAR to go back to the game selection screen."),
     SELECT_SUDOKU_FOUR("Press the SPACE BAR to play the 4 by 4 version of Sudoku."),
     SELECT_SUDOKU_SIX("Press the SPACE BAR to play the 6 by 6 version of Sudoku."),
@@ -83,7 +84,7 @@ public enum Phrase {
             "Use the arrow keys to make your selection."),
     WHICH_SUDOKU_GAME_NO_SIX("Which Sudoku game would you like to play, 4 by 4 or 9 by 9? " +
             "Use the arrow keys to make your selection."),
-    PLAY_OR_EXIT("Would you like to play Sudoku or exit? Use the arrow keys to make your selection."),
+    PLAY_OR_EXIT("Would you like to play Sudoku, Mastermind, or exit? Use the arrow keys to make your selection."),
     EXITING("The game is exiting. Goodbye!"),
     
     /* Sudoku: locations */
