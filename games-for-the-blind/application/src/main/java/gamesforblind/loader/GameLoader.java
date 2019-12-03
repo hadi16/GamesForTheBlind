@@ -13,6 +13,8 @@ import gamesforblind.loader.gui.listener.LoaderKeyboardListener;
 import gamesforblind.logger.LogFactory;
 import gamesforblind.logger.LogReader;
 import gamesforblind.logger.LogWriter;
+import gamesforblind.mastermind.MastermindGame;
+import gamesforblind.mastermind.action.MastermindAction;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.action.SudokuAction;
 import gamesforblind.synthesizer.AudioPlayer;
@@ -47,6 +49,7 @@ public class GameLoader {
 
     private LoaderFrame loaderFrame;
     private SudokuGame sudokuGame;
+    private MastermindGame mastermindGame;
 
     /**
      * Creates a new GameLoader (this is only called directly from main()).
@@ -94,6 +97,8 @@ public class GameLoader {
             } else if (currentAction instanceof SudokuAction) {
                 // The game should have been initialized by the LoaderSudokuSelectionAction in the XML log file.
                 this.sudokuGame.receiveAction((SudokuAction) currentAction);
+            } else if(currentAction instanceof MastermindAction){
+                this.mastermindGame.receiveAction((MastermindAction) currentAction);
             }
 
             // If we are on the last iteration/action, then no need to sleep anymore.
@@ -188,6 +193,7 @@ public class GameLoader {
     private void highlightDifferentLoaderButton(@NotNull LoaderArrowKeyAction loaderArrowKeyAction) {
         final Map<String, Phrase> BUTTON_TEXT_TO_PHRASE = Map.of(
                 PLAY_SUDOKU_BUTTON, Phrase.SPACE_FOR_SUDOKU,
+                PLAY_MASTERMIND_BUTTON, Phrase.SPACE_FOR_MASTERMIND,
                 EXIT_BUTTON, Phrase.SPACE_FOR_EXIT,
                 BACK_BUTTON, Phrase.GO_BACK_TO_GAME_SELECTION,
                 FOUR_BY_FOUR_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_FOUR,
@@ -209,6 +215,10 @@ public class GameLoader {
     private void changeCurrentGame(@NotNull LoaderGameSelectionAction loaderGameSelectionAction) {
         SelectedGame selectedGame = loaderGameSelectionAction.getSelectedGame();
 
+        if(selectedGame == selectedGame.MASTERMIND){
+            this.loadMastermindGame();
+        }
+
         Phrase relevantPhrase;
         if (selectedGame == SelectedGame.SUDOKU) {
             if (this.programArgs.getSelectedInterfaceType() == InterfaceType.ARROW_KEY_INTERFACE) {
@@ -216,7 +226,8 @@ public class GameLoader {
             } else {
                 relevantPhrase = Phrase.WHICH_SUDOKU_GAME_NO_SIX;
             }
-        } else {
+        }
+        else {
             relevantPhrase = Phrase.PLAY_OR_EXIT;
         }
         this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrase);
@@ -244,6 +255,16 @@ public class GameLoader {
         this.loaderFrame.closeLoaderFrames();
         this.sudokuGame = new SudokuGame(
                 this, sudokuType, this.audioPlayerExecutor, this.logFactory, this.programArgs
+        );
+    }
+
+    /**
+     * Loads the Mastermind game that the user requested.
+     */
+    private void loadMastermindGame() {
+        this.loaderFrame.closeLoaderFrames();
+        this.mastermindGame = new MastermindGame(
+                this, this.audioPlayerExecutor, this.logFactory, this.programArgs
         );
     }
 

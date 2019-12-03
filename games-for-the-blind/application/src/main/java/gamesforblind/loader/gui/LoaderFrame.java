@@ -27,7 +27,7 @@ public class LoaderFrame extends JFrame {
     private static final Color DARK_GOLD = new Color(218, 165, 32);
 
     /**
-     * When in the main screen, contains buttons in following order: "PLAY_SUDOKU", "EXIT"
+     * When in the main screen, contains buttons in following order: "PLAY_SUDOKU","PLAY_MASTERMIND", "EXIT"
      * When in the Sudoku screen, contains buttons in following order: "BACK", "4x4", "9x9"
      */
     private final ArrayList<JButton> relevantButtons = new ArrayList<>();
@@ -50,7 +50,7 @@ public class LoaderFrame extends JFrame {
     private JFrame loaderFrame;
     /**
      * Holds the index of the currently highlighted button.
-     * In main screen, 0 --> "PLAY SUDOKU", 1 --> "EXIT"
+     * In main screen, 0 --> "PLAY SUDOKU", 1 --> "MASTERMIND", 2 --> "EXIT"
      * In Sudoku screen, 0 --> "BACK", 1 --> "4x4", 2 --> "9x9"
      */
     private int highlightedButtonIndex = 0;
@@ -113,10 +113,17 @@ public class LoaderFrame extends JFrame {
 
         // Case 1: I am in the main screen (just return the "PLAY_SUDOKU" button).
         if (selectedGame == SelectedGame.NONE) {
-            return this.getUIButton(
+            //Set up the content pane.
+            JPanel container = new JPanel();
+            container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+            container.add(this.getUIButton(
                     PLAY_SUDOKU_BUTTON,
-                    new Dimension(FRAME_DIMENSION, FRAME_DIMENSION / HEIGHT_DIVISOR)
-            );
+                    new Dimension(FRAME_DIMENSION, FRAME_DIMENSION / HEIGHT_DIVISOR)));
+
+            container.add(this.getUIButton(
+                    PLAY_MASTERMIND_BUTTON,
+                    new Dimension(FRAME_DIMENSION, FRAME_DIMENSION / HEIGHT_DIVISOR)));
+            return container;
         }
 
         // Case 2: I am in the Sudoku selection screen (return a JPanel with "BACK", "4x4", and "9x9" buttons).
@@ -161,6 +168,7 @@ public class LoaderFrame extends JFrame {
 
         this.loaderFrame = new JFrame("Game Loader Menu");
 
+
         JComponent selectedGameComponent = this.getSelectedGameComponent(selectedGame);
         selectedGameComponent.setVisible(true);
 
@@ -174,7 +182,8 @@ public class LoaderFrame extends JFrame {
         // The selectedGameComponent is on top of the GUI
         // & the exit button is on the bottom of the GUI.
         Container frameContainer = this.loaderFrame.getContentPane();
-        frameContainer.add(selectedGameComponent, BorderLayout.PAGE_START);
+        frameContainer.add(selectedGameComponent.getComponents()[0], BorderLayout.PAGE_START);
+        frameContainer.add(selectedGameComponent.getComponents()[0], BorderLayout.CENTER);
         frameContainer.add(exitButton, BorderLayout.PAGE_END);
 
         // Call the logger save when the close button is clicked.
