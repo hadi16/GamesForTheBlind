@@ -13,22 +13,22 @@ public class LogFileSelectionGui extends JFrame {
     /**
      * The path to the log file that the user selected, as a String.
      */
+    @Nullable
     private final String selectedLogFilePath;
 
     /**
      * Creates a new LogFileSelectionGui.
      */
     public LogFileSelectionGui() {
-        this.selectedLogFilePath = this.openLogFileGuiAndReturnPath();
+        this.selectedLogFilePath = this.openLogFileGuiAndReturnPath().orElse(null);
     }
 
     /**
      * Opens the log file selection GUI & returns the path to the XML file that was selected by the user.
      *
-     * @return The path to the selected log file as a String (or null if operation was cancelled).
+     * @return The path to the selected log file as a String (wrapped in an {@link Optional}).
      */
-    @Nullable
-    private String openLogFileGuiAndReturnPath() {
+    private Optional<String> openLogFileGuiAndReturnPath() {
         JFrame openDialog = new JFrame();
         openDialog.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -43,11 +43,11 @@ public class LogFileSelectionGui extends JFrame {
         if (fileChooser.showOpenDialog(openDialog) == JFileChooser.APPROVE_OPTION) {
             String logFilePath = fileChooser.getSelectedFile().getPath();
             System.out.println("File successfully opened: " + logFilePath);
-            return logFilePath;
+            return Optional.of(logFilePath);
         }
 
         System.out.println("The open operation was cancelled.");
-        return null;
+        return Optional.empty();
     }
 
     /**
@@ -56,10 +56,6 @@ public class LogFileSelectionGui extends JFrame {
      * @return The path to the selected XML log file. Or, Optional.empty() if operation was cancelled.
      */
     public Optional<String> getSelectedLogFilePath() {
-        if (this.selectedLogFilePath == null) {
-            return Optional.empty();
-        }
-
-        return Optional.of(this.selectedLogFilePath);
+        return Optional.ofNullable(this.selectedLogFilePath);
     }
 }

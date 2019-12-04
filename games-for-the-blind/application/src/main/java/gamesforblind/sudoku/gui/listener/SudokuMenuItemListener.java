@@ -1,6 +1,6 @@
 package gamesforblind.sudoku.gui.listener;
 
-import gamesforblind.enums.SudokuMenuItem;
+import gamesforblind.enums.GameMenuItem;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.action.*;
 import org.jetbrains.annotations.NotNull;
@@ -39,10 +39,10 @@ public class SudokuMenuItemListener implements ActionListener {
 
         // TODO: Support the language option.
         final Map<String, SudokuAction> SELECTED_MENU_TEXT_TO_ACTION = Map.of(
-                SudokuMenuItem.HINT.toString(), new SudokuHintKeyAction(),
-                SudokuMenuItem.INSTRUCTIONS.toString(), new SudokuInstructionsAction(),
-                SudokuMenuItem.RETURN_TO_MAIN_MENU.toString(), new SudokuMainMenuAction(),
-                SudokuMenuItem.RESTART.toString(), new SudokuRestartAction()
+                GameMenuItem.HINT.toString(), new SudokuHintKeyAction(),
+                GameMenuItem.INSTRUCTIONS.toString(), new SudokuInstructionsAction(),
+                GameMenuItem.RETURN_TO_MAIN_MENU.toString(), new SudokuMainMenuAction(),
+                GameMenuItem.RESTART.toString(), new SudokuRestartAction()
         );
 
         SudokuAction sudokuAction = SELECTED_MENU_TEXT_TO_ACTION.get(selectedMenuText);

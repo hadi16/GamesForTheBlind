@@ -3,6 +3,7 @@ package gamesforblind.sudoku.interfaces;
 import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.enums.InputType;
 import gamesforblind.sudoku.SudokuState;
+import gamesforblind.sudoku.action.SudokuAction;
 import gamesforblind.sudoku.action.SudokuHighlightAction;
 import gamesforblind.sudoku.action.SudokuHotKeyAction;
 import org.jetbrains.annotations.NotNull;
@@ -19,26 +20,32 @@ import java.util.Optional;
  * Allows multiple keyboard interfaces to exist seamlessly in the game.
  */
 public abstract class SudokuKeyboardInterface {
+    protected final SudokuState sudokuState;
     /**
      * Mapping between key codes (as defined in {@link KeyEvent}) to hot key actions.
      * Note: the CTRL key must be pressed down to trigger any hot key.
      */
-    public final Map<Integer, SudokuHotKeyAction> keyCodeToHotKeyAction;
-
-    protected final SudokuState sudokuState;
+    private final Map<Integer, SudokuHotKeyAction> keyCodeToHotKeyAction;
+    /**
+     * The {@link SudokuAction} to send when the space bar is pressed.
+     */
+    private final SudokuAction spacebarAction;
 
     /**
      * Creates a new SudokuKeyboardInterface.
      *
      * @param sudokuState           The state of the Sudoku game.
      * @param keyCodeToHotKeyAction Mapping between key codes (as defined in {@link KeyEvent}) to hot key actions.
+     * @param spacebarAction        The {@link SudokuAction} to send when the space bar is pressed.
      */
     protected SudokuKeyboardInterface(
             @NotNull SudokuState sudokuState,
-            @NotNull Map<Integer, SudokuHotKeyAction> keyCodeToHotKeyAction
+            @NotNull Map<Integer, SudokuHotKeyAction> keyCodeToHotKeyAction,
+            @NotNull SudokuAction spacebarAction
     ) {
         this.sudokuState = sudokuState;
         this.keyCodeToHotKeyAction = keyCodeToHotKeyAction;
+        this.spacebarAction = spacebarAction;
     }
 
     /**
@@ -88,5 +95,23 @@ public abstract class SudokuKeyboardInterface {
     protected boolean selectedPointInBounds(@NotNull Point pointToSet) {
         int boardSize = this.sudokuState.getSudokuType().getSudokuBoardSize();
         return pointToSet.x >= 0 && pointToSet.y >= 0 && pointToSet.x < boardSize && pointToSet.y < boardSize;
+    }
+
+    /**
+     * Getter for keyCodeToHotKeyAction
+     *
+     * @return Mapping between key codes (as defined in {@link KeyEvent}) to hot key actions.
+     */
+    public Map<Integer, SudokuHotKeyAction> getKeyCodeToHotKeyAction() {
+        return this.keyCodeToHotKeyAction;
+    }
+
+    /**
+     * Getter for spacebarAction
+     *
+     * @return The {@link SudokuAction} to send when the space bar is pressed.
+     */
+    public SudokuAction getSpacebarAction() {
+        return this.spacebarAction;
     }
 }
