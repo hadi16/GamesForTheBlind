@@ -14,6 +14,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.function.Function;
 
 import static gamesforblind.Constants.*;
 
@@ -108,27 +110,25 @@ public class LoaderFrame extends JFrame {
      * @param selectedGame The currently selected game. If set to NONE, I am in the main screen of the loader GUI.
      * @return The upper portion of the loader GUI.
      */
-    private JComponent getSelectedGameComponent(@NotNull SelectedGame selectedGame) {
-        final int HEIGHT_DIVISOR = 3;
+    private ArrayList<JComponent> getSelectedGameComponent(@NotNull SelectedGame selectedGame) {
+        Function<Integer, Dimension> getButtonDimension = (numberOfButtons) -> {
+            return new Dimension(FRAME_DIMENSION / numberOfButtons, FRAME_DIMENSION / 3);
+        };
 
-        // Case 1: I am in the main screen (just return the "PLAY_SUDOKU" button).
+        // Case 1: I am in the main screen (return list of JButtons with "PLAY SUDOKU" & "PLAY MASTERMIND").
         if (selectedGame == SelectedGame.NONE) {
-            //Set up the content pane.
-            JPanel container = new JPanel();
-            container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-            container.add(this.getUIButton(
-                    PLAY_SUDOKU_BUTTON,
-                    new Dimension(FRAME_DIMENSION, FRAME_DIMENSION / HEIGHT_DIVISOR)));
+            ArrayList<JComponent> gameButtonList = new ArrayList<>();
 
-            container.add(this.getUIButton(
-                    PLAY_MASTERMIND_BUTTON,
-                    new Dimension(FRAME_DIMENSION, FRAME_DIMENSION / HEIGHT_DIVISOR)));
-            return container;
+            final String[] GAME_BUTTONS = new String[]{PLAY_SUDOKU_BUTTON, PLAY_MASTERMIND_BUTTON};
+            for (String gameButtonText : GAME_BUTTONS) {
+                gameButtonList.add(this.getUIButton(gameButtonText, getButtonDimension.apply(GAME_BUTTONS.length)));
+            }
+
+            return gameButtonList;
         }
 
         // Case 2: I am in the Sudoku selection screen (return a JPanel with "BACK", "4x4", and "9x9" buttons).
         if (selectedGame == SelectedGame.SUDOKU) {
-            // Want the buttons laid out IN THIS ORDER.
             ArrayList<String> buttonNameList = new ArrayList<>(Arrays.asList(
                     BACK_BUTTON, FOUR_BY_FOUR_SUDOKU_BUTTON, SIX_BY_SIX_SUDOKU_BUTTON, NINE_BY_NINE_SUDOKU_BUTTON
             ));
@@ -138,15 +138,16 @@ public class LoaderFrame extends JFrame {
                 buttonNameList.remove(SIX_BY_SIX_SUDOKU_BUTTON);
             }
 
-            final Dimension BUTTON_SIZE = new Dimension(
-                    FRAME_DIMENSION / buttonNameList.size(), FRAME_DIMENSION / HEIGHT_DIVISOR
-            );
             JPanel sudokuOptionsPanel = new JPanel();
             sudokuOptionsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, FRAME_DIMENSION / 15, 0));
 
-            buttonNameList.forEach(buttonName -> sudokuOptionsPanel.add(this.getUIButton(buttonName, BUTTON_SIZE)));
+            buttonNameList.forEach(buttonName -> {
+                sudokuOptionsPanel.add(
+                        this.getUIButton(buttonName, getButtonDimension.apply(buttonNameList.size()))
+                );
+            });
 
-            return sudokuOptionsPanel;
+            return new ArrayList<>(Collections.singletonList(sudokuOptionsPanel));
         }
 
         // Should never be thrown (NONE & SUDOKU are the only possible GameType's). Needed to prevent compilation error.
@@ -168,9 +169,8 @@ public class LoaderFrame extends JFrame {
 
         this.loaderFrame = new JFrame("Game Loader Menu");
 
-
-        JComponent selectedGameComponent = this.getSelectedGameComponent(selectedGame);
-        selectedGameComponent.setVisible(true);
+        ArrayList<JComponent> selectedGameComponents = this.getSelectedGameComponent(selectedGame);
+        selectedGameComponents.forEach(component -> component.setVisible(true));
 
         JButton exitButton = this.getUIButton(
                 EXIT_BUTTON, new Dimension(FRAME_DIMENSION, FRAME_DIMENSION / 3)
@@ -182,8 +182,15 @@ public class LoaderFrame extends JFrame {
         // The selectedGameComponent is on top of the GUI
         // & the exit button is on the bottom of the GUI.
         Container frameContainer = this.loaderFrame.getContentPane();
-        frameContainer.add(selectedGameComponent.getComponents()[0], BorderLayout.PAGE_START);
-        frameContainer.add(selectedGameComponent.getComponents()[0], BorderLayout.CENTER);
+
+        String[] selectedGameLayouts = new String[]{BorderLayout.PAGE_START, BorderLayout.CENTER};
+        if (selectedGameLayouts.length < selectedGameComponents.size()) {
+            throw new IllegalArgumentException("Too many 'PLAY ____' buttons!");
+        }
+
+        for (int i = 0; i < selectedGameComponents.size(); i++) {
+            frameContainer.add(selectedGameComponents.get(i), selectedGameLayouts[i]);
+        }
         frameContainer.add(exitButton, BorderLayout.PAGE_END);
 
         // Call the logger save when the close button is clicked.
