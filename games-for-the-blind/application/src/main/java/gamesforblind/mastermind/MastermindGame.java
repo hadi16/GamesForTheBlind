@@ -1,12 +1,12 @@
 package gamesforblind.mastermind;
 
 import gamesforblind.ProgramArgs;
-import gamesforblind.enums.InterfaceType;
 import gamesforblind.loader.GameLoader;
 import gamesforblind.logger.LogFactory;
 import gamesforblind.mastermind.action.MastermindAction;
+import gamesforblind.mastermind.action.MastermindExitAction;
+import gamesforblind.mastermind.action.MastermindMainMenuAction;
 import gamesforblind.mastermind.gui.MastermindFrame;
-import gamesforblind.sudoku.SudokuState;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * Game class that is called directly from the {@link GameLoader} class.
- * It receives actions & sends these actions to the {@link SudokuState} for the game.
+ * It receives actions & sends these actions to the {@link MastermindState} for the game.
  */
 public class MastermindGame {
     private final GameLoader gameLoader;
@@ -41,7 +41,6 @@ public class MastermindGame {
         this.programArgs = programArgs;
         this.logFactory = logFactory;
 
-        InterfaceType selectedInterfaceType = programArgs.getSelectedInterfaceType();
         if (programArgs.isPlaybackMode()) {
             // Case 1: the program is in playback mode (call state constructor with the original state of the board).
             this.mastermindState = new MastermindState(audioPlayerExecutor);
@@ -62,6 +61,10 @@ public class MastermindGame {
      * @param mastermindAction The action that was received.
      */
     public void receiveAction(@NotNull MastermindAction mastermindAction) {
+        if (!this.programArgs.isPlaybackMode()) {
+            this.logFactory.addProgramAction(mastermindAction);
+        }
+
         // If the game is over, go to main menu
         if (this.mastermindState.isGameOver()) {
             this.mastermindFrame.closeFrames();
@@ -70,16 +73,26 @@ public class MastermindGame {
         }
 
         final Map<Class, Runnable> MASTERMIND_ACTION_TO_RUNNABLE = Map.of(
+                // Case 1: return to main menu.
+                MastermindMainMenuAction.class, this::returnToMainMenu,
 
-
+                // Case 2: exit the game.
+                MastermindExitAction.class, this.gameLoader::exitApplication
         );
 
         Runnable functionToExecute = MASTERMIND_ACTION_TO_RUNNABLE.get(mastermindAction.getClass());
         if (functionToExecute != null) {
             functionToExecute.run();
         } else {
-            System.err.println("An unrecognized form of a Sudoku action was received by the game!");
+            System.err.println("An unrecognized form of a Mastermind action was received by the game!");
         }
     }
 
+    /**
+     * Restarts the game at the main menu.
+     */
+    private void returnToMainMenu() {
+        this.mastermindFrame.closeFrames();
+        this.gameLoader.openLoaderInterface();
+    }
 }

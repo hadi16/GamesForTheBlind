@@ -1,8 +1,5 @@
 package gamesforblind.sudoku;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import phrase.Phrase;
 import gamesforblind.enums.*;
 import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Generator;
@@ -12,6 +9,9 @@ import gamesforblind.sudoku.interfaces.SudokuArrowKeyInterface;
 import gamesforblind.sudoku.interfaces.SudokuBlockSelectionInterface;
 import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import phrase.Phrase;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;

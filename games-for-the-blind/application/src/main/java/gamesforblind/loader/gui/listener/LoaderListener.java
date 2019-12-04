@@ -5,6 +5,7 @@ import gamesforblind.enums.SudokuType;
 import gamesforblind.loader.GameLoader;
 import gamesforblind.loader.action.LoaderExitAction;
 import gamesforblind.loader.action.LoaderGameSelectionAction;
+import gamesforblind.loader.action.LoaderMastermindSelectionAction;
 import gamesforblind.loader.action.LoaderSudokuSelectionAction;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,7 +45,8 @@ public abstract class LoaderListener {
                 this.gameLoader.receiveAction(new LoaderGameSelectionAction(SelectedGame.SUDOKU));
                 break;
             case PLAY_MASTERMIND_BUTTON:
-                this.gameLoader.receiveAction(new LoaderGameSelectionAction(SelectedGame.MASTERMIND));
+                // No options for Mastermind yet (just load the Mastermind GUI).
+                this.gameLoader.receiveAction(new LoaderMastermindSelectionAction());
                 break;
             case EXIT_BUTTON:
                 this.gameLoader.receiveAction(new LoaderExitAction());

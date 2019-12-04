@@ -86,7 +86,7 @@ public enum Phrase {
             "Use the arrow keys to make your selection."),
     PLAY_OR_EXIT("Would you like to play Sudoku, Mastermind, or exit? Use the arrow keys to make your selection."),
     EXITING("The game is exiting. Goodbye!"),
-    
+
     /* Sudoku: locations */
     A1, A2, A3, A4, A5, A6, A7, A8, A9,
     B1, B2, B3, B4, B5, B6, B7, B8, B9,
@@ -307,15 +307,15 @@ public enum Phrase {
      */
     public static Phrase convertPointToLocationPhrase(@NotNull Point selectedPoint) {
         final Phrase[][] LOCATIONS_PHRASE_LIST = new Phrase[][]{
-                new Phrase[] {A1, A2, A3, A4, A5, A6, A7, A8, A9},
-                new Phrase[] {B1, B2, B3, B4, B5, B6, B7, B8, B9},
-                new Phrase[] {C1, C2, C3, C4, C5, C6, C7, C8, C9},
-                new Phrase[] {D1, D2, D3, D4, D5, D6, D7, D8, D9},
-                new Phrase[] {E1, E2, E3, E4, E5, E6, E7, E8, E9},
-                new Phrase[] {F1, F2, F3, F4, F5, F6, F7, F8, F9},
-                new Phrase[] {G1, G2, G3, G4, G5, G6, G7, G8, G9},
-                new Phrase[] {H1, H2, H3, H4, H5, H6, H7, H8, H9},
-                new Phrase[] {I1, I2, I3, I4, I5, I6, I7, I8, I9},
+                new Phrase[]{A1, A2, A3, A4, A5, A6, A7, A8, A9},
+                new Phrase[]{B1, B2, B3, B4, B5, B6, B7, B8, B9},
+                new Phrase[]{C1, C2, C3, C4, C5, C6, C7, C8, C9},
+                new Phrase[]{D1, D2, D3, D4, D5, D6, D7, D8, D9},
+                new Phrase[]{E1, E2, E3, E4, E5, E6, E7, E8, E9},
+                new Phrase[]{F1, F2, F3, F4, F5, F6, F7, F8, F9},
+                new Phrase[]{G1, G2, G3, G4, G5, G6, G7, G8, G9},
+                new Phrase[]{H1, H2, H3, H4, H5, H6, H7, H8, H9},
+                new Phrase[]{I1, I2, I3, I4, I5, I6, I7, I8, I9},
         };
 
         // x value: 0 maps to "A", 1 maps to "B", etc.

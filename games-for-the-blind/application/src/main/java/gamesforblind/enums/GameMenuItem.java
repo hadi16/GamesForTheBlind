@@ -6,16 +6,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * An enumeration for all of the {@link JMenuItem}s in the Mastermind menu.
+ * An enumeration for all of the {@link JMenuItem}s in the Sudoku or Mastermind menu.
  */
-public enum MastermindMenuItem {
+public enum GameMenuItem {
+    HINT,
     INSTRUCTIONS,
     LANGUAGE,
     RESTART,
     RETURN_TO_MAIN_MENU;
 
+    public static final GameMenuItem[] SUDOKU_MENU_ITEMS = new GameMenuItem[]{
+            HINT, INSTRUCTIONS, LANGUAGE, RESTART, RETURN_TO_MAIN_MENU
+    };
+
+    public static final GameMenuItem[] MASTERMIND_MENU_ITEMS = new GameMenuItem[]{
+            INSTRUCTIONS, LANGUAGE, RESTART, RETURN_TO_MAIN_MENU
+    };
+
     /**
-     * Overrides the String representation of each enumeration member, which is used in the Mastermind menu GUI.
+     * Overrides the String representation of each enumeration member, which is used in the Sudoku menu GUI.
      * Replaces the underscores in the name w/ spaces and capitalizes each word in the name
      * (e.g. RETURN_TO_MAIN_MENU --> "Return To Main Menu").
      *
