@@ -166,7 +166,7 @@ public class AudioPlayer implements Runnable {
 
         // Ensures that the goodbye message plays in its entirety.
         // noinspection StatementWithEmptyBody
-        while (this.activeClip.isRunning());
+        while (this.activeClip.isRunning()) ;
     }
 
     /**

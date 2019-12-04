@@ -1,11 +1,9 @@
 package gamesforblind.mastermind.gui.listener;
 
-import gamesforblind.enums.MastermindMenuItem;
-import gamesforblind.enums.SudokuMenuItem;
+import gamesforblind.enums.GameMenuItem;
 import gamesforblind.mastermind.MastermindGame;
 import gamesforblind.mastermind.action.MastermindAction;
-import gamesforblind.sudoku.SudokuGame;
-import gamesforblind.sudoku.action.*;
+import gamesforblind.mastermind.action.MastermindMainMenuAction;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -40,16 +38,13 @@ public class MastermindMenuItemListener implements ActionListener {
     public void actionPerformed(@NotNull ActionEvent e) {
         String selectedMenuText = e.getActionCommand();
 
-        /*
         final Map<String, MastermindAction> SELECTED_MENU_TEXT_TO_ACTION = Map.of(
-                MastermindMenuItem.INSTRUCTIONS.toString(), new MastermindInstructionsAction(),
-                MastermindMenuItem.RETURN_TO_MAIN_MENU.toString(), new MastermindMainMenuAction(),
-                MastermindMenuItem.RESTART.toString(), new MastermindRestartAction()
+                GameMenuItem.RETURN_TO_MAIN_MENU.toString(), new MastermindMainMenuAction()
         );
 
         MastermindAction mastermindAction = SELECTED_MENU_TEXT_TO_ACTION.get(selectedMenuText);
         if (mastermindAction != null) {
             this.mastermindGame.receiveAction(mastermindAction);
-        }*/
+        }
     }
 }

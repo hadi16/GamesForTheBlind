@@ -1,7 +1,10 @@
 package gamesforblind.mastermind.gui;
 
+import gamesforblind.enums.GameMenuItem;
 import gamesforblind.mastermind.MastermindGame;
 import gamesforblind.mastermind.MastermindState;
+import gamesforblind.mastermind.gui.listener.MastermindMenuItemListener;
+import gamesforblind.mastermind.gui.listener.MastermindWindowListener;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -23,9 +26,9 @@ public class MastermindFrame extends JFrame {
     /**
      * Creates a new MastermindFrame.
      *
-     * @param mastermindGame   The current Mastermind game.
-     * @param initialState The initial state of the game, which is used to initialize the MastermindPanel.
-     * @param playbackMode true if loading saved game from logs (otherwise, false).
+     * @param mastermindGame The current Mastermind game.
+     * @param initialState   The initial state of the game, which is used to initialize the MastermindPanel.
+     * @param playbackMode   true if loading saved game from logs (otherwise, false).
      */
     public MastermindFrame(
             @NotNull MastermindGame mastermindGame,
@@ -37,6 +40,9 @@ public class MastermindFrame extends JFrame {
 
         this.initializeGui(mastermindGame);
 
+        if (!playbackMode) {
+            this.frame.addWindowListener(new MastermindWindowListener(mastermindGame));
+        }
     }
 
     /**
@@ -55,11 +61,30 @@ public class MastermindFrame extends JFrame {
         JMenuBar menuBar = new JMenuBar();
 
         // Add menu to menu bar
-        MastermindMenu menu = new MastermindMenu();
-        menuBar.add(menu.getInitializedMenu(mastermindGame));
+        menuBar.add(this.getInitializedMenu(mastermindGame));
 
         // Add menu bar to frame
         this.frame.setJMenuBar(menuBar);
+    }
+
+    /**
+     * Sets up the {@link JMenu}. Adds all the {@link JMenuItem}s & {@link MastermindMenuItemListener} to these items.
+     *
+     * @param mastermindGame The current Sudoku game.
+     * @return The initialized {@link JMenu} for the Sudoku game.
+     */
+    private JMenu getInitializedMenu(@NotNull MastermindGame mastermindGame) {
+        JMenu mainMenu = new JMenu("Menu");
+        MastermindMenuItemListener mastermindMenuItemListener = new MastermindMenuItemListener(mastermindGame);
+
+        /* Add menu items to menu. */
+        for (GameMenuItem gameMenuItem : GameMenuItem.MASTERMIND_MENU_ITEMS) {
+            JMenuItem jMenuItem = new JMenuItem(gameMenuItem.toString());
+            jMenuItem.addActionListener(mastermindMenuItemListener);
+            mainMenu.add(jMenuItem);
+        }
+
+        return mainMenu;
     }
 
     /**

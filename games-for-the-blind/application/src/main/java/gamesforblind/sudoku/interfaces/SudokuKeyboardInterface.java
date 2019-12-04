@@ -20,18 +20,16 @@ import java.util.Optional;
  * Allows multiple keyboard interfaces to exist seamlessly in the game.
  */
 public abstract class SudokuKeyboardInterface {
+    protected final SudokuState sudokuState;
     /**
      * Mapping between key codes (as defined in {@link KeyEvent}) to hot key actions.
      * Note: the CTRL key must be pressed down to trigger any hot key.
      */
     private final Map<Integer, SudokuHotKeyAction> keyCodeToHotKeyAction;
-
     /**
      * The {@link SudokuAction} to send when the space bar is pressed.
      */
     private final SudokuAction spacebarAction;
-
-    protected final SudokuState sudokuState;
 
     /**
      * Creates a new SudokuKeyboardInterface.
