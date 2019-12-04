@@ -16,21 +16,6 @@ import java.util.Arrays;
  */
 public class AudioFileBuilder {
     /**
-     * The entry point to the audio file builder.
-     *
-     * @param args Command line arguments that were passed by the user.
-     */
-    public static void main(String[] args) {
-        System.out.println("Generating & deleting audio files...");
-
-        AudioFileBuilder audioFileBuilder = new AudioFileBuilder();
-        audioFileBuilder.createPhraseAudioFiles();
-        audioFileBuilder.deleteOldPhraseAudioFiles();
-
-        System.out.println("Completed audio file generation & deletion!");
-    }
-
-    /**
      * The directory that contains all of the Phrases in the program.
      */
     private final File phraseDirectory;
@@ -45,6 +30,21 @@ public class AudioFileBuilder {
                 throw new IllegalArgumentException("Could not create the directory to store the audio phrases!");
             }
         }
+    }
+
+    /**
+     * The entry point to the audio file builder.
+     *
+     * @param args Command line arguments that were passed by the user.
+     */
+    public static void main(String[] args) {
+        System.out.println("Generating & deleting audio files...");
+
+        AudioFileBuilder audioFileBuilder = new AudioFileBuilder();
+        audioFileBuilder.createPhraseAudioFiles();
+        audioFileBuilder.deleteOldPhraseAudioFiles();
+
+        System.out.println("Completed audio file generation & deletion!");
     }
 
     /**

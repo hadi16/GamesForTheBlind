@@ -11,6 +11,7 @@ import gamesforblind.synthesizer.AudioPlayerExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.AbstractMap;
 import java.util.Map;
 
 /**
@@ -80,46 +81,72 @@ public class SudokuGame {
             return;
         }
 
-        final Map<Class, Runnable> SUDOKU_ACTION_TO_RUNNABLE = Map.of(
+        final Map<Class, Runnable> SUDOKU_ACTION_TO_RUNNABLE = Map.ofEntries(
                 // Case 1: the user wishes to exit the game.
-                SudokuExitAction.class,
-                this.gameLoader::exitApplication,
+                new AbstractMap.SimpleEntry<>(
+                        SudokuExitAction.class,
+                        this.gameLoader::exitApplication
+                ),
 
                 // Case 2: the user wants the instructions for the game to be read.
-                SudokuInstructionsAction.class,
-                this.sudokuState::readInstructions,
+                new AbstractMap.SimpleEntry<>(
+                        SudokuInstructionsAction.class,
+                        this.sudokuState::readInstructions
+                ),
 
                 // Case 3: the user wants a hint.
-                SudokuHintKeyAction.class,
-                this::giveHint,
+                new AbstractMap.SimpleEntry<>(
+                        SudokuHintKeyAction.class,
+                        this::giveHint
+                ),
 
                 // Case 4: the user has pressed an unrecognized key on the keyboard.
-                SudokuUnrecognizedKeyAction.class,
-                () -> this.readUnrecognizedKey((SudokuUnrecognizedKeyAction) sudokuAction),
+                new AbstractMap.SimpleEntry<>(
+                        SudokuUnrecognizedKeyAction.class,
+                        () -> this.readUnrecognizedKey((SudokuUnrecognizedKeyAction) sudokuAction)
+                ),
 
                 // Case 5: the user hits a hot key (e.g. Ctrl + LEFT)
-                SudokuHotKeyAction.class,
-                () -> this.processHotKey((SudokuHotKeyAction) sudokuAction),
+                new AbstractMap.SimpleEntry<>(
+                        SudokuHotKeyAction.class,
+                        () -> this.processHotKey((SudokuHotKeyAction) sudokuAction)
+                ),
 
                 // Case 6: the user wants to highlight a square/block on the board.
-                SudokuHighlightAction.class,
-                () -> this.changeHighlightedSquare((SudokuHighlightAction) sudokuAction),
+                new AbstractMap.SimpleEntry<>(
+                        SudokuHighlightAction.class,
+                        () -> this.changeHighlightedSquare((SudokuHighlightAction) sudokuAction)
+                ),
 
                 // Case 7: the user wants to fill a square on the board.
-                SudokuFillAction.class,
-                () -> this.fillSudokuSquare((SudokuFillAction) sudokuAction),
+                new AbstractMap.SimpleEntry<>(
+                        SudokuFillAction.class,
+                        () -> this.fillSudokuSquare((SudokuFillAction) sudokuAction)
+                ),
 
                 // Case 8: the user wants the current row/column/block to be read.
-                SudokuReadPositionAction.class,
-                () -> this.readBoardSection((SudokuReadPositionAction) sudokuAction),
+                new AbstractMap.SimpleEntry<>(
+                        SudokuReadPositionAction.class,
+                        () -> this.readBoardSection((SudokuReadPositionAction) sudokuAction)
+                ),
 
-                // Case 9: return to main menu.
-                SudokuMainMenuAction.class,
-                this::returnToMainMenu,
+                // Case 9: the user wants to read off the location of the currently selected square.
+                new AbstractMap.SimpleEntry<>(
+                        SudokuLocationAction.class,
+                        this.sudokuState::readSelectedLocation
+                ),
 
-                // Case 10: restart the current Sudoku board.
-                SudokuRestartAction.class,
-                this::restartSudokuBoard
+                // Case 10: return to main menu.
+                new AbstractMap.SimpleEntry<>(
+                        SudokuMainMenuAction.class,
+                        this::returnToMainMenu
+                ),
+
+                // Case 11: restart the current Sudoku board.
+                new AbstractMap.SimpleEntry<>(
+                        SudokuRestartAction.class,
+                        this::restartSudokuBoard
+                )
         );
 
         Runnable functionToExecute = SUDOKU_ACTION_TO_RUNNABLE.get(sudokuAction.getClass());

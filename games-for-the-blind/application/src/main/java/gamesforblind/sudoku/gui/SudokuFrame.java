@@ -1,9 +1,11 @@
 package gamesforblind.sudoku.gui;
 
+import gamesforblind.enums.GameMenuItem;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.SudokuState;
 import gamesforblind.sudoku.gui.listener.SudokuKeyboardListener;
+import gamesforblind.sudoku.gui.listener.SudokuMenuItemListener;
 import gamesforblind.sudoku.gui.listener.SudokuMouseListener;
 import gamesforblind.sudoku.gui.listener.SudokuWindowListener;
 import org.jetbrains.annotations.NotNull;
@@ -67,11 +69,30 @@ public class SudokuFrame extends JFrame {
         JMenuBar menuBar = new JMenuBar();
 
         // Add menu to menu bar
-        SudokuMenu menu = new SudokuMenu();
-        menuBar.add(menu.getInitializedMenu(sudokuGame));
+        menuBar.add(this.getInitializedMenu(sudokuGame));
 
         // Add menu bar to frame
         this.frame.setJMenuBar(menuBar);
+    }
+
+    /**
+     * Sets up the {@link JMenu}. Adds all the {@link JMenuItem}s & {@link SudokuMenuItemListener} to these items.
+     *
+     * @param sudokuGame The current Sudoku game.
+     * @return The initialized {@link JMenu} for the Sudoku game.
+     */
+    private JMenu getInitializedMenu(@NotNull SudokuGame sudokuGame) {
+        JMenu mainMenu = new JMenu("Menu");
+        SudokuMenuItemListener sudokuMenuItemListener = new SudokuMenuItemListener(sudokuGame);
+
+        /* Add menu items to menu. */
+        for (GameMenuItem gameMenuItem : GameMenuItem.SUDOKU_MENU_ITEMS) {
+            JMenuItem jMenuItem = new JMenuItem(gameMenuItem.toString());
+            jMenuItem.addActionListener(sudokuMenuItemListener);
+            mainMenu.add(jMenuItem);
+        }
+
+        return mainMenu;
     }
 
     /**
