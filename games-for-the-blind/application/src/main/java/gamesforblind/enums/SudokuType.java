@@ -47,9 +47,9 @@ public enum SudokuType {
     /**
      * Creates a new SudokuType.
      *
-     * @param blockWidth                The number of columns in each block.
-     * @param blockHeight               The number of rows in each block.
-     * @param sudokuBoardSize           The overall dimension of the Sudoku board (e.g. 9x9 --> 9).
+     * @param blockWidth          The number of columns in each block.
+     * @param blockHeight         The number of rows in each block.
+     * @param sudokuBoardSize     The overall dimension of the Sudoku board (e.g. 9x9 --> 9).
      * @param supportedInterfaces The supported keyboard interface types.
      */
     SudokuType(int blockWidth, int blockHeight, int sudokuBoardSize, @NotNull List<InterfaceType> supportedInterfaces) {
