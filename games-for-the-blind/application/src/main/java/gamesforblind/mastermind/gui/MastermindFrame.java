@@ -26,9 +26,9 @@ public class MastermindFrame extends JFrame {
     /**
      * Creates a new MastermindFrame.
      *
-     * @param mastermindGame   The current Mastermind game.
-     * @param initialState The initial state of the game, which is used to initialize the MastermindPanel.
-     * @param playbackMode true if loading saved game from logs (otherwise, false).
+     * @param mastermindGame The current Mastermind game.
+     * @param initialState   The initial state of the game, which is used to initialize the MastermindPanel.
+     * @param playbackMode   true if loading saved game from logs (otherwise, false).
      */
     public MastermindFrame(
             @NotNull MastermindGame mastermindGame,
