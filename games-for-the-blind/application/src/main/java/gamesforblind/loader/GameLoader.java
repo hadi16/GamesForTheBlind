@@ -92,13 +92,15 @@ public class GameLoader {
         for (int i = 0; i < programActions.size(); i++) {
             ProgramAction currentAction = programActions.get(i);
 
-            if (currentAction instanceof LoaderAction) {
-                this.receiveAction((LoaderAction) currentAction);
-            } else if (currentAction instanceof SudokuAction) {
-                // The game should have been initialized by the LoaderSudokuSelectionAction in the XML log file.
-                this.sudokuGame.receiveAction((SudokuAction) currentAction);
-            } else if(currentAction instanceof MastermindAction){
-                this.mastermindGame.receiveAction((MastermindAction) currentAction);
+            final Map<Class, Runnable> ACTION_TO_RUNNABLE = Map.of(
+                    LoaderAction.class, () -> this.receiveAction((LoaderAction) currentAction),
+                    SudokuAction.class, () -> this.sudokuGame.receiveAction((SudokuAction) currentAction),
+                    MastermindAction.class, () -> this.mastermindGame.receiveAction((MastermindAction) currentAction)
+            );
+
+            Runnable functionToExecute = ACTION_TO_RUNNABLE.get(currentAction.getClass());
+            if (functionToExecute != null) {
+                functionToExecute.run();
             }
 
             // If we are on the last iteration/action, then no need to sleep anymore.
@@ -168,11 +170,15 @@ public class GameLoader {
                 LoaderSudokuSelectionAction.class,
                 () -> this.loadSudokuGame((LoaderSudokuSelectionAction) loaderAction),
 
-                // Case 4: the user pressed an unrecognized key on the keyboard.
+                // Case 4: the user selected Mastermind.
+                LoaderMastermindSelectionAction.class,
+                this::loadMastermindGame,
+
+                // Case 5: the user pressed an unrecognized key on the keyboard.
                 LoaderUnrecognizedKeyAction.class,
                 () -> this.readUnrecognizedKey((LoaderUnrecognizedKeyAction) loaderAction),
 
-                // Case 5: the user has decided to exit the loader GUI.
+                // Case 6: the user has decided to exit the loader GUI.
                 LoaderExitAction.class,
                 this::exitApplication
         );
@@ -215,10 +221,6 @@ public class GameLoader {
     private void changeCurrentGame(@NotNull LoaderGameSelectionAction loaderGameSelectionAction) {
         SelectedGame selectedGame = loaderGameSelectionAction.getSelectedGame();
 
-        if(selectedGame == selectedGame.MASTERMIND){
-            this.loadMastermindGame();
-        }
-
         Phrase relevantPhrase;
         if (selectedGame == SelectedGame.SUDOKU) {
             if (this.programArgs.getSelectedInterfaceType() == InterfaceType.ARROW_KEY_INTERFACE) {
@@ -226,8 +228,7 @@ public class GameLoader {
             } else {
                 relevantPhrase = Phrase.WHICH_SUDOKU_GAME_NO_SIX;
             }
-        }
-        else {
+        } else {
             relevantPhrase = Phrase.PLAY_OR_EXIT;
         }
         this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrase);
