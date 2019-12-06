@@ -36,7 +36,7 @@ public class MastermindPanel extends JPanel {
       * @param initialPosition Amount of pixels to begin painting board from (the row & column labels come before this).
       */
     private void paintMainBoard(@NotNull Graphics graphics, int squareDimension, int initialPosition) {
-        int initialPositionY = initialPosition - squareDimension;
+        int initialPositionY = initialPosition - (squareDimension/2);
         //draws border around box
         graphics.drawRect(
                 initialPosition - 1,
@@ -101,7 +101,7 @@ public class MastermindPanel extends JPanel {
      * @param initialPosition Amount of pixels to begin painting board from (column labels come before this).
      */
     private void paintBoardLabels(@NotNull Graphics graphics, int squareDimension, int initialPosition) {
-        int initialPositionY = initialPosition - squareDimension;
+        int initialPositionY = initialPosition - (squareDimension/2);
 
         graphics.setColor(Color.BLACK);
         graphics.setFont(
@@ -157,7 +157,7 @@ public class MastermindPanel extends JPanel {
                 graphics,
                 squareDimension/2,
                 INITIAL_POSITION + (squareDimension * 4),
-                INITIAL_POSITION - squareDimension
+                INITIAL_POSITION - (squareDimension/2)
         );
 
 
