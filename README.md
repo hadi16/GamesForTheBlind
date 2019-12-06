@@ -43,10 +43,10 @@ A 9x9 Sudoku board is broken into nine blocks. Each block contains squares for n
  
 Hot keys include:
 * Space: go to the home position (top left square)
-* Command-left: move to the leftmost column in the current row
-* Command-right: move to the rightmost column in the current row
-* Command-up: move to the top row in the current column
-* Command-down: move to the bottom row in the current column
+* Control-left: move to the leftmost column in the current row
+* Control-right: move to the rightmost column in the current row
+* Control-up: move to the top row in the current column
+* Control-down: move to the bottom row in the current column
 * 'J' : read the row 
 * 'K' : read the column 
 * 'I' : read the instructions
