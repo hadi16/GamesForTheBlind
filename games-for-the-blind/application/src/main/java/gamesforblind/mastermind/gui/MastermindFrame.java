@@ -65,6 +65,7 @@ public class MastermindFrame extends JFrame {
 
         // Add menu bar to frame
         this.frame.setJMenuBar(menuBar);
+
     }
 
     /**
@@ -74,6 +75,16 @@ public class MastermindFrame extends JFrame {
      * @return The initialized {@link JMenu} for the Sudoku game.
      */
     private JMenu getInitializedMenu(@NotNull MastermindGame mastermindGame) {
+        this.frame.add(this.mastermindPanel);
+
+        this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.frame.setSize(FRAME_DIMENSION, FRAME_DIMENSION);
+        this.frame.setVisible(true);
+
+        JMenuBar menuBar = new JMenuBar();
+
+        // Add menu bar to frame
+        this.frame.setJMenuBar(menuBar);
         JMenu mainMenu = new JMenu("Menu");
         MastermindMenuItemListener mastermindMenuItemListener = new MastermindMenuItemListener(mastermindGame);
 
