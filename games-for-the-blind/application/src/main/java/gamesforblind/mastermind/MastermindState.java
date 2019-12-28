@@ -7,7 +7,7 @@ import gamesforblind.synthesizer.AudioPlayerExecutor;
  * Also handles any calls into the {@link AudioPlayerExecutor} for Sudoku.
  */
 public class MastermindState {
-    private boolean gameOver;
+    private final boolean gameOver;
 
     /**
      * Creates a new MastermindState.

@@ -65,7 +65,6 @@ public class MastermindFrame extends JFrame {
 
         // Add menu bar to frame
         this.frame.setJMenuBar(menuBar);
-
     }
 
     /**

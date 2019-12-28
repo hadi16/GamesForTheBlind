@@ -69,14 +69,12 @@ public class LogReader {
      */
     private Optional<Object> convertXmlLogNodeToObject(@NotNull Node xmlNode) {
         try {
-            Class originalGridClass = OriginalSudokuGrid.class;
-
             String xmlNodeName = xmlNode.getNodeName();
-            Class classToMarshall;
+            Class<?> classToMarshall;
 
             // Gets the class name without the package name.
-            if (xmlNodeName.equals(originalGridClass.getSimpleName())) {
-                classToMarshall = originalGridClass;
+            if (xmlNodeName.equals(OriginalSudokuGrid.class.getSimpleName())) {
+                classToMarshall = OriginalSudokuGrid.class;
             } else if (xmlNodeName.toLowerCase().contains("loader")) {
                 // Need the fully qualified name to the class that needs marshalling.
                 classToMarshall = Class.forName("gamesforblind.loader.action." + xmlNodeName);

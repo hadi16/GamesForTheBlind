@@ -6,17 +6,12 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import java.awt.*;
 
-
 /**
  * Contains the main GUI code for Mastermind. Serves as a custom JPanel for Mastermind GUI (extends JPanel).
  */
 public class MastermindPanel extends JPanel {
-
     private final MastermindState mastermindState;
     private int totalBoardLength;
-
-
-
 
     /**
      * Creates a new MastermindPanel.
@@ -25,83 +20,81 @@ public class MastermindPanel extends JPanel {
      */
     public MastermindPanel(@NotNull MastermindState initialState) {
         this.mastermindState = initialState;
-
     }
 
-
-     /** Paints the Mastermind board where the colors will be placed.
-      *
-      * @param graphics        The {@link Graphics} object used for painting.
-      * @param squareDimension The pixel dimension of each square on the board.
-      * @param initialPosition Amount of pixels to begin painting board from (the row & column labels come before this).
-      */
+    /**
+     * Paints the Mastermind board where the colors will be placed.
+     *
+     * @param graphics        The {@link Graphics} object used for painting.
+     * @param squareDimension The pixel dimension of each square on the board.
+     * @param initialPosition Amount of pixels to begin painting board from (the row & column labels come before this).
+     */
     private void paintMainBoard(@NotNull Graphics graphics, int squareDimension, int initialPosition) {
-        int initialPositionY = initialPosition - (squareDimension/2);
-        //draws border around box
+        int initialPositionY = initialPosition - (squareDimension / 2);
+
+        // Draws border around box
         graphics.drawRect(
                 initialPosition - 1,
                 initialPositionY - 1,
                 squareDimension * 4,
-                 squareDimension * 10
+                squareDimension * 10
         );
 
-        //draws border
+        // Draws border
         graphics.drawRect(
                 initialPosition + (squareDimension * 4) - 1,
                 initialPositionY - 1,
                 squareDimension,
-                 squareDimension * 10
+                squareDimension * 10
         );
+
         for (int rowIndex = 0; rowIndex < 10; rowIndex++) {
             int yPosition = initialPositionY + rowIndex * squareDimension;
 
             for (int columnIndex = 0; columnIndex < 4; columnIndex++) {
                 int xPosition = initialPosition + columnIndex * squareDimension;
 
-
-                //draw grid
+                // Draw grid
                 graphics.setColor(Color.BLACK);
                 graphics.drawRect(xPosition, yPosition, squareDimension, squareDimension);
-                System.out.println(xPosition+"  "+yPosition);
+                System.out.println(xPosition + "  " + yPosition);
             }
         }
     }
-    /** Paints the Mastermind board where the previous results are shown.
+
+    /**
+     * Paints the Mastermind board where the previous results are shown.
      *
-     * @param graphics        The {@link Graphics} object used for painting.
-     * @param squareDimension The pixel dimension of each square on the board.
-     * @param initialPosition Amount of pixels to begin painting board from (column labels come before this).
+     * @param graphics         The {@link Graphics} object used for painting.
+     * @param squareDimension  The pixel dimension of each square on the board.
+     * @param initialPosition  Amount of pixels to begin painting board from (column labels come before this).
      * @param initialPositionY Amount of pixels to begin painting board from (the row labels come before this).
      */
     private void paintResultBoard(
-                                    @NotNull Graphics graphics,
-                                    int squareDimension,
-                                    int initialPosition,
-                                    int initialPositionY) {
-
+            @NotNull Graphics graphics, int squareDimension, int initialPosition, int initialPositionY
+    ) {
         for (int rowIndex = 0; rowIndex < 20; rowIndex++) {
-            int yPosition = initialPositionY  + rowIndex * squareDimension;
+            int yPosition = initialPositionY + rowIndex * squareDimension;
 
             for (int columnIndex = 0; columnIndex < 2; columnIndex++) {
                 int xPosition = initialPosition + columnIndex * squareDimension;
 
-
-                // Step 3: draw square of grid
+                // Draw square of grid
                 graphics.setColor(Color.BLACK);
                 graphics.drawRect(xPosition, yPosition, squareDimension, squareDimension);
             }
         }
     }
 
-
-    /** Paints the  labels along the left and top edges of the board
+    /**
+     * Paints the  labels along the left and top edges of the board
      *
      * @param graphics        The {@link Graphics} object used for painting.
      * @param squareDimension The pixel dimension of each square on the board.
      * @param initialPosition Amount of pixels to begin painting board from (column labels come before this).
      */
     private void paintBoardLabels(@NotNull Graphics graphics, int squareDimension, int initialPosition) {
-        int initialPositionY = initialPosition - (squareDimension/2);
+        int initialPositionY = initialPosition - (squareDimension / 2);
 
         graphics.setColor(Color.BLACK);
         graphics.setFont(
@@ -127,7 +120,6 @@ public class MastermindPanel extends JPanel {
         }
     }
 
-
     /**
      * When repaint() or paint() is called, paints the Mastermind GUI.
      * Might look into using comic sans as a font.
@@ -142,24 +134,21 @@ public class MastermindPanel extends JPanel {
         this.totalBoardLength = Math.min(clipBounds.height, clipBounds.width);
 
         int squaresPerSide = 11; // 10 (for initial board) + 1
-        int squareDimension = (((this.totalBoardLength - squaresPerSide) / squaresPerSide)/2)*2;
+        int squareDimension = (((this.totalBoardLength - squaresPerSide) / squaresPerSide) / 2) * 2;
 
-        final int INITIAL_POSITION =
-                this.totalBoardLength - (squareDimension * squaresPerSide) + 3*(squareDimension/2);
+        final int INITIAL_POSITION = this.totalBoardLength - (squareDimension * squaresPerSide) + 3 * (squareDimension / 2);
 
 
         // Step 1: paint the board, 4x10 grid currently
-        this.paintMainBoard(graphics, squareDimension, INITIAL_POSITION );
-        System.out.println("Dimensions 1: "+squareDimension+"Dimensions 2: " + squareDimension/2);
+        this.paintMainBoard(graphics, squareDimension, INITIAL_POSITION);
 
         //Step 2: paint small board that will display the result of previous guess
         this.paintResultBoard(
                 graphics,
-                squareDimension/2,
+                squareDimension / 2,
                 INITIAL_POSITION + (squareDimension * 4),
-                INITIAL_POSITION - (squareDimension/2)
+                INITIAL_POSITION - (squareDimension / 2)
         );
-
 
         // Step 3: paint the labels
         this.paintBoardLabels(graphics, squareDimension, INITIAL_POSITION);
