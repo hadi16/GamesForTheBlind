@@ -81,7 +81,7 @@ public class SudokuGame {
             return;
         }
 
-        final Map<Class, Runnable> SUDOKU_ACTION_TO_RUNNABLE = Map.ofEntries(
+        final Map<Class<? extends SudokuAction>, Runnable> SUDOKU_ACTION_TO_RUNNABLE = Map.ofEntries(
                 // Case 1: the user wishes to exit the game.
                 new AbstractMap.SimpleEntry<>(
                         SudokuExitAction.class,
