@@ -146,6 +146,10 @@
                         <CFBundleDisplayName>Games For The Blind</CFBundleDisplayName>
                         <CFBundleName>Games For The Blind</CFBundleName>
                     </plist>
+                    <dmg>
+                        <generate>true</generate>
+                        <createApplicationsSymlink>true</createApplicationsSymlink>
+                    </dmg>
                 </configuration>
                 <executions>
                     <execution>
