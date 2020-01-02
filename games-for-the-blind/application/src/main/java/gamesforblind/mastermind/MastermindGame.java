@@ -41,14 +41,7 @@ public class MastermindGame {
         this.programArgs = programArgs;
         this.logFactory = logFactory;
 
-        if (programArgs.isPlaybackMode()) {
-            // Case 1: the program is in playback mode (call state constructor with the original state of the board).
-            this.mastermindState = new MastermindState(audioPlayerExecutor);
-        } else {
-            // Case 2: the program is not in playback mode (set the log factory's original Sudoku state).
-            this.mastermindState = new MastermindState(audioPlayerExecutor);
-        }
-
+        this.mastermindState = new MastermindState(audioPlayerExecutor);
         this.mastermindFrame = new MastermindFrame(
                 this, this.mastermindState, programArgs.isPlaybackMode()
         );
