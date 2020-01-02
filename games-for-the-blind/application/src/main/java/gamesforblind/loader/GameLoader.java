@@ -92,7 +92,7 @@ public class GameLoader {
         for (int i = 0; i < programActions.size(); i++) {
             ProgramAction currentAction = programActions.get(i);
 
-            final Map<Class, Runnable> ACTION_TO_RUNNABLE = Map.of(
+            final Map<Class<? extends ProgramAction>, Runnable> ACTION_TO_RUNNABLE = Map.of(
                     LoaderAction.class, () -> this.receiveAction((LoaderAction) currentAction),
                     SudokuAction.class, () -> this.sudokuGame.receiveAction((SudokuAction) currentAction),
                     MastermindAction.class, () -> this.mastermindGame.receiveAction((MastermindAction) currentAction)
@@ -157,7 +157,7 @@ public class GameLoader {
             this.logFactory.addProgramAction(loaderAction);
         }
 
-        final Map<Class, Runnable> LOADER_ACTION_TO_RUNNABLE = Map.of(
+        final Map<Class<? extends LoaderAction>, Runnable> LOADER_ACTION_TO_RUNNABLE = Map.of(
                 // Case 1: the user pressed one of the arrow keys in the loader GUI.
                 LoaderArrowKeyAction.class,
                 () -> this.highlightDifferentLoaderButton((LoaderArrowKeyAction) loaderAction),
