@@ -1,10 +1,10 @@
 package gamesforblind.codebreaker.gui;
 
-import gamesforblind.enums.GameMenuItem;
 import gamesforblind.codebreaker.CodebreakerGame;
 import gamesforblind.codebreaker.CodebreakerState;
 import gamesforblind.codebreaker.gui.listener.CodebreakerMenuItemListener;
 import gamesforblind.codebreaker.gui.listener.CodebreakerWindowListener;
+import gamesforblind.enums.GameMenuItem;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -27,8 +27,8 @@ public class CodebreakerFrame extends JFrame {
      * Creates a new CodebreakerFrame.
      *
      * @param codebreakerGame The current Codebreaker game.
-     * @param initialState   The initial state of the game, which is used to initialize the CodebreakerPanel.
-     * @param playbackMode   true if loading saved game from logs (otherwise, false).
+     * @param initialState    The initial state of the game, which is used to initialize the CodebreakerPanel.
+     * @param playbackMode    true if loading saved game from logs (otherwise, false).
      */
     public CodebreakerFrame(
             @NotNull CodebreakerGame codebreakerGame,

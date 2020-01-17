@@ -4,8 +4,8 @@ import gamesforblind.ProgramAction;
 import gamesforblind.ProgramArgs;
 import gamesforblind.codebreaker.CodebreakerGame;
 import gamesforblind.codebreaker.action.CodebreakerAction;
-import gamesforblind.enums.InterfaceType;
 import gamesforblind.enums.CodebreakerType;
+import gamesforblind.enums.InterfaceType;
 import gamesforblind.enums.SelectedGame;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.loader.action.*;
@@ -232,11 +232,9 @@ public class GameLoader {
             } else {
                 relevantPhrase = Phrase.WHICH_SUDOKU_GAME_NO_SIX;
             }
-        }
-        else if(selectedGame == SelectedGame.CODEBREAKER){
-                relevantPhrase = Phrase.WHICH_CODEBREAKER_GAME_ALL;
-        }
-        else {
+        } else if (selectedGame == SelectedGame.CODEBREAKER) {
+            relevantPhrase = Phrase.WHICH_CODEBREAKER_GAME_ALL;
+        } else {
             relevantPhrase = Phrase.PLAY_OR_EXIT;
         }
         this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrase);

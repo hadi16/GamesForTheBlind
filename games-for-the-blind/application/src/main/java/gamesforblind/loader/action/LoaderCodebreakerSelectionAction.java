@@ -2,6 +2,7 @@ package gamesforblind.loader.action;
 
 import com.sun.istack.NotNull;
 import gamesforblind.enums.CodebreakerType;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;

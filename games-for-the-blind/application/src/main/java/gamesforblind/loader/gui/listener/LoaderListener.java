@@ -4,9 +4,9 @@ import gamesforblind.enums.CodebreakerType;
 import gamesforblind.enums.SelectedGame;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.loader.GameLoader;
+import gamesforblind.loader.action.LoaderCodebreakerSelectionAction;
 import gamesforblind.loader.action.LoaderExitAction;
 import gamesforblind.loader.action.LoaderGameSelectionAction;
-import gamesforblind.loader.action.LoaderCodebreakerSelectionAction;
 import gamesforblind.loader.action.LoaderSudokuSelectionAction;
 import org.jetbrains.annotations.NotNull;
 
