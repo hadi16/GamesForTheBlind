@@ -29,17 +29,17 @@ The goal of Sudoku is to fill up the missing numbers on the board so that no num
 **4x4 Board:** 
 A 4x4 Sudoku board is broken into four blocks. Each block contains four squares for numbers to be placed. The squares will be filled in with the numbers 1-4 such that no number is repeated in each block, row, and column. 
  
- ![Image_Of_4x4Board](https://github.com/hadi16/GamesForTheBlind/images/4x4Board.png)
+ ![Image_Of_4x4Board](https://github.com/hadi16/GamesForTheBlind/blob/master/images/4x4Board.png)
 
 **6x6 Board:** 
 A 6x6 Sudoku board is somewhat different. The board is broken into six rectangles, each with six squares for numbers to be placed. Each block has two rows and 3 columns of squares to place the numbers 1-6. The squares are arranged so that there are two columns and three rows of squares on the board. 
   
-  ![Image_Of_6x6Board](https://github.com/hadi16/GamesForTheBlind/images/6x6Board.png)
+  ![Image_Of_6x6Board](https://github.com/hadi16/GamesForTheBlind/blob/master/images/6x6Board.png)
 
 **9x9 Board:** 
 A 9x9 Sudoku board is broken into nine blocks. Each block contains squares for numbers to be placed. The squares must be filled with the numbers 1-9 such that no number is repeated twice in each block, row, and column. 
   
-  ![Image_Of_9x9Board](https://github.com/hadi16/GamesForTheBlind/images/9x9Board.png)
+  ![Image_Of_9x9Board](https://github.com/hadi16/GamesForTheBlind/blob/master/images/9x9Board.png)
 
 ### How to Play 
 
@@ -47,11 +47,11 @@ A 9x9 Sudoku board is broken into nine blocks. Each block contains squares for n
 
 From the initial main menu page, choose Sudoku by either pressing space or clicking. 
 
-  ![Image_Of_mainMenu](https://github.com/hadi16/GamesForTheBlind/images/mainMenu.png)
+  ![Image_Of_mainMenu](https://github.com/hadi16/GamesForTheBlind/blob/master/images/mainMenu.png)
 
 Then choose the difficulty level desired or return to main menu.
 
-  ![Image_Of_sudokuOptions](https://github.com/hadi16/GamesForTheBlind/images/sudokuOptions.png)
+  ![Image_Of_sudokuOptions](https://github.com/hadi16/GamesForTheBlind/blob/master/images/sudokuOptions.png)
  
 **How to Play Sudoku Using Mouse:** Simply click on the square where you would like to place a number and press the corresponding number on the number pad. 
  
@@ -82,7 +82,7 @@ Example: Place a ‘3’ into the top-right square in the bottom-left block in a
 * Restart: restart the sudoku board
 * Return to Main Menu: exit the game and return to main menu
 
-![Image_Of_menuTab](https://github.com/hadi16/GamesForTheBlind/images/menuTab.png)
+![Image_Of_menuTab](https://github.com/hadi16/GamesForTheBlind/blob/master/images/menuTab.png)
 
 
 ## CodeBreaker User Manual
