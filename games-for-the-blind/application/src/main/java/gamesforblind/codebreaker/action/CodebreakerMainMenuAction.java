@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Action that is sent when a user wishes to return to the main menu.
  */
-@XmlRootElement(name = "MastermindMainMenuAction")
+@XmlRootElement(name = "CodebreakerMainMenuAction")
 @XmlAccessorType(XmlAccessType.NONE)
 public class CodebreakerMainMenuAction extends CodebreakerAction {
 }

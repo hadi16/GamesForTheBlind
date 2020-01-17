@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Action that is sent when a user wishes to exit.
  */
-@XmlRootElement(name = "MastermindExitAction")
+@XmlRootElement(name = "CodebreakerExitAction")
 @XmlAccessorType(XmlAccessType.NONE)
 public class CodebreakerExitAction extends CodebreakerAction {
 }
