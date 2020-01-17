@@ -84,6 +84,11 @@ public enum Phrase {
             "Use the arrow keys to make your selection."),
     WHICH_SUDOKU_GAME_NO_SIX("Which Sudoku game would you like to play, 4 by 4 or 9 by 9? " +
             "Use the arrow keys to make your selection."),
+    WHICH_MASTERMIND_GAME_ALL("Which Code Breaker game would you like to play, 4, 5, or 6? " +
+            "Use the arrow keys to make your selection."),
+    SELECT_MASTERMIND_FOUR("Press the SPACE BAR to play the 4 version of Code Breaker."),
+    SELECT_MASTERMIND_FIVE("Press the SPACE BAR to play the 5 version of Code Breaker."),
+    SELECT_MASTERMIND_SIX("Press the SPACE BAR to play the 6 version of Code Breaker."),
     PLAY_OR_EXIT("Would you like to play Sudoku, Mastermind, or exit? Use the arrow keys to make your selection."),
     EXITING("The game is exiting. Goodbye!"),
 

@@ -3,6 +3,7 @@ package gamesforblind.loader;
 import gamesforblind.ProgramAction;
 import gamesforblind.ProgramArgs;
 import gamesforblind.enums.InterfaceType;
+import gamesforblind.enums.MastermindType;
 import gamesforblind.enums.SelectedGame;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.loader.action.*;
@@ -166,13 +167,13 @@ public class GameLoader {
                 LoaderGameSelectionAction.class,
                 () -> this.changeCurrentGame((LoaderGameSelectionAction) loaderAction),
 
-                // Case 3: the user selected one of the Sudoku board sizes in the loader GUI (4x4 or 9x9).
+                // Case 3: the user selected one of the Sudoku board sizes in the loader GUI (4x4, 6x6, or 9x9).
                 LoaderSudokuSelectionAction.class,
                 () -> this.loadSudokuGame((LoaderSudokuSelectionAction) loaderAction),
 
-                // Case 4: the user selected Mastermind.
+                // Case 4: the user selected one of the Mastermind board sizes in the loader GUI (4,5, or 6).
                 LoaderMastermindSelectionAction.class,
-                this::loadMastermindGame,
+                () -> this.loadMastermindGame((LoaderMastermindSelectionAction) loaderAction),
 
                 // Case 5: the user pressed an unrecognized key on the keyboard.
                 LoaderUnrecognizedKeyAction.class,
@@ -204,7 +205,10 @@ public class GameLoader {
                 BACK_BUTTON, Phrase.GO_BACK_TO_GAME_SELECTION,
                 FOUR_BY_FOUR_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_FOUR,
                 SIX_BY_SIX_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_SIX,
-                NINE_BY_NINE_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_NINE
+                NINE_BY_NINE_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_NINE,
+                FOUR_MASTERMIND_BUTTON, Phrase.SELECT_MASTERMIND_FOUR,
+                FIVE_MASTERMIND_BUTTON, Phrase.SELECT_MASTERMIND_FIVE,
+                SIX_MASTERMIND_BUTTON, Phrase.SELECT_MASTERMIND_SIX
         );
 
         this.loaderFrame.changeHighlightedButton(loaderArrowKeyAction.getArrowKeyDirection());
@@ -228,7 +232,11 @@ public class GameLoader {
             } else {
                 relevantPhrase = Phrase.WHICH_SUDOKU_GAME_NO_SIX;
             }
-        } else {
+        }
+        else if(selectedGame == SelectedGame.MASTERMIND){
+                relevantPhrase = Phrase.WHICH_MASTERMIND_GAME_ALL;
+        }
+        else {
             relevantPhrase = Phrase.PLAY_OR_EXIT;
         }
         this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrase);
@@ -262,10 +270,11 @@ public class GameLoader {
     /**
      * Loads the Mastermind game that the user requested.
      */
-    private void loadMastermindGame() {
+    private void loadMastermindGame(LoaderMastermindSelectionAction loaderMastermindSelectionAction) {
+        MastermindType mastermindType = loaderMastermindSelectionAction.getMastermindType();
         this.loaderFrame.closeLoaderFrames();
         this.mastermindGame = new MastermindGame(
-                this, this.audioPlayerExecutor, this.logFactory, this.programArgs
+                this, mastermindType,this.audioPlayerExecutor, this.logFactory, this.programArgs
         );
     }
 

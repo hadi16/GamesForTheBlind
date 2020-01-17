@@ -6,5 +6,5 @@ package gamesforblind.enums;
  * MASTERMIND isn't needed because it doesn't have an options pane (instead, just directly load Mastermind).
  */
 public enum SelectedGame {
-    NONE, SUDOKU
+    NONE, SUDOKU, MASTERMIND
 }
