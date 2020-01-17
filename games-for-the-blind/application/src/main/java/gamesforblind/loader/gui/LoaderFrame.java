@@ -117,7 +117,7 @@ public class LoaderFrame extends JFrame {
         if (selectedGame == SelectedGame.NONE) {
             ArrayList<JComponent> gameButtonList = new ArrayList<>();
 
-            final String[] GAME_BUTTONS = new String[]{PLAY_SUDOKU_BUTTON, PLAY_MASTERMIND_BUTTON};
+            final String[] GAME_BUTTONS = new String[]{PLAY_SUDOKU_BUTTON, PLAY_CODEBREAKER_BUTTON};
             for (String gameButtonText : GAME_BUTTONS) {
                 gameButtonList.add(this.getUIButton(gameButtonText, getButtonDimension.apply(GAME_BUTTONS.length)));
             }
@@ -149,9 +149,9 @@ public class LoaderFrame extends JFrame {
         }
 
         // Case 3: I am in the Mastermind selection screen (return a JPanel with "BACK", "4","5", "6" buttons).
-        if (selectedGame == SelectedGame.MASTERMIND) {
+        if (selectedGame == SelectedGame.CODEBREAKER) {
             ArrayList<String> buttonNameList = new ArrayList<>(Arrays.asList(
-                    BACK_BUTTON, FOUR_MASTERMIND_BUTTON, FIVE_MASTERMIND_BUTTON, SIX_MASTERMIND_BUTTON
+                    BACK_BUTTON, FOUR_CODEBREAKER_BUTTON, FIVE_CODEBREAKER_BUTTON, SIX_CODEBREAKER_BUTTON
             ));
 
             JPanel sudokuOptionsPanel = new JPanel();
@@ -284,7 +284,7 @@ public class LoaderFrame extends JFrame {
         }
 
         // Case 2: I am in the Sudoku game selection screen.
-        if (selectedGame == SelectedGame.MASTERMIND) {
+        if (selectedGame == SelectedGame.CODEBREAKER) {
             // I only care about the first child component (the JPanel w/ "BACK", etc.)
             Component mastermindMenuComponent = frameContainerComponents[0];
             if (mastermindMenuComponent instanceof JPanel) {
