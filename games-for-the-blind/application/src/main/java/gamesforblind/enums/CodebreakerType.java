@@ -16,7 +16,7 @@ public enum CodebreakerType {
     /**
      * Creates a new CodebreakerType.
      *
-     * @param blockWidth          The length of code.
+     * @param blockWidth The length of code.
      */
     CodebreakerType(int blockWidth) {
         this.blockWidth = blockWidth;

@@ -1,13 +1,13 @@
 package gamesforblind.codebreaker;
 
 import gamesforblind.ProgramArgs;
-import gamesforblind.enums.CodebreakerType;
-import gamesforblind.loader.GameLoader;
-import gamesforblind.logger.LogFactory;
 import gamesforblind.codebreaker.action.CodebreakerAction;
 import gamesforblind.codebreaker.action.CodebreakerExitAction;
 import gamesforblind.codebreaker.action.CodebreakerMainMenuAction;
 import gamesforblind.codebreaker.gui.CodebreakerFrame;
+import gamesforblind.enums.CodebreakerType;
+import gamesforblind.loader.GameLoader;
+import gamesforblind.logger.LogFactory;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +29,7 @@ public class CodebreakerGame {
      * Creates a new CodebreakerGame.
      *
      * @param gameLoader          The "main menu" for the games, which is needed when reopening this menu.
-     * @param codebreakerType      int describing the number of boxes/difficulty to use
+     * @param codebreakerType     int describing the number of boxes/difficulty to use
      * @param audioPlayerExecutor Class used to execute the threaded audio player.
      * @param logFactory          Where all of the logs are stored or read from (depending on whether in playback mode).
      * @param programArgs         The program arguments that were passed.
