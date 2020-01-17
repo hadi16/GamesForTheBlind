@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * An enumeration for all of the {@link JMenuItem}s in the Sudoku or Mastermind menu.
+ * An enumeration for all of the {@link JMenuItem}s in the Sudoku or Codebreaker menu.
  */
 public enum GameMenuItem {
     HINT,
@@ -19,7 +19,7 @@ public enum GameMenuItem {
             HINT, INSTRUCTIONS, LANGUAGE, RESTART, RETURN_TO_MAIN_MENU
     };
 
-    public static final GameMenuItem[] MASTERMIND_MENU_ITEMS = new GameMenuItem[]{
+    public static final GameMenuItem[] CODEBREAKER_MENU_ITEMS = new GameMenuItem[]{
             INSTRUCTIONS, LANGUAGE, RESTART, RETURN_TO_MAIN_MENU
     };
 

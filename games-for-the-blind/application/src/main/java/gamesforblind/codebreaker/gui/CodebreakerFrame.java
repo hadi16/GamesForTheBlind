@@ -13,21 +13,21 @@ import java.awt.*;
 import static gamesforblind.Constants.FRAME_DIMENSION;
 
 /**
- * Class that creates the Mastermind GUI, adds the listeners to that GUI, and updates the Mastermind state of the GUI.
+ * Class that creates the Codebreaker GUI, adds the listeners to that GUI, and updates the Codebreaker state of the GUI.
  */
 public class CodebreakerFrame extends JFrame {
     private final JFrame frame;
 
     /**
-     * A reference to the panel that contains most of the Mastermind GUI code.
+     * A reference to the panel that contains most of the Codebreaker GUI code.
      */
     private final CodebreakerPanel codebreakerPanel;
 
     /**
-     * Creates a new MastermindFrame.
+     * Creates a new CodebreakerFrame.
      *
-     * @param codebreakerGame The current Mastermind game.
-     * @param initialState   The initial state of the game, which is used to initialize the MastermindPanel.
+     * @param codebreakerGame The current Codebreaker game.
+     * @param initialState   The initial state of the game, which is used to initialize the CodebreakerPanel.
      * @param playbackMode   true if loading saved game from logs (otherwise, false).
      */
     public CodebreakerFrame(
@@ -36,7 +36,7 @@ public class CodebreakerFrame extends JFrame {
             boolean playbackMode
     ) {
         this.codebreakerPanel = new CodebreakerPanel(initialState);
-        this.frame = new JFrame("Mastermind");
+        this.frame = new JFrame("Codebreaker");
 
         this.initializeGui(codebreakerGame);
 
@@ -49,7 +49,7 @@ public class CodebreakerFrame extends JFrame {
      * Used for creating the on-screen GUI.
      * This will start at a dimension of 500 by 500 pixels, but is fully resizable by dragging the window.
      *
-     * @param codebreakerGame The Mastermind game.
+     * @param codebreakerGame The Codebreaker game.
      */
     private void initializeGui(@NotNull CodebreakerGame codebreakerGame) {
         this.frame.add(this.codebreakerPanel);
@@ -88,7 +88,7 @@ public class CodebreakerFrame extends JFrame {
         CodebreakerMenuItemListener codebreakerMenuItemListener = new CodebreakerMenuItemListener(codebreakerGame);
 
         /* Add menu items to menu. */
-        for (GameMenuItem gameMenuItem : GameMenuItem.MASTERMIND_MENU_ITEMS) {
+        for (GameMenuItem gameMenuItem : GameMenuItem.CODEBREAKER_MENU_ITEMS) {
             JMenuItem jMenuItem = new JMenuItem(gameMenuItem.toString());
             jMenuItem.addActionListener(codebreakerMenuItemListener);
             mainMenu.add(jMenuItem);
@@ -98,9 +98,9 @@ public class CodebreakerFrame extends JFrame {
     }
 
     /**
-     * Calls repaint() on the enclosed Mastermind panel reference.
+     * Calls repaint() on the enclosed Codebreaker panel reference.
      */
-    public void repaintMastermindPanel() {
+    public void repaintCodebreakerPanel() {
         this.codebreakerPanel.repaint();
     }
 
