@@ -1,12 +1,5 @@
 package gamesforblind.enums;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * Enumeration for the different types of Sudoku that are supported in the game (e.g. 4x4 and 9x9).
  */

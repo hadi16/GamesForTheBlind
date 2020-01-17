@@ -26,7 +26,7 @@ public class CodebreakerGame {
     private final ProgramArgs programArgs;
 
     /**
-     * Creates a new MastermindGame.
+     * Creates a new CodebreakerGame.
      *
      * @param gameLoader          The "main menu" for the games, which is needed when reopening this menu.
      * @param codebreakerType      int describing the number of boxes/difficulty to use
@@ -77,7 +77,7 @@ public class CodebreakerGame {
             return;
         }
 
-        final Map<Class<? extends MastermindAction>, Runnable> MASTERMIND_ACTION_TO_RUNNABLE = Map.of(
+        final Map<Class<? extends CodebreakerAction>, Runnable> CODEBREAKER_ACTION_TO_RUNNABLE = Map.of(
                 // Case 1: return to main menu.
                 CodebreakerMainMenuAction.class, this::returnToMainMenu,
 
@@ -85,11 +85,11 @@ public class CodebreakerGame {
                 CodebreakerExitAction.class, this.gameLoader::exitApplication
         );
 
-        Runnable functionToExecute = MASTERMIND_ACTION_TO_RUNNABLE.get(codebreakerAction.getClass());
+        Runnable functionToExecute = CODEBREAKER_ACTION_TO_RUNNABLE.get(codebreakerAction.getClass());
         if (functionToExecute != null) {
             functionToExecute.run();
         } else {
-            System.err.println("An unrecognized form of a Mastermind action was received by the game!");
+            System.err.println("An unrecognized form of a Codebreaker action was received by the game!");
         }
     }
 

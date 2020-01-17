@@ -7,23 +7,23 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Contains the main GUI code for Mastermind. Serves as a custom JPanel for Mastermind GUI (extends JPanel).
+ * Contains the main GUI code for Codebreaker. Serves as a custom JPanel for Codebreaker GUI (extends JPanel).
  */
 public class CodebreakerPanel extends JPanel {
     private final CodebreakerState codebreakerState;
     private int totalBoardLength;
 
     /**
-     * Creates a new MastermindPanel.
+     * Creates a new CodebreakerPanel.
      *
-     * @param initialState The initial state of the Mastermind game.
+     * @param initialState The initial state of the Codebreaker game.
      */
     public CodebreakerPanel(@NotNull CodebreakerState initialState) {
         this.codebreakerState = initialState;
     }
 
     /**
-     * Paints the Mastermind board where the colors will be placed.
+     * Paints the Codebreaker board where the colors will be placed.
      *
      * @param graphics        The {@link Graphics} object used for painting.
      * @param squareDimension The pixel dimension of each square on the board.
@@ -60,7 +60,7 @@ public class CodebreakerPanel extends JPanel {
     }
 
     /**
-     * Paints the Mastermind board where the previous results are shown.
+     * Paints the Codebreaker board where the previous results are shown.
      *
      * @param graphics        The {@link Graphics} object used for painting.
      * @param squareDimension The pixel dimension of each square on the board.
@@ -113,7 +113,7 @@ public class CodebreakerPanel extends JPanel {
     }
 
     /**
-     * When repaint() or paint() is called, paints the Mastermind GUI.
+     * When repaint() or paint() is called, paints the Codebreaker GUI.
      * Might look into using comic sans as a font.
      *
      * @param graphics The {@link Graphics} object used for painting.
