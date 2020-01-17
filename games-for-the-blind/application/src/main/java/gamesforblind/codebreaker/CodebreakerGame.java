@@ -77,7 +77,7 @@ public class CodebreakerGame {
             return;
         }
 
-        final Map<Class, Runnable> MASTERMIND_ACTION_TO_RUNNABLE = Map.of(
+        final Map<Class<? extends MastermindAction>, Runnable> MASTERMIND_ACTION_TO_RUNNABLE = Map.of(
                 // Case 1: return to main menu.
                 CodebreakerMainMenuAction.class, this::returnToMainMenu,
 
