@@ -2,7 +2,10 @@ package gamesforblind.loader;
 
 import gamesforblind.ProgramAction;
 import gamesforblind.ProgramArgs;
+import gamesforblind.codebreaker.CodebreakerGame;
+import gamesforblind.codebreaker.action.CodebreakerAction;
 import gamesforblind.enums.InterfaceType;
+import gamesforblind.enums.CodebreakerType;
 import gamesforblind.enums.SelectedGame;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.loader.action.*;
@@ -13,8 +16,6 @@ import gamesforblind.loader.gui.listener.LoaderKeyboardListener;
 import gamesforblind.logger.LogFactory;
 import gamesforblind.logger.LogReader;
 import gamesforblind.logger.LogWriter;
-import gamesforblind.mastermind.MastermindGame;
-import gamesforblind.mastermind.action.MastermindAction;
 import gamesforblind.sudoku.SudokuGame;
 import gamesforblind.sudoku.action.SudokuAction;
 import gamesforblind.synthesizer.AudioPlayer;
@@ -49,7 +50,7 @@ public class GameLoader {
 
     private LoaderFrame loaderFrame;
     private SudokuGame sudokuGame;
-    private MastermindGame mastermindGame;
+    private CodebreakerGame codebreakerGame;
 
     /**
      * Creates a new GameLoader (this is only called directly from main()).
@@ -95,7 +96,7 @@ public class GameLoader {
             final Map<Class<? extends ProgramAction>, Runnable> ACTION_TO_RUNNABLE = Map.of(
                     LoaderAction.class, () -> this.receiveAction((LoaderAction) currentAction),
                     SudokuAction.class, () -> this.sudokuGame.receiveAction((SudokuAction) currentAction),
-                    MastermindAction.class, () -> this.mastermindGame.receiveAction((MastermindAction) currentAction)
+                    CodebreakerAction.class, () -> this.codebreakerGame.receiveAction((CodebreakerAction) currentAction)
             );
 
             Runnable functionToExecute = ACTION_TO_RUNNABLE.get(currentAction.getClass());
@@ -166,13 +167,13 @@ public class GameLoader {
                 LoaderGameSelectionAction.class,
                 () -> this.changeCurrentGame((LoaderGameSelectionAction) loaderAction),
 
-                // Case 3: the user selected one of the Sudoku board sizes in the loader GUI (4x4 or 9x9).
+                // Case 3: the user selected one of the Sudoku board sizes in the loader GUI (4x4, 6x6, or 9x9).
                 LoaderSudokuSelectionAction.class,
                 () -> this.loadSudokuGame((LoaderSudokuSelectionAction) loaderAction),
 
-                // Case 4: the user selected Mastermind.
-                LoaderMastermindSelectionAction.class,
-                this::loadMastermindGame,
+                // Case 4: the user selected one of the Codebreaker board sizes in the loader GUI (4,5, or 6).
+                LoaderCodebreakerSelectionAction.class,
+                () -> this.loadCodebreakerGame((LoaderCodebreakerSelectionAction) loaderAction),
 
                 // Case 5: the user pressed an unrecognized key on the keyboard.
                 LoaderUnrecognizedKeyAction.class,
@@ -199,12 +200,15 @@ public class GameLoader {
     private void highlightDifferentLoaderButton(@NotNull LoaderArrowKeyAction loaderArrowKeyAction) {
         final Map<String, Phrase> BUTTON_TEXT_TO_PHRASE = Map.of(
                 PLAY_SUDOKU_BUTTON, Phrase.SPACE_FOR_SUDOKU,
-                PLAY_MASTERMIND_BUTTON, Phrase.SPACE_FOR_MASTERMIND,
+                PLAY_CODEBREAKER_BUTTON, Phrase.SPACE_FOR_CODEBREAKER,
                 EXIT_BUTTON, Phrase.SPACE_FOR_EXIT,
                 BACK_BUTTON, Phrase.GO_BACK_TO_GAME_SELECTION,
                 FOUR_BY_FOUR_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_FOUR,
                 SIX_BY_SIX_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_SIX,
-                NINE_BY_NINE_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_NINE
+                NINE_BY_NINE_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_NINE,
+                FOUR_CODEBREAKER_BUTTON, Phrase.SELECT_CODEBREAKER_FOUR,
+                FIVE_CODEBREAKER_BUTTON, Phrase.SELECT_CODEBREAKER_FIVE,
+                SIX_CODEBREAKER_BUTTON, Phrase.SELECT_CODEBREAKER_SIX
         );
 
         this.loaderFrame.changeHighlightedButton(loaderArrowKeyAction.getArrowKeyDirection());
@@ -228,7 +232,11 @@ public class GameLoader {
             } else {
                 relevantPhrase = Phrase.WHICH_SUDOKU_GAME_NO_SIX;
             }
-        } else {
+        }
+        else if(selectedGame == SelectedGame.CODEBREAKER){
+                relevantPhrase = Phrase.WHICH_CODEBREAKER_GAME_ALL;
+        }
+        else {
             relevantPhrase = Phrase.PLAY_OR_EXIT;
         }
         this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrase);
@@ -260,12 +268,13 @@ public class GameLoader {
     }
 
     /**
-     * Loads the Mastermind game that the user requested.
+     * Loads the Codebreaker game that the user requested.
      */
-    private void loadMastermindGame() {
+    private void loadCodebreakerGame(LoaderCodebreakerSelectionAction loaderCodebreakerSelectionAction) {
+        CodebreakerType codebreakerType = loaderCodebreakerSelectionAction.getCodebreakerType();
         this.loaderFrame.closeLoaderFrames();
-        this.mastermindGame = new MastermindGame(
-                this, this.audioPlayerExecutor, this.logFactory, this.programArgs
+        this.codebreakerGame = new CodebreakerGame(
+                this, codebreakerType, this.audioPlayerExecutor, this.logFactory, this.programArgs
         );
     }
 

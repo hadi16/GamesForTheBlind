@@ -32,7 +32,7 @@ public class Constants {
 
     /* The various button text values that are used throughout the loader GUI. */
     public static final String PLAY_SUDOKU_BUTTON = "PLAY SUDOKU";
-    public static final String PLAY_MASTERMIND_BUTTON = "PLAY MASTERMIND";
+    public static final String PLAY_CODEBREAKER_BUTTON = "PLAY CODEBREAKER";
     public static final String EXIT_BUTTON = "EXIT";
 
     /**
@@ -43,5 +43,9 @@ public class Constants {
     public static final String FOUR_BY_FOUR_SUDOKU_BUTTON = "4x4";
     public static final String SIX_BY_SIX_SUDOKU_BUTTON = "6x6";
     public static final String NINE_BY_NINE_SUDOKU_BUTTON = "9x9";
+
+    public static final String FOUR_CODEBREAKER_BUTTON = "4";
+    public static final String FIVE_CODEBREAKER_BUTTON = "5";
+    public static final String SIX_CODEBREAKER_BUTTON = "6";
     // endregion
 }

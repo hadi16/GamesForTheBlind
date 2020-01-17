@@ -1,11 +1,12 @@
 package gamesforblind.loader.gui.listener;
 
+import gamesforblind.enums.CodebreakerType;
 import gamesforblind.enums.SelectedGame;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.loader.GameLoader;
 import gamesforblind.loader.action.LoaderExitAction;
 import gamesforblind.loader.action.LoaderGameSelectionAction;
-import gamesforblind.loader.action.LoaderMastermindSelectionAction;
+import gamesforblind.loader.action.LoaderCodebreakerSelectionAction;
 import gamesforblind.loader.action.LoaderSudokuSelectionAction;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,9 +45,8 @@ public abstract class LoaderListener {
             case PLAY_SUDOKU_BUTTON:
                 this.gameLoader.receiveAction(new LoaderGameSelectionAction(SelectedGame.SUDOKU));
                 break;
-            case PLAY_MASTERMIND_BUTTON:
-                // No options for Mastermind yet (just load the Mastermind GUI).
-                this.gameLoader.receiveAction(new LoaderMastermindSelectionAction());
+            case PLAY_CODEBREAKER_BUTTON:
+                this.gameLoader.receiveAction(new LoaderGameSelectionAction(SelectedGame.CODEBREAKER));
                 break;
             case EXIT_BUTTON:
                 this.gameLoader.receiveAction(new LoaderExitAction());
@@ -64,6 +64,17 @@ public abstract class LoaderListener {
                 break;
             case NINE_BY_NINE_SUDOKU_BUTTON:
                 this.gameLoader.receiveAction(new LoaderSudokuSelectionAction(SudokuType.NINE_BY_NINE));
+                break;
+
+            // Cases for when the user can select between going back, a new 4 Codebreaker game, or a new 5 Codebreaker game.
+            case FOUR_CODEBREAKER_BUTTON:
+                this.gameLoader.receiveAction(new LoaderCodebreakerSelectionAction(CodebreakerType.FOUR));
+                break;
+            case FIVE_CODEBREAKER_BUTTON:
+                this.gameLoader.receiveAction(new LoaderCodebreakerSelectionAction(CodebreakerType.FIVE));
+                break;
+            case SIX_CODEBREAKER_BUTTON:
+                this.gameLoader.receiveAction(new LoaderCodebreakerSelectionAction(CodebreakerType.SIX));
                 break;
         }
     }
