@@ -148,6 +148,24 @@ public class LoaderFrame extends JFrame {
             return new ArrayList<>(Collections.singletonList(sudokuOptionsPanel));
         }
 
+        // Case 3: I am in the Mastermind selection screen (return a JPanel with "BACK", "4","5", "6" buttons).
+        if (selectedGame == SelectedGame.MASTERMIND) {
+            ArrayList<String> buttonNameList = new ArrayList<>(Arrays.asList(
+                    BACK_BUTTON, FOUR_MASTERMIND_BUTTON, FIVE_MASTERMIND_BUTTON, SIX_MASTERMIND_BUTTON
+            ));
+
+            JPanel sudokuOptionsPanel = new JPanel();
+            sudokuOptionsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, FRAME_DIMENSION / 15, 0));
+
+            buttonNameList.forEach(buttonName -> {
+                sudokuOptionsPanel.add(
+                        this.getUIButton(buttonName, getButtonDimension.apply(buttonNameList.size()))
+                );
+            });
+
+            return new ArrayList<>(Collections.singletonList(sudokuOptionsPanel));
+        }
+
         // Should never be thrown (NONE & SUDOKU are the only possible GameType's). Needed to prevent compilation error.
         throw new IllegalArgumentException("Game type is invalid!");
     }
@@ -258,6 +276,22 @@ public class LoaderFrame extends JFrame {
 
                 // Add each of the JPanel's child components to the list of relevant buttons.
                 for (Component component : sudokuMenuPanel.getComponents()) {
+                    if (component instanceof JButton) {
+                        this.relevantButtons.add((JButton) component);
+                    }
+                }
+            }
+        }
+
+        // Case 2: I am in the Sudoku game selection screen.
+        if (selectedGame == SelectedGame.MASTERMIND) {
+            // I only care about the first child component (the JPanel w/ "BACK", etc.)
+            Component mastermindMenuComponent = frameContainerComponents[0];
+            if (mastermindMenuComponent instanceof JPanel) {
+                JPanel mastermindMenuPanel = (JPanel) mastermindMenuComponent;
+
+                // Add each of the JPanel's child components to the list of relevant buttons.
+                for (Component component : mastermindMenuPanel.getComponents()) {
                     if (component instanceof JButton) {
                         this.relevantButtons.add((JButton) component);
                     }

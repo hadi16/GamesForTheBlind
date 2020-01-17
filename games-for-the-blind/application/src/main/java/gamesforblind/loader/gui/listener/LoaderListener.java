@@ -1,5 +1,6 @@
 package gamesforblind.loader.gui.listener;
 
+import gamesforblind.enums.MastermindType;
 import gamesforblind.enums.SelectedGame;
 import gamesforblind.enums.SudokuType;
 import gamesforblind.loader.GameLoader;
@@ -46,7 +47,7 @@ public abstract class LoaderListener {
                 break;
             case PLAY_MASTERMIND_BUTTON:
                 // No options for Mastermind yet (just load the Mastermind GUI).
-                this.gameLoader.receiveAction(new LoaderMastermindSelectionAction());
+                this.gameLoader.receiveAction(new LoaderGameSelectionAction(SelectedGame.MASTERMIND));
                 break;
             case EXIT_BUTTON:
                 this.gameLoader.receiveAction(new LoaderExitAction());
@@ -64,6 +65,17 @@ public abstract class LoaderListener {
                 break;
             case NINE_BY_NINE_SUDOKU_BUTTON:
                 this.gameLoader.receiveAction(new LoaderSudokuSelectionAction(SudokuType.NINE_BY_NINE));
+                break;
+
+            // Cases for when the user can select between going back, a new 4 Mastermind game, or a new 5 Mastermind game.
+            case FOUR_MASTERMIND_BUTTON:
+                this.gameLoader.receiveAction(new LoaderMastermindSelectionAction(MastermindType.FOUR));
+                break;
+            case FIVE_MASTERMIND_BUTTON:
+                this.gameLoader.receiveAction(new LoaderMastermindSelectionAction(MastermindType.FIVE));
+                break;
+            case SIX_MASTERMIND_BUTTON:
+                this.gameLoader.receiveAction(new LoaderMastermindSelectionAction(MastermindType.SIX));
                 break;
         }
     }

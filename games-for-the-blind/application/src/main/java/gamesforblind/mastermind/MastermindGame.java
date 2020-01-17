@@ -1,6 +1,7 @@
 package gamesforblind.mastermind;
 
 import gamesforblind.ProgramArgs;
+import gamesforblind.enums.MastermindType;
 import gamesforblind.loader.GameLoader;
 import gamesforblind.logger.LogFactory;
 import gamesforblind.mastermind.action.MastermindAction;
@@ -18,6 +19,7 @@ import java.util.Map;
  */
 public class MastermindGame {
     private final GameLoader gameLoader;
+    private final MastermindType mastermindType;
     private final MastermindState mastermindState;
     private final MastermindFrame mastermindFrame;
     private final LogFactory logFactory;
@@ -27,12 +29,14 @@ public class MastermindGame {
      * Creates a new MastermindGame.
      *
      * @param gameLoader          The "main menu" for the games, which is needed when reopening this menu.
+     * @param mastermindType      int describing the number of boxes/difficulty to use
      * @param audioPlayerExecutor Class used to execute the threaded audio player.
      * @param logFactory          Where all of the logs are stored or read from (depending on whether in playback mode).
      * @param programArgs         The program arguments that were passed.
      */
     public MastermindGame(
             @NotNull GameLoader gameLoader,
+            @NotNull MastermindType mastermindType,
             @NotNull AudioPlayerExecutor audioPlayerExecutor,
             @NotNull LogFactory logFactory,
             @NotNull ProgramArgs programArgs
@@ -40,6 +44,7 @@ public class MastermindGame {
         this.gameLoader = gameLoader;
         this.programArgs = programArgs;
         this.logFactory = logFactory;
+        this.mastermindType = mastermindType;
 
         if (programArgs.isPlaybackMode()) {
             // Case 1: the program is in playback mode (call state constructor with the original state of the board).
