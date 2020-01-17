@@ -99,7 +99,8 @@ public class CodeBreakerTest {
         try {
             CodebreakerState.checkThatGameIsOver(null, new ArrayList<>());
             Assert.fail();
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException e) {
+        }
     }
 
     @Test
@@ -107,6 +108,7 @@ public class CodeBreakerTest {
         try {
             CodebreakerState.checkThatGameIsOver(new Color[]{}, null);
             Assert.fail();
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException e) {
+        }
     }
 }

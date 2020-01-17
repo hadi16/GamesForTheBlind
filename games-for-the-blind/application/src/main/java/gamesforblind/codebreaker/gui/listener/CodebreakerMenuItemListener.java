@@ -1,9 +1,9 @@
 package gamesforblind.codebreaker.gui.listener;
 
-import gamesforblind.enums.GameMenuItem;
 import gamesforblind.codebreaker.CodebreakerGame;
 import gamesforblind.codebreaker.action.CodebreakerAction;
 import gamesforblind.codebreaker.action.CodebreakerMainMenuAction;
+import gamesforblind.enums.GameMenuItem;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
