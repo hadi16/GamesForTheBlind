@@ -29,7 +29,7 @@ public class LoaderFrame extends JFrame {
     private static final Color DARK_GOLD = new Color(218, 165, 32);
 
     /**
-     * When in the main screen, contains buttons in following order: "PLAY_SUDOKU","PLAY_MASTERMIND", "EXIT"
+     * When in the main screen, contains buttons in following order: "PLAY_SUDOKU","PLAY_CODEBREAKER", "EXIT"
      * When in the Sudoku screen, contains buttons in following order: "BACK", "4x4", "9x9"
      */
     private final ArrayList<JButton> relevantButtons = new ArrayList<>();
@@ -52,7 +52,7 @@ public class LoaderFrame extends JFrame {
     private JFrame loaderFrame;
     /**
      * Holds the index of the currently highlighted button.
-     * In main screen, 0 --> "PLAY SUDOKU", 1 --> "MASTERMIND", 2 --> "EXIT"
+     * In main screen, 0 --> "PLAY SUDOKU", 1 --> "CODEBREAKER", 2 --> "EXIT"
      * In Sudoku screen, 0 --> "BACK", 1 --> "4x4", 2 --> "9x9"
      */
     private int highlightedButtonIndex = 0;
@@ -102,6 +102,21 @@ public class LoaderFrame extends JFrame {
         return button;
     }
 
+    private ArrayList<JComponent> getInitializedOptionsPanelAsList(
+            ArrayList<String> buttonNameList, Function<Integer, Dimension> getButtonDimension
+    ) {
+        JPanel optionsPanel = new JPanel();
+        optionsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, FRAME_DIMENSION / 15, 0));
+
+        buttonNameList.forEach(buttonName -> {
+            optionsPanel.add(
+                    this.getUIButton(buttonName, getButtonDimension.apply(buttonNameList.size()))
+            );
+        });
+
+        return new ArrayList<>(Collections.singletonList(optionsPanel));
+    }
+
     /**
      * Gets the game component that is variable depending on the currently selected game (the upper portion of the GUI).
      *
@@ -113,7 +128,7 @@ public class LoaderFrame extends JFrame {
             return new Dimension(FRAME_DIMENSION / numberOfButtons, FRAME_DIMENSION / 3);
         };
 
-        // Case 1: I am in the main screen (return list of JButtons with "PLAY SUDOKU" & "PLAY MASTERMIND").
+        // Case 1: I am in the main screen (return list of JButtons with "PLAY SUDOKU" & "PLAY CODEBREAKER").
         if (selectedGame == SelectedGame.NONE) {
             ArrayList<JComponent> gameButtonList = new ArrayList<>();
 
@@ -136,37 +151,19 @@ public class LoaderFrame extends JFrame {
                 buttonNameList.remove(SIX_BY_SIX_SUDOKU_BUTTON);
             }
 
-            JPanel sudokuOptionsPanel = new JPanel();
-            sudokuOptionsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, FRAME_DIMENSION / 15, 0));
-
-            buttonNameList.forEach(buttonName -> {
-                sudokuOptionsPanel.add(
-                        this.getUIButton(buttonName, getButtonDimension.apply(buttonNameList.size()))
-                );
-            });
-
-            return new ArrayList<>(Collections.singletonList(sudokuOptionsPanel));
+            return this.getInitializedOptionsPanelAsList(buttonNameList, getButtonDimension);
         }
 
-        // Case 3: I am in the Mastermind selection screen (return a JPanel with "BACK", "4","5", "6" buttons).
+        // Case 3: I am in the Codebreaker selection screen (return a JPanel with "BACK", "4","5", "6" buttons).
         if (selectedGame == SelectedGame.CODEBREAKER) {
             ArrayList<String> buttonNameList = new ArrayList<>(Arrays.asList(
                     BACK_BUTTON, FOUR_CODEBREAKER_BUTTON, FIVE_CODEBREAKER_BUTTON, SIX_CODEBREAKER_BUTTON
             ));
 
-            JPanel sudokuOptionsPanel = new JPanel();
-            sudokuOptionsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, FRAME_DIMENSION / 15, 0));
-
-            buttonNameList.forEach(buttonName -> {
-                sudokuOptionsPanel.add(
-                        this.getUIButton(buttonName, getButtonDimension.apply(buttonNameList.size()))
-                );
-            });
-
-            return new ArrayList<>(Collections.singletonList(sudokuOptionsPanel));
+            return this.getInitializedOptionsPanelAsList(buttonNameList, getButtonDimension);
         }
 
-        // Should never be thrown (NONE & SUDOKU are the only possible GameType's). Needed to prevent compilation error.
+        // Should never be thrown, but needed to prevent compilation error.
         throw new IllegalArgumentException("Game type is invalid!");
     }
 
@@ -267,31 +264,15 @@ public class LoaderFrame extends JFrame {
             }
         }
 
-        // Case 2: I am in the Sudoku game selection screen.
-        if (selectedGame == SelectedGame.SUDOKU) {
+        // Case 2: I am in the Sudoku or Codebreaker game selection screen.
+        if (selectedGame == SelectedGame.SUDOKU || selectedGame == SelectedGame.CODEBREAKER) {
             // I only care about the first child component (the JPanel w/ "BACK", etc.)
-            Component sudokuMenuComponent = frameContainerComponents[0];
-            if (sudokuMenuComponent instanceof JPanel) {
-                JPanel sudokuMenuPanel = (JPanel) sudokuMenuComponent;
+            Component menuComponent = frameContainerComponents[0];
+            if (menuComponent instanceof JPanel) {
+                JPanel menuPanel = (JPanel) menuComponent;
 
                 // Add each of the JPanel's child components to the list of relevant buttons.
-                for (Component component : sudokuMenuPanel.getComponents()) {
-                    if (component instanceof JButton) {
-                        this.relevantButtons.add((JButton) component);
-                    }
-                }
-            }
-        }
-
-        // Case 2: I am in the Sudoku game selection screen.
-        if (selectedGame == SelectedGame.CODEBREAKER) {
-            // I only care about the first child component (the JPanel w/ "BACK", etc.)
-            Component mastermindMenuComponent = frameContainerComponents[0];
-            if (mastermindMenuComponent instanceof JPanel) {
-                JPanel mastermindMenuPanel = (JPanel) mastermindMenuComponent;
-
-                // Add each of the JPanel's child components to the list of relevant buttons.
-                for (Component component : mastermindMenuPanel.getComponents()) {
+                for (Component component : menuPanel.getComponents()) {
                     if (component instanceof JButton) {
                         this.relevantButtons.add((JButton) component);
                     }

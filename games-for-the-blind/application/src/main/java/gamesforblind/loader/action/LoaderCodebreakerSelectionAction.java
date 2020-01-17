@@ -24,7 +24,7 @@ public class LoaderCodebreakerSelectionAction extends LoaderAction {
      * Warning: DO NOT call this constructor directly.
      * Needed to allow JAXB (XML serializer) to work, since it needs a zero-argument constructor.
      */
-    @SuppressWarnings({"unused", "ConstantConditions"})
+    @SuppressWarnings({"unused"})
     private LoaderCodebreakerSelectionAction() {
         this(null);
     }

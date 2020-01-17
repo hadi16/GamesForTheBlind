@@ -8,7 +8,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 /**
- * Window Listener that calls the exit action for Mastermind when the game is terminated.
+ * Window Listener that calls the exit action for Codebreaker when the game is terminated.
  * This is also called when pressing COMMAND + Q, since a System property was set in main (apple.eawt.quitStrategy).
  */
 public class CodebreakerWindowListener implements WindowListener {
@@ -18,7 +18,7 @@ public class CodebreakerWindowListener implements WindowListener {
     private final CodebreakerGame codebreakerGame;
 
     /**
-     * Creates a new MastermindWindowListener.
+     * Creates a new CodebreakerWindowListener.
      *
      * @param codebreakerGame The current {@link CodebreakerGame}.
      */

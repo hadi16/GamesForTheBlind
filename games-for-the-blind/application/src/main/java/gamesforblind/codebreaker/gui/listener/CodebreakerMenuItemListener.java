@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.util.Map;
 
 /**
- * The {@link ActionListener} for each of the {@link JMenuItem}s in the Mastermind menu.
+ * The {@link ActionListener} for each of the {@link JMenuItem}s in the Codebreaker menu.
  */
 public class CodebreakerMenuItemListener implements ActionListener {
     /**
@@ -21,7 +21,7 @@ public class CodebreakerMenuItemListener implements ActionListener {
     private final CodebreakerGame codebreakerGame;
 
     /**
-     * Creates a new MastermindMenuListener.
+     * Creates a new CodebreakerMenuListener.
      *
      * @param codebreakerGame The {@link CodebreakerGame}, which receives actions in the game.
      */
@@ -30,7 +30,7 @@ public class CodebreakerMenuItemListener implements ActionListener {
     }
 
     /**
-     * Triggered when the user clicks on a {@link JMenuItem} in the Mastermind menu GUI.
+     * Triggered when the user clicks on a {@link JMenuItem} in the Codebreaker menu GUI.
      *
      * @param e The {@link ActionEvent} that was triggered in the GUI.
      */
