@@ -1,0 +1,21 @@
+AGAPE - Games for the Blind  
+Tests Document Sprint 5 (Jan 17) 
+9 Total tests have been drafted.  
+ 
+codeSizeMustMatchCodeToBreakSize: Makes sure the code length is the same as the difficulty the user selected. This code will be in the lengths between three and six. 
+
+codeToBreakMustNotBeNull: Makes sure the code the user is attempting to solve is an actual code and doesn’t include any null values making the puzzle unsolvable. 
+
+codeToBreakMustBeUnique: Makes sure the code is unique and not the same as past codes, the codes will be randomly generated for every puzzle. 
+
+numberOfCorrectColorsReported: Checks to see that the returned value for “number of correct colors” is properly being returned. Makes sure duplicate colors are not used registered and counted multiple times. 
+
+maxTrialsPlayedForCodebreakerGame: Checks that the player has not exceeded the maximum number of trials allowed for the puzzle. The Current Maximum is twelve, but this might change in the future to be puzzle specific. 
+
+correctCodePlayedForCodebreakerGame: Checks that when the correct code is played that the game will properly accept it while ending the game allowing users to restart or return to the menu. 
+
+codebreakerGameIsNotOver: Makes sure the game isn't ending before it should. 
+
+checkerThrowsWhenCodeToBreakIsNull: Throws an error when the code has a null value since it should be a solvable code instead. 
+
+checkerThrowsWhenGuessListIsNull: Throws an error when the game’s guessable list is set to null. 
