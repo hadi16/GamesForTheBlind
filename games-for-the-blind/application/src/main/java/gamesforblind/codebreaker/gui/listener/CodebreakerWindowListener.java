@@ -1,7 +1,7 @@
-package gamesforblind.mastermind.gui.listener;
+package gamesforblind.codebreaker.gui.listener;
 
-import gamesforblind.mastermind.MastermindGame;
-import gamesforblind.mastermind.action.MastermindExitAction;
+import gamesforblind.codebreaker.CodebreakerGame;
+import gamesforblind.codebreaker.action.CodebreakerExitAction;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.WindowEvent;
@@ -11,29 +11,29 @@ import java.awt.event.WindowListener;
  * Window Listener that calls the exit action for Mastermind when the game is terminated.
  * This is also called when pressing COMMAND + Q, since a System property was set in main (apple.eawt.quitStrategy).
  */
-public class MastermindWindowListener implements WindowListener {
+public class CodebreakerWindowListener implements WindowListener {
     /**
-     * The current {@link MastermindGame}.
+     * The current {@link CodebreakerGame}.
      */
-    private final MastermindGame mastermindGame;
+    private final CodebreakerGame codebreakerGame;
 
     /**
      * Creates a new MastermindWindowListener.
      *
-     * @param mastermindGame The current {@link MastermindGame}.
+     * @param codebreakerGame The current {@link CodebreakerGame}.
      */
-    public MastermindWindowListener(@NotNull MastermindGame mastermindGame) {
-        this.mastermindGame = mastermindGame;
+    public CodebreakerWindowListener(@NotNull CodebreakerGame codebreakerGame) {
+        this.codebreakerGame = codebreakerGame;
     }
 
     /**
-     * When the window closing event is triggered, just send the exit action to the {@link MastermindGame} instance.
+     * When the window closing event is triggered, just send the exit action to the {@link CodebreakerGame} instance.
      *
      * @param e The event that was triggered by the window.
      */
     @Override
     public void windowClosing(WindowEvent e) {
-        this.mastermindGame.receiveAction(new MastermindExitAction());
+        this.codebreakerGame.receiveAction(new CodebreakerExitAction());
     }
 
     /* These methods are required to be overridden by the WindowListener, but they are unused. */

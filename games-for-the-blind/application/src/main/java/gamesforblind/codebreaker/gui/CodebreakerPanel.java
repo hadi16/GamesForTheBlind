@@ -1,6 +1,6 @@
-package gamesforblind.mastermind.gui;
+package gamesforblind.codebreaker.gui;
 
-import gamesforblind.mastermind.MastermindState;
+import gamesforblind.codebreaker.CodebreakerState;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -9,7 +9,8 @@ import java.awt.*;
 /**
  * Contains the main GUI code for Mastermind. Serves as a custom JPanel for Mastermind GUI (extends JPanel).
  */
-public class MastermindPanel extends JPanel {
+public class CodebreakerPanel extends JPanel {
+    private final CodebreakerState codebreakerState;
     private int totalBoardLength;
 
     /**
@@ -17,7 +18,8 @@ public class MastermindPanel extends JPanel {
      *
      * @param initialState The initial state of the Mastermind game.
      */
-    public MastermindPanel(@NotNull MastermindState initialState) {
+    public CodebreakerPanel(@NotNull CodebreakerState initialState) {
+        this.codebreakerState = initialState;
     }
 
     /**

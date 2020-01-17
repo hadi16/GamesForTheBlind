@@ -75,7 +75,7 @@ public enum Phrase {
     /* Loader */
     SPACE_FOR_EXIT("Press the SPACE BAR to exit."),
     SPACE_FOR_SUDOKU("Press the SPACE BAR to play Sudoku."),
-    SPACE_FOR_MASTERMIND("Press the SPACE BAR to play Mastermind."),
+    SPACE_FOR_CODEBREAKER("Press the SPACE BAR to play CODE BREAKER."),
     GO_BACK_TO_GAME_SELECTION("Press the SPACE BAR to go back to the game selection screen."),
     SELECT_SUDOKU_FOUR("Press the SPACE BAR to play the 4 by 4 version of Sudoku."),
     SELECT_SUDOKU_SIX("Press the SPACE BAR to play the 6 by 6 version of Sudoku."),
@@ -84,7 +84,12 @@ public enum Phrase {
             "Use the arrow keys to make your selection."),
     WHICH_SUDOKU_GAME_NO_SIX("Which Sudoku game would you like to play, 4 by 4 or 9 by 9? " +
             "Use the arrow keys to make your selection."),
-    PLAY_OR_EXIT("Would you like to play Sudoku, Mastermind, or exit? Use the arrow keys to make your selection."),
+    WHICH_CODEBREAKER_GAME_ALL("Which Code Breaker game would you like to play, 4, 5, or 6? " +
+            "Use the arrow keys to make your selection."),
+    SELECT_CODEBREAKER_FOUR("Press the SPACE BAR to play the 4 version of Code Breaker."),
+    SELECT_CODEBREAKER_FIVE("Press the SPACE BAR to play the 5 version of Code Breaker."),
+    SELECT_CODEBREAKER_SIX("Press the SPACE BAR to play the 6 version of Code Breaker."),
+    PLAY_OR_EXIT("Would you like to play Sudoku, Code Breaker, or exit? Use the arrow keys to make your selection."),
     EXITING("The game is exiting. Goodbye!"),
 
     /* Sudoku: locations */
