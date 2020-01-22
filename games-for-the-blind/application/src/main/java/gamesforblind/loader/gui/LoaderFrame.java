@@ -192,6 +192,11 @@ public class LoaderFrame extends JFrame {
         // Disable the exit button when in a game selection screen (e.g. Sudoku's).
         exitButton.setEnabled(selectedGame == SelectedGame.NONE);
 
+        //if game has been selected hide exit button
+        if(selectedGame != SelectedGame.NONE){
+            exitButton.setVisible(false);
+        }
+
         // The selectedGameComponent is on top of the GUI
         // & the exit button is on the bottom of the GUI.
         Container frameContainer = this.loaderFrame.getContentPane();
@@ -204,7 +209,7 @@ public class LoaderFrame extends JFrame {
         for (int i = 0; i < selectedGameComponents.size(); i++) {
             frameContainer.add(selectedGameComponents.get(i), selectedGameLayouts[i]);
         }
-        frameContainer.add(exitButton, BorderLayout.PAGE_END);
+        frameContainer.add(exitButton, BorderLayout.SOUTH);
 
         // Call the logger save when the close button is clicked.
         this.loaderFrame.addWindowListener(this.loaderWindowListener);
