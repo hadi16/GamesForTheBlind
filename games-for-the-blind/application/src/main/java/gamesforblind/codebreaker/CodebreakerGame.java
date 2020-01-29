@@ -100,4 +100,17 @@ public class CodebreakerGame {
         this.codebreakerFrame.closeFrames();
         this.gameLoader.openLoaderInterface();
     }
+    /**
+     * Restarts the current Sudoku board from the beginning (generates a new board as well).
+     */
+   /* private void restartSudokuBoard() {
+        if (this.programArgs.isPlaybackMode()) {
+            this.codebreakerState.resetCodebreakerState(this.logFactory.popOriginalGridFromFront());
+        } else {
+            this.codebreakerState.resetCodebreakerState(null);
+            //this.logFactory.addOriginalSudokuGrid(this.codebreakerState.getOriginalGrid());
+        }
+
+        this.codebreakerFrame.repaintCodebreakerPanel();
+    }*/
 }
