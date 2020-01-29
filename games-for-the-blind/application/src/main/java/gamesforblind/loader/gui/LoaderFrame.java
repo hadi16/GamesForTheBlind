@@ -112,7 +112,7 @@ public class LoaderFrame extends JFrame implements ComponentListener {
             ArrayList<String> buttonNameList, Function<Integer, Dimension> getButtonDimension
     ) {
         JPanel optionsPanel = new JPanel();
-        optionsPanel.setLayout(new GridLayout());  //FlowLayout(FlowLayout.CENTER, FRAME_DIMENSION/15, 0));
+        optionsPanel.setLayout(new GridLayout());
 
         buttonNameList.forEach(buttonName -> {
             optionsPanel.add(
@@ -134,7 +134,6 @@ public class LoaderFrame extends JFrame implements ComponentListener {
             return new Dimension(FRAME_DIMENSION / numberOfButtons, FRAME_DIMENSION / 3);
         };
         JPanel gamePanel = new JPanel();
-        gamePanel.setLayout(new GridLayout(3, 1));
 
         // Case 1: I am in the main screen (return list of JButtons with "PLAY SUDOKU" & "PLAY CODEBREAKER").
         if (selectedGame == SelectedGame.NONE) {
@@ -218,9 +217,9 @@ public class LoaderFrame extends JFrame implements ComponentListener {
         }
 
         for (int i = 0; i < selectedGameComponents.size(); i++) {
-            frameContainer.add(selectedGameComponents.get(i));//, selectedGameLayouts[i]);
+            frameContainer.add(selectedGameComponents.get(i));
         }
-        frameContainer.add(exitButton);// BorderLayout.SOUTH);
+        frameContainer.add(exitButton);
 
         // Call the logger save when the close button is clicked.
         this.loaderFrame.addWindowListener(this.loaderWindowListener);
