@@ -1,5 +1,6 @@
 import gamesforblind.codebreaker.CodebreakerGuess;
 import gamesforblind.codebreaker.CodebreakerState;
+import gamesforblind.enums.CodebreakerType;
 import gamesforblind.synthesizer.AudioPlayer;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
 import org.junit.Assert;
@@ -13,7 +14,8 @@ import java.util.Collections;
 
 public class CodeBreakerTest {
     private final AudioPlayerExecutor testAudioPlayerExecutor = new AudioPlayerExecutor(new AudioPlayer());
-    private final CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor);
+    private final CodebreakerType codebreakerType = CodebreakerType.FOUR;
+    private final CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, this.codebreakerType);
 
     public CodeBreakerTest() throws LineUnavailableException {
     }
@@ -30,7 +32,7 @@ public class CodeBreakerTest {
 
     @Test
     public void codeToBreakMustBeUnique() {
-        CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor);
+        CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, this.codebreakerType);
 
         Assert.assertNotEquals(this.codebreakerState.getCodeToBreak(), codebreakerState.getCodeToBreak());
     }

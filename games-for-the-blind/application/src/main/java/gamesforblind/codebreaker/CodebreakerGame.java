@@ -48,10 +48,10 @@ public class CodebreakerGame {
 
         if (programArgs.isPlaybackMode()) {
             // Case 1: the program is in playback mode (call state constructor with the original state of the board).
-            this.codebreakerState = new CodebreakerState(audioPlayerExecutor);
+            this.codebreakerState = new CodebreakerState(audioPlayerExecutor, codebreakerType);
         } else {
-            // Case 2: the program is not in playback mode (set the log factory's original Sudoku state).
-            this.codebreakerState = new CodebreakerState(audioPlayerExecutor);
+            // Case 2: the program is not in playback mode (set the log factory's original Codebreaker state).
+            this.codebreakerState = new CodebreakerState(audioPlayerExecutor, codebreakerType);
         }
 
         this.codebreakerFrame = new CodebreakerFrame(
