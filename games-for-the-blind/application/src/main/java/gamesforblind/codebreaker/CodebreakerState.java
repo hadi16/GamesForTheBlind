@@ -1,5 +1,6 @@
 package gamesforblind.codebreaker;
 
+import gamesforblind.enums.CodebreakerType;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,6 +16,7 @@ public class CodebreakerState {
     private static final int MAX_AMOUNT_OF_GUESSES = 12;
 
     private final int codeSize;
+    private final CodebreakerType codebreakerType;
     private final Color[] codeToBreak;
     private final boolean gameOver;
     private final ArrayList<CodebreakerGuess> guessList = new ArrayList<>();
@@ -24,8 +26,9 @@ public class CodebreakerState {
      *
      * @param audioPlayerExecutor Calls into the threaded audio player for the game.
      */
-    public CodebreakerState(@NotNull AudioPlayerExecutor audioPlayerExecutor) {
+    public CodebreakerState(@NotNull AudioPlayerExecutor audioPlayerExecutor, @NotNull CodebreakerType codebreakerType) {
         this.gameOver = false;
+        this.codebreakerType = codebreakerType;
 
         // TODO: Change these (needed for now to compile unit test).
         this.codeToBreak = new Color[]{};
@@ -58,5 +61,9 @@ public class CodebreakerState {
 
     public Color[] getCodeToBreak() {
         return this.codeToBreak;
+    }
+
+    public CodebreakerType getCodebreakerType(){
+        return this.codebreakerType;
     }
 }
