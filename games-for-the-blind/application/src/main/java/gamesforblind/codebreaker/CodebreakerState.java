@@ -52,7 +52,18 @@ public class CodebreakerState {
      */
     public void readInstructions() {
         Phrase instructionsPhrase = null;
-        instructionsPhrase = Phrase.INSTRUCTIONS_CODEBREAKER;
+        switch (this.codeToBreak.length) {
+            case 4:
+                instructionsPhrase = Phrase.INSTRUCTIONS_CODEBREAKER_4;
+                break;
+            case 5:
+                instructionsPhrase = Phrase.INSTRUCTIONS_CODEBREAKER_5;
+                break;
+            case 6:
+                instructionsPhrase = Phrase.INSTRUCTIONS_CODEBREAKER_6;
+                break;
+        }
+
         this.audioPlayerExecutor.replacePhraseAndPrint(instructionsPhrase);
     }
 
