@@ -179,7 +179,12 @@ public enum Phrase {
             " small box to the right of your guess will contain six pegs of either black or white. A white peg means that" +
             " one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that" +
             " one of your numbers is the correct number and is in the correct place. If you have guessed correctly," +
-            " you win the game!");
+            " you win the game!"),
+
+    PLACED_CODEBREAKER_CODE("You have placed the codebreaker code:"),
+    CODEBREAKER_GUESS_NUMBER("It is guess number:"),
+    CODEBREAKER_NUMBER_CORRECT_POSITION("Pegs with the correct position and number:"),
+    CODEBREAKER_NUMBER_ONLY("Pegs with the correct number:");
 
     /**
      * The directory for all of the Phrase audio files ("resources/phrases" folder under the root of the project).
