@@ -143,6 +143,30 @@ public enum Phrase {
             " currently selected number's column press K, to hear all of the numbers in the current block press L." +
             "If you have selected an empty square and are stuck, press H to automatically fill in the square."),
 
+    INSTRUCTIONS_CODEBREAKER_4("Welcome to Codebreaker! The goal is to accurately guess a secret code of four numbers. "+
+             "To make a guess use the arrow keys to select a space and enter a number from 1-6. Once you have finalized"+
+            " your guess, hit the space key to see if you guessed correctly. If you did not guess the right code, the"+
+            " small box to the right of your guess will contain 4 pegs of either black or white. A white peg means that"+
+            "one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that"+"" +
+            " one of your numbers is the correct number and is in the correct place. If you have guessed correctly, "+
+            "you win the game!"),
+
+    INSTRUCTIONS_CODEBREAKER_5("Welcome to Codebreaker! The goal is to accurately guess a secret code of five numbers. "+
+            "To make a guess use the arrow keys to select a space and enter a number from 1-6. Once you have finalized"+
+            " your guess, hit the space key to see if you guessed correctly. If you did not guess the right code, the"+
+            " small box to the right of your guess will contain five pegs of either black or white. A white peg means that"+
+            "one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that"+"" +
+            " one of your numbers is the correct number and is in the correct place. If you have guessed correctly, "+
+            "you win the game!"),
+
+    INSTRUCTIONS_CODEBREAKER_6("Welcome to Codebreaker! The goal is to accurately guess a secret code of six numbers. "+
+            "To make a guess use the arrow keys to select a space and enter a number from 1-6. Once you have finalized"+
+            " your guess, hit the space key to see if you guessed correctly. If you did not guess the right code, the"+
+            " small box to the right of your guess will contain six pegs of either black or white. A white peg means that"+
+            "one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that"+"" +
+            " one of your numbers is the correct number and is in the correct place. If you have guessed correctly, "+
+            " you win the game!"),
+
     /* Sudoku: Empty Squares Left */
     EMPTY_PIECES_OF_BOARD_PLURAL_1("There are"),
     EMPTY_PIECES_OF_BOARD_PLURAL_2("empty squares left on the board."),
