@@ -3,6 +3,7 @@ package gamesforblind.codebreaker;
 import gamesforblind.enums.CodebreakerType;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
 import org.jetbrains.annotations.NotNull;
+import phrase.Phrase;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class CodebreakerState {
     private final CodebreakerType codebreakerType;
     private final Color[] codeToBreak;
     private final boolean gameOver;
+    private final AudioPlayerExecutor audioPlayerExecutor;
     private final ArrayList<CodebreakerGuess> guessList = new ArrayList<>();
 
     /**
@@ -33,6 +35,7 @@ public class CodebreakerState {
         // TODO: Change these (needed for now to compile unit test).
         this.codeToBreak = new Color[]{};
         this.codeSize = 100;
+        this.audioPlayerExecutor = audioPlayerExecutor;
     }
 
     public static boolean checkThatGameIsOver(Color[] codeToBreak, ArrayList<CodebreakerGuess> guessList) {
@@ -44,6 +47,32 @@ public class CodebreakerState {
         }
 
         return codeToBreak.length == guessList.get(guessList.size() - 1).getNumberInCorrectPosition();
+    }
+
+
+    /**
+     * Reads the instructions for the 4x4, 6x6, or 9x9 game.
+     */
+    public void readInstructions() {
+        Phrase instructionsPhrase = null;
+
+        //currently commented out because I need Polina's updates first to get codebreakerType and I don't want
+        //to mess anything up
+        //currently plays the instructions for the 4 length
+
+        /*switch (this.codebreakerType) {
+            case FOUR:*/
+                instructionsPhrase = Phrase.INSTRUCTIONS_CODEBREAKER_4;
+                /*break;
+            case FIVE:
+                instructionsPhrase = Phrase.INSTRUCTIONS_CODEBREAKER_5;
+                break;
+            case SIX:
+                instructionsPhrase = Phrase.INSTRUCTIONS_CODEBREAKER_6;
+                break;
+        }*/
+
+        this.audioPlayerExecutor.replacePhraseAndPrint(instructionsPhrase);
     }
 
     /**
