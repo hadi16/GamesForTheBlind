@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,7 +24,7 @@ import static gamesforblind.Constants.*;
 /**
  * Contains the logic for the loader GUI.
  */
-public class LoaderFrame extends JFrame {
+public class LoaderFrame extends JFrame implements ComponentListener {
     /**
      * Used for the button text of the currently highlighted button in the GUI.
      */
@@ -87,7 +89,7 @@ public class LoaderFrame extends JFrame {
      */
     private JButton getUIButton(@NotNull String buttonText, @NotNull Dimension preferredSize) {
         // Make the size of the button font dependent on the size of the frame.
-        final Font BUTTON_FONT = new Font("Arial", Font.BOLD, FRAME_DIMENSION / 13);
+        final Font BUTTON_FONT = new Font("Arial", Font.BOLD, FRAME_DIMENSION/ 13);
 
         JButton button = new JButton(buttonText);
         if (!this.programArgs.isPlaybackMode()) {
@@ -102,11 +104,15 @@ public class LoaderFrame extends JFrame {
         return button;
     }
 
+    /**
+    * For level selection
+    *
+    * */
     private ArrayList<JComponent> getInitializedOptionsPanelAsList(
             ArrayList<String> buttonNameList, Function<Integer, Dimension> getButtonDimension
     ) {
         JPanel optionsPanel = new JPanel();
-        optionsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, FRAME_DIMENSION / 15, 0));
+        optionsPanel.setLayout(new GridLayout());
 
         buttonNameList.forEach(buttonName -> {
             optionsPanel.add(
@@ -127,6 +133,7 @@ public class LoaderFrame extends JFrame {
         Function<Integer, Dimension> getButtonDimension = (numberOfButtons) -> {
             return new Dimension(FRAME_DIMENSION / numberOfButtons, FRAME_DIMENSION / 3);
         };
+        JPanel gamePanel = new JPanel();
 
         // Case 1: I am in the main screen (return list of JButtons with "PLAY SUDOKU" & "PLAY CODEBREAKER").
         if (selectedGame == SelectedGame.NONE) {
@@ -134,7 +141,9 @@ public class LoaderFrame extends JFrame {
 
             final String[] GAME_BUTTONS = new String[]{PLAY_SUDOKU_BUTTON, PLAY_CODEBREAKER_BUTTON};
             for (String gameButtonText : GAME_BUTTONS) {
-                gameButtonList.add(this.getUIButton(gameButtonText, getButtonDimension.apply(GAME_BUTTONS.length)));
+                JButton newButton = this.getUIButton(gameButtonText, getButtonDimension.apply(GAME_BUTTONS.length));
+                gameButtonList.add(newButton);
+                gamePanel.add(newButton);
             }
 
             return gameButtonList;
@@ -185,31 +194,38 @@ public class LoaderFrame extends JFrame {
         ArrayList<JComponent> selectedGameComponents = this.getSelectedGameComponent(selectedGame);
         selectedGameComponents.forEach(component -> component.setVisible(true));
 
-        JButton exitButton = this.getUIButton(
-                EXIT_BUTTON, new Dimension(FRAME_DIMENSION, FRAME_DIMENSION / 3)
-        );
+        JButton exitButton = this.getUIButton(EXIT_BUTTON, new Dimension(FRAME_DIMENSION, FRAME_DIMENSION/ 3));
 
         // Disable the exit button when in a game selection screen (e.g. Sudoku's).
         exitButton.setEnabled(selectedGame == SelectedGame.NONE);
+
+        //if game has been selected hide exit button
+        if(selectedGame != SelectedGame.NONE){
+            exitButton.setVisible(false);
+        }
 
         // The selectedGameComponent is on top of the GUI
         // & the exit button is on the bottom of the GUI.
         Container frameContainer = this.loaderFrame.getContentPane();
 
-        String[] selectedGameLayouts = new String[]{BorderLayout.PAGE_START, BorderLayout.CENTER};
+        //add 1 too rows to account for exit button, only one column for game selection menu
+        frameContainer.setLayout(new GridLayout(selectedGameComponents.size()+1, 1));
+
+        String[] selectedGameLayouts = new String[]{BorderLayout.NORTH, BorderLayout.CENTER};
         if (selectedGameLayouts.length < selectedGameComponents.size()) {
             throw new IllegalArgumentException("Too many 'PLAY ____' buttons!");
         }
 
         for (int i = 0; i < selectedGameComponents.size(); i++) {
-            frameContainer.add(selectedGameComponents.get(i), selectedGameLayouts[i]);
+            frameContainer.add(selectedGameComponents.get(i));
         }
-        frameContainer.add(exitButton, BorderLayout.PAGE_END);
+        frameContainer.add(exitButton);
 
         // Call the logger save when the close button is clicked.
         this.loaderFrame.addWindowListener(this.loaderWindowListener);
         this.loaderFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        this.loaderFrame.pack();
         this.loaderFrame.setSize((int) (FRAME_DIMENSION * 1.7), FRAME_DIMENSION);
         this.loaderFrame.setVisible(true);
 
@@ -332,5 +348,28 @@ public class LoaderFrame extends JFrame {
      */
     public String getCurrentlyHighlightedButtonText() {
         return this.relevantButtons.get(this.highlightedButtonIndex).getText();
+    }
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+        final Font BUTTON_FONT = new Font("Arial", Font.BOLD, loaderFrame.getWidth()/ 10);
+
+        this.loaderFrame.repaint();
+
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+
     }
 }

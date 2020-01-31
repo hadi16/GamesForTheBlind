@@ -1,7 +1,10 @@
 package gamesforblind.codebreaker;
 
 import gamesforblind.ProgramArgs;
-import gamesforblind.codebreaker.action.*;
+import gamesforblind.codebreaker.action.CodebreakerAction;
+import gamesforblind.codebreaker.action.CodebreakerExitAction;
+import gamesforblind.codebreaker.action.CodebreakerInstructionsAction;
+import gamesforblind.codebreaker.action.CodebreakerMainMenuAction;
 import gamesforblind.codebreaker.gui.CodebreakerFrame;
 import gamesforblind.codebreaker.gui.listener.CodebreakerArrowKeyAction;
 import gamesforblind.enums.CodebreakerType;
@@ -10,6 +13,7 @@ import gamesforblind.logger.LogFactory;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.AbstractMap;
 import java.util.Map;
 
 /**
@@ -78,9 +82,11 @@ public class CodebreakerGame {
 
                 CodebreakerSetSingleNumberAction.class, () -> {
                     this.setSingleNumber((CodebreakerSetSingleNumberAction) codebreakerAction);
-                }
+                },
 
-                //CodebreakerSetGuessAction.class, null
+                //Case 3: read instructions
+                CodebreakerInstructionsAction.class, this.codebreakerState::readInstructions
+
         );
 
         Runnable functionToExecute = CODEBREAKER_ACTION_TO_RUNNABLE.get(codebreakerAction.getClass());
@@ -106,4 +112,6 @@ public class CodebreakerGame {
         this.codebreakerFrame.closeFrames();
         this.gameLoader.openLoaderInterface();
     }
+
+
 }
