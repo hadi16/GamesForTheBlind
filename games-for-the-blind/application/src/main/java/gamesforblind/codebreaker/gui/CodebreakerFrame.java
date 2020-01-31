@@ -6,7 +6,6 @@ import gamesforblind.codebreaker.gui.listener.CodebreakerKeyboardListener;
 import gamesforblind.codebreaker.gui.listener.CodebreakerMenuItemListener;
 import gamesforblind.codebreaker.gui.listener.CodebreakerWindowListener;
 import gamesforblind.enums.GameMenuItem;
-import gamesforblind.sudoku.gui.listener.SudokuKeyboardListener;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

@@ -1,19 +1,15 @@
 package gamesforblind.codebreaker;
 
 import gamesforblind.ProgramArgs;
-import gamesforblind.codebreaker.action.CodebreakerAction;
-import gamesforblind.codebreaker.action.CodebreakerExitAction;
-import gamesforblind.codebreaker.action.CodebreakerInstructionsAction;
-import gamesforblind.codebreaker.action.CodebreakerMainMenuAction;
+import gamesforblind.codebreaker.action.*;
 import gamesforblind.codebreaker.gui.CodebreakerFrame;
-import gamesforblind.codebreaker.gui.listener.CodebreakerArrowKeyAction;
+import gamesforblind.codebreaker.action.CodebreakerArrowKeyAction;
 import gamesforblind.enums.CodebreakerType;
 import gamesforblind.loader.GameLoader;
 import gamesforblind.logger.LogFactory;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.AbstractMap;
 import java.util.Map;
 
 /**
@@ -84,9 +80,12 @@ public class CodebreakerGame {
                     this.setSingleNumber((CodebreakerSetSingleNumberAction) codebreakerAction);
                 },
 
-                //Case 3: read instructions
-                CodebreakerInstructionsAction.class, this.codebreakerState::readInstructions
+                CodebreakerInstructionsAction.class, this.codebreakerState::readInstructions,
 
+                CodebreakerSetGuessAction.class, () -> {
+                    this.codebreakerState.setCodebreakerGuess();
+                    this.codebreakerFrame.repaintCodebreakerPanel();
+                }
         );
 
         Runnable functionToExecute = CODEBREAKER_ACTION_TO_RUNNABLE.get(codebreakerAction.getClass());
@@ -99,10 +98,12 @@ public class CodebreakerGame {
 
     private void changeSelectedCellPoint(CodebreakerArrowKeyAction codebreakerArrowKeyAction) {
         this.codebreakerState.changeSelectedCellPoint(codebreakerArrowKeyAction.getArrowKeyDirection());
+        this.codebreakerFrame.repaintCodebreakerPanel();
     }
 
     private void setSingleNumber(CodebreakerSetSingleNumberAction codebreakerSetSingleNumberAction) {
         this.codebreakerState.setSingleNumber(codebreakerSetSingleNumberAction.getNumberToSet());
+        this.codebreakerFrame.repaintCodebreakerPanel();
     }
 
     /**

@@ -80,17 +80,18 @@ public enum Phrase {
     SELECT_SUDOKU_FOUR("Press the SPACE BAR to play the 4 by 4 version of Sudoku."),
     SELECT_SUDOKU_SIX("Press the SPACE BAR to play the 6 by 6 version of Sudoku."),
     SELECT_SUDOKU_NINE("Press the SPACE BAR to play the 9 by 9 version of Sudoku."),
-    WHICH_SUDOKU_GAME_ALL("Which Sudoku game would you like to play, 4 by 4, 6 by 6, or 9 by 9? " +
-            "Use the arrow keys to make your selection."),
-    WHICH_SUDOKU_GAME_NO_SIX("Which Sudoku game would you like to play, 4 by 4 or 9 by 9? " +
-            "Use the arrow keys to make your selection."),
-    WHICH_CODEBREAKER_GAME_ALL("Which Code Breaker game would you like to play, 4, 5, or 6? " +
-            "Use the arrow keys to make your selection."),
+    WHICH_SUDOKU_GAME_ALL("Which Sudoku game would you like to play, 4 by 4, 6 by 6, or 9 by 9?" +
+            " Use the arrow keys to make your selection."),
+    WHICH_SUDOKU_GAME_NO_SIX("Which Sudoku game would you like to play, 4 by 4 or 9 by 9?" +
+            " Use the arrow keys to make your selection."),
+    WHICH_CODEBREAKER_GAME_ALL("Which Code Breaker game would you like to play, 4, 5, or 6?" +
+            " Use the arrow keys to make your selection."),
     SELECT_CODEBREAKER_FOUR("Press the SPACE BAR to play the 4 version of Code Breaker."),
     SELECT_CODEBREAKER_FIVE("Press the SPACE BAR to play the 5 version of Code Breaker."),
     SELECT_CODEBREAKER_SIX("Press the SPACE BAR to play the 6 version of Code Breaker."),
     PLAY_OR_EXIT("Would you like to play Sudoku, Code Breaker, or exit? Use the arrow keys to make your selection."),
     EXITING("The game is exiting. Goodbye!"),
+    CODEBREAKER_NEED_CODE("You didn't enter the whole Codebreaker code yet!"),
 
     /* Sudoku: locations */
     A1, A2, A3, A4, A5, A6, A7, A8, A9,
@@ -122,50 +123,26 @@ public enum Phrase {
     INVALID_NUMBER_TO_FILL_9("The number to fill must be between 1 and 9"),
 
     /* Sudoku: Instructions Phrases. */
-    INSTRUCTIONS_4("Welcome to Sudoku! Each of the four blocks must contain the numbers 1 through 4 " +
-            "within its square. Each number can only appear once in a row, column or box. Each four-square column, " +
-            "or four-square row, within the entire board, must also have the numbers 1 through 4, without repetition." +
-            "To hear the numbers in the currently selected number's row press J, to hear the numbers in the " +
+    INSTRUCTIONS_4("Welcome to Sudoku! Each of the four blocks must contain the numbers 1 through 4" +
+            " within its square. Each number can only appear once in a row, column or box. Each four-square column," +
+            " or four-square row, within the entire board, must also have the numbers 1 through 4, without repetition." +
+            " To hear the numbers in the currently selected number's row press J, to hear the numbers in the" +
             " currently selected number's column press K, to hear all of the numbers in the current block press L." +
-            "If you have selected an empty square and are stuck, press H to automatically fill in the square."),
+            " If you have selected an empty square and are stuck, press H to automatically fill in the square."),
 
-    INSTRUCTIONS_6("Welcome to Sudoku! Each of the six blocks must contain the numbers 1 through 6 " +
-            "within its square. Each number can only appear once in a row, column or box. Each six-square column, " +
-            "or six-square row, within the entire board, must also have the numbers 1 through 6, without repetition." +
-            "To hear the numbers in the currently selected number's row press J, to hear the numbers in the " +
+    INSTRUCTIONS_6("Welcome to Sudoku! Each of the six blocks must contain the numbers 1 through 6" +
+            " within its square. Each number can only appear once in a row, column or box. Each six-square column," +
+            " or six-square row, within the entire board, must also have the numbers 1 through 6, without repetition." +
+            " To hear the numbers in the currently selected number's row press J, to hear the numbers in the" +
             " currently selected number's column press K, to hear all of the numbers in the current block press L." +
-            "If you have selected an empty square and are stuck, press H to automatically fill in the square."),
+            " If you have selected an empty square and are stuck, press H to automatically fill in the square."),
 
-    INSTRUCTIONS_9("Welcome to Sudoku! Each of the nine blocks must contain the numbers 1 through 9 " +
-            "within its square. Each number can only appear once in a row, column or box. Each nine-square column, " +
-            "or nine-square row, within the entire board, must also have the numbers 1 through 9, without repetition." +
-            "To hear the numbers in the currently selected number's row press J, to hear the numbers in the " +
+    INSTRUCTIONS_9("Welcome to Sudoku! Each of the nine blocks must contain the numbers 1 through 9" +
+            " within its square. Each number can only appear once in a row, column or box. Each nine-square column," +
+            " or nine-square row, within the entire board, must also have the numbers 1 through 9, without repetition." +
+            " To hear the numbers in the currently selected number's row press J, to hear the numbers in the" +
             " currently selected number's column press K, to hear all of the numbers in the current block press L." +
-            "If you have selected an empty square and are stuck, press H to automatically fill in the square."),
-
-    INSTRUCTIONS_CODEBREAKER_4("Welcome to Codebreaker! The goal is to accurately guess a secret code of four numbers. "+
-             "To make a guess use the arrow keys to select a space and enter a number from 1-6. Once you have finalized"+
-            " your guess, hit the space key to see if you guessed correctly. If you did not guess the right code, the"+
-            " small box to the right of your guess will contain 4 pegs of either black or white. A white peg means that"+
-            "one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that"+"" +
-            " one of your numbers is the correct number and is in the correct place. If you have guessed correctly, "+
-            "you win the game!"),
-
-    INSTRUCTIONS_CODEBREAKER_5("Welcome to Codebreaker! The goal is to accurately guess a secret code of five numbers. "+
-            "To make a guess use the arrow keys to select a space and enter a number from 1-6. Once you have finalized"+
-            " your guess, hit the space key to see if you guessed correctly. If you did not guess the right code, the"+
-            " small box to the right of your guess will contain five pegs of either black or white. A white peg means that"+
-            "one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that"+"" +
-            " one of your numbers is the correct number and is in the correct place. If you have guessed correctly, "+
-            "you win the game!"),
-
-    INSTRUCTIONS_CODEBREAKER_6("Welcome to Codebreaker! The goal is to accurately guess a secret code of six numbers. "+
-            "To make a guess use the arrow keys to select a space and enter a number from 1-6. Once you have finalized"+
-            " your guess, hit the space key to see if you guessed correctly. If you did not guess the right code, the"+
-            " small box to the right of your guess will contain six pegs of either black or white. A white peg means that"+
-            "one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that"+"" +
-            " one of your numbers is the correct number and is in the correct place. If you have guessed correctly, "+
-            " you win the game!"),
+            " If you have selected an empty square and are stuck, press H to automatically fill in the square."),
 
     /* Sudoku: Empty Squares Left */
     EMPTY_PIECES_OF_BOARD_PLURAL_1("There are"),
@@ -177,7 +154,32 @@ public enum Phrase {
     /* Sudoku: Information Phrases */
     CURRENT_VALUE("The current value in this box is"),
     PLACED_NUM("You have placed a"),
-    REMOVED_NUM("You have removed the number");
+    REMOVED_NUM("You have removed the number"),
+
+    /* Codebreaker: Instructions Phrases */
+    INSTRUCTIONS_CODEBREAKER_4("Welcome to Codebreaker! The goal is to accurately guess a secret code of four numbers." +
+            " To make a guess use the arrow keys to select a space and enter a number from 1-6. Once you have finalized" +
+            " your guess, hit the space key to see if you guessed correctly. If you did not guess the right code, the" +
+            " small box to the right of your guess will contain 4 pegs of either black or white. A white peg means that" +
+            " one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that" +
+            " one of your numbers is the correct number and is in the correct place. If you have guessed correctly," +
+            " you win the game!"),
+
+    INSTRUCTIONS_CODEBREAKER_5("Welcome to Codebreaker! The goal is to accurately guess a secret code of five numbers." +
+            " To make a guess use the arrow keys to select a space and enter a number from 1-6. Once you have finalized" +
+            " your guess, hit the space key to see if you guessed correctly. If you did not guess the right code, the" +
+            " small box to the right of your guess will contain five pegs of either black or white. A white peg means that" +
+            " one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that" +
+            " one of your numbers is the correct number and is in the correct place. If you have guessed correctly," +
+            " you win the game!"),
+
+    INSTRUCTIONS_CODEBREAKER_6("Welcome to Codebreaker! The goal is to accurately guess a secret code of six numbers." +
+            " To make a guess use the arrow keys to select a space and enter a number from 1-6. Once you have finalized" +
+            " your guess, hit the space key to see if you guessed correctly. If you did not guess the right code, the" +
+            " small box to the right of your guess will contain six pegs of either black or white. A white peg means that" +
+            " one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that" +
+            " one of your numbers is the correct number and is in the correct place. If you have guessed correctly," +
+            " you win the game!");
 
     /**
      * The directory for all of the Phrase audio files ("resources/phrases" folder under the root of the project).
