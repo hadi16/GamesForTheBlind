@@ -3,6 +3,7 @@ package gamesforblind.codebreaker;
 import gamesforblind.ProgramArgs;
 import gamesforblind.codebreaker.action.CodebreakerAction;
 import gamesforblind.codebreaker.action.CodebreakerExitAction;
+import gamesforblind.codebreaker.action.CodebreakerInstructionsAction;
 import gamesforblind.codebreaker.action.CodebreakerMainMenuAction;
 import gamesforblind.codebreaker.gui.CodebreakerFrame;
 import gamesforblind.enums.CodebreakerType;
@@ -11,6 +12,7 @@ import gamesforblind.logger.LogFactory;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.AbstractMap;
 import java.util.Map;
 
 /**
@@ -81,8 +83,19 @@ public class CodebreakerGame {
                 // Case 1: return to main menu.
                 CodebreakerMainMenuAction.class, this::returnToMainMenu,
 
-                // Case 2: exit the game.
+                CodebreakerInstructionsAction.class, this.codebreakerState::readInstructions,
+
+
                 CodebreakerExitAction.class, this.gameLoader::exitApplication
+
+
+                //CodebreakerMainMenuAction.class, this::returnToMainMenu,
+
+                // Case 2: exit the game.
+                //CodebreakerExitAction.class, this.gameLoader::exitApplication,
+
+                //case 3: read instructions
+               // CodebreakerInstructionsAction.class, this.codebreakerState::readInstructions
         );
 
         Runnable functionToExecute = CODEBREAKER_ACTION_TO_RUNNABLE.get(codebreakerAction.getClass());
