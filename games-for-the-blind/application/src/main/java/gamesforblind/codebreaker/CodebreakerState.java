@@ -7,9 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import phrase.Phrase;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 import static gamesforblind.Constants.CODEBREAKER_MAX_AMOUNT_OF_GUESSES;
 import static gamesforblind.Constants.CODEBREAKER_MAX_CODE_INT;
@@ -66,7 +64,24 @@ public class CodebreakerState {
             }
         }
 
-        this.guessList.add(new CodebreakerGuess(this.codeToBreak, this.currentGuess));
+        CodebreakerGuess currentCodebreakerGuess = new CodebreakerGuess(this.codeToBreak, this.currentGuess);
+        this.guessList.add(currentCodebreakerGuess);
+
+        ArrayList<Phrase> relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.PLACED_CODEBREAKER_CODE));
+        for (int i : this.currentGuess) {
+            relevantPhrases.add(Phrase.convertIntegerToPhrase(i));
+        }
+
+        Phrase[] phrasesToAdd = {
+                Phrase.CODEBREAKER_GUESS_NUMBER, Phrase.convertIntegerToPhrase(this.guessList.size()),
+                Phrase.CODEBREAKER_NUMBER_CORRECT_POSITION,
+                Phrase.convertIntegerToPhrase(currentCodebreakerGuess.getNumberInCorrectPosition()),
+                Phrase.CODEBREAKER_NUMBER_ONLY,
+                Phrase.convertIntegerToPhrase(currentCodebreakerGuess.getNumberOfCorrectColor())
+        };
+        relevantPhrases.addAll(Arrays.asList(phrasesToAdd));
+
+        this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
         this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
 
         this.selectedCellPoint.x = 0;
@@ -74,6 +89,10 @@ public class CodebreakerState {
     }
 
     public void setSingleNumber(int numberToSet) {
+        this.audioPlayerExecutor.replacePhraseAndPrint(
+                new ArrayList<>(Arrays.asList(Phrase.PLACED_NUM, Phrase.convertIntegerToPhrase(numberToSet)))
+        );
+
         this.currentGuess[this.selectedCellPoint.x] = numberToSet;
     }
 
@@ -100,7 +119,7 @@ public class CodebreakerState {
      * Reads the instructions for the 4x4, 6x6, or 9x9 game.
      */
     public void readInstructions() {
-        Phrase instructionsPhrase = null;
+        Phrase instructionsPhrase;
 
         switch (this.codebreakerType) {
             case FOUR:
