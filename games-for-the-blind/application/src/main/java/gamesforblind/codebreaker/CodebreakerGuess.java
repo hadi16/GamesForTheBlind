@@ -1,14 +1,14 @@
 package gamesforblind.codebreaker;
 
-import java.awt.*;
+import java.util.Arrays;
 
 public class CodebreakerGuess {
-    private final Color[] guessedCode;
+    private final int[] guessedCode;
     private final int numberInCorrectPosition;
     private final int numberOfCorrectColor;
 
-    public CodebreakerGuess(Color[] codebreakerCode, Color[] guessedCode) {
-        this.guessedCode = guessedCode;
+    public CodebreakerGuess(int[] correctCode, Integer[] guessedCode) {
+        this.guessedCode = Arrays.stream(guessedCode).mapToInt(i -> i).toArray();
 
         // TODO: Properly implement this.
         this.numberInCorrectPosition = 0;

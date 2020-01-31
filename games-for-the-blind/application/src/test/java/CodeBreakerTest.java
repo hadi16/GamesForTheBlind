@@ -7,7 +7,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import javax.sound.sampled.LineUnavailableException;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,14 +14,11 @@ import java.util.Collections;
 public class CodeBreakerTest {
     private final AudioPlayerExecutor testAudioPlayerExecutor = new AudioPlayerExecutor(new AudioPlayer());
     private final CodebreakerType codebreakerType = CodebreakerType.FOUR;
-    private final CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, this.codebreakerType);
+    private final CodebreakerState codebreakerState = new CodebreakerState(
+            this.testAudioPlayerExecutor, this.codebreakerType
+    );
 
     public CodeBreakerTest() throws LineUnavailableException {
-    }
-
-    @Test
-    public void codeSizeMustMatchCodeToBreakSize() {
-        Assert.assertEquals(this.codebreakerState.getCodeSize(), this.codebreakerState.getCodeToBreak().length);
     }
 
     @Test
@@ -39,15 +35,10 @@ public class CodeBreakerTest {
 
     @Test
     public void numberOfCorrectColorsReported() {
-        Color[] codebreakerCode = new Color[]{
-                Color.BLACK, Color.BLUE, Color.GREEN, Color.WHITE
-        };
+        int[] correctCode = new int[]{1, 2, 3, 4};
+        Integer[] guessedCode = new Integer[]{1, 1, 1, 1};
 
-        Color[] codeGuess = new Color[]{
-                Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK
-        };
-
-        CodebreakerGuess codebreakerGuess = new CodebreakerGuess(codebreakerCode, codeGuess);
+        CodebreakerGuess codebreakerGuess = new CodebreakerGuess(correctCode, guessedCode);
         Assert.assertEquals(codebreakerGuess.getNumberInCorrectPosition(), 1);
         Assert.assertEquals(codebreakerGuess.getNumberOfCorrectColor(), 1);
     }
@@ -59,41 +50,31 @@ public class CodeBreakerTest {
                 null, null, null, null, null, null, null, null, null, null, null, null
         ));
 
-        Assert.assertTrue(CodebreakerState.checkThatGameIsOver(new Color[]{}, guessList));
+        Assert.assertTrue(CodebreakerState.checkThatGameIsOver(new int[]{}, guessList));
     }
 
     @Test
     public void correctCodePlayedForCodebreakerGame() {
-        Color[] codebreakerCode = new Color[]{
-                Color.BLACK, Color.BLUE, Color.GREEN, Color.WHITE
-        };
-
-        Color[] guessedCode = new Color[]{
-                Color.BLACK, Color.BLUE, Color.GREEN, Color.WHITE
-        };
+        int[] correctCode = new int[]{1, 2, 3, 4};
+        Integer[] guessedCode = new Integer[]{1, 2, 3, 4};
 
         ArrayList<CodebreakerGuess> guessList = new ArrayList<>(
-                Collections.singletonList(new CodebreakerGuess(codebreakerCode, guessedCode))
+                Collections.singletonList(new CodebreakerGuess(correctCode, guessedCode))
         );
 
-        Assert.assertTrue(CodebreakerState.checkThatGameIsOver(codebreakerCode, guessList));
+        Assert.assertTrue(CodebreakerState.checkThatGameIsOver(correctCode, guessList));
     }
 
     @Test
     public void codebreakerGameIsNotOver() {
-        Color[] codebreakerCode = new Color[]{
-                Color.BLACK, Color.BLUE, Color.GREEN, Color.WHITE
-        };
-
-        Color[] guessedCode = new Color[]{
-                Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK
-        };
+        int[] correctCode = new int[]{1, 2, 3, 4};
+        Integer[] guessedCode = new Integer[]{1, 1, 1, 1};
 
         ArrayList<CodebreakerGuess> guessList = new ArrayList<>(
-                Collections.singletonList(new CodebreakerGuess(codebreakerCode, guessedCode))
+                Collections.singletonList(new CodebreakerGuess(correctCode, guessedCode))
         );
 
-        Assert.assertFalse(CodebreakerState.checkThatGameIsOver(codebreakerCode, guessList));
+        Assert.assertFalse(CodebreakerState.checkThatGameIsOver(correctCode, guessList));
     }
 
     @Test
@@ -101,16 +82,16 @@ public class CodeBreakerTest {
         try {
             CodebreakerState.checkThatGameIsOver(null, new ArrayList<>());
             Assert.fail();
-        } catch (NullPointerException e) {
+        } catch (NullPointerException ignored) {
         }
     }
 
     @Test
     public void checkerThrowsWhenGuessListIsNull() {
         try {
-            CodebreakerState.checkThatGameIsOver(new Color[]{}, null);
+            CodebreakerState.checkThatGameIsOver(new int[]{}, null);
             Assert.fail();
-        } catch (NullPointerException e) {
+        } catch (NullPointerException ignored) {
         }
     }
 }
