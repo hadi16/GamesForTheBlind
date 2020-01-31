@@ -2,9 +2,11 @@ package gamesforblind.codebreaker.gui;
 
 import gamesforblind.codebreaker.CodebreakerGame;
 import gamesforblind.codebreaker.CodebreakerState;
+import gamesforblind.codebreaker.gui.listener.CodebreakerKeyboardListener;
 import gamesforblind.codebreaker.gui.listener.CodebreakerMenuItemListener;
 import gamesforblind.codebreaker.gui.listener.CodebreakerWindowListener;
 import gamesforblind.enums.GameMenuItem;
+import gamesforblind.sudoku.gui.listener.SudokuKeyboardListener;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -42,6 +44,7 @@ public class CodebreakerFrame extends JFrame {
 
         if (!playbackMode) {
             this.frame.addWindowListener(new CodebreakerWindowListener(codebreakerGame));
+            this.frame.addKeyListener(new CodebreakerKeyboardListener(codebreakerGame));
         }
     }
 

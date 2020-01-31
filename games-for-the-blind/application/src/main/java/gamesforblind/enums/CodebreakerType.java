@@ -9,24 +9,23 @@ public enum CodebreakerType {
     SIX(6);
 
     /**
-     * The length of code
+     * The length of the code
      */
-    private final int codebreakerType;
+    private final int codeLength;
 
     /**
      * Creates a new CodebreakerType.
      *
-     * @param codebreakerType The length of code.
+     * @param codeLength The length of code.
      */
-    CodebreakerType(int codebreakerType) {
-        this.codebreakerType = codebreakerType;
+    CodebreakerType(int codeLength) {
+        this.codeLength = codeLength;
     }
 
     /**
      * @return The length of code.
      */
-    public int getNumber() {
-        return this.codebreakerType;
+    public int getCodeLength() {
+        return this.codeLength;
     }
-
 }

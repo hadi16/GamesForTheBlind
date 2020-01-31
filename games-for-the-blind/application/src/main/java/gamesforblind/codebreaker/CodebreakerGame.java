@@ -1,10 +1,9 @@
 package gamesforblind.codebreaker;
 
 import gamesforblind.ProgramArgs;
-import gamesforblind.codebreaker.action.CodebreakerAction;
-import gamesforblind.codebreaker.action.CodebreakerExitAction;
-import gamesforblind.codebreaker.action.CodebreakerMainMenuAction;
+import gamesforblind.codebreaker.action.*;
 import gamesforblind.codebreaker.gui.CodebreakerFrame;
+import gamesforblind.codebreaker.gui.listener.CodebreakerArrowKeyAction;
 import gamesforblind.enums.CodebreakerType;
 import gamesforblind.loader.GameLoader;
 import gamesforblind.logger.LogFactory;
@@ -19,7 +18,6 @@ import java.util.Map;
  */
 public class CodebreakerGame {
     private final GameLoader gameLoader;
-    private final CodebreakerType codebreakerType;
     private final CodebreakerState codebreakerState;
     private final CodebreakerFrame codebreakerFrame;
     private final LogFactory logFactory;
@@ -44,19 +42,9 @@ public class CodebreakerGame {
         this.gameLoader = gameLoader;
         this.programArgs = programArgs;
         this.logFactory = logFactory;
-        this.codebreakerType = codebreakerType;
 
-        if (programArgs.isPlaybackMode()) {
-            // Case 1: the program is in playback mode (call state constructor with the original state of the board).
-            this.codebreakerState = new CodebreakerState(audioPlayerExecutor, codebreakerType);
-        } else {
-            // Case 2: the program is not in playback mode (set the log factory's original Codebreaker state).
-            this.codebreakerState = new CodebreakerState(audioPlayerExecutor, codebreakerType);
-        }
-
-        this.codebreakerFrame = new CodebreakerFrame(
-                this, this.codebreakerState, programArgs.isPlaybackMode()
-        );
+        this.codebreakerState = new CodebreakerState(audioPlayerExecutor, codebreakerType);
+        this.codebreakerFrame = new CodebreakerFrame(this, this.codebreakerState, programArgs.isPlaybackMode());
     }
 
     /**
@@ -82,7 +70,17 @@ public class CodebreakerGame {
                 CodebreakerMainMenuAction.class, this::returnToMainMenu,
 
                 // Case 2: exit the game.
-                CodebreakerExitAction.class, this.gameLoader::exitApplication
+                CodebreakerExitAction.class, this.gameLoader::exitApplication,
+
+                CodebreakerArrowKeyAction.class, () -> {
+                    this.changeSelectedCellPoint((CodebreakerArrowKeyAction) codebreakerAction);
+                },
+
+                CodebreakerSetSingleNumberAction.class, () -> {
+                    this.setSingleNumber((CodebreakerSetSingleNumberAction) codebreakerAction);
+                }
+
+                //CodebreakerSetGuessAction.class, null
         );
 
         Runnable functionToExecute = CODEBREAKER_ACTION_TO_RUNNABLE.get(codebreakerAction.getClass());
@@ -91,6 +89,14 @@ public class CodebreakerGame {
         } else {
             System.err.println("An unrecognized form of a Codebreaker action was received by the game!");
         }
+    }
+
+    private void changeSelectedCellPoint(CodebreakerArrowKeyAction codebreakerArrowKeyAction) {
+        this.codebreakerState.changeSelectedCellPoint(codebreakerArrowKeyAction.getArrowKeyDirection());
+    }
+
+    private void setSingleNumber(CodebreakerSetSingleNumberAction codebreakerSetSingleNumberAction) {
+        this.codebreakerState.setSingleNumber(codebreakerSetSingleNumberAction.getNumberToSet());
     }
 
     /**
