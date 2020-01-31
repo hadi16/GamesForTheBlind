@@ -9,4 +9,4 @@ logs/
 *.prefs
 *.class
 
-google_api_key.json
+games-for-the-blind/audio-builder/google_api_key.json
