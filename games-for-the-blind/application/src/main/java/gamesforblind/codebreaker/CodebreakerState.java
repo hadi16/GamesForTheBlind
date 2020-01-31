@@ -53,17 +53,18 @@ public class CodebreakerState {
     public void readInstructions() {
         Phrase instructionsPhrase = null;
 
-        //currently commented out beacause I need Polina's updates first to get codebreakerType and I don't want
+        //currently commented out because I need Polina's updates first to get codebreakerType and I don't want
         //to mess anything up
+        //currently plays the instructions for the 4 length
 
         /*switch (this.codebreakerType) {
-            case 4:*/
+            case FOUR:*/
                 instructionsPhrase = Phrase.INSTRUCTIONS_CODEBREAKER_4;
                 /*break;
-            case 5:
+            case FIVE:
                 instructionsPhrase = Phrase.INSTRUCTIONS_CODEBREAKER_5;
                 break;
-            case 6:
+            case SIX:
                 instructionsPhrase = Phrase.INSTRUCTIONS_CODEBREAKER_6;
                 break;
         }*/
