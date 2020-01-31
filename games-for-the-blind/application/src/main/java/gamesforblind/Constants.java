@@ -48,4 +48,7 @@ public class Constants {
     public static final String FIVE_CODEBREAKER_BUTTON = "5";
     public static final String SIX_CODEBREAKER_BUTTON = "6";
     // endregion
+
+    public static final int CODEBREAKER_MAX_CODE_INT = 6;
+    public static final int CODEBREAKER_MAX_AMOUNT_OF_GUESSES = 12;
 }
