@@ -3,19 +3,14 @@ package gamesforblind.codebreaker.gui.listener;
 import gamesforblind.codebreaker.CodebreakerGame;
 import gamesforblind.codebreaker.action.*;
 import gamesforblind.enums.ArrowKeyDirection;
-import gamesforblind.enums.InputType;
-import gamesforblind.enums.SudokuSection;
-import gamesforblind.sudoku.SudokuGame;
-import gamesforblind.sudoku.action.*;
-import gamesforblind.sudoku.interfaces.SudokuKeyboardInterface;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
+
+import static gamesforblind.Constants.CODEBREAKER_MAX_CODE_INT;
 
 /**
  * Keyboard listener for Sudoku that receives keyboard inputs and appropriately calls the proper action class
@@ -52,10 +47,11 @@ public class CodebreakerKeyboardListener implements KeyListener {
 
         // Case 1: pressed key is a number.
         if (Character.isDigit(e.getKeyChar())) {
-            this.codebreakerGame.receiveAction(
-                    new CodebreakerSetSingleNumberAction(Character.getNumericValue(e.getKeyChar()))
-            );
-            return;
+            int selectedNumber = Character.getNumericValue(e.getKeyChar());
+            if (selectedNumber > 0 && selectedNumber <= CODEBREAKER_MAX_CODE_INT) {
+                this.codebreakerGame.receiveAction(new CodebreakerSetSingleNumberAction(selectedNumber));
+                return;
+            }
         }
 
         final Map<Integer, ArrowKeyDirection> ARROW_KEY_MAP = Map.of(
@@ -106,7 +102,13 @@ public class CodebreakerKeyboardListener implements KeyListener {
             return;
         }
 
-        // Case 7: the selected key is unrecognized.
+        // Case 7: the user wants to save their current code guess.
+        if (selectedKeyCode == KeyEvent.VK_SPACE) {
+            this.codebreakerGame.receiveAction(new CodebreakerSetGuessAction());
+            return;
+        }
+
+        // Case 8: the selected key is unrecognized.
         this.codebreakerGame.receiveAction(new CodebreakerUnrecognizedKeyAction(e.getKeyCode()));
     }
 

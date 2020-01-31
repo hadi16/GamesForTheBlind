@@ -89,7 +89,7 @@ public class LoaderFrame extends JFrame implements ComponentListener {
      */
     private JButton getUIButton(@NotNull String buttonText, @NotNull Dimension preferredSize) {
         // Make the size of the button font dependent on the size of the frame.
-        final Font BUTTON_FONT = new Font("Arial", Font.BOLD, FRAME_DIMENSION/ 13);
+        final Font BUTTON_FONT = new Font("Arial", Font.BOLD, FRAME_DIMENSION / 13);
 
         JButton button = new JButton(buttonText);
         if (!this.programArgs.isPlaybackMode()) {
@@ -105,9 +105,8 @@ public class LoaderFrame extends JFrame implements ComponentListener {
     }
 
     /**
-    * For level selection
-    *
-    * */
+     * For level selection
+     */
     private ArrayList<JComponent> getInitializedOptionsPanelAsList(
             ArrayList<String> buttonNameList, Function<Integer, Dimension> getButtonDimension
     ) {
@@ -194,13 +193,13 @@ public class LoaderFrame extends JFrame implements ComponentListener {
         ArrayList<JComponent> selectedGameComponents = this.getSelectedGameComponent(selectedGame);
         selectedGameComponents.forEach(component -> component.setVisible(true));
 
-        JButton exitButton = this.getUIButton(EXIT_BUTTON, new Dimension(FRAME_DIMENSION, FRAME_DIMENSION/ 3));
+        JButton exitButton = this.getUIButton(EXIT_BUTTON, new Dimension(FRAME_DIMENSION, FRAME_DIMENSION / 3));
 
         // Disable the exit button when in a game selection screen (e.g. Sudoku's).
         exitButton.setEnabled(selectedGame == SelectedGame.NONE);
 
         //if game has been selected hide exit button
-        if(selectedGame != SelectedGame.NONE){
+        if (selectedGame != SelectedGame.NONE) {
             exitButton.setVisible(false);
         }
 
@@ -209,7 +208,7 @@ public class LoaderFrame extends JFrame implements ComponentListener {
         Container frameContainer = this.loaderFrame.getContentPane();
 
         //add 1 too rows to account for exit button, only one column for game selection menu
-        frameContainer.setLayout(new GridLayout(selectedGameComponents.size()+1, 1));
+        frameContainer.setLayout(new GridLayout(selectedGameComponents.size() + 1, 1));
 
         String[] selectedGameLayouts = new String[]{BorderLayout.NORTH, BorderLayout.CENTER};
         if (selectedGameLayouts.length < selectedGameComponents.size()) {
@@ -352,7 +351,7 @@ public class LoaderFrame extends JFrame implements ComponentListener {
 
     @Override
     public void componentResized(ComponentEvent e) {
-        final Font BUTTON_FONT = new Font("Arial", Font.BOLD, loaderFrame.getWidth()/ 10);
+        final Font BUTTON_FONT = new Font("Arial", Font.BOLD, this.loaderFrame.getWidth() / 10);
 
         this.loaderFrame.repaint();
 

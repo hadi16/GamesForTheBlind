@@ -36,7 +36,7 @@ public class CodeBreakerTest {
     @Test
     public void numberOfCorrectColorsReported() {
         int[] correctCode = new int[]{1, 2, 3, 4};
-        Integer[] guessedCode = new Integer[]{1, 1, 1, 1};
+        Integer[] guessedCode = new Integer[]{1, 1, 1, 2};
 
         CodebreakerGuess codebreakerGuess = new CodebreakerGuess(correctCode, guessedCode);
         Assert.assertEquals(codebreakerGuess.getNumberInCorrectPosition(), 1);
