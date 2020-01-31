@@ -83,19 +83,12 @@ public class CodebreakerGame {
                 // Case 1: return to main menu.
                 CodebreakerMainMenuAction.class, this::returnToMainMenu,
 
-                CodebreakerInstructionsAction.class, this.codebreakerState::readInstructions,
-
-
-                CodebreakerExitAction.class, this.gameLoader::exitApplication
-
-
-                //CodebreakerMainMenuAction.class, this::returnToMainMenu,
-
                 // Case 2: exit the game.
-                //CodebreakerExitAction.class, this.gameLoader::exitApplication,
+                CodebreakerExitAction.class, this.gameLoader::exitApplication,
 
-                //case 3: read instructions
-               // CodebreakerInstructionsAction.class, this.codebreakerState::readInstructions
+                //Case 3: read instructions
+                CodebreakerInstructionsAction.class, this.codebreakerState::readInstructions
+
         );
 
         Runnable functionToExecute = CODEBREAKER_ACTION_TO_RUNNABLE.get(codebreakerAction.getClass());
@@ -113,17 +106,6 @@ public class CodebreakerGame {
         this.codebreakerFrame.closeFrames();
         this.gameLoader.openLoaderInterface();
     }
-    /**
-     * Restarts the current Sudoku board from the beginning (generates a new board as well).
-     */
-   /* private void restartSudokuBoard() {
-        if (this.programArgs.isPlaybackMode()) {
-            this.codebreakerState.resetCodebreakerState(this.logFactory.popOriginalGridFromFront());
-        } else {
-            this.codebreakerState.resetCodebreakerState(null);
-            //this.logFactory.addOriginalSudokuGrid(this.codebreakerState.getOriginalGrid());
-        }
 
-        this.codebreakerFrame.repaintCodebreakerPanel();
-    }*/
+
 }
