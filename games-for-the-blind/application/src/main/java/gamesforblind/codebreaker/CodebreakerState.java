@@ -52,17 +52,21 @@ public class CodebreakerState {
      */
     public void readInstructions() {
         Phrase instructionsPhrase = null;
-        switch (this.codeToBreak.length) {
-            case 4:
+
+        //currently commented out beacause I need Polina's updates first to get codebreakerType and I don't want
+        //to mess anything up
+
+        /*switch (this.codebreakerType) {
+            case 4:*/
                 instructionsPhrase = Phrase.INSTRUCTIONS_CODEBREAKER_4;
-                break;
+                /*break;
             case 5:
                 instructionsPhrase = Phrase.INSTRUCTIONS_CODEBREAKER_5;
                 break;
             case 6:
                 instructionsPhrase = Phrase.INSTRUCTIONS_CODEBREAKER_6;
                 break;
-        }
+        }*/
 
         this.audioPlayerExecutor.replacePhraseAndPrint(instructionsPhrase);
     }
