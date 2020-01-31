@@ -142,6 +142,7 @@ public enum Phrase {
             "To hear the numbers in the currently selected number's row press J, to hear the numbers in the " +
             " currently selected number's column press K, to hear all of the numbers in the current block press L." +
             "If you have selected an empty square and are stuck, press H to automatically fill in the square."),
+    INSTRUCTIONS_CODEBREAKER("Welcome to Codebreaker! "),
 
     /* Sudoku: Empty Squares Left */
     EMPTY_PIECES_OF_BOARD_PLURAL_1("There are"),
