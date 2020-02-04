@@ -9,7 +9,6 @@ import gamesforblind.enums.GameMenuItem;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.awt.*;
 
 import static gamesforblind.Constants.FRAME_DIMENSION;
 
@@ -104,15 +103,6 @@ public class CodebreakerFrame extends JFrame {
      */
     public void repaintCodebreakerPanel() {
         this.codebreakerPanel.repaint();
-    }
-
-    /**
-     * Getter for the enclosed {@link JFrame}'s bounds. Used to determine proper sizing of elements on the GUI.
-     *
-     * @return A {@link Rectangle} containing the {@link JFrame} bounds.
-     */
-    public Rectangle getFrameBounds() {
-        return new Rectangle(this.frame.getBounds());
     }
 
     /**

@@ -34,7 +34,9 @@ public class CodebreakerState {
         this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
     }
 
-    public static boolean checkThatGameIsOver(int[] codeToBreak, ArrayList<CodebreakerGuess> guessList) {
+    public static boolean checkThatGameIsOver(
+            @NotNull int[] codeToBreak, @NotNull ArrayList<CodebreakerGuess> guessList
+    ) {
         Objects.requireNonNull(codeToBreak, "Code to break cannot be null!");
         Objects.requireNonNull(guessList, "Guess list must not be null!");
 
@@ -96,7 +98,7 @@ public class CodebreakerState {
         this.currentGuess[this.selectedCellPoint.x] = numberToSet;
     }
 
-    public void changeSelectedCellPoint(ArrowKeyDirection arrowKeyDirection) {
+    public void changeSelectedCellPoint(@NotNull ArrowKeyDirection arrowKeyDirection) {
         switch (arrowKeyDirection) {
             case LEFT:
                 if (this.selectedCellPoint.x == 0) {
