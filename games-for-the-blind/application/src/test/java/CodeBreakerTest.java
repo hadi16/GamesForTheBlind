@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+@SuppressWarnings("ConstantConditions")
 public class CodeBreakerTest {
     private final AudioPlayerExecutor testAudioPlayerExecutor = new AudioPlayerExecutor(new AudioPlayer());
     private final CodebreakerType codebreakerType = CodebreakerType.FOUR;
@@ -82,7 +83,7 @@ public class CodeBreakerTest {
         try {
             CodebreakerState.checkThatGameIsOver(null, new ArrayList<>());
             Assert.fail();
-        } catch (NullPointerException ignored) {
+        } catch (NullPointerException | IllegalArgumentException ignored) {
         }
     }
 
@@ -91,7 +92,7 @@ public class CodeBreakerTest {
         try {
             CodebreakerState.checkThatGameIsOver(new int[]{}, null);
             Assert.fail();
-        } catch (NullPointerException ignored) {
+        } catch (NullPointerException | IllegalArgumentException ignored) {
         }
     }
 }

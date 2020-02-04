@@ -189,7 +189,7 @@ public class CodebreakerPanel extends JPanel {
      * @param squareDimension The pixel dimension of each square on the board.
      * @param initialPosition Amount of pixels to begin painting board from (row & column labels come before this).
      */
-    private void paintBoardLabels(@NotNull Graphics graphics, int squareDimension, Point initialPosition) {
+    private void paintBoardLabels(@NotNull Graphics graphics, int squareDimension, @NotNull Point initialPosition) {
         graphics.setColor(Color.BLACK);
         graphics.setFont(
                 new Font("Arial", Font.BOLD, (93 - 7 * 10) * this.totalBoardLength / 390)

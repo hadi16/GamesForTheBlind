@@ -215,8 +215,8 @@ public class LoaderFrame extends JFrame implements ComponentListener {
             throw new IllegalArgumentException("Too many 'PLAY ____' buttons!");
         }
 
-        for (int i = 0; i < selectedGameComponents.size(); i++) {
-            frameContainer.add(selectedGameComponents.get(i));
+        for (JComponent selectedGameComponent : selectedGameComponents) {
+            frameContainer.add(selectedGameComponent);
         }
         frameContainer.add(exitButton);
 
@@ -351,24 +351,18 @@ public class LoaderFrame extends JFrame implements ComponentListener {
 
     @Override
     public void componentResized(ComponentEvent e) {
-        final Font BUTTON_FONT = new Font("Arial", Font.BOLD, this.loaderFrame.getWidth() / 10);
-
         this.loaderFrame.repaint();
-
     }
 
     @Override
     public void componentMoved(ComponentEvent e) {
-
     }
 
     @Override
     public void componentShown(ComponentEvent e) {
-
     }
 
     @Override
     public void componentHidden(ComponentEvent e) {
-
     }
 }
