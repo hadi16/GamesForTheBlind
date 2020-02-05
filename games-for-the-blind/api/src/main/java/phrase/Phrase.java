@@ -171,26 +171,22 @@ public enum Phrase {
     REMOVED_NUM("You have removed the number"),
 
     /* Codebreaker: Instructions Phrases */
-    INSTRUCTIONS_CODEBREAKER_4("Welcome to Codebreaker! The goal is to accurately guess a secret code of four numbers." +
-            " To make a guess use the arrow keys to select a space and enter a number from 1-6. Once you have finalized" +
-            " your guess, hit the space key to see if you guessed correctly. If you did not guess the right code, the" +
-            " small box to the right of your guess will contain 4 pegs of either black or white. A white peg means that" +
-            " one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that" +
-            " one of your numbers is the correct number and is in the correct place. If you have guessed correctly," +
-            " you win the game!"),
+    INSTRUCTIONS_CODEBREAKER_4("Welcome to Codebreaker! The goal is to accurately guess a secret code of" +
+            "four numbers."),
+    INSTRUCTIONS_CODEBREAKER_4_SECOND("four pegs of either black or white."),
 
-    INSTRUCTIONS_CODEBREAKER_5("Welcome to Codebreaker! The goal is to accurately guess a secret code of five numbers." +
-            " To make a guess use the arrow keys to select a space and enter a number from 1-6. Once you have finalized" +
-            " your guess, hit the space key to see if you guessed correctly. If you did not guess the right code, the" +
-            " small box to the right of your guess will contain five pegs of either black or white. A white peg means that" +
-            " one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that" +
-            " one of your numbers is the correct number and is in the correct place. If you have guessed correctly," +
-            " you win the game!"),
+    INSTRUCTIONS_CODEBREAKER_5("Welcome to Codebreaker! The goal is to accurately guess a secret code of " +
+            "five numbers."),
+    INSTRUCTIONS_CODEBREAKER_5_SECOND("five pegs of either black or white."),
 
-    INSTRUCTIONS_CODEBREAKER_6("Welcome to Codebreaker! The goal is to accurately guess a secret code of six numbers." +
-            " To make a guess use the arrow keys to select a space and enter a number from 1-6. Once you have finalized" +
-            " your guess, hit the space key to see if you guessed correctly. If you did not guess the right code, the" +
-            " small box to the right of your guess will contain six pegs of either black or white. A white peg means that" +
+    INSTRUCTIONS_CODEBREAKER_6("Welcome to Codebreaker! The goal is to accurately guess a secret code of " +
+            "six numbers."),
+    INSTRUCTIONS_CODEBREAKER_6_SECOND("six pegs of either black or white."),
+
+    INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME(" To make a guess use the arrow keys to select a space and enter a number " +
+            "from 1-6. Once you have finalized your guess, hit the space key to see if you guessed correctly. If you " +
+            "did not guess the right code, the small box to the right of your guess will contain "),
+    INSTRUCTIONS_CODEBREAKER_ENDING_SAME("A white peg means that" +
             " one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that" +
             " one of your numbers is the correct number and is in the correct place. If you have guessed correctly," +
             " you win the game!"),
