@@ -314,7 +314,6 @@ public class SudokuState {
         ArrayList<Phrase> instructions_Phrases = new ArrayList<>(Arrays.asList());
         switch (this.sudokuType) {
             case FOUR_BY_FOUR:
-                //instructionsPhrase = Phrase.INSTRUCTIONS_SUDOKU_4;
                 instructions_Phrases = new ArrayList<>(Arrays.asList(
                         Phrase.INSTRUCTIONS_SUDOKU_4,
                         Phrase.INSTRUCTIONS_SUDOKU_MIDDLE_SAME,
@@ -322,7 +321,6 @@ public class SudokuState {
                         Phrase.INSTRUCTIONS_SUDOKU_ENDING_SAME));
                 break;
             case SIX_BY_SIX:
-                //instructionsPhrase = Phrase.INSTRUCTIONS_SUDOKU_6;
                 instructions_Phrases = new ArrayList<>(Arrays.asList(
                         Phrase.INSTRUCTIONS_SUDOKU_6,
                         Phrase.INSTRUCTIONS_SUDOKU_MIDDLE_SAME,
@@ -330,7 +328,6 @@ public class SudokuState {
                         Phrase.INSTRUCTIONS_SUDOKU_ENDING_SAME));
                 break;
             case NINE_BY_NINE:
-                //instructionsPhrase = Phrase.INSTRUCTIONS_SUDOKU_9;
                 instructions_Phrases = new ArrayList<>(Arrays.asList(
                         Phrase.INSTRUCTIONS_SUDOKU_9,
                         Phrase.INSTRUCTIONS_SUDOKU_MIDDLE_SAME,
