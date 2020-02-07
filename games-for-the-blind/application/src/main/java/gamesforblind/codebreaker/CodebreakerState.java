@@ -155,6 +155,11 @@ public class CodebreakerState {
         return this.codeToBreak;
     }
 
+    //not implemented yet
+    public boolean restart(){return false;}
+
+    public int hint(int value){return 0;}
+
     public CodebreakerType getCodebreakerType() {
         return this.codebreakerType;
     }
