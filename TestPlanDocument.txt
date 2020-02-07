@@ -18,4 +18,15 @@ codebreakerGameIsNotOver: Makes sure the game isn't ending before it should.
 
 checkerThrowsWhenCodeToBreakIsNull: Throws an error when the code has a null value since it should be a solvable code instead. 
 
-checkerThrowsWhenGuessListIsNull: Throws an error when the game’s guessable list is set to null. 
+checkerThrowsWhenGuessListIsNull: Throws an error when the game’s guessable list is set to null.
+
+Tests Sprint 6 (Feb 7)
+4 Total tests have been drafted.
+
+codebreakerMaxTrialsForFiveLengthCodeLose(): Checks that the game will end if the player fails to guess code in 15 guesses for the 5 digit long code.
+
+codebreakerMaxTrialsForSixLengthCodeLose(): Checks that the game will end if the player fails to guess the code in 20 guesses for the 6 digit long code.
+
+codebreakerGameisOverRestart: Checks that when game is over, the game restarts.
+
+codebreakerHint: Check that the hint function returns the correct number.
