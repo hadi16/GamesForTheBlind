@@ -50,5 +50,7 @@ public class Constants {
     // endregion
 
     public static final int CODEBREAKER_MAX_CODE_INT = 6;
-    public static final int CODEBREAKER_MAX_AMOUNT_OF_GUESSES = 12;
+    public static final int CODEBREAKER_MAX_AMOUNT_OF_FOUR = 12;
+    public static final int CODEBREAKER_MAX_AMOUNT_OF_FIVE = 15;
+    public static final int CODEBREAKER_MAX_AMOUNT_OF_SIX = 20;
 }
