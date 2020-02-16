@@ -9,7 +9,6 @@ import phrase.Phrase;
 import java.awt.*;
 import java.util.*;
 
-import static gamesforblind.Constants.CODEBREAKER_MAX_AMOUNT_OF_GUESSES;
 import static gamesforblind.Constants.CODEBREAKER_MAX_CODE_INT;
 
 /**
@@ -40,7 +39,17 @@ public class CodebreakerState {
         Objects.requireNonNull(codeToBreak, "Code to break cannot be null!");
         Objects.requireNonNull(guessList, "Guess list must not be null!");
 
-        if (guessList.size() == CODEBREAKER_MAX_AMOUNT_OF_GUESSES) {
+        int numOfRows  = 0;
+        if (codeToBreak.length == 4){
+            numOfRows = 12;
+        }
+        else if(codeToBreak.length == 5){
+            numOfRows = 15;
+        }
+        else {
+            numOfRows = 20;
+        }
+        if (guessList.size() == numOfRows) {
             return true;
         }
 
