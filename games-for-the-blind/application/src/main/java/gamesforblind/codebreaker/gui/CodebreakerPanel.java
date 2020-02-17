@@ -33,7 +33,7 @@ public class CodebreakerPanel extends JPanel {
     /**
      * This is the number of rows
      */
-    private int numOfRows;
+    private final int numOfRows;
 
     /**
      * Creates a new CodebreakerPanel.
@@ -43,13 +43,11 @@ public class CodebreakerPanel extends JPanel {
     public CodebreakerPanel(@NotNull CodebreakerState initialState) {
         this.codebreakerType = initialState.getCodebreakerType();
         this.codebreakerState = initialState;
-        if(this.codebreakerType.getCodeLength() == 4){
+        if (this.codebreakerType.getCodeLength() == 4) {
             this.numOfRows = 12;
-        }
-        else if(this.codebreakerType.getCodeLength() == 5){
+        } else if (this.codebreakerType.getCodeLength() == 5) {
             this.numOfRows = 15;
-        }
-        else{
+        } else {
             this.numOfRows = 20;
         }
     }
@@ -76,8 +74,7 @@ public class CodebreakerPanel extends JPanel {
         final Function<Integer, Integer> GET_RECTANGLE_LENGTH = (length) -> {
             if (this.codebreakerType == CodebreakerType.FOUR) {
                 return 2;
-            }
-            else if(this.codebreakerType == CodebreakerType.FIVE){
+            } else if (this.codebreakerType == CodebreakerType.FIVE) {
                 return 5;
             }
             return 10;
@@ -87,13 +84,13 @@ public class CodebreakerPanel extends JPanel {
                 initialPosition.x - 1,
                 initialPosition.y - 1,
                 GET_RECTANGLE_WIDTH.apply(squareDimension * this.codebreakerType.getCodeLength() + squareDimension),
-                10* squareDimension
+                10 * squareDimension
         );
         graphics.drawRect(
-                initialPosition.x + squareDimension * this.codebreakerType.getCodeLength() + squareDimension*3 +1,
+                initialPosition.x + squareDimension * this.codebreakerType.getCodeLength() + squareDimension * 3 + 1,
                 initialPosition.y - 1,
                 GET_RECTANGLE_WIDTH.apply(squareDimension * this.codebreakerType.getCodeLength() + squareDimension),
-                GET_RECTANGLE_LENGTH.apply(this.codebreakerType.getCodeLength())* squareDimension
+                GET_RECTANGLE_LENGTH.apply(this.codebreakerType.getCodeLength()) * squareDimension
         );
 
         graphics.drawRect(
@@ -104,11 +101,11 @@ public class CodebreakerPanel extends JPanel {
         );
 
         graphics.drawRect(
-                initialPosition.x  + (squareDimension * this.codebreakerType.getCodeLength()) - 1 + squareDimension * this.codebreakerType.getCodeLength()
-                        + squareDimension*3 +1,
+                initialPosition.x + (squareDimension * this.codebreakerType.getCodeLength()) - 1 + squareDimension * this.codebreakerType.getCodeLength()
+                        + squareDimension * 3 + 1,
                 initialPosition.y - 1,
                 GET_RECTANGLE_WIDTH.apply(squareDimension),
-                GET_RECTANGLE_LENGTH.apply(this.codebreakerType.getCodeLength())*squareDimension
+                GET_RECTANGLE_LENGTH.apply(this.codebreakerType.getCodeLength()) * squareDimension
         );
 
         ArrayList<CodebreakerGuess> codebreakerGuesses = this.codebreakerState.getGuessList();
@@ -118,12 +115,11 @@ public class CodebreakerPanel extends JPanel {
         int yPosition;
         for (int rowIndex = 0; rowIndex < this.numOfRows; rowIndex++) {
 
-            if(rowIndex > 9){
+            if (rowIndex > 9) {
                 yPosition = initialPosition.y + rowIndex2 * squareDimension;
                 rowIndex2++;
-            }
-            else{
-                 yPosition = initialPosition.y + rowIndex * squareDimension;
+            } else {
+                yPosition = initialPosition.y + rowIndex * squareDimension;
             }
 
             Integer[] guessedCode = null;
@@ -137,12 +133,11 @@ public class CodebreakerPanel extends JPanel {
 
             int xPosition;
             for (int columnIndex = 0; columnIndex < this.codebreakerType.getCodeLength(); columnIndex++) {
-                if(rowIndex <= 9){
+                if (rowIndex <= 9) {
                     xPosition = initialPosition.x + columnIndex * squareDimension;
-                }
-                else{
+                } else {
                     xPosition = initialPosition.x + columnIndex * squareDimension
-                            + squareDimension * this.codebreakerType.getCodeLength() + squareDimension*3 +1;
+                            + squareDimension * this.codebreakerType.getCodeLength() + squareDimension * 3 + 1;
                 }
 
                 graphics.setColor(Color.BLACK);
@@ -191,34 +186,30 @@ public class CodebreakerPanel extends JPanel {
                 numberOfCorrectColor = currentCodeGuess.getNumberOfCorrectColor();
             }
             int yPosition;
-            if(guessIndex > 9){
+            if (guessIndex > 9) {
                 guessIndex2++;
             }
             for (int rowIndex = 0; rowIndex < 2; rowIndex++) {
-                if(guessIndex <= 9){
+                if (guessIndex <= 9) {
                     yPosition = initialPosition.y + (2 * guessIndex + rowIndex) * squareDimension;
-                }
-                else {
+                } else {
                     yPosition = initialPosition.y + (2 * guessIndex2 + rowIndex) * squareDimension;
                 }
 
                 int xPosition;
                 for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++) {
-                    if(guessIndex > 9){
-                        if(this.codebreakerType.getCodeLength() == 4){
+                    if (guessIndex > 9) {
+                        if (this.codebreakerType.getCodeLength() == 4) {
                             xPosition = initialPosition.x + columnIndex * squareDimension
-                                    + squareDimension * this.codebreakerType.getCodeLength() + squareDimension*10 +1;
-                        }
-                        else if(this.codebreakerType.getCodeLength() == 5){
+                                    + squareDimension * this.codebreakerType.getCodeLength() + squareDimension * 10 + 1;
+                        } else if (this.codebreakerType.getCodeLength() == 5) {
                             xPosition = initialPosition.x + columnIndex * squareDimension
-                                    + (squareDimension * this.codebreakerType.getCodeLength())*3 + squareDimension;
-                        }
-                        else {
+                                    + (squareDimension * this.codebreakerType.getCodeLength()) * 3 + squareDimension;
+                        } else {
                             xPosition = initialPosition.x + columnIndex * squareDimension
                                     + (squareDimension * this.codebreakerType.getCodeLength()) * 3;// + squareDimension*10 +1;
                         }
-                    }
-                    else {
+                    } else {
                         xPosition = initialPosition.x + columnIndex * squareDimension;
                     }
 
@@ -285,7 +276,7 @@ public class CodebreakerPanel extends JPanel {
         for (int rowIndex = 10; rowIndex < this.numOfRows; rowIndex++) {
             graphics.drawString(
                     Integer.toString(rowIndex + 1),
-                    initialPosition.x + squareDimension * this.codebreakerType.getCodeLength() + squareDimension*2 +1,
+                    initialPosition.x + squareDimension * this.codebreakerType.getCodeLength() + squareDimension * 2 + 1,
                     initialPosition.y + (squareDimension * secondRow) + (3 * squareDimension / 4)
             );
             secondRow++;
@@ -300,7 +291,7 @@ public class CodebreakerPanel extends JPanel {
             );
         }
 
-        int x = initialPosition.x + squareDimension * this.codebreakerType.getCodeLength() + squareDimension*3 +1;
+        int x = initialPosition.x + squareDimension * this.codebreakerType.getCodeLength() + squareDimension * 3 + 1;
         for (int columnIndex = 0; columnIndex < this.codebreakerType.getCodeLength(); columnIndex++) {
             graphics.drawString(
                     Character.toString((char) columnIndex + 'A'),
