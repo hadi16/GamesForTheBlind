@@ -39,14 +39,12 @@ public class CodebreakerState {
         Objects.requireNonNull(codeToBreak, "Code to break cannot be null!");
         Objects.requireNonNull(guessList, "Guess list must not be null!");
 
-        int numOfRows  = 0;
-        if (codeToBreak.length == 4){
+        int numOfRows;
+        if (codeToBreak.length == 4) {
             numOfRows = 12;
-        }
-        else if(codeToBreak.length == 5){
+        } else if (codeToBreak.length == 5) {
             numOfRows = 15;
-        }
-        else {
+        } else {
             numOfRows = 20;
         }
         if (guessList.size() == numOfRows) {
@@ -165,9 +163,13 @@ public class CodebreakerState {
     }
 
     //not implemented yet
-    public boolean restart(){return false;}
+    public boolean restart() {
+        return false;
+    }
 
-    public int hint(int value){return 0;}
+    public int hint(int value) {
+        return 0;
+    }
 
     public CodebreakerType getCodebreakerType() {
         return this.codebreakerType;
