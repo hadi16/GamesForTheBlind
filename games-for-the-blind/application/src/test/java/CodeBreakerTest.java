@@ -99,21 +99,17 @@ public class CodeBreakerTest {
     // Tests that if the correct code was not guessed for 5 length code and 15 guesses have already been made
     @Test
     public void codebreakerMaxTrialsForFiveLengthCodeLose() {
-        CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, CodebreakerType.FIVE);
-
-        //only 15 guesses allowed
+        // Only 15 guesses allowed
         ArrayList<CodebreakerGuess> guessList = new ArrayList<>(Arrays.asList(
                 null, null, null, null, null, null, null, null, null, null, null, null, null, null, null
         ));
 
         Assert.assertTrue(CodebreakerState.checkThatGameIsOver(new int[]{}, guessList));
-
     }
 
     // Tests that if the correct code was not guessed for 6 length code and 20 guesses have already been made
     @Test
     public void codebreakerMaxTrialsForSixLengthCodeLose() {
-        CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, CodebreakerType.SIX);
         // 20 long to match the max number of trials.
         ArrayList<CodebreakerGuess> guessList = new ArrayList<>(Arrays.asList(
                 null, null, null, null, null, null, null, null, null, null, null, null,
@@ -134,16 +130,14 @@ public class CodeBreakerTest {
 
         if (CodebreakerState.checkThatGameIsOver(correctCode, guessList)) {
             Assert.assertTrue(codebreakerState.restart());
-
         }
     }
 
     @Test
     public void codebreakerHint() {
-        //if player wants to guess correctCode[1]
+        // If player wants to guess correctCode[1]
         CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, CodebreakerType.FOUR);
         int[] correctCode = new int[]{1, 2, 3, 4};
         Assert.assertEquals(codebreakerState.hint(correctCode[1]), 2);
-
     }
 }

@@ -310,24 +310,24 @@ public class SudokuState {
      * Reads the instructions for the 4x4, 6x6, or 9x9 game.
      */
     public void readInstructions() {
-        ArrayList<Phrase> instructions_Phrases;
+        ArrayList<Phrase> instructionsPhrases;
         switch (this.sudokuType) {
             case FOUR_BY_FOUR:
-                instructions_Phrases = new ArrayList<>(Arrays.asList(
+                instructionsPhrases = new ArrayList<>(Arrays.asList(
                         Phrase.INSTRUCTIONS_SUDOKU_4,
                         Phrase.INSTRUCTIONS_SUDOKU_MIDDLE_SAME,
                         Phrase.INSTRUCTIONS_SUDOKU_4_SECOND,
                         Phrase.INSTRUCTIONS_SUDOKU_ENDING_SAME));
                 break;
             case SIX_BY_SIX:
-                instructions_Phrases = new ArrayList<>(Arrays.asList(
+                instructionsPhrases = new ArrayList<>(Arrays.asList(
                         Phrase.INSTRUCTIONS_SUDOKU_6,
                         Phrase.INSTRUCTIONS_SUDOKU_MIDDLE_SAME,
                         Phrase.INSTRUCTIONS_SUDOKU_6_SECOND,
                         Phrase.INSTRUCTIONS_SUDOKU_ENDING_SAME));
                 break;
             case NINE_BY_NINE:
-                instructions_Phrases = new ArrayList<>(Arrays.asList(
+                instructionsPhrases = new ArrayList<>(Arrays.asList(
                         Phrase.INSTRUCTIONS_SUDOKU_9,
                         Phrase.INSTRUCTIONS_SUDOKU_MIDDLE_SAME,
                         Phrase.INSTRUCTIONS_SUDOKU_9_SECOND,
@@ -339,7 +339,7 @@ public class SudokuState {
                 );
         }
 
-        this.audioPlayerExecutor.replacePhraseAndPrint(instructions_Phrases);
+        this.audioPlayerExecutor.replacePhraseAndPrint(instructionsPhrases);
     }
 
     /**

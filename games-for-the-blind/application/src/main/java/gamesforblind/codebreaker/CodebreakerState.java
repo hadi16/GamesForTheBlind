@@ -131,24 +131,24 @@ public class CodebreakerState {
      * Reads the instructions for the 4x4, 6x6, or 9x9 game.
      */
     public void readInstructions() {
-        ArrayList<Phrase> instructions_Phrases;
+        ArrayList<Phrase> instructionsPhrases;
         switch (this.codebreakerType) {
             case FOUR:
-                instructions_Phrases = new ArrayList<>(Arrays.asList(
+                instructionsPhrases = new ArrayList<>(Arrays.asList(
                         Phrase.INSTRUCTIONS_CODEBREAKER_4,
                         Phrase.INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME,
                         Phrase.INSTRUCTIONS_CODEBREAKER_4_SECOND,
                         Phrase.INSTRUCTIONS_CODEBREAKER_ENDING_SAME));
                 break;
             case FIVE:
-                instructions_Phrases = new ArrayList<>(Arrays.asList(
+                instructionsPhrases = new ArrayList<>(Arrays.asList(
                         Phrase.INSTRUCTIONS_CODEBREAKER_5,
                         Phrase.INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME,
                         Phrase.INSTRUCTIONS_CODEBREAKER_5_SECOND,
                         Phrase.INSTRUCTIONS_CODEBREAKER_ENDING_SAME));
                 break;
             case SIX:
-                instructions_Phrases = new ArrayList<>(Arrays.asList(
+                instructionsPhrases = new ArrayList<>(Arrays.asList(
                         Phrase.INSTRUCTIONS_CODEBREAKER_6,
                         Phrase.INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME,
                         Phrase.INSTRUCTIONS_CODEBREAKER_6_SECOND,
@@ -160,7 +160,7 @@ public class CodebreakerState {
                 );
         }
 
-        this.audioPlayerExecutor.replacePhraseAndPrint(instructions_Phrases);
+        this.audioPlayerExecutor.replacePhraseAndPrint(instructionsPhrases);
     }
 
     /**
@@ -176,13 +176,12 @@ public class CodebreakerState {
         return this.codeToBreak;
     }
 
-    //not implemented yet
     public boolean restart() {
-        return false;
+        throw new UnsupportedOperationException("Restart not implemented yet!");
     }
 
     public int hint(int value) {
-        return 0;
+        throw new UnsupportedOperationException("Hint not implemented yet!");
     }
 
     public CodebreakerType getCodebreakerType() {
