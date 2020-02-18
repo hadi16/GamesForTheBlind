@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+@SuppressWarnings("ConstantConditions")
 public class CodeBreakerTest {
     private final AudioPlayerExecutor testAudioPlayerExecutor = new AudioPlayerExecutor(new AudioPlayer());
     private final CodebreakerType codebreakerType = CodebreakerType.FOUR;
@@ -82,7 +83,7 @@ public class CodeBreakerTest {
         try {
             CodebreakerState.checkThatGameIsOver(null, new ArrayList<>());
             Assert.fail();
-        } catch (NullPointerException ignored) {
+        } catch (NullPointerException | IllegalArgumentException ignored) {
         }
     }
 
@@ -91,42 +92,34 @@ public class CodeBreakerTest {
         try {
             CodebreakerState.checkThatGameIsOver(new int[]{}, null);
             Assert.fail();
-        } catch (NullPointerException ignored) {
+        } catch (NullPointerException | IllegalArgumentException ignored) {
         }
     }
 
-
-
-
-
     // Tests that if the correct code was not guessed for 5 length code and 15 guesses have already been made
     @Test
-    public void codebreakerMaxTrialsForFiveLengthCodeLose(){
-        CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, CodebreakerType.FIVE);
-
-        //only 15 guesses allowed
+    public void codebreakerMaxTrialsForFiveLengthCodeLose() {
+        // Only 15 guesses allowed
         ArrayList<CodebreakerGuess> guessList = new ArrayList<>(Arrays.asList(
                 null, null, null, null, null, null, null, null, null, null, null, null, null, null, null
         ));
 
-        Assert.assertTrue(codebreakerState.checkThatGameIsOver(new int[]{}, guessList));
-
+        Assert.assertTrue(CodebreakerState.checkThatGameIsOver(new int[]{}, guessList));
     }
 
     // Tests that if the correct code was not guessed for 6 length code and 20 guesses have already been made
     @Test
-    public void codebreakerMaxTrialsForSixLengthCodeLose(){
-        CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, CodebreakerType.SIX);
+    public void codebreakerMaxTrialsForSixLengthCodeLose() {
         // 20 long to match the max number of trials.
         ArrayList<CodebreakerGuess> guessList = new ArrayList<>(Arrays.asList(
                 null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, null, null, null, null, null
         ));
-        Assert.assertTrue(codebreakerState.checkThatGameIsOver(new int[]{}, guessList));
+        Assert.assertTrue(CodebreakerState.checkThatGameIsOver(new int[]{}, guessList));
     }
 
     @Test
-    public void codebreakerGameisOverRestart(){
+    public void codebreakerGameisOverRestart() {
         CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, CodebreakerType.FOUR);
         int[] correctCode = new int[]{1, 2, 3, 4};
         Integer[] guessedCode = new Integer[]{1, 2, 3, 4};
@@ -135,22 +128,16 @@ public class CodeBreakerTest {
                 Collections.singletonList(new CodebreakerGuess(correctCode, guessedCode))
         );
 
-        if(codebreakerState.checkThatGameIsOver(correctCode, guessList) == true) {
+        if (CodebreakerState.checkThatGameIsOver(correctCode, guessList)) {
             Assert.assertTrue(codebreakerState.restart());
-
         }
-
-
     }
 
     @Test
     public void codebreakerHint() {
-        //if player wants to guess correctCode[1]
+        // If player wants to guess correctCode[1]
         CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, CodebreakerType.FOUR);
         int[] correctCode = new int[]{1, 2, 3, 4};
-        Assert.assertEquals( codebreakerState.hint(correctCode[1]), 2 );
-
+        Assert.assertEquals(codebreakerState.hint(correctCode[1]), 2);
     }
-
-
 }
