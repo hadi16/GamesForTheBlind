@@ -171,12 +171,13 @@ public class CodebreakerPanel extends JPanel {
                 numberOfCorrectColor = currentCodeGuess.getNumberOfCorrectColor();
             }
 
+            int numberOfDrawnPegs = 0;
             for (int rowIndex = 0; rowIndex < 2; rowIndex++) {
                 int adjustedGuessIndex = guessIndex > 9 ? guessIndex % 10 : guessIndex;
                 int yPosition = initialPosition.y + (2 * adjustedGuessIndex + rowIndex) * squareDimension;
 
                 int xPosition;
-                for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++) {
+                for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++, numberOfDrawnPegs++) {
                     xPosition = initialPosition.x + columnIndex * squareDimension;
                     if (guessIndex > 9) {
                         if (this.codebreakerType == CodebreakerType.FOUR) {
@@ -192,11 +193,9 @@ public class CodebreakerPanel extends JPanel {
                     graphics.setColor(Color.BLACK);
                     graphics.drawRect(xPosition, yPosition, squareDimension, squareDimension);
 
-                    // Special case: there is no sixth peg for the five type.
-                    if (this.codebreakerType == CodebreakerType.FIVE) {
-                        if (rowIndex % 2 == 1 && columnIndex == NUMBER_OF_COLUMNS - 1) {
-                            continue;
-                        }
+                    // Don't want to draw too many pegs.
+                    if (this.codebreakerType.getCodeLength() == numberOfDrawnPegs) {
+                        continue;
                     }
 
                     graphics.drawRoundRect(
