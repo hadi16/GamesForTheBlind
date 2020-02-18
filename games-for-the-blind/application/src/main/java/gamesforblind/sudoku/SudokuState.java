@@ -310,20 +310,36 @@ public class SudokuState {
      * Reads the instructions for the 4x4, 6x6, or 9x9 game.
      */
     public void readInstructions() {
-        Phrase instructionsPhrase = null;
+        ArrayList<Phrase> instructions_Phrases;
         switch (this.sudokuType) {
             case FOUR_BY_FOUR:
-                instructionsPhrase = Phrase.INSTRUCTIONS_4;
+                instructions_Phrases = new ArrayList<>(Arrays.asList(
+                        Phrase.INSTRUCTIONS_SUDOKU_4,
+                        Phrase.INSTRUCTIONS_SUDOKU_MIDDLE_SAME,
+                        Phrase.INSTRUCTIONS_SUDOKU_4_SECOND,
+                        Phrase.INSTRUCTIONS_SUDOKU_ENDING_SAME));
                 break;
             case SIX_BY_SIX:
-                instructionsPhrase = Phrase.INSTRUCTIONS_6;
+                instructions_Phrases = new ArrayList<>(Arrays.asList(
+                        Phrase.INSTRUCTIONS_SUDOKU_6,
+                        Phrase.INSTRUCTIONS_SUDOKU_MIDDLE_SAME,
+                        Phrase.INSTRUCTIONS_SUDOKU_6_SECOND,
+                        Phrase.INSTRUCTIONS_SUDOKU_ENDING_SAME));
                 break;
             case NINE_BY_NINE:
-                instructionsPhrase = Phrase.INSTRUCTIONS_9;
+                instructions_Phrases = new ArrayList<>(Arrays.asList(
+                        Phrase.INSTRUCTIONS_SUDOKU_9,
+                        Phrase.INSTRUCTIONS_SUDOKU_MIDDLE_SAME,
+                        Phrase.INSTRUCTIONS_SUDOKU_9_SECOND,
+                        Phrase.INSTRUCTIONS_SUDOKU_ENDING_SAME));
                 break;
+            default:
+                throw new IllegalArgumentException(
+                        String.format("Invalid Sudoku type: '%s'!", this.sudokuType)
+                );
         }
 
-        this.audioPlayerExecutor.replacePhraseAndPrint(instructionsPhrase);
+        this.audioPlayerExecutor.replacePhraseAndPrint(instructions_Phrases);
     }
 
     /**

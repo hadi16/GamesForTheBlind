@@ -58,6 +58,16 @@ public enum Phrase {
     TWENTY_EIGHT("28"),
     TWENTY_NINE("29"),
     THIRTY("30"),
+    THIRTY_ONE("31"),
+    THIRTY_TWO("32"),
+    THIRTY_THREE("33"),
+    THIRTY_FOUR("34"),
+    THIRTY_FIVE("35"),
+    THIRTY_SIX("36"),
+    THIRTY_SEVEN("37"),
+    THIRTY_EIGHT("35"),
+    THIRTY_NINE("39"),
+    FORTY("40"),
 
     /* General: Keyboard Key Phrases */
     A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
@@ -92,6 +102,8 @@ public enum Phrase {
     PLAY_OR_EXIT("Would you like to play Sudoku, Code Breaker, or exit? Use the arrow keys to make your selection."),
     EXITING("The game is exiting. Goodbye!"),
     CODEBREAKER_NEED_CODE("You didn't enter the whole Codebreaker code yet!"),
+    RETURN_TO_MENU("Press the M key again to return to the main menu"),
+    RESTART_GAME("Press the R key again to restart the game"),
 
     /* Sudoku: locations */
     A1, A2, A3, A4, A5, A6, A7, A8, A9,
@@ -123,26 +135,28 @@ public enum Phrase {
     INVALID_NUMBER_TO_FILL_9("The number to fill must be between 1 and 9"),
 
     /* Sudoku: Instructions Phrases. */
-    INSTRUCTIONS_4("Welcome to Sudoku! Each of the four blocks must contain the numbers 1 through 4" +
-            " within its square. Each number can only appear once in a row, column or box. Each four-square column," +
-            " or four-square row, within the entire board, must also have the numbers 1 through 4, without repetition." +
-            " To hear the numbers in the currently selected number's row press J, to hear the numbers in the" +
-            " currently selected number's column press K, to hear all of the numbers in the current block press L." +
-            " If you have selected an empty square and are stuck, press H to automatically fill in the square."),
+    INSTRUCTIONS_SUDOKU_4("Welcome to Sudoku! Each of the four blocks must contain the numbers 1 through 4" +
+            " within its square."),
+    INSTRUCTIONS_SUDOKU_4_SECOND("Each four-square column," +
+            " or four-square row, within the entire board, must also have the numbers 1 through 4, without repetition."),
 
-    INSTRUCTIONS_6("Welcome to Sudoku! Each of the six blocks must contain the numbers 1 through 6" +
-            " within its square. Each number can only appear once in a row, column or box. Each six-square column," +
-            " or six-square row, within the entire board, must also have the numbers 1 through 6, without repetition." +
-            " To hear the numbers in the currently selected number's row press J, to hear the numbers in the" +
-            " currently selected number's column press K, to hear all of the numbers in the current block press L." +
-            " If you have selected an empty square and are stuck, press H to automatically fill in the square."),
+    INSTRUCTIONS_SUDOKU_6("Welcome to Sudoku! Each of the six blocks must contain the numbers 1 through 6" +
+            " within its square."),
+    INSTRUCTIONS_SUDOKU_6_SECOND("Each six-square column," +
+            " or six-square row, within the entire board, must also have the numbers 1 through 6, without repetition."),
 
-    INSTRUCTIONS_9("Welcome to Sudoku! Each of the nine blocks must contain the numbers 1 through 9" +
-            " within its square. Each number can only appear once in a row, column or box. Each nine-square column," +
-            " or nine-square row, within the entire board, must also have the numbers 1 through 9, without repetition." +
-            " To hear the numbers in the currently selected number's row press J, to hear the numbers in the" +
-            " currently selected number's column press K, to hear all of the numbers in the current block press L." +
-            " If you have selected an empty square and are stuck, press H to automatically fill in the square."),
+    INSTRUCTIONS_SUDOKU_9("Welcome to Sudoku! Each of the nine blocks must contain the numbers 1 through 9" +
+            " within its square."),
+    INSTRUCTIONS_SUDOKU_9_SECOND("Each nine-square column," +
+            " or nine-square row, within the entire board, must also have the numbers 1 through 9, without repetition."),
+
+    INSTRUCTIONS_SUDOKU_MIDDLE_SAME("Each number can only appear once in a row, column, or box"),
+    INSTRUCTIONS_SUDOKU_ENDING_SAME(" To hear the numbers in the currently selected number's row press J," +
+            " to hear the numbers in the currently selected number's column press K, to hear all of the numbers in " +
+            " the current block press L. If you have selected an empty square and are stuck, press H to automatically " +
+            "fill in the square. Navigate the board using the arrow keys. Press and hold the control key while " +
+            "clicking an arrow to jump to the end of the row or column. When you have selkected the box you want" +
+            " to add a number to, select a number on your keypad to try and place it into the highlighted box"),
 
     /* Sudoku: Empty Squares Left */
     EMPTY_PIECES_OF_BOARD_PLURAL_1("There are"),
@@ -157,26 +171,22 @@ public enum Phrase {
     REMOVED_NUM("You have removed the number"),
 
     /* Codebreaker: Instructions Phrases */
-    INSTRUCTIONS_CODEBREAKER_4("Welcome to Codebreaker! The goal is to accurately guess a secret code of four numbers." +
-            " To make a guess use the arrow keys to select a space and enter a number from 1-6. Once you have finalized" +
-            " your guess, hit the space key to see if you guessed correctly. If you did not guess the right code, the" +
-            " small box to the right of your guess will contain 4 pegs of either black or white. A white peg means that" +
-            " one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that" +
-            " one of your numbers is the correct number and is in the correct place. If you have guessed correctly," +
-            " you win the game!"),
+    INSTRUCTIONS_CODEBREAKER_4("Welcome to Codebreaker! The goal is to accurately guess a secret code of" +
+            "four numbers."),
+    INSTRUCTIONS_CODEBREAKER_4_SECOND("four pegs of either black or white."),
 
-    INSTRUCTIONS_CODEBREAKER_5("Welcome to Codebreaker! The goal is to accurately guess a secret code of five numbers." +
-            " To make a guess use the arrow keys to select a space and enter a number from 1-6. Once you have finalized" +
-            " your guess, hit the space key to see if you guessed correctly. If you did not guess the right code, the" +
-            " small box to the right of your guess will contain five pegs of either black or white. A white peg means that" +
-            " one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that" +
-            " one of your numbers is the correct number and is in the correct place. If you have guessed correctly," +
-            " you win the game!"),
+    INSTRUCTIONS_CODEBREAKER_5("Welcome to Codebreaker! The goal is to accurately guess a secret code of " +
+            "five numbers."),
+    INSTRUCTIONS_CODEBREAKER_5_SECOND("five pegs of either black or white."),
 
-    INSTRUCTIONS_CODEBREAKER_6("Welcome to Codebreaker! The goal is to accurately guess a secret code of six numbers." +
-            " To make a guess use the arrow keys to select a space and enter a number from 1-6. Once you have finalized" +
-            " your guess, hit the space key to see if you guessed correctly. If you did not guess the right code, the" +
-            " small box to the right of your guess will contain six pegs of either black or white. A white peg means that" +
+    INSTRUCTIONS_CODEBREAKER_6("Welcome to Codebreaker! The goal is to accurately guess a secret code of " +
+            "six numbers."),
+    INSTRUCTIONS_CODEBREAKER_6_SECOND("six pegs of either black or white."),
+
+    INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME(" To make a guess use the arrow keys to select a space and enter a number " +
+            "from 1-6. Once you have finalized your guess, hit the space key to see if you guessed correctly. If you " +
+            "did not guess the right code, the small box to the right of your guess will contain "),
+    INSTRUCTIONS_CODEBREAKER_ENDING_SAME("A white peg means that" +
             " one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that" +
             " one of your numbers is the correct number and is in the correct place. If you have guessed correctly," +
             " you win the game!"),

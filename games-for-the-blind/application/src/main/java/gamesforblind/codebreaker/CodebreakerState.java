@@ -131,17 +131,28 @@ public class CodebreakerState {
      * Reads the instructions for the 4x4, 6x6, or 9x9 game.
      */
     public void readInstructions() {
-        Phrase instructionsPhrase;
-
+        ArrayList<Phrase> instructions_Phrases;
         switch (this.codebreakerType) {
             case FOUR:
-                instructionsPhrase = Phrase.INSTRUCTIONS_CODEBREAKER_4;
+                instructions_Phrases = new ArrayList<>(Arrays.asList(
+                        Phrase.INSTRUCTIONS_CODEBREAKER_4,
+                        Phrase.INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME,
+                        Phrase.INSTRUCTIONS_CODEBREAKER_4_SECOND,
+                        Phrase.INSTRUCTIONS_CODEBREAKER_ENDING_SAME));
                 break;
             case FIVE:
-                instructionsPhrase = Phrase.INSTRUCTIONS_CODEBREAKER_5;
+                instructions_Phrases = new ArrayList<>(Arrays.asList(
+                        Phrase.INSTRUCTIONS_CODEBREAKER_5,
+                        Phrase.INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME,
+                        Phrase.INSTRUCTIONS_CODEBREAKER_5_SECOND,
+                        Phrase.INSTRUCTIONS_CODEBREAKER_ENDING_SAME));
                 break;
             case SIX:
-                instructionsPhrase = Phrase.INSTRUCTIONS_CODEBREAKER_6;
+                instructions_Phrases = new ArrayList<>(Arrays.asList(
+                        Phrase.INSTRUCTIONS_CODEBREAKER_6,
+                        Phrase.INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME,
+                        Phrase.INSTRUCTIONS_CODEBREAKER_6_SECOND,
+                        Phrase.INSTRUCTIONS_CODEBREAKER_ENDING_SAME));
                 break;
             default:
                 throw new IllegalArgumentException(
@@ -149,7 +160,7 @@ public class CodebreakerState {
                 );
         }
 
-        this.audioPlayerExecutor.replacePhraseAndPrint(instructionsPhrase);
+        this.audioPlayerExecutor.replacePhraseAndPrint(instructions_Phrases);
     }
 
     /**
