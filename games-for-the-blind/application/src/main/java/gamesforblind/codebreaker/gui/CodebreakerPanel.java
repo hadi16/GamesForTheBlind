@@ -61,18 +61,20 @@ public class CodebreakerPanel extends JPanel {
             return width;
         };
 
-        final Function<Integer, Integer> GET_RECTANGLE_LENGTH = (length) -> {
-            switch (this.codebreakerType) {
-                case FOUR:
-                    return 2;
-                case FIVE:
-                    return 5;
-                case SIX:
-                    return 10;
-                default:
-                    throw new IllegalArgumentException("Invalid codebreaker type passed!");
-            }
-        };
+        final int RECTANGLE_HEIGHT_FACTOR;
+        switch (this.codebreakerType) {
+            case FOUR:
+                RECTANGLE_HEIGHT_FACTOR = 2;
+                break;
+            case FIVE:
+                RECTANGLE_HEIGHT_FACTOR = 5;
+                break;
+            case SIX:
+                RECTANGLE_HEIGHT_FACTOR = 10;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid codebreaker type passed!");
+        }
 
         graphics.drawRect(
                 initialPosition.x - 1,
@@ -80,11 +82,12 @@ public class CodebreakerPanel extends JPanel {
                 GET_RECTANGLE_WIDTH.apply(squareDimension * CODE_LENGTH + squareDimension),
                 10 * squareDimension
         );
+
         graphics.drawRect(
                 initialPosition.x + squareDimension * CODE_LENGTH + squareDimension * 3 + 1,
                 initialPosition.y - 1,
                 GET_RECTANGLE_WIDTH.apply(squareDimension * CODE_LENGTH + squareDimension),
-                GET_RECTANGLE_LENGTH.apply(CODE_LENGTH) * squareDimension
+                RECTANGLE_HEIGHT_FACTOR * squareDimension
         );
 
         graphics.drawRect(
@@ -98,7 +101,7 @@ public class CodebreakerPanel extends JPanel {
                 initialPosition.x + (squareDimension * CODE_LENGTH) - 1 + squareDimension * CODE_LENGTH + squareDimension * 3 + 1,
                 initialPosition.y - 1,
                 GET_RECTANGLE_WIDTH.apply(squareDimension),
-                GET_RECTANGLE_LENGTH.apply(CODE_LENGTH) * squareDimension
+                RECTANGLE_HEIGHT_FACTOR * squareDimension
         );
 
         ArrayList<CodebreakerGuess> guesses = this.codebreakerState.getGuessList();
