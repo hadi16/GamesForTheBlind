@@ -101,24 +101,17 @@ public class CodebreakerPanel extends JPanel {
                 GET_RECTANGLE_LENGTH.apply(CODE_LENGTH) * squareDimension
         );
 
-        ArrayList<CodebreakerGuess> codebreakerGuesses = this.codebreakerState.getGuessList();
+        ArrayList<CodebreakerGuess> guesses = this.codebreakerState.getGuessList();
         Point selectedCellPoint = this.codebreakerState.getSelectedCellPoint();
 
-        int rowIndex2 = 0;
-        int yPosition;
         for (int rowIndex = 0; rowIndex < this.codebreakerType.getNumberOfRows(); rowIndex++) {
-            if (rowIndex > 9) {
-                yPosition = initialPosition.y + rowIndex2 * squareDimension;
-                rowIndex2++;
-            } else {
-                yPosition = initialPosition.y + rowIndex * squareDimension;
-            }
+            int adjustedRowIndex = rowIndex > 9 ? rowIndex % 10 : rowIndex;
+            int yPosition = initialPosition.y + adjustedRowIndex * squareDimension;
 
             Integer[] guessedCode = null;
-            if (rowIndex <= codebreakerGuesses.size() - 1) {
-                guessedCode = Arrays.stream(codebreakerGuesses.get(rowIndex).getGuessedCode())
-                        .boxed().toArray(Integer[]::new);
-            } else if (rowIndex == codebreakerGuesses.size()) {
+            if (rowIndex <= guesses.size() - 1) {
+                guessedCode = Arrays.stream(guesses.get(rowIndex).getGuessedCode()).boxed().toArray(Integer[]::new);
+            } else if (rowIndex == guesses.size()) {
                 guessedCode = this.codebreakerState.getCurrentGuess();
             }
 
@@ -168,7 +161,6 @@ public class CodebreakerPanel extends JPanel {
         Integer numberInCorrectPosition = null;
         Integer numberOfCorrectColor = null;
 
-        int guessIndex2 = -1;
         for (int guessIndex = 0; guessIndex < this.codebreakerType.getNumberOfRows(); guessIndex++) {
             if (guessIndex <= codebreakerGuesses.size() - 1) {
                 currentCodeGuess = codebreakerGuesses.get(guessIndex);
@@ -176,30 +168,21 @@ public class CodebreakerPanel extends JPanel {
                 numberOfCorrectColor = currentCodeGuess.getNumberOfCorrectColor();
             }
 
-            int yPosition;
-            if (guessIndex > 9) {
-                guessIndex2++;
-            }
-
             for (int rowIndex = 0; rowIndex < 2; rowIndex++) {
-                if (guessIndex <= 9) {
-                    yPosition = initialPosition.y + (2 * guessIndex + rowIndex) * squareDimension;
-                } else {
-                    yPosition = initialPosition.y + (2 * guessIndex2 + rowIndex) * squareDimension;
-                }
+                int adjustedGuessIndex = guessIndex > 9 ? guessIndex % 10 : guessIndex;
+                int yPosition = initialPosition.y + (2 * adjustedGuessIndex + rowIndex) * squareDimension;
 
                 int xPosition;
                 for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++) {
+                    xPosition = initialPosition.x + columnIndex * squareDimension;
                     if (guessIndex > 9) {
                         if (this.codebreakerType == CodebreakerType.FOUR) {
-                            xPosition = initialPosition.x + columnIndex * squareDimension + squareDimension * CODE_LENGTH + squareDimension * 10 + 1;
+                            xPosition += squareDimension * CODE_LENGTH + squareDimension * 10 + 1;
                         } else if (this.codebreakerType == CodebreakerType.FIVE) {
-                            xPosition = initialPosition.x + columnIndex * squareDimension + (squareDimension * CODE_LENGTH) * 3 + squareDimension;
+                            xPosition += (squareDimension * CODE_LENGTH) * 3 + squareDimension;
                         } else {
-                            xPosition = initialPosition.x + columnIndex * squareDimension + (squareDimension * CODE_LENGTH) * 3;
+                            xPosition += (squareDimension * CODE_LENGTH) * 3;
                         }
-                    } else {
-                        xPosition = initialPosition.x + columnIndex * squareDimension;
                     }
 
                     // Draw square of codebreaker peg.
