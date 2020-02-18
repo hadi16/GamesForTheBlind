@@ -39,15 +39,18 @@ public class CodebreakerState {
         Objects.requireNonNull(codeToBreak, "Code to break cannot be null!");
         Objects.requireNonNull(guessList, "Guess list must not be null!");
 
-        int numOfRows;
-        if (codeToBreak.length == 4) {
-            numOfRows = 12;
-        } else if (codeToBreak.length == 5) {
-            numOfRows = 15;
-        } else {
-            numOfRows = 20;
+        CodebreakerType codebreakerType = null;
+        for (CodebreakerType type : CodebreakerType.values()) {
+            if (codeToBreak.length == type.getCodeLength()) {
+                codebreakerType = type;
+            }
         }
-        if (guessList.size() == numOfRows) {
+
+        if (codebreakerType == null) {
+            throw new IllegalArgumentException("Invalid code length passed to checker function!");
+        }
+
+        if (guessList.size() == codebreakerType.getCodeLength()) {
             return true;
         }
 
