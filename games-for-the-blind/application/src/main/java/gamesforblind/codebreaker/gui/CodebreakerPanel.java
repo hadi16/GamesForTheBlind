@@ -31,11 +31,6 @@ public class CodebreakerPanel extends JPanel {
     private int totalBoardLength;
 
     /**
-     * This is the number of rows
-     */
-    private int numOfRows;
-
-    /**
      * Creates a new CodebreakerPanel.
      *
      * @param initialState The initial state of the Codebreaker game.
@@ -43,15 +38,6 @@ public class CodebreakerPanel extends JPanel {
     public CodebreakerPanel(@NotNull CodebreakerState initialState) {
         this.codebreakerType = initialState.getCodebreakerType();
         this.codebreakerState = initialState;
-        if(this.codebreakerType.getCodeLength() == 4){
-            this.numOfRows = 12;
-        }
-        else if(this.codebreakerType.getCodeLength() == 5){
-            this.numOfRows = 15;
-        }
-        else{
-            this.numOfRows = 20;
-        }
     }
 
     /**
@@ -62,6 +48,8 @@ public class CodebreakerPanel extends JPanel {
      * @param initialPosition Amount of pixels to begin painting board from (the row & column labels come before this).
      */
     private void paintMainBoard(@NotNull Graphics graphics, int squareDimension, @NotNull Point initialPosition) {
+        final int CODE_LENGTH = this.codebreakerType.getCodeLength();
+
         final Font MAIN_BOARD_FONT = new Font("Serif", Font.BOLD, 50);
         graphics.setFont(MAIN_BOARD_FONT);
 
@@ -74,75 +62,64 @@ public class CodebreakerPanel extends JPanel {
         };
 
         final Function<Integer, Integer> GET_RECTANGLE_LENGTH = (length) -> {
-            if (this.codebreakerType == CodebreakerType.FOUR) {
-                return 2;
+            switch (this.codebreakerType) {
+                case FOUR:
+                    return 2;
+                case FIVE:
+                    return 5;
+                case SIX:
+                    return 10;
+                default:
+                    throw new IllegalArgumentException("Invalid codebreaker type passed!");
             }
-            else if(this.codebreakerType == CodebreakerType.FIVE){
-                return 5;
-            }
-            return 10;
         };
 
         graphics.drawRect(
                 initialPosition.x - 1,
                 initialPosition.y - 1,
-                GET_RECTANGLE_WIDTH.apply(squareDimension * this.codebreakerType.getCodeLength() + squareDimension),
-                10* squareDimension
+                GET_RECTANGLE_WIDTH.apply(squareDimension * CODE_LENGTH + squareDimension),
+                10 * squareDimension
         );
         graphics.drawRect(
-                initialPosition.x + squareDimension * this.codebreakerType.getCodeLength() + squareDimension*3 +1,
+                initialPosition.x + squareDimension * CODE_LENGTH + squareDimension * 3 + 1,
                 initialPosition.y - 1,
-                GET_RECTANGLE_WIDTH.apply(squareDimension * this.codebreakerType.getCodeLength() + squareDimension),
-                GET_RECTANGLE_LENGTH.apply(this.codebreakerType.getCodeLength())* squareDimension
+                GET_RECTANGLE_WIDTH.apply(squareDimension * CODE_LENGTH + squareDimension),
+                GET_RECTANGLE_LENGTH.apply(CODE_LENGTH) * squareDimension
         );
 
         graphics.drawRect(
-                initialPosition.x + (squareDimension * this.codebreakerType.getCodeLength()) - 1,
+                initialPosition.x + (squareDimension * CODE_LENGTH) - 1,
                 initialPosition.y - 1,
                 GET_RECTANGLE_WIDTH.apply(squareDimension),
                 squareDimension * 10
         );
 
         graphics.drawRect(
-                initialPosition.x  + (squareDimension * this.codebreakerType.getCodeLength()) - 1 + squareDimension * this.codebreakerType.getCodeLength()
-                        + squareDimension*3 +1,
+                initialPosition.x + (squareDimension * CODE_LENGTH) - 1 + squareDimension * CODE_LENGTH + squareDimension * 3 + 1,
                 initialPosition.y - 1,
                 GET_RECTANGLE_WIDTH.apply(squareDimension),
-                GET_RECTANGLE_LENGTH.apply(this.codebreakerType.getCodeLength())*squareDimension
+                GET_RECTANGLE_LENGTH.apply(CODE_LENGTH) * squareDimension
         );
 
-        ArrayList<CodebreakerGuess> codebreakerGuesses = this.codebreakerState.getGuessList();
+        ArrayList<CodebreakerGuess> guesses = this.codebreakerState.getGuessList();
         Point selectedCellPoint = this.codebreakerState.getSelectedCellPoint();
 
-        int rowIndex2 = 0;
-        int yPosition;
-        for (int rowIndex = 0; rowIndex < this.numOfRows; rowIndex++) {
-
-            if(rowIndex > 9){
-                yPosition = initialPosition.y + rowIndex2 * squareDimension;
-                rowIndex2++;
-            }
-            else{
-                 yPosition = initialPosition.y + rowIndex * squareDimension;
-            }
+        for (int rowIndex = 0; rowIndex < this.codebreakerType.getNumberOfRows(); rowIndex++) {
+            int adjustedRowIndex = rowIndex > 9 ? rowIndex % 10 : rowIndex;
+            int yPosition = initialPosition.y + adjustedRowIndex * squareDimension;
 
             Integer[] guessedCode = null;
-            if (rowIndex <= codebreakerGuesses.size() - 1) {
-                guessedCode = Arrays.stream(
-                        codebreakerGuesses.get(rowIndex).getGuessedCode()
-                ).boxed().toArray(Integer[]::new);
-            } else if (rowIndex == codebreakerGuesses.size()) {
+            if (rowIndex <= guesses.size() - 1) {
+                guessedCode = Arrays.stream(guesses.get(rowIndex).getGuessedCode()).boxed().toArray(Integer[]::new);
+            } else if (rowIndex == guesses.size()) {
                 guessedCode = this.codebreakerState.getCurrentGuess();
             }
 
             int xPosition;
-            for (int columnIndex = 0; columnIndex < this.codebreakerType.getCodeLength(); columnIndex++) {
-                if(rowIndex <= 9){
-                    xPosition = initialPosition.x + columnIndex * squareDimension;
-                }
-                else{
-                    xPosition = initialPosition.x + columnIndex * squareDimension
-                            + squareDimension * this.codebreakerType.getCodeLength() + squareDimension*3 +1;
+            for (int columnIndex = 0; columnIndex < CODE_LENGTH; columnIndex++) {
+                xPosition = initialPosition.x + columnIndex * squareDimension;
+                if (rowIndex > 9) {
+                    xPosition += squareDimension * CODE_LENGTH + squareDimension * 3 + 1;
                 }
 
                 graphics.setColor(Color.BLACK);
@@ -176,50 +153,36 @@ public class CodebreakerPanel extends JPanel {
      * @param initialPosition Amount of pixels to begin painting board from (column & row labels come before this).
      */
     private void paintResultBoard(@NotNull Graphics graphics, int squareDimension, @NotNull Point initialPosition) {
-        ArrayList<CodebreakerGuess> codebreakerGuesses = this.codebreakerState.getGuessList();
+        final ArrayList<CodebreakerGuess> codebreakerGuesses = this.codebreakerState.getGuessList();
+        final int CODE_LENGTH = this.codebreakerType.getCodeLength();
+        final int NUMBER_OF_COLUMNS = (int) Math.ceil(Math.sqrt(CODE_LENGTH));
 
-        final int NUMBER_OF_COLUMNS = (int) Math.ceil(Math.sqrt(this.codebreakerType.getCodeLength()));
         CodebreakerGuess currentCodeGuess = null;
         Integer numberInCorrectPosition = null;
         Integer numberOfCorrectColor = null;
-        int guessIndex2 = -1;
-        for (int guessIndex = 0; guessIndex < this.numOfRows; guessIndex++) {
 
+        for (int guessIndex = 0; guessIndex < this.codebreakerType.getNumberOfRows(); guessIndex++) {
             if (guessIndex <= codebreakerGuesses.size() - 1) {
                 currentCodeGuess = codebreakerGuesses.get(guessIndex);
                 numberInCorrectPosition = currentCodeGuess.getNumberInCorrectPosition();
                 numberOfCorrectColor = currentCodeGuess.getNumberOfCorrectColor();
             }
-            int yPosition;
-            if(guessIndex > 9){
-                guessIndex2++;
-            }
+
             for (int rowIndex = 0; rowIndex < 2; rowIndex++) {
-                if(guessIndex <= 9){
-                    yPosition = initialPosition.y + (2 * guessIndex + rowIndex) * squareDimension;
-                }
-                else {
-                    yPosition = initialPosition.y + (2 * guessIndex2 + rowIndex) * squareDimension;
-                }
+                int adjustedGuessIndex = guessIndex > 9 ? guessIndex % 10 : guessIndex;
+                int yPosition = initialPosition.y + (2 * adjustedGuessIndex + rowIndex) * squareDimension;
 
                 int xPosition;
                 for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++) {
-                    if(guessIndex > 9){
-                        if(this.codebreakerType.getCodeLength() == 4){
-                            xPosition = initialPosition.x + columnIndex * squareDimension
-                                    + squareDimension * this.codebreakerType.getCodeLength() + squareDimension*10 +1;
+                    xPosition = initialPosition.x + columnIndex * squareDimension;
+                    if (guessIndex > 9) {
+                        if (this.codebreakerType == CodebreakerType.FOUR) {
+                            xPosition += squareDimension * CODE_LENGTH + squareDimension * 10 + 1;
+                        } else if (this.codebreakerType == CodebreakerType.FIVE) {
+                            xPosition += (squareDimension * CODE_LENGTH) * 3 + squareDimension;
+                        } else {
+                            xPosition += (squareDimension * CODE_LENGTH) * 3;
                         }
-                        else if(this.codebreakerType.getCodeLength() == 5){
-                            xPosition = initialPosition.x + columnIndex * squareDimension
-                                    + (squareDimension * this.codebreakerType.getCodeLength())*3 + squareDimension;
-                        }
-                        else {
-                            xPosition = initialPosition.x + columnIndex * squareDimension
-                                    + (squareDimension * this.codebreakerType.getCodeLength()) * 3;// + squareDimension*10 +1;
-                        }
-                    }
-                    else {
-                        xPosition = initialPosition.x + columnIndex * squareDimension;
                     }
 
                     // Draw square of codebreaker peg.
@@ -267,7 +230,10 @@ public class CodebreakerPanel extends JPanel {
      * @param squareDimension The pixel dimension of each square on the board.
      * @param initialPosition Amount of pixels to begin painting board from (row & column labels come before this).
      */
-    private void paintBoardLabels(@NotNull Graphics graphics, int squareDimension, Point initialPosition) {
+    private void paintBoardLabels(@NotNull Graphics graphics, int squareDimension, @NotNull Point initialPosition) {
+        final int CODE_LENGTH = this.codebreakerType.getCodeLength();
+        final int NUMBER_OF_ROWS = this.codebreakerType.getNumberOfRows();
+
         graphics.setColor(Color.BLACK);
         graphics.setFont(
                 new Font("Arial", Font.BOLD, (93 - 7 * 10) * this.totalBoardLength / 390)
@@ -281,31 +247,30 @@ public class CodebreakerPanel extends JPanel {
                     initialPosition.y + (squareDimension * rowIndex) + (3 * squareDimension / 4)
             );
         }
-        int secondRow = 0;
-        for (int rowIndex = 10; rowIndex < this.numOfRows; rowIndex++) {
+
+        for (int rowIdx = 10, secondRowIdx = 0; rowIdx < NUMBER_OF_ROWS; rowIdx++, secondRowIdx++) {
             graphics.drawString(
-                    Integer.toString(rowIndex + 1),
-                    initialPosition.x + squareDimension * this.codebreakerType.getCodeLength() + squareDimension*2 +1,
-                    initialPosition.y + (squareDimension * secondRow) + (3 * squareDimension / 4)
+                    Integer.toString(rowIdx + 1),
+                    initialPosition.x + squareDimension * CODE_LENGTH + squareDimension * 2 + 1,
+                    initialPosition.y + (squareDimension * secondRowIdx) + (3 * squareDimension / 4)
             );
-            secondRow++;
         }
 
         // Step 2: print the column labels (letters 'A', 'B', 'C', etc.)
-        for (int columnIndex = 0; columnIndex < this.codebreakerType.getCodeLength(); columnIndex++) {
+        for (int columnIndex = 0; columnIndex < CODE_LENGTH; columnIndex++) {
             graphics.drawString(
                     Character.toString((char) columnIndex + 'A'),
                     initialPosition.x + 10 + squareDimension * columnIndex,
-                    initialPosition.y - (this.codebreakerType.getCodeLength() * squareDimension / 14)
+                    initialPosition.y - (CODE_LENGTH * squareDimension / 14)
             );
         }
 
-        int x = initialPosition.x + squareDimension * this.codebreakerType.getCodeLength() + squareDimension*3 +1;
-        for (int columnIndex = 0; columnIndex < this.codebreakerType.getCodeLength(); columnIndex++) {
+        final int X_OFFSET = initialPosition.x + squareDimension * CODE_LENGTH + squareDimension * 3 + 1;
+        for (int columnIndex = 0; columnIndex < CODE_LENGTH; columnIndex++) {
             graphics.drawString(
                     Character.toString((char) columnIndex + 'A'),
-                    x + 10 + squareDimension * columnIndex,
-                    initialPosition.y - (this.codebreakerType.getCodeLength() * squareDimension / 14)
+                    X_OFFSET + 10 + squareDimension * columnIndex,
+                    initialPosition.y - (CODE_LENGTH * squareDimension / 14)
             );
         }
     }

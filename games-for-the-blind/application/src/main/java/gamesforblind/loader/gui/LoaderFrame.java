@@ -207,16 +207,15 @@ public class LoaderFrame extends JFrame implements ComponentListener {
         // & the exit button is on the bottom of the GUI.
         Container frameContainer = this.loaderFrame.getContentPane();
 
-        //add 1 too rows to account for exit button, only one column for game selection menu
+        // Add 1 to rows to account for exit button, only one column for game selection menu
         frameContainer.setLayout(new GridLayout(selectedGameComponents.size() + 1, 1));
 
-        String[] selectedGameLayouts = new String[]{BorderLayout.NORTH, BorderLayout.CENTER};
-        if (selectedGameLayouts.length < selectedGameComponents.size()) {
+        if (selectedGameComponents.size() > 2) {
             throw new IllegalArgumentException("Too many 'PLAY ____' buttons!");
         }
 
-        for (int i = 0; i < selectedGameComponents.size(); i++) {
-            frameContainer.add(selectedGameComponents.get(i));
+        for (JComponent selectedGameComponent : selectedGameComponents) {
+            frameContainer.add(selectedGameComponent);
         }
         frameContainer.add(exitButton);
 
@@ -351,24 +350,18 @@ public class LoaderFrame extends JFrame implements ComponentListener {
 
     @Override
     public void componentResized(ComponentEvent e) {
-        final Font BUTTON_FONT = new Font("Arial", Font.BOLD, this.loaderFrame.getWidth() / 10);
-
         this.loaderFrame.repaint();
-
     }
 
     @Override
     public void componentMoved(ComponentEvent e) {
-
     }
 
     @Override
     public void componentShown(ComponentEvent e) {
-
     }
 
     @Override
     public void componentHidden(ComponentEvent e) {
-
     }
 }

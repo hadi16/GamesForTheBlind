@@ -33,21 +33,24 @@ public class CodebreakerState {
         this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
     }
 
-    public static boolean checkThatGameIsOver(int[] codeToBreak, ArrayList<CodebreakerGuess> guessList) {
+    public static boolean checkThatGameIsOver(
+            @NotNull int[] codeToBreak, @NotNull ArrayList<CodebreakerGuess> guessList
+    ) {
         Objects.requireNonNull(codeToBreak, "Code to break cannot be null!");
         Objects.requireNonNull(guessList, "Guess list must not be null!");
 
-        int numOfRows  = 0;
-        if (codeToBreak.length == 4){
-            numOfRows = 12;
+        CodebreakerType codebreakerType = null;
+        for (CodebreakerType type : CodebreakerType.values()) {
+            if (codeToBreak.length == type.getCodeLength()) {
+                codebreakerType = type;
+            }
         }
-        else if(codeToBreak.length == 5){
-            numOfRows = 15;
+
+        if (codebreakerType == null) {
+            throw new IllegalArgumentException("Invalid code length passed to checker function!");
         }
-        else {
-            numOfRows = 20;
-        }
-        if (guessList.size() == numOfRows) {
+
+        if (guessList.size() == codebreakerType.getCodeLength()) {
             return true;
         }
 
@@ -105,7 +108,7 @@ public class CodebreakerState {
         this.currentGuess[this.selectedCellPoint.x] = numberToSet;
     }
 
-    public void changeSelectedCellPoint(ArrowKeyDirection arrowKeyDirection) {
+    public void changeSelectedCellPoint(@NotNull ArrowKeyDirection arrowKeyDirection) {
         switch (arrowKeyDirection) {
             case LEFT:
                 if (this.selectedCellPoint.x == 0) {
@@ -128,24 +131,24 @@ public class CodebreakerState {
      * Reads the instructions for the 4x4, 6x6, or 9x9 game.
      */
     public void readInstructions() {
-        ArrayList<Phrase> instructions_Phrases;
+        ArrayList<Phrase> instructionsPhrases;
         switch (this.codebreakerType) {
             case FOUR:
-                instructions_Phrases = new ArrayList<>(Arrays.asList(
+                instructionsPhrases = new ArrayList<>(Arrays.asList(
                         Phrase.INSTRUCTIONS_CODEBREAKER_4,
                         Phrase.INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME,
                         Phrase.INSTRUCTIONS_CODEBREAKER_4_SECOND,
                         Phrase.INSTRUCTIONS_CODEBREAKER_ENDING_SAME));
                 break;
             case FIVE:
-                instructions_Phrases = new ArrayList<>(Arrays.asList(
+                instructionsPhrases = new ArrayList<>(Arrays.asList(
                         Phrase.INSTRUCTIONS_CODEBREAKER_5,
                         Phrase.INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME,
                         Phrase.INSTRUCTIONS_CODEBREAKER_5_SECOND,
                         Phrase.INSTRUCTIONS_CODEBREAKER_ENDING_SAME));
                 break;
             case SIX:
-                instructions_Phrases = new ArrayList<>(Arrays.asList(
+                instructionsPhrases = new ArrayList<>(Arrays.asList(
                         Phrase.INSTRUCTIONS_CODEBREAKER_6,
                         Phrase.INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME,
                         Phrase.INSTRUCTIONS_CODEBREAKER_6_SECOND,
@@ -157,7 +160,7 @@ public class CodebreakerState {
                 );
         }
 
-        this.audioPlayerExecutor.replacePhraseAndPrint(instructions_Phrases);
+        this.audioPlayerExecutor.replacePhraseAndPrint(instructionsPhrases);
     }
 
     /**
@@ -173,10 +176,13 @@ public class CodebreakerState {
         return this.codeToBreak;
     }
 
-    //not implemented yet
-    public boolean restart(){return false;}
+    public boolean restart() {
+        throw new UnsupportedOperationException("Restart not implemented yet!");
+    }
 
-    public int hint(int value){return 0;}
+    public int hint(int value) {
+        throw new UnsupportedOperationException("Hint not implemented yet!");
+    }
 
     public CodebreakerType getCodebreakerType() {
         return this.codebreakerType;

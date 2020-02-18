@@ -151,11 +151,11 @@ public enum Phrase {
             " or nine-square row, within the entire board, must also have the numbers 1 through 9, without repetition."),
 
     INSTRUCTIONS_SUDOKU_MIDDLE_SAME("Each number can only appear once in a row, column, or box"),
-    INSTRUCTIONS_SUDOKU_ENDING_SAME(" To hear the numbers in the currently selected number's row press J," +
-            " to hear the numbers in the currently selected number's column press K, to hear all of the numbers in " +
-            " the current block press L. If you have selected an empty square and are stuck, press H to automatically " +
-            "fill in the square. Navigate the board using the arrow keys. Press and hold the control key while " +
-            "clicking an arrow to jump to the end of the row or column. When you have selkected the box you want" +
+    INSTRUCTIONS_SUDOKU_ENDING_SAME("To hear the numbers in the currently selected number's row press J," +
+            " to hear the numbers in the currently selected number's column press K, to hear all of the numbers in" +
+            " the current block press L. If you have selected an empty square and are stuck, press H to automatically" +
+            " fill in the square. Navigate the board using the arrow keys. Press and hold the control key while" +
+            " clicking an arrow to jump to the end of the row or column. When you have selkected the box you want" +
             " to add a number to, select a number on your keypad to try and place it into the highlighted box"),
 
     /* Sudoku: Empty Squares Left */
@@ -175,21 +175,20 @@ public enum Phrase {
             "four numbers."),
     INSTRUCTIONS_CODEBREAKER_4_SECOND("four pegs of either black or white."),
 
-    INSTRUCTIONS_CODEBREAKER_5("Welcome to Codebreaker! The goal is to accurately guess a secret code of " +
-            "five numbers."),
+    INSTRUCTIONS_CODEBREAKER_5("Welcome to Codebreaker! The goal is to accurately guess a secret code of" +
+            " five numbers."),
     INSTRUCTIONS_CODEBREAKER_5_SECOND("five pegs of either black or white."),
 
-    INSTRUCTIONS_CODEBREAKER_6("Welcome to Codebreaker! The goal is to accurately guess a secret code of " +
-            "six numbers."),
+    INSTRUCTIONS_CODEBREAKER_6("Welcome to Codebreaker! The goal is to accurately guess a secret code of" +
+            " six numbers."),
     INSTRUCTIONS_CODEBREAKER_6_SECOND("six pegs of either black or white."),
 
-    INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME(" To make a guess use the arrow keys to select a space and enter a number " +
-            "from 1-6. Once you have finalized your guess, hit the space key to see if you guessed correctly. If you " +
-            "did not guess the right code, the small box to the right of your guess will contain "),
-    INSTRUCTIONS_CODEBREAKER_ENDING_SAME("A white peg means that" +
-            " one of the numbers you have guessed is correct, but it is in the wrong place. A black peg means that" +
-            " one of your numbers is the correct number and is in the correct place. If you have guessed correctly," +
-            " you win the game!"),
+    INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME("To make a guess use the arrow keys to select a space and enter a number" +
+            " from 1-6. Once you have finalized your guess, hit the space key to see if you guessed correctly. If you" +
+            " did not guess the right code, the small box to the right of your guess will contain "),
+    INSTRUCTIONS_CODEBREAKER_ENDING_SAME("A white peg means that one of the numbers you have guessed is correct," +
+            " but it is in the wrong place. A black peg means that one of your numbers is the correct number and is in" +
+            " the correct place. If you have guessed correctly, you win the game!"),
 
     PLACED_CODEBREAKER_CODE("You have placed the codebreaker code:"),
     CODEBREAKER_GUESS_NUMBER("It is guess number:"),

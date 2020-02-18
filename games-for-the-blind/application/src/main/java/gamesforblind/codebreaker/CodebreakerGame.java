@@ -3,7 +3,6 @@ package gamesforblind.codebreaker;
 import gamesforblind.ProgramArgs;
 import gamesforblind.codebreaker.action.*;
 import gamesforblind.codebreaker.gui.CodebreakerFrame;
-import gamesforblind.codebreaker.action.CodebreakerArrowKeyAction;
 import gamesforblind.enums.CodebreakerType;
 import gamesforblind.loader.GameLoader;
 import gamesforblind.logger.LogFactory;
@@ -96,12 +95,12 @@ public class CodebreakerGame {
         }
     }
 
-    private void changeSelectedCellPoint(CodebreakerArrowKeyAction codebreakerArrowKeyAction) {
+    private void changeSelectedCellPoint(@NotNull CodebreakerArrowKeyAction codebreakerArrowKeyAction) {
         this.codebreakerState.changeSelectedCellPoint(codebreakerArrowKeyAction.getArrowKeyDirection());
         this.codebreakerFrame.repaintCodebreakerPanel();
     }
 
-    private void setSingleNumber(CodebreakerSetSingleNumberAction codebreakerSetSingleNumberAction) {
+    private void setSingleNumber(@NotNull CodebreakerSetSingleNumberAction codebreakerSetSingleNumberAction) {
         this.codebreakerState.setSingleNumber(codebreakerSetSingleNumberAction.getNumberToSet());
         this.codebreakerFrame.repaintCodebreakerPanel();
     }
