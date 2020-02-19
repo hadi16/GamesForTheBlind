@@ -237,9 +237,10 @@ public class CodebreakerPanel extends JPanel {
         final int NUMBER_OF_ROWS = this.codebreakerType.getNumberOfRows();
 
         graphics.setColor(Color.BLACK);
-        graphics.setFont(
-                new Font("Arial", Font.BOLD, (93 - 7 * 10) * this.totalBoardLength / 390)
-        );
+
+        /*graphics.setFont(
+                new Font("La Coste", Font.BOLD, (93 - 7 * 10) * this.totalBoardLength / 390)
+        );*/
 
         // Step 1: print the row labels (numbers 1, 2, 3, etc.)
         for (int rowIndex = 0; rowIndex < 10; rowIndex++) {
