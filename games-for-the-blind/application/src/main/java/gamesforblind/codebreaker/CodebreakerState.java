@@ -66,7 +66,7 @@ public class CodebreakerState {
             throw new IllegalArgumentException("Invalid code length passed to checker function!");
         }
 
-        if (guessList.size() == codebreakerType.getCodeLength()) {
+        if (guessList.size() == codebreakerType.getNumberOfRows()) {
             return true;
         }
 
@@ -100,20 +100,33 @@ public class CodebreakerState {
             relevantPhrases.add(Phrase.convertIntegerToPhrase(i));
         }
 
-        Phrase[] phrasesToAdd = {
-                Phrase.CODEBREAKER_GUESS_NUMBER, Phrase.convertIntegerToPhrase(this.guessList.size()),
-                Phrase.CODEBREAKER_NUMBER_CORRECT_POSITION,
-                Phrase.convertIntegerToPhrase(currentCodebreakerGuess.getNumberInCorrectPosition()),
-                Phrase.CODEBREAKER_NUMBER_ONLY,
-                Phrase.convertIntegerToPhrase(currentCodebreakerGuess.getNumberOfCorrectColor())
-        };
-        relevantPhrases.addAll(Arrays.asList(phrasesToAdd));
+//            //if guess is correct say correct code
+//            ArrayList<Phrase> relevantPhrasesEndGame = new ArrayList<>(Collections.singletonList(Phrase.PLACED_CODEBREAKER_CODE));
+//            //relevantPhrasesEndGame.add(Phrase.THE_CORRECT_CODE_IS);
+//            for (int i =0; i < codebreakerType.getCodeLength(); i++) {
+//                relevantPhrasesEndGame.add(Phrase.convertIntegerToPhrase(codeToBreak[i]));
+//            }
+//            this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrasesEndGame);
 
-        this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
-        this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
+            Phrase[] phrasesToAdd = {
+                    Phrase.CODEBREAKER_GUESS_NUMBER, Phrase.convertIntegerToPhrase(this.guessList.size()),
+                    Phrase.CODEBREAKER_NUMBER_CORRECT_POSITION,
+                    Phrase.convertIntegerToPhrase(currentCodebreakerGuess.getNumberInCorrectPosition()),
+                    Phrase.CODEBREAKER_NUMBER_ONLY,
+                    Phrase.convertIntegerToPhrase(currentCodebreakerGuess.getNumberOfCorrectColor())
+            };
+            relevantPhrases.addAll(Arrays.asList(phrasesToAdd));
+
+            this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
+            this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
 
         this.selectedCellPoint.x = 0;
         this.selectedCellPoint.y++;
+
+       if(checkThatGameIsOver(codeToBreak, guessList)){
+            gameOver = true;
+        }
+
     }
 
     public void setSingleNumber(int numberToSet) {
