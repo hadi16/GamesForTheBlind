@@ -61,18 +61,20 @@ public class CodebreakerPanel extends JPanel {
             return width;
         };
 
-        final Function<Integer, Integer> GET_RECTANGLE_LENGTH = (length) -> {
-            switch (this.codebreakerType) {
-                case FOUR:
-                    return 2;
-                case FIVE:
-                    return 5;
-                case SIX:
-                    return 10;
-                default:
-                    throw new IllegalArgumentException("Invalid codebreaker type passed!");
-            }
-        };
+        final int RECTANGLE_HEIGHT_FACTOR;
+        switch (this.codebreakerType) {
+            case FOUR:
+                RECTANGLE_HEIGHT_FACTOR = 2;
+                break;
+            case FIVE:
+                RECTANGLE_HEIGHT_FACTOR = 5;
+                break;
+            case SIX:
+                RECTANGLE_HEIGHT_FACTOR = 10;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid codebreaker type passed!");
+        }
 
         graphics.drawRect(
                 initialPosition.x - 1,
@@ -80,11 +82,12 @@ public class CodebreakerPanel extends JPanel {
                 GET_RECTANGLE_WIDTH.apply(squareDimension * CODE_LENGTH + squareDimension),
                 10 * squareDimension
         );
+
         graphics.drawRect(
                 initialPosition.x + squareDimension * CODE_LENGTH + squareDimension * 3 + 1,
                 initialPosition.y - 1,
                 GET_RECTANGLE_WIDTH.apply(squareDimension * CODE_LENGTH + squareDimension),
-                GET_RECTANGLE_LENGTH.apply(CODE_LENGTH) * squareDimension
+                RECTANGLE_HEIGHT_FACTOR * squareDimension
         );
 
         graphics.drawRect(
@@ -98,7 +101,7 @@ public class CodebreakerPanel extends JPanel {
                 initialPosition.x + (squareDimension * CODE_LENGTH) - 1 + squareDimension * CODE_LENGTH + squareDimension * 3 + 1,
                 initialPosition.y - 1,
                 GET_RECTANGLE_WIDTH.apply(squareDimension),
-                GET_RECTANGLE_LENGTH.apply(CODE_LENGTH) * squareDimension
+                RECTANGLE_HEIGHT_FACTOR * squareDimension
         );
 
         ArrayList<CodebreakerGuess> guesses = this.codebreakerState.getGuessList();
@@ -168,12 +171,13 @@ public class CodebreakerPanel extends JPanel {
                 numberOfCorrectColor = currentCodeGuess.getNumberOfCorrectColor();
             }
 
+            int numberOfDrawnPegs = 0;
             for (int rowIndex = 0; rowIndex < 2; rowIndex++) {
                 int adjustedGuessIndex = guessIndex > 9 ? guessIndex % 10 : guessIndex;
                 int yPosition = initialPosition.y + (2 * adjustedGuessIndex + rowIndex) * squareDimension;
 
                 int xPosition;
-                for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++) {
+                for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++, numberOfDrawnPegs++) {
                     xPosition = initialPosition.x + columnIndex * squareDimension;
                     if (guessIndex > 9) {
                         if (this.codebreakerType == CodebreakerType.FOUR) {
@@ -189,11 +193,9 @@ public class CodebreakerPanel extends JPanel {
                     graphics.setColor(Color.BLACK);
                     graphics.drawRect(xPosition, yPosition, squareDimension, squareDimension);
 
-                    // Special case: there is no sixth peg for the five type.
-                    if (this.codebreakerType == CodebreakerType.FIVE) {
-                        if (rowIndex % 2 == 1 && columnIndex == NUMBER_OF_COLUMNS - 1) {
-                            continue;
-                        }
+                    // Don't want to draw too many pegs.
+                    if (this.codebreakerType.getCodeLength() == numberOfDrawnPegs) {
+                        continue;
                     }
 
                     graphics.drawRoundRect(
