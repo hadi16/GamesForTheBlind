@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
+import java.awt.*;
+
 import static gamesforblind.Constants.FRAME_DIMENSION;
 
 /**
@@ -111,5 +113,9 @@ public class CodebreakerFrame extends JFrame {
     public void closeFrames() {
         this.frame.setVisible(false);
         this.frame.dispose();
+    }
+
+    public Rectangle getFrameBounds() {
+        return new Rectangle(this.frame.getBounds());
     }
 }
