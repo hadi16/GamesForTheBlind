@@ -116,7 +116,9 @@ public class CodebreakerGame {
 
     private void changeSelectedCellPoint(@NotNull CodebreakerArrowKeyAction codebreakerArrowKeyAction) {
         this.codebreakerState.changeSelectedCellPoint(codebreakerArrowKeyAction.getArrowKeyDirection());
+        this.codebreakerState.readSelectedSquare();
         this.codebreakerFrame.repaintCodebreakerPanel();
+
     }
 
     private void setSingleNumber(@NotNull CodebreakerSetSingleNumberAction codebreakerSetSingleNumberAction) {
