@@ -25,6 +25,9 @@ public class CodebreakerPanel extends JPanel {
      */
     private final CodebreakerType codebreakerType;
 
+    private final Function<Integer, Integer> getSecondGroupXOffset;
+    private final Function<Integer, Boolean> isSecondGroup = (index) -> index > 9;
+
     /**
      * Creates a new CodebreakerPanel.
      *
@@ -33,6 +36,10 @@ public class CodebreakerPanel extends JPanel {
     public CodebreakerPanel(@NotNull CodebreakerState initialState) {
         this.codebreakerType = initialState.getCodebreakerType();
         this.codebreakerState = initialState;
+
+        this.getSecondGroupXOffset = (squareDimension) -> {
+            return squareDimension * this.codebreakerType.getCodeLength() + squareDimension * 3 + 1;
+        };
     }
 
     /**
@@ -44,6 +51,7 @@ public class CodebreakerPanel extends JPanel {
      */
     private void paintMainBoard(@NotNull Graphics graphics, int squareDimension, @NotNull Point initialPosition) {
         final int CODE_LENGTH = this.codebreakerType.getCodeLength();
+        final int SECOND_GROUP_X_OFFSET = this.getSecondGroupXOffset.apply(squareDimension);
 
         final Font MAIN_BOARD_FONT = new Font("Serif", Font.BOLD, 50);
         graphics.setFont(MAIN_BOARD_FONT);
@@ -79,7 +87,7 @@ public class CodebreakerPanel extends JPanel {
         );
 
         graphics.drawRect(
-                initialPosition.x + squareDimension * CODE_LENGTH + squareDimension * 3 + 1,
+                initialPosition.x + SECOND_GROUP_X_OFFSET,
                 initialPosition.y - 1,
                 GET_RECTANGLE_WIDTH.apply(squareDimension * CODE_LENGTH + squareDimension),
                 RECTANGLE_HEIGHT_FACTOR * squareDimension
@@ -93,7 +101,7 @@ public class CodebreakerPanel extends JPanel {
         );
 
         graphics.drawRect(
-                initialPosition.x + (squareDimension * CODE_LENGTH) - 1 + squareDimension * CODE_LENGTH + squareDimension * 3 + 1,
+                initialPosition.x + (squareDimension * CODE_LENGTH) - 1 + SECOND_GROUP_X_OFFSET,
                 initialPosition.y - 1,
                 GET_RECTANGLE_WIDTH.apply(squareDimension),
                 RECTANGLE_HEIGHT_FACTOR * squareDimension
@@ -103,7 +111,9 @@ public class CodebreakerPanel extends JPanel {
         Point selectedCellPoint = this.codebreakerState.getSelectedCellPoint();
 
         for (int rowIndex = 0; rowIndex < this.codebreakerType.getNumberOfRows(); rowIndex++) {
-            int adjustedRowIndex = rowIndex > 9 ? rowIndex % 10 : rowIndex;
+            final boolean IS_SECOND_GROUP = this.isSecondGroup.apply(rowIndex);
+
+            int adjustedRowIndex = IS_SECOND_GROUP ? rowIndex % 10 : rowIndex;
             int yPosition = initialPosition.y + adjustedRowIndex * squareDimension;
 
             Integer[] guessedCode = null;
@@ -116,8 +126,8 @@ public class CodebreakerPanel extends JPanel {
             int xPosition;
             for (int columnIndex = 0; columnIndex < CODE_LENGTH; columnIndex++) {
                 xPosition = initialPosition.x + columnIndex * squareDimension;
-                if (rowIndex > 9) {
-                    xPosition += squareDimension * CODE_LENGTH + squareDimension * 3 + 1;
+                if (IS_SECOND_GROUP) {
+                    xPosition += SECOND_GROUP_X_OFFSET;
                 }
 
                 graphics.setColor(Color.BLACK);
@@ -160,6 +170,8 @@ public class CodebreakerPanel extends JPanel {
         Integer numberOfCorrectColor = null;
 
         for (int guessIndex = 0; guessIndex < this.codebreakerType.getNumberOfRows(); guessIndex++) {
+            final boolean IS_SECOND_GROUP = this.isSecondGroup.apply(guessIndex);
+
             if (guessIndex <= codebreakerGuesses.size() - 1) {
                 currentCodeGuess = codebreakerGuesses.get(guessIndex);
                 numberInCorrectPosition = currentCodeGuess.getNumberInCorrectPosition();
@@ -168,13 +180,13 @@ public class CodebreakerPanel extends JPanel {
 
             int numberOfDrawnPegs = 0;
             for (int rowIndex = 0; rowIndex < 2; rowIndex++) {
-                int adjustedGuessIndex = guessIndex > 9 ? guessIndex % 10 : guessIndex;
+                int adjustedGuessIndex = IS_SECOND_GROUP ? guessIndex % 10 : guessIndex;
                 int yPosition = initialPosition.y + (2 * adjustedGuessIndex + rowIndex) * squareDimension;
 
                 int xPosition;
                 for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++, numberOfDrawnPegs++) {
                     xPosition = initialPosition.x + columnIndex * squareDimension;
-                    if (guessIndex > 9) {
+                    if (IS_SECOND_GROUP) {
                         if (this.codebreakerType == CodebreakerType.FOUR) {
                             xPosition += squareDimension * CODE_LENGTH + squareDimension * 10 + 1;
                         } else if (this.codebreakerType == CodebreakerType.FIVE) {
@@ -259,7 +271,7 @@ public class CodebreakerPanel extends JPanel {
             );
         }
 
-        final int X_OFFSET = initialPosition.x + squareDimension * CODE_LENGTH + squareDimension * 3 + 1;
+        final int X_OFFSET = initialPosition.x + this.getSecondGroupXOffset.apply(squareDimension);
         for (int columnIndex = 0; columnIndex < CODE_LENGTH; columnIndex++) {
             graphics.drawString(
                     Character.toString((char) columnIndex + 'A'),
