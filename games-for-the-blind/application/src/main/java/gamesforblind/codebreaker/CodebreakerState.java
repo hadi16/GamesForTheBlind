@@ -180,6 +180,13 @@ public class CodebreakerState {
     }
 
     /**
+     * Reads the value of the currently selected cell
+     */
+    public void readSelectedSquare() {
+        this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.convertPointToLocationPhrase(this.selectedCellPoint));
+    }
+
+    /**
      * Getter for gameOver
      *
      * @return true if the game is over (otherwise, false).
