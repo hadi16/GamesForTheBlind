@@ -53,7 +53,6 @@ public class SudokuMouseListener implements MouseListener {
      */
     @Override
     public void mouseClicked(@NotNull MouseEvent e) {
-
         Point selectedPoint = e.getPoint();
         Rectangle frameBounds = this.sudokuFrame.getFrameBounds();
 
