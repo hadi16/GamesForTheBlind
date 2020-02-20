@@ -155,7 +155,7 @@ public enum Phrase {
             " to hear the numbers in the currently selected number's column press K, to hear all of the numbers in" +
             " the current block press L. If you have selected an empty square and are stuck, press H to automatically" +
             " fill in the square. Navigate the board using the arrow keys. Press and hold the control key while" +
-            " clicking an arrow to jump to the end of the row or column. When you have selkected the box you want" +
+            " clicking an arrow to jump to the end of the row or column. When you have selected the box you want" +
             " to add a number to, select a number on your keypad to try and place it into the highlighted box"),
 
     /* Sudoku: Empty Squares Left */
@@ -193,7 +193,11 @@ public enum Phrase {
     PLACED_CODEBREAKER_CODE("You have placed the codebreaker code:"),
     CODEBREAKER_GUESS_NUMBER("It is guess number:"),
     CODEBREAKER_NUMBER_CORRECT_POSITION("Pegs with the correct position and number:"),
-    CODEBREAKER_NUMBER_ONLY("Pegs with the correct number:");
+    CODEBREAKER_NUMBER_ONLY("Pegs with the correct number:"),
+    CODEBREAKER_GUESS_NUMBER_RESPONSE("Guess number:"),
+    CODEBREAKER_GUESS_WAS("the codebreaker code guess was:"),
+    CODEBREAKER_READ_ROW("Row"),
+    CODEBREAKER_UNKNOWN_GUESS("has the following guess so far");
 
     /**
      * The directory for all of the Phrase audio files ("resources/phrases" folder under the root of the project).
