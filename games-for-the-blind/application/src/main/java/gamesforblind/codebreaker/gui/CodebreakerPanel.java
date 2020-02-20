@@ -239,14 +239,16 @@ public class CodebreakerPanel extends JPanel {
      * @param squareDimension The pixel dimension of each square on the board.
      * @param initialPosition Amount of pixels to begin painting board from (row & column labels come before this).
      */
-    private void paintBoardLabels(@NotNull Graphics graphics, int squareDimension, @NotNull Point initialPosition) {
+    private void paintBoardLabels(
+            @NotNull Graphics graphics, int squareDimension, @NotNull Point initialPosition, int totalBoardLength
+    ) {
         final int CODE_LENGTH = this.codebreakerType.getCodeLength();
         final int NUMBER_OF_ROWS = this.codebreakerType.getNumberOfRows();
 
         graphics.setColor(Color.BLACK);
 
         graphics.setFont(
-                new Font("Arial", Font.BOLD, (93 - 7 * 10) * this.totalBoardLength / 390)
+                new Font("Arial", Font.BOLD, (93 - 7 * 10) * totalBoardLength / 390)
         );
 
         // Step 1: print the row labels (numbers r1, r2, r3, etc.)
@@ -319,7 +321,10 @@ public class CodebreakerPanel extends JPanel {
 
         // Step 3: paint the labels
         this.paintBoardLabels(
-                graphics, SQUARE_DIM, new Point(INITIAL_POSITION, INITIAL_POSITION - (SQUARE_DIM / 2))
+                graphics,
+                SQUARE_DIM,
+                new Point(INITIAL_POSITION, INITIAL_POSITION - (SQUARE_DIM / 2)),
+                TOTAL_BOARD_LENGTH
         );
     }
 }
