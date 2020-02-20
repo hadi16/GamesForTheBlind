@@ -26,11 +26,6 @@ public class CodebreakerPanel extends JPanel {
     private final CodebreakerType codebreakerType;
 
     /**
-     * This is reset every time the board is repainted (based on the bounds of the GUI window).
-     */
-    private int totalBoardLength;
-
-    /**
      * Creates a new CodebreakerPanel.
      *
      * @param initialState The initial state of the Codebreaker game.
@@ -237,7 +232,6 @@ public class CodebreakerPanel extends JPanel {
         final int NUMBER_OF_ROWS = this.codebreakerType.getNumberOfRows();
 
         graphics.setColor(Color.BLACK);
-        //graphics.setFont();
 
         graphics.setFont(
                 new Font("Arial", Font.BOLD, (93 - 7 * 10) * this.totalBoardLength / 390)
@@ -290,31 +284,30 @@ public class CodebreakerPanel extends JPanel {
         super.paintComponent(graphics);
 
         Rectangle clipBounds = graphics.getClipBounds();
-        this.totalBoardLength = Math.min(clipBounds.height - 10, clipBounds.width + 20);
 
-        int squaresPerSide = 13; // 12 (for initial board) + 1
-        int squareDimension = (((this.totalBoardLength - squaresPerSide) / squaresPerSide) / 2) * 2;
-
-        final int INITIAL_POSITION = this.totalBoardLength - (squareDimension * squaresPerSide) + 3 * (squareDimension / 2);
+        final int TOTAL_BOARD_LENGTH = Math.min(clipBounds.height - 10, clipBounds.width + 20);
+        final int SQUARES_PER_SIDE = 13; // 12 (for initial board) + 1
+        final int SQUARE_DIM = (((TOTAL_BOARD_LENGTH - SQUARES_PER_SIDE) / SQUARES_PER_SIDE) / 2) * 2;
+        final int INITIAL_POSITION = TOTAL_BOARD_LENGTH - (SQUARE_DIM * SQUARES_PER_SIDE) + 3 * (SQUARE_DIM / 2);
 
         // Step 1: paint the board, 4x10 grid currently
         this.paintMainBoard(
-                graphics, squareDimension, new Point(INITIAL_POSITION, INITIAL_POSITION - (squareDimension / 2))
+                graphics, SQUARE_DIM, new Point(INITIAL_POSITION, INITIAL_POSITION - (SQUARE_DIM / 2))
         );
 
         //Step 2: paint small board that will display the result of previous guess
         this.paintResultBoard(
                 graphics,
-                squareDimension / 2,
+                SQUARE_DIM / 2,
                 new Point(
-                        INITIAL_POSITION + (squareDimension * this.codebreakerType.getCodeLength()),
-                        INITIAL_POSITION - (squareDimension / 2)
+                        INITIAL_POSITION + (SQUARE_DIM * this.codebreakerType.getCodeLength()),
+                        INITIAL_POSITION - (SQUARE_DIM / 2)
                 )
         );
 
         // Step 3: paint the labels
         this.paintBoardLabels(
-                graphics, squareDimension, new Point(INITIAL_POSITION, INITIAL_POSITION - (squareDimension / 2))
+                graphics, SQUARE_DIM, new Point(INITIAL_POSITION, INITIAL_POSITION - (SQUARE_DIM / 2))
         );
     }
 }
