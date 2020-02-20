@@ -140,20 +140,20 @@ public class SudokuPanel extends JPanel {
                 new Font("Arial", Font.BOLD, (93 - 7 * sudokuBoardSize) * this.totalBoardLength / 390)
         );
 
-        // Step 1: print the row labels (numbers 1, 2, 3, etc.)
+        // Step 1: print the row labels (numbers r1, r2, r3, etc.)
         for (int rowIndex = 0; rowIndex < sudokuBoardSize; rowIndex++) {
             graphics.drawString(
-                    Integer.toString(rowIndex + 1),
-                    initialPosition + (11 * squareDimension / 24),
+                    ("r" + Integer.toString(rowIndex + 1)),
+                    initialPosition + (11 * squareDimension / 24) -(squareDimension/3),
                     initialPosition + (squareDimension * rowIndex) + (11 * squareDimension / 6)
             );
         }
 
-        // Step 2: print the column labels (letters 'A', 'B', 'C', etc.)
+        // Step 2: print the column labels (letters 'c1', 'c2', 'c3', etc.)
         for (int columnIndex = 0; columnIndex < sudokuBoardSize; columnIndex++) {
             graphics.drawString(
-                    Character.toString((char) columnIndex + 'A'),
-                    initialPosition + (51 * squareDimension * columnIndex / 50) + (29 * squareDimension / 24),
+                    "c" + Integer.toString(columnIndex + 1),
+                    initialPosition + (51 * squareDimension * columnIndex / 50) + (29 * squareDimension / 24)-(squareDimension/4),
                     initialPosition + (11 * squareDimension / 12)
             );
         }
