@@ -79,6 +79,8 @@ public class CodebreakerGame {
                     this.setSingleNumber((CodebreakerSetSingleNumberAction) codebreakerAction);
                 },
 
+                CodebreakerReadBackAction.class, this.codebreakerState::readBackRow,
+
                 CodebreakerInstructionsAction.class, this.codebreakerState::readInstructions,
 
                 CodebreakerSetGuessAction.class, () -> {
