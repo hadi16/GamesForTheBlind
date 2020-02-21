@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Function;
@@ -27,6 +29,12 @@ public class CodebreakerPanel extends JPanel {
 
     private final Function<Integer, Integer> getSecondGroupXOffset;
     private final Function<Integer, Boolean> isSecondGroup = (index) -> index > 9;
+
+    /**
+     * This is reset every time the board is repainted (based on the bounds of the GUI window).
+     */
+    private int totalBoardLength;
+    private JFrame popUpFrame = new JFrame("End of Game");
 
     /**
      * Creates a new CodebreakerPanel.
@@ -232,6 +240,64 @@ public class CodebreakerPanel extends JPanel {
         }
     }
 
+    public void paintCode(){
+        JPanel popUpPanel = new JPanel();
+        JLabel l;
+
+        int [] code = codebreakerState.getCodeToBreak();
+        String str = "";
+        //convert int[] to string and append together
+        for (int i =0; i < codebreakerType.getCodeLength(); i++){
+            String newNum = Integer.toString(code[i]);
+            str = str + newNum;
+        }
+
+        // create a label
+        if(codebreakerState.getCodeToBreak().length==codebreakerState.getGuessList().get(codebreakerState.getGuessList().size() - 1).getNumberInCorrectPosition()){
+            l = new JLabel("Congrats! You guessed the correct code!" );
+            l.setFont( new Font("Arial", Font.BOLD, (93 - 7 * 10) * this.totalBoardLength / 490));
+        }
+        else {
+            l = new JLabel("Correct code: " + str);
+            l.setFont(new Font("Arial", Font.BOLD, (93 - 7 * 10) * this.totalBoardLength / 390));
+        }
+
+        popUpFrame.setSize(this.totalBoardLength , this.totalBoardLength/3);
+
+        PopupFactory pf = new PopupFactory();
+
+        popUpPanel.add(l);
+
+        // create a popup
+        Popup p = pf.getPopup(popUpFrame, popUpPanel, this.totalBoardLength/2, this.totalBoardLength/2);
+
+        popUpFrame.add(popUpPanel);
+        popUpFrame.show();
+        p.show();
+
+        // Add and define the KeyListener here!
+        popUpFrame.addKeyListener(new KeyListener(){
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_SPACE){
+                    popUpFrame.setVisible(false);
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+        });
+
+
+}
+
+
     /**
      * Paints the  labels along the left and top edges of the board
      *
@@ -326,5 +392,12 @@ public class CodebreakerPanel extends JPanel {
                 new Point(INITIAL_POSITION, INITIAL_POSITION - (SQUARE_DIM / 2)),
                 TOTAL_BOARD_LENGTH
         );
+
+        if(codebreakerState.isGameOver() == true){
+            paintCode();
+
+        }
     }
+
+    public JFrame getPopUpFrame(){return this.popUpFrame;}
 }
