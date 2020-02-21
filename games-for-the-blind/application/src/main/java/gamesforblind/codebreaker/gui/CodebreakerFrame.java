@@ -114,7 +114,6 @@ public class CodebreakerFrame extends JFrame {
         this.frame.dispose();
         this.codebreakerPanel.getPopUpFrame().setVisible(false);
         this.codebreakerPanel.getPopUpFrame().dispose();
-
     }
 
     public Rectangle getFrameBounds() {
