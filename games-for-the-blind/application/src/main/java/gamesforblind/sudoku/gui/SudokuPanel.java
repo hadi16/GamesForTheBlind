@@ -143,8 +143,8 @@ public class SudokuPanel extends JPanel {
         // Step 1: print the row labels (numbers r1, r2, r3, etc.)
         for (int rowIndex = 0; rowIndex < sudokuBoardSize; rowIndex++) {
             graphics.drawString(
-                    ("r" + Integer.toString(rowIndex + 1)),
-                    initialPosition + (11 * squareDimension / 24) -(squareDimension/3),
+                    ("r" + (rowIndex + 1)),
+                    initialPosition + (11 * squareDimension / 24) - (squareDimension / 3),
                     initialPosition + (squareDimension * rowIndex) + (11 * squareDimension / 6)
             );
         }
@@ -152,8 +152,8 @@ public class SudokuPanel extends JPanel {
         // Step 2: print the column labels (letters 'c1', 'c2', 'c3', etc.)
         for (int columnIndex = 0; columnIndex < sudokuBoardSize; columnIndex++) {
             graphics.drawString(
-                    "c" + Integer.toString(columnIndex + 1),
-                    initialPosition + (51 * squareDimension * columnIndex / 50) + (29 * squareDimension / 24)-(squareDimension/4),
+                    "c" + (columnIndex + 1),
+                    initialPosition + (51 * squareDimension * columnIndex / 50) + (29 * squareDimension / 24) - (squareDimension / 4),
                     initialPosition + (11 * squareDimension / 12)
             );
         }
