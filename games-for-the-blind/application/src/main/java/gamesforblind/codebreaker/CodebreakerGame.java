@@ -85,22 +85,25 @@ public class CodebreakerGame {
                     this.setSingleNumber((CodebreakerSetSingleNumberAction) codebreakerAction);
                 },
 
-                // Case 5: the user wants the instructions to be read.
+                // Case 5: the user wants the current row to be read off.
+                CodebreakerReadBackAction.class, this.codebreakerState::readBackRow,
+
+                // Case 6: the user wants the instructions to be read.
                 CodebreakerInstructionsAction.class, this.codebreakerState::readInstructions,
 
-                // Case 6: the user wants the current Codebreaker guess to be set.
+                // Case 7: the user wants the current Codebreaker guess to be set.
                 CodebreakerSetGuessAction.class, () -> {
                     this.codebreakerState.setCodebreakerGuess();
                     this.codebreakerFrame.repaintCodebreakerPanel();
                 },
 
-                // Case 7: the user wants to restart the current Codebreaker game.
+                // Case 8: the user wants to restart the current Codebreaker game.
                 CodebreakerRestartAction.class, () -> {
                     this.codebreakerState.initNewCodebreakerGame();
                     this.codebreakerFrame.repaintCodebreakerPanel();
                 },
 
-                // Case 8: the user has pressed an unrecognized key in the game.
+                // Case 9: the user has pressed an unrecognized key in the game.
                 CodebreakerUnrecognizedKeyAction.class, () -> {
                     this.readUnrecognizedKey((CodebreakerUnrecognizedKeyAction) codebreakerAction);
                 }
@@ -120,7 +123,9 @@ public class CodebreakerGame {
 
     private void changeSelectedCellPoint(@NotNull CodebreakerArrowKeyAction codebreakerArrowKeyAction) {
         this.codebreakerState.changeSelectedCellPoint(codebreakerArrowKeyAction.getArrowKeyDirection());
+        this.codebreakerState.readSelectedSquare();
         this.codebreakerFrame.repaintCodebreakerPanel();
+
     }
 
     private void setSingleNumber(@NotNull CodebreakerSetSingleNumberAction codebreakerSetSingleNumberAction) {
