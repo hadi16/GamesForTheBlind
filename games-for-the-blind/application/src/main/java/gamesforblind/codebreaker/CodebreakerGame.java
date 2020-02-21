@@ -9,9 +9,6 @@ import gamesforblind.logger.LogFactory;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.util.Map;
 
 /**
@@ -62,7 +59,7 @@ public class CodebreakerGame {
 
         // If the game is over, go to main menu
         if (this.codebreakerState.isGameOver()) {
-            codebreakerFrame.repaintCodebreakerPanel();
+            this.codebreakerFrame.repaintCodebreakerPanel();
             this.codebreakerFrame.closeFrames();
             this.gameLoader.openLoaderInterface();
             return;

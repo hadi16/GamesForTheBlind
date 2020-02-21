@@ -3,7 +3,6 @@ package gamesforblind.codebreaker.gui.listener;
 import gamesforblind.codebreaker.CodebreakerGame;
 import gamesforblind.codebreaker.gui.CodebreakerFrame;
 import gamesforblind.enums.CodebreakerType;
-import gamesforblind.enums.InputType;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;

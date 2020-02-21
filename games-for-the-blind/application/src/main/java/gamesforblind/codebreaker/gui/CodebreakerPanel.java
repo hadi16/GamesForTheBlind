@@ -29,12 +29,11 @@ public class CodebreakerPanel extends JPanel {
 
     private final Function<Integer, Integer> getSecondGroupXOffset;
     private final Function<Integer, Boolean> isSecondGroup = (index) -> index > 9;
-
+    private final JFrame popUpFrame = new JFrame("End of Game");
     /**
      * This is reset every time the board is repainted (based on the bounds of the GUI window).
      */
     private int totalBoardLength;
-    private JFrame popUpFrame = new JFrame("End of Game");
 
     /**
      * Creates a new CodebreakerPanel.
@@ -240,43 +239,42 @@ public class CodebreakerPanel extends JPanel {
         }
     }
 
-    public void paintCode(){
+    public void paintCode() {
         JPanel popUpPanel = new JPanel();
         JLabel l;
 
-        int [] code = codebreakerState.getCodeToBreak();
+        int[] code = this.codebreakerState.getCodeToBreak();
         String str = "";
         //convert int[] to string and append together
-        for (int i =0; i < codebreakerType.getCodeLength(); i++){
+        for (int i = 0; i < this.codebreakerType.getCodeLength(); i++) {
             String newNum = Integer.toString(code[i]);
             str = str + newNum;
         }
 
         // create a label
-        if(codebreakerState.getCodeToBreak().length==codebreakerState.getGuessList().get(codebreakerState.getGuessList().size() - 1).getNumberInCorrectPosition()){
-            l = new JLabel("Congrats! You guessed the correct code!" );
-            l.setFont( new Font("Arial", Font.BOLD, (93 - 7 * 10) * this.totalBoardLength / 490));
-        }
-        else {
+        if (this.codebreakerState.getCodeToBreak().length == this.codebreakerState.getGuessList().get(this.codebreakerState.getGuessList().size() - 1).getNumberInCorrectPosition()) {
+            l = new JLabel("Congrats! You guessed the correct code!");
+            l.setFont(new Font("Arial", Font.BOLD, (93 - 7 * 10) * this.totalBoardLength / 490));
+        } else {
             l = new JLabel("Correct code: " + str);
             l.setFont(new Font("Arial", Font.BOLD, (93 - 7 * 10) * this.totalBoardLength / 390));
         }
 
-        popUpFrame.setSize(this.totalBoardLength , this.totalBoardLength/3);
+        this.popUpFrame.setSize(this.totalBoardLength, this.totalBoardLength / 3);
 
         PopupFactory pf = new PopupFactory();
 
         popUpPanel.add(l);
 
         // create a popup
-        Popup p = pf.getPopup(popUpFrame, popUpPanel, this.totalBoardLength/2, this.totalBoardLength/2);
+        Popup p = pf.getPopup(this.popUpFrame, popUpPanel, this.totalBoardLength / 2, this.totalBoardLength / 2);
 
-        popUpFrame.add(popUpPanel);
-        popUpFrame.show();
+        this.popUpFrame.add(popUpPanel);
+        this.popUpFrame.show();
         p.show();
 
         // Add and define the KeyListener here!
-        popUpFrame.addKeyListener(new KeyListener(){
+        this.popUpFrame.addKeyListener(new KeyListener() {
 
             @Override
             public void keyTyped(KeyEvent e) {
@@ -284,8 +282,8 @@ public class CodebreakerPanel extends JPanel {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_SPACE){
-                    popUpFrame.setVisible(false);
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    CodebreakerPanel.this.popUpFrame.setVisible(false);
                 }
             }
 
@@ -295,7 +293,7 @@ public class CodebreakerPanel extends JPanel {
         });
 
 
-}
+    }
 
 
     /**
@@ -320,16 +318,16 @@ public class CodebreakerPanel extends JPanel {
         // Step 1: print the row labels (numbers r1, r2, r3, etc.)
         for (int rowIndex = 0; rowIndex < 10; rowIndex++) {
             graphics.drawString(
-                    ("r" + Integer.toString(rowIndex + 1)),
-                    initialPosition.x - (squareDimension)- (squareDimension/4),
+                    ("r" + (rowIndex + 1)),
+                    initialPosition.x - (squareDimension) - (squareDimension / 4),
                     initialPosition.y + (squareDimension * rowIndex) + (3 * squareDimension / 4)
             );
         }
 
         for (int rowIdx = 10, secondRowIdx = 0; rowIdx < NUMBER_OF_ROWS; rowIdx++, secondRowIdx++) {
             graphics.drawString(
-                    ("r" + Integer.toString(rowIdx + 1)),
-                    initialPosition.x + squareDimension * CODE_LENGTH + squareDimension * 2 + 1 -(squareDimension/3),
+                    ("r" + (rowIdx + 1)),
+                    initialPosition.x + squareDimension * CODE_LENGTH + squareDimension * 2 + 1 - (squareDimension / 3),
                     initialPosition.y + (squareDimension * secondRowIdx) + (3 * squareDimension / 4)
             );
         }
@@ -337,8 +335,8 @@ public class CodebreakerPanel extends JPanel {
         // Step 2: print the column labels (letters 'c1', 'c2', 'c3', etc.)
         for (int columnIndex = 0; columnIndex < CODE_LENGTH; columnIndex++) {
             graphics.drawString(
-                    ("c" + Integer.toString(columnIndex + 1)),
-                    initialPosition.x +5 + squareDimension * columnIndex,
+                    ("c" + (columnIndex + 1)),
+                    initialPosition.x + 5 + squareDimension * columnIndex,
                     initialPosition.y - (CODE_LENGTH * squareDimension / 14)
             );
         }
@@ -346,7 +344,7 @@ public class CodebreakerPanel extends JPanel {
         final int X_OFFSET = initialPosition.x + this.getSecondGroupXOffset.apply(squareDimension);
         for (int columnIndex = 0; columnIndex < CODE_LENGTH; columnIndex++) {
             graphics.drawString(
-                    ("c" + Integer.toString(columnIndex + 1)),
+                    ("c" + (columnIndex + 1)),
                     X_OFFSET + 5 + squareDimension * columnIndex,
                     initialPosition.y - (CODE_LENGTH * squareDimension / 14)
             );
@@ -393,12 +391,14 @@ public class CodebreakerPanel extends JPanel {
                 TOTAL_BOARD_LENGTH
         );
 
-        if(codebreakerState.isGameOver() == true){
+        if (this.codebreakerState.isGameOver() == true) {
             this.totalBoardLength = TOTAL_BOARD_LENGTH;
-            paintCode();
+            this.paintCode();
 
         }
     }
 
-    public JFrame getPopUpFrame(){return this.popUpFrame;}
+    public JFrame getPopUpFrame() {
+        return this.popUpFrame;
+    }
 }
