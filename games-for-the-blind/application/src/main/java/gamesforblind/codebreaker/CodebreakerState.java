@@ -131,9 +131,6 @@ public class CodebreakerState {
     public void feedbackGuess(CodebreakerGuess currentGuess){
 
 
-        CodebreakerGuess currentCodebreakerGuess = new CodebreakerGuess(this.codeToBreak, this.currentGuess);
-        this.guessList.add(currentCodebreakerGuess);
-
 
 
         ArrayList<Phrase> relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.PLACED_CODEBREAKER_CODE));
