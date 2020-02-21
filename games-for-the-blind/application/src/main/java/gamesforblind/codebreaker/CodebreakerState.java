@@ -85,7 +85,6 @@ public class CodebreakerState {
     }
 
     public void setCodebreakerGuess() {
-
         for (Integer i : this.currentGuess) {
             if (i == null) {
                 this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CODEBREAKER_NEED_CODE);
@@ -95,18 +94,19 @@ public class CodebreakerState {
         CodebreakerGuess currentCodebreakerGuess = new CodebreakerGuess(this.codeToBreak, this.currentGuess);
         this.guessList.add(currentCodebreakerGuess);
 
-
+        ArrayList<Phrase> relevantPhrases;
+        //if the game is over, give message
        if(checkThatGameIsOver(codeToBreak, guessList)){
            gameOver = true;
            //if code is guessed correctly
            if(codeToBreak.length == guessList.get(guessList.size() - 1).getNumberInCorrectPosition()){
-               ArrayList<Phrase> relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
+               relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
                this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
            }
 
            //if player ran out of guesses
            else{
-               ArrayList<Phrase> relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.NO_MORE_GUESSES));
+               relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.NO_MORE_GUESSES));
                for (int i =0; i < codebreakerType.getCodeLength(); i++){
                    relevantPhrases.add(Phrase.convertIntegerToPhrase(codeToBreak[i]));
                }
