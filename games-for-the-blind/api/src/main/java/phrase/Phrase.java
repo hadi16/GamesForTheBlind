@@ -203,7 +203,6 @@ public enum Phrase {
     CODEBREAKER_UNKNOWN_GUESS("has the following guess so far");
 
 
-
     /**
      * The directory for all of the Phrase audio files ("resources/phrases" folder under the root of the project).
      */

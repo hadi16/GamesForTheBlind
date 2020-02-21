@@ -18,39 +18,21 @@ import static gamesforblind.Constants.CODEBREAKER_MAX_CODE_INT;
 public class CodebreakerState {
     private final CodebreakerType codebreakerType;
     private final AudioPlayerExecutor audioPlayerExecutor;
-
+    private final int[][] pastGuesses = new int[20][8];
+    private final int j = 0;
+    private final int k = 0;
+    public int h = 0;
     private boolean gameOver;
     private int[] codeToBreak;
     private Integer[] currentGuess;
-    private int[][] pastGuesses = new int[20][8];
     private ArrayList<CodebreakerGuess> guessList;
     private Point selectedCellPoint;
 
-    private int j = 0;
-    private int k = 0;
-    public int h = 0;
     public CodebreakerState(@NotNull AudioPlayerExecutor audioPlayerExecutor, @NotNull CodebreakerType codebreakerType) {
         this.audioPlayerExecutor = audioPlayerExecutor;
         this.codebreakerType = codebreakerType;
 
         this.initNewCodebreakerGame();
-    }
-
-    public boolean initNewCodebreakerGame() {
-        this.gameOver = false;
-        this.codeToBreak = this.generateCorrectCode();
-        this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
-        this.guessList = new ArrayList<>();
-        this.selectedCellPoint = new Point();
-
-        return true;
-    }
-
-    public void readUnrecognizedKey(int keyCode) {
-        ArrayList<Phrase> phrasesToRead = new ArrayList<>(Arrays.asList(
-                Phrase.UNRECOGNIZED_KEY, Phrase.keyCodeToPhrase(keyCode)
-        ));
-        this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
 
     public static boolean checkThatGameIsOver(
@@ -76,6 +58,23 @@ public class CodebreakerState {
         return codeToBreak.length == guessList.get(guessList.size() - 1).getNumberInCorrectPosition();
     }
 
+    public boolean initNewCodebreakerGame() {
+        this.gameOver = false;
+        this.codeToBreak = this.generateCorrectCode();
+        this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
+        this.guessList = new ArrayList<>();
+        this.selectedCellPoint = new Point();
+
+        return true;
+    }
+
+    public void readUnrecognizedKey(int keyCode) {
+        ArrayList<Phrase> phrasesToRead = new ArrayList<>(Arrays.asList(
+                Phrase.UNRECOGNIZED_KEY, Phrase.keyCodeToPhrase(keyCode)
+        ));
+        this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
+    }
+
     private int[] generateCorrectCode() {
         final Random RANDOM = new Random();
         final int CODE_LENGTH = this.codebreakerType.getCodeLength();
@@ -89,11 +88,11 @@ public class CodebreakerState {
 
     public void setCodebreakerGuess() {
         //creates a past guesses array for reading back past rows
-        for(int j = 0; j < 1; j++){
-            for(int k = 0; k < codeToBreak.length; k++){
-                    pastGuesses[h][k] = this.currentGuess[k];
+        for (int j = 0; j < 1; j++) {
+            for (int k = 0; k < this.codeToBreak.length; k++) {
+                this.pastGuesses[this.h][k] = this.currentGuess[k];
             }
-            h++;
+            this.h++;
         }
 
         for (Integer i : this.currentGuess) {
@@ -107,20 +106,20 @@ public class CodebreakerState {
 
         ArrayList<Phrase> relevantPhrases;
         //if the game is over, give message
-       if(checkThatGameIsOver(codeToBreak, guessList)){
-           gameOver = true;
-           feedbackGameOver(currentCodebreakerGuess);
+        if (checkThatGameIsOver(this.codeToBreak, this.guessList)) {
+            this.gameOver = true;
+            this.feedbackGameOver(currentCodebreakerGuess);
 
-       }
+        }
 
-       //if the game is not over, give the player feedback
-       else{
-           feedbackGuess(currentCodebreakerGuess);
-       }
+        //if the game is not over, give the player feedback
+        else {
+            this.feedbackGuess(currentCodebreakerGuess);
+        }
 
         //for reading back later
-        pastGuesses[h-1][6] = currentCodebreakerGuess.getNumberInCorrectPosition();
-        pastGuesses[h-1][7] = currentCodebreakerGuess.getNumberOfCorrectColor();
+        this.pastGuesses[this.h - 1][6] = currentCodebreakerGuess.getNumberInCorrectPosition();
+        this.pastGuesses[this.h - 1][7] = currentCodebreakerGuess.getNumberOfCorrectColor();
 
         this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
         this.selectedCellPoint.x = 0;
@@ -128,9 +127,7 @@ public class CodebreakerState {
 
     }
 
-    public void feedbackGuess(CodebreakerGuess currentGuess){
-
-
+    public void feedbackGuess(CodebreakerGuess currentGuess) {
 
 
         ArrayList<Phrase> relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.PLACED_CODEBREAKER_CODE));
@@ -151,18 +148,19 @@ public class CodebreakerState {
         this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
 
     }
-    public void feedbackGameOver(CodebreakerGuess currentGuess){
+
+    public void feedbackGameOver(CodebreakerGuess currentGuess) {
         ArrayList<Phrase> relevantPhrases;
         //if code is guessed correctly
-        if(codeToBreak.length == guessList.get(guessList.size() - 1).getNumberInCorrectPosition()){
+        if (this.codeToBreak.length == this.guessList.get(this.guessList.size() - 1).getNumberInCorrectPosition()) {
             relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
         }
 
         //if player ran out of guesses
-        else{
+        else {
             relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.NO_MORE_GUESSES));
-            for (int i =0; i < codebreakerType.getCodeLength(); i++){
-                relevantPhrases.add(Phrase.convertIntegerToPhrase(codeToBreak[i]));
+            for (int i = 0; i < this.codebreakerType.getCodeLength(); i++) {
+                relevantPhrases.add(Phrase.convertIntegerToPhrase(this.codeToBreak[i]));
             }
 
         }
@@ -178,11 +176,10 @@ public class CodebreakerState {
         );
 
         this.currentGuess[this.selectedCellPoint.x] = numberToSet;
-        if(this.selectedCellPoint.x == codebreakerType.getCodeLength()-1){
+        if (this.selectedCellPoint.x == this.codebreakerType.getCodeLength() - 1) {
             this.selectedCellPoint.x = 0;
-        }
-        else{
-            this.selectedCellPoint.x =  this.selectedCellPoint.x+1;
+        } else {
+            this.selectedCellPoint.x = this.selectedCellPoint.x + 1;
         }
     }
 
@@ -204,16 +201,16 @@ public class CodebreakerState {
                 }
                 break;
             case UP:
-                if(this.selectedCellPoint.y == 0 ){}
-                else {
+                if (this.selectedCellPoint.y == 0) {
+                } else {
                     this.selectedCellPoint.y--;
                 }
                 break;
             case DOWN:
-                if(this.codeToBreak.length == 4 && this.selectedCellPoint.y == 11){}
-                else if(this.codeToBreak.length == 5 && this.selectedCellPoint.y == 14){}
-                else if(this.codeToBreak.length == 6 && this.selectedCellPoint.y == 19){}
-                else {
+                if (this.codeToBreak.length == 4 && this.selectedCellPoint.y == 11) {
+                } else if (this.codeToBreak.length == 5 && this.selectedCellPoint.y == 14) {
+                } else if (this.codeToBreak.length == 6 && this.selectedCellPoint.y == 19) {
+                } else {
                     this.selectedCellPoint.y++;
                 }
                 break;
@@ -256,18 +253,19 @@ public class CodebreakerState {
 
         this.audioPlayerExecutor.replacePhraseAndPrint(instructionsPhrases);
     }
+
     public void readBackRow() {
 
         ArrayList<Phrase> readBackPhrases;
         int a, b, c, d, e, f, g, o = 0;
-        a = pastGuesses[selectedCellPoint.y][0];
-        b = pastGuesses[selectedCellPoint.y][1];
-        c = pastGuesses[selectedCellPoint.y][2];
-        d = pastGuesses[selectedCellPoint.y][3];
-        e = pastGuesses[selectedCellPoint.y][4];
-        f = pastGuesses[selectedCellPoint.y][5];
-        g = pastGuesses[selectedCellPoint.y][6];
-        o = pastGuesses[selectedCellPoint.y][7];
+        a = this.pastGuesses[this.selectedCellPoint.y][0];
+        b = this.pastGuesses[this.selectedCellPoint.y][1];
+        c = this.pastGuesses[this.selectedCellPoint.y][2];
+        d = this.pastGuesses[this.selectedCellPoint.y][3];
+        e = this.pastGuesses[this.selectedCellPoint.y][4];
+        f = this.pastGuesses[this.selectedCellPoint.y][5];
+        g = this.pastGuesses[this.selectedCellPoint.y][6];
+        o = this.pastGuesses[this.selectedCellPoint.y][7];
 
         /* For reading off rows that havent been submitted yet, TODO
         for(int z = 0; z < 6; z++){
@@ -276,22 +274,21 @@ public class CodebreakerState {
                 }
         }*/
         //read empty row
-        if(pastGuesses[selectedCellPoint.y][0] == 0){
-            if(codeToBreak.length == 4){
+        if (this.pastGuesses[this.selectedCellPoint.y][0] == 0) {
+            if (this.codeToBreak.length == 4) {
                 readBackPhrases = new ArrayList<>(Arrays.asList(
                         Phrase.CODEBREAKER_READ_ROW,
-                        Phrase.convertIntegerToPhrase(selectedCellPoint.y+1),
+                        Phrase.convertIntegerToPhrase(this.selectedCellPoint.y + 1),
                         Phrase.CODEBREAKER_UNKNOWN_GUESS,
                         Phrase.convertIntegerToPhrase(a),
                         Phrase.convertIntegerToPhrase(b),
                         Phrase.convertIntegerToPhrase(c),
                         Phrase.convertIntegerToPhrase(d)
                 ));
-            }
-            else if(codeToBreak.length == 5){
+            } else if (this.codeToBreak.length == 5) {
                 readBackPhrases = new ArrayList<>(Arrays.asList(
                         Phrase.CODEBREAKER_READ_ROW,
-                        Phrase.convertIntegerToPhrase(selectedCellPoint.y+1),
+                        Phrase.convertIntegerToPhrase(this.selectedCellPoint.y + 1),
                         Phrase.CODEBREAKER_UNKNOWN_GUESS,
                         Phrase.convertIntegerToPhrase(a),
                         Phrase.convertIntegerToPhrase(b),
@@ -299,11 +296,10 @@ public class CodebreakerState {
                         Phrase.convertIntegerToPhrase(d),
                         Phrase.convertIntegerToPhrase(e)
                 ));
-            }
-            else{
+            } else {
                 readBackPhrases = new ArrayList<>(Arrays.asList(
                         Phrase.CODEBREAKER_READ_ROW,
-                        Phrase.convertIntegerToPhrase(selectedCellPoint.y+1),
+                        Phrase.convertIntegerToPhrase(this.selectedCellPoint.y + 1),
                         Phrase.CODEBREAKER_UNKNOWN_GUESS,
                         Phrase.convertIntegerToPhrase(a),
                         Phrase.convertIntegerToPhrase(b),
@@ -315,11 +311,10 @@ public class CodebreakerState {
             }
 
 
-        }
-        else if(codeToBreak.length == 4){
+        } else if (this.codeToBreak.length == 4) {
             readBackPhrases = new ArrayList<>(Arrays.asList(
                     Phrase.CODEBREAKER_GUESS_NUMBER_RESPONSE,
-                    Phrase.convertIntegerToPhrase(this.selectedCellPoint.y+1),
+                    Phrase.convertIntegerToPhrase(this.selectedCellPoint.y + 1),
                     Phrase.CODEBREAKER_GUESS_WAS,
                     Phrase.convertIntegerToPhrase(a),
                     Phrase.convertIntegerToPhrase(b),
@@ -329,12 +324,11 @@ public class CodebreakerState {
                     Phrase.convertIntegerToPhrase(g),
                     Phrase.CODEBREAKER_NUMBER_ONLY,
                     Phrase.convertIntegerToPhrase(o)
-                ));
-        }
-        else if(codeToBreak.length == 5){
+            ));
+        } else if (this.codeToBreak.length == 5) {
             readBackPhrases = new ArrayList<>(Arrays.asList(
                     Phrase.CODEBREAKER_GUESS_NUMBER_RESPONSE,
-                    Phrase.convertIntegerToPhrase(this.selectedCellPoint.y+1),
+                    Phrase.convertIntegerToPhrase(this.selectedCellPoint.y + 1),
                     Phrase.CODEBREAKER_GUESS_WAS,
                     Phrase.convertIntegerToPhrase(a),
                     Phrase.convertIntegerToPhrase(b),
@@ -346,11 +340,10 @@ public class CodebreakerState {
                     Phrase.CODEBREAKER_NUMBER_ONLY,
                     Phrase.convertIntegerToPhrase(o)
             ));
-        }
-        else{
+        } else {
             readBackPhrases = new ArrayList<>(Arrays.asList(
                     Phrase.CODEBREAKER_GUESS_NUMBER_RESPONSE,
-                    Phrase.convertIntegerToPhrase(this.selectedCellPoint.y+1),
+                    Phrase.convertIntegerToPhrase(this.selectedCellPoint.y + 1),
                     Phrase.CODEBREAKER_GUESS_WAS,
                     Phrase.convertIntegerToPhrase(a),
                     Phrase.convertIntegerToPhrase(b),
