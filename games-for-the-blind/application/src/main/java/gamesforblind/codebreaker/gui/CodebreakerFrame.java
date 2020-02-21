@@ -111,5 +111,8 @@ public class CodebreakerFrame extends JFrame {
     public void closeFrames() {
         this.frame.setVisible(false);
         this.frame.dispose();
+        codebreakerPanel.getPopUpFrame().setVisible(false);
+        codebreakerPanel.getPopUpFrame().dispose();
+
     }
 }
