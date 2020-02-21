@@ -239,43 +239,44 @@ public class CodebreakerPanel extends JPanel {
         }
     }
 
-    public void paintCode() {
-        JPanel popUpPanel = new JPanel();
-        JLabel l;
+    private void paintCode() {
+        final int[] codeToBreak = this.codebreakerState.getCodeToBreak();
 
-        int[] code = this.codebreakerState.getCodeToBreak();
-        String str = "";
-        //convert int[] to string and append together
+        JPanel popUpPanel = new JPanel();
+        JLabel label;
+
+        // Convert int[] to string and append together
+        StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < this.codebreakerType.getCodeLength(); i++) {
-            String newNum = Integer.toString(code[i]);
-            str = str + newNum;
+            String newNum = Integer.toString(codeToBreak[i]);
+            stringBuilder.append(newNum);
         }
 
-        // create a label
-        if (this.codebreakerState.getCodeToBreak().length == this.codebreakerState.getGuessList().get(this.codebreakerState.getGuessList().size() - 1).getNumberInCorrectPosition()) {
-            l = new JLabel("Congrats! You guessed the correct code!");
-            l.setFont(new Font("Arial", Font.BOLD, (93 - 7 * 10) * this.totalBoardLength / 490));
+        // Create a label
+        final ArrayList<CodebreakerGuess> guessList = this.codebreakerState.getGuessList();
+        final CodebreakerGuess lastGuess = guessList.get(guessList.size() - 1);
+        if (this.codebreakerType.getCodeLength() == lastGuess.getNumberInCorrectPosition()) {
+            label = new JLabel("Congrats! You guessed the correct code!");
+            label.setFont(new Font("Arial", Font.BOLD, (93 - 7 * 10) * this.totalBoardLength / 490));
         } else {
-            l = new JLabel("Correct code: " + str);
-            l.setFont(new Font("Arial", Font.BOLD, (93 - 7 * 10) * this.totalBoardLength / 390));
+            label = new JLabel("Correct code: " + stringBuilder);
+            label.setFont(new Font("Arial", Font.BOLD, (93 - 7 * 10) * this.totalBoardLength / 390));
         }
 
         this.popUpFrame.setSize(this.totalBoardLength, this.totalBoardLength / 3);
 
-        PopupFactory pf = new PopupFactory();
-
-        popUpPanel.add(l);
-
-        // create a popup
-        Popup p = pf.getPopup(this.popUpFrame, popUpPanel, this.totalBoardLength / 2, this.totalBoardLength / 2);
+        // Create a popup
+        popUpPanel.add(label);
+        Popup popup = new PopupFactory().getPopup(
+                this.popUpFrame, popUpPanel, this.totalBoardLength / 2, this.totalBoardLength / 2
+        );
 
         this.popUpFrame.add(popUpPanel);
-        this.popUpFrame.show();
-        p.show();
+        this.popUpFrame.setVisible(true);
+        popup.show();
 
         // Add and define the KeyListener here!
         this.popUpFrame.addKeyListener(new KeyListener() {
-
             @Override
             public void keyTyped(KeyEvent e) {
             }
@@ -291,8 +292,6 @@ public class CodebreakerPanel extends JPanel {
             public void keyReleased(KeyEvent e) {
             }
         });
-
-
     }
 
 
@@ -391,7 +390,7 @@ public class CodebreakerPanel extends JPanel {
                 TOTAL_BOARD_LENGTH
         );
 
-        if (this.codebreakerState.isGameOver() == true) {
+        if (this.codebreakerState.isGameOver()) {
             this.totalBoardLength = TOTAL_BOARD_LENGTH;
             this.paintCode();
 
