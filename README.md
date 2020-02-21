@@ -86,25 +86,33 @@ Example: Place a ‘3’ into the top-right square in the bottom-left block in a
 
 
 ## CodeBreaker User Manual
-**Rules of CodeBreaker:** The goal of CodeBreaker is to correctly guess a pre-determined code. Typically, this code is made up of a series of colored pegs; however, in this version of CodeBreaker, numbered pegs will be used instead. To guess the code, the player must place four numbers from 1-6 (numbers may be used more than once) into four spaces. After making the guess, the player is notified about how much of their guess is correct. This is done by adding four small pegs off to the side. A black peg means that a numbered peg is the right number in the right place. A red peg means that a peg with that number is in the code, but not in the correct place. No peg means that a peg is not the correct number nor is it in the correct place. This is repeated until the code is correctly guessed. 
- 
-**How to Play CodeBreaker Using Mouse:** Click and drag a numbered peg into a peg hole, then click “Make Guess.” 
- 
-**How to Play CodeBreaker Using Keyboard:** Use the arrow keys to select a space to place the peg. Use the number pad to enter a number from 1 to 6. Hit the spacebar to make a guess. The player will be given feedback on the accuracy of their guess. Pressing “Q” followed by a number will read back that row. This will allow users to look back row by row and remember past guesses.
+**Rules of CodeBreaker:** The goal of CodeBreaker is to correctly guess a pre-determined code. 
+Typically, this code is made up of a series of colored pegs; however, in this version of CodeBreaker, numbered pegs will be used instead. 
+The code length options are 4, 5, and 6 with the number of trials being 12, 15, and 20 respectively. 
 
-Example: Enter the code "5, 1, 2, 3": 
-1. Enter the number '5' and use the right arrow key to move into the next space.
-3. Audio feedback will play to disclose what number is currently this square if you already placed a number there. 
-4. Assuming that the square is empty, press the number ‘1’ on the number pad to insert a 1. 
-5. continue moving through the four spaces until you have finalized your guess. 
-6. Press the space bar to make the guess. Audio feedback will let you know how you did by reading the current guess, how many guesses you have made, and what you got correct. 
-7. Repeat steps with new guesses until you either run out of guesses or correctly guess the code.
+![Image_Of_cb_options](https://github.com/hadi16/GamesForTheBlind/blob/master/images/cb_options.png)
+ 
+To guess the code, the player must place the correct amount of numbers from 1-6 (numbers may be used more than once) into the empty spaces. 
+After making the guess, the player is notified about how much of their guess is correct. 
+This is done by adding four/five/six small pegs off to the side. 
+ 
+ ![Image_Of_cb_4_solved](https://github.com/hadi16/GamesForTheBlind/blob/master/images/cb_4_solved.png)
 
-**Menu Tab Features:**
-* Instructions: read the instructions
-* Language: change the language (Not yet implemented)
-* Restart: restart the codebreaker board
-* Return to Main Menu: exit the game and return to main menu
+A black peg means that a numbered peg is the right number in the right place. 
+A red peg means that a peg with that number is in the code, but not in the correct place. 
+No peg means that a peg is not the correct number nor is it in the correct place. 
+This is repeated until the code is correctly guessed. 
+ 
+![Image_Of_cb_5](https://github.com/hadi16/GamesForTheBlind/blob/master/images/cb_5.png)
+
+![Image_Of_cb_6](https://github.com/hadi16/GamesForTheBlind/blob/master/images/cb_6.png)
+
+
+**How to Play CodeBreaker Using Mouse:** Click and enter a number into a peg hole, then click “Make Guess.” 
+ 
+**How to Play CodeBreaker Using Keyboard:** Use the arrow keys to select a hole to place the peg. Use the number pad to enter a number from 1 to 6. Hit the spacebar to make a guess. The player will be given feedback on the accuracy of their guess. Pressing “Q” followed by a number will read back that row. This will allow users to look back row by row and remember past guesses
+
+
 
 ## License
 This code is publicly available and licensed under GPLv3. 
