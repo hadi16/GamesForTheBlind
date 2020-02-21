@@ -118,6 +118,10 @@ public class CodebreakerState {
            feedbackGuess(currentCodebreakerGuess);
        }
 
+        //for reading back later
+        pastGuesses[h-1][6] = currentCodebreakerGuess.getNumberInCorrectPosition();
+        pastGuesses[h-1][7] = currentCodebreakerGuess.getNumberOfCorrectColor();
+
         this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
         this.selectedCellPoint.x = 0;
         this.selectedCellPoint.y++;
@@ -130,9 +134,7 @@ public class CodebreakerState {
         CodebreakerGuess currentCodebreakerGuess = new CodebreakerGuess(this.codeToBreak, this.currentGuess);
         this.guessList.add(currentCodebreakerGuess);
 
-        //for reading back later
-        pastGuesses[h-1][6] = currentCodebreakerGuess.getNumberInCorrectPosition();
-        pastGuesses[h-1][7] = currentCodebreakerGuess.getNumberOfCorrectColor();
+
 
         ArrayList<Phrase> relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.PLACED_CODEBREAKER_CODE));
         for (int i : this.currentGuess) {
