@@ -85,49 +85,67 @@ public class CodebreakerState {
     }
 
     public void setCodebreakerGuess() {
+
         for (Integer i : this.currentGuess) {
             if (i == null) {
                 this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CODEBREAKER_NEED_CODE);
                 return;
             }
         }
-
         CodebreakerGuess currentCodebreakerGuess = new CodebreakerGuess(this.codeToBreak, this.currentGuess);
         this.guessList.add(currentCodebreakerGuess);
+
+
+       if(checkThatGameIsOver(codeToBreak, guessList)){
+           gameOver = true;
+           //if code is guessed correctly
+           if(codeToBreak.length == guessList.get(guessList.size() - 1).getNumberInCorrectPosition()){
+               ArrayList<Phrase> relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
+               this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
+           }
+
+           //if player ran out of guesses
+           else{
+               ArrayList<Phrase> relevantPhrases = new ArrayList<>();
+               for (int i =0; i < codebreakerType.getCodeLength(); i++){
+                   relevantPhrases.add(Phrase.convertIntegerToPhrase(codeToBreak[i]));
+               }
+               this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
+
+           }
+
+
+       }
+       //if the game is not over, give the player feedback
+       else{
+           feedbackGuess(currentCodebreakerGuess);
+       }
+
+        this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
+        this.selectedCellPoint.x = 0;
+        this.selectedCellPoint.y++;
+
+    }
+
+    public void feedbackGuess(CodebreakerGuess currentGuess){
 
         ArrayList<Phrase> relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.PLACED_CODEBREAKER_CODE));
         for (int i : this.currentGuess) {
             relevantPhrases.add(Phrase.convertIntegerToPhrase(i));
         }
+        Phrase[] phrasesToAdd = {
+                Phrase.CODEBREAKER_GUESS_NUMBER, Phrase.convertIntegerToPhrase(this.guessList.size()),
+                Phrase.CODEBREAKER_NUMBER_CORRECT_POSITION,
+                Phrase.convertIntegerToPhrase(currentGuess.getNumberInCorrectPosition()),
+                Phrase.CODEBREAKER_NUMBER_ONLY,
+                Phrase.convertIntegerToPhrase(currentGuess.getNumberOfCorrectColor())
+        };
+        relevantPhrases.addAll(Arrays.asList(phrasesToAdd));
 
-//            //if guess is correct say correct code
-//            ArrayList<Phrase> relevantPhrasesEndGame = new ArrayList<>(Collections.singletonList(Phrase.PLACED_CODEBREAKER_CODE));
-//            //relevantPhrasesEndGame.add(Phrase.THE_CORRECT_CODE_IS);
-//            for (int i =0; i < codebreakerType.getCodeLength(); i++) {
-//                relevantPhrasesEndGame.add(Phrase.convertIntegerToPhrase(codeToBreak[i]));
-//            }
-//            this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrasesEndGame);
-
-            Phrase[] phrasesToAdd = {
-                    Phrase.CODEBREAKER_GUESS_NUMBER, Phrase.convertIntegerToPhrase(this.guessList.size()),
-                    Phrase.CODEBREAKER_NUMBER_CORRECT_POSITION,
-                    Phrase.convertIntegerToPhrase(currentCodebreakerGuess.getNumberInCorrectPosition()),
-                    Phrase.CODEBREAKER_NUMBER_ONLY,
-                    Phrase.convertIntegerToPhrase(currentCodebreakerGuess.getNumberOfCorrectColor())
-            };
-            relevantPhrases.addAll(Arrays.asList(phrasesToAdd));
-
-            this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
-            this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
-
-        this.selectedCellPoint.x = 0;
-        this.selectedCellPoint.y++;
-
-       if(checkThatGameIsOver(codeToBreak, guessList)){
-            gameOver = true;
-        }
+        this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
 
     }
+
 
     public void setSingleNumber(int numberToSet) {
         this.audioPlayerExecutor.replacePhraseAndPrint(
