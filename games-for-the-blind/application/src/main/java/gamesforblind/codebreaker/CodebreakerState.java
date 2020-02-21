@@ -98,24 +98,10 @@ public class CodebreakerState {
         //if the game is over, give message
        if(checkThatGameIsOver(codeToBreak, guessList)){
            gameOver = true;
-           //if code is guessed correctly
-           if(codeToBreak.length == guessList.get(guessList.size() - 1).getNumberInCorrectPosition()){
-               relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
-               this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
-           }
-
-           //if player ran out of guesses
-           else{
-               relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.NO_MORE_GUESSES));
-               for (int i =0; i < codebreakerType.getCodeLength(); i++){
-                   relevantPhrases.add(Phrase.convertIntegerToPhrase(codeToBreak[i]));
-               }
-               this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
-
-           }
-
+           feedbackGameOver(currentCodebreakerGuess);
 
        }
+
        //if the game is not over, give the player feedback
        else{
            feedbackGuess(currentCodebreakerGuess);
@@ -142,6 +128,25 @@ public class CodebreakerState {
         };
         relevantPhrases.addAll(Arrays.asList(phrasesToAdd));
 
+        this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
+
+    }
+    public void feedbackGameOver(CodebreakerGuess currentGuess){
+        ArrayList<Phrase> relevantPhrases;
+        //if code is guessed correctly
+        if(codeToBreak.length == guessList.get(guessList.size() - 1).getNumberInCorrectPosition()){
+            relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
+        }
+
+        //if player ran out of guesses
+        else{
+            relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.NO_MORE_GUESSES));
+            for (int i =0; i < codebreakerType.getCodeLength(); i++){
+                relevantPhrases.add(Phrase.convertIntegerToPhrase(codeToBreak[i]));
+            }
+
+        }
+        relevantPhrases.add(Phrase.SPACE_FOR_EXIT);
         this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
 
     }
