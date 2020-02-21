@@ -263,24 +263,24 @@ public class CodebreakerPanel extends JPanel {
         popUpFrame.show();
         p.show();
 
-//        // Add and define the KeyListener here!
-//        popUpFrame.addKeyListener(new KeyListener(){
-//
-//            @Override
-//            public void keyTyped(KeyEvent e) {
-//            }
-//
-//            @Override
-//            public void keyPressed(KeyEvent e) {}
-//
-//            @Override
-//            public void keyReleased(KeyEvent e) {
-//                if(e.getKeyCode() == KeyEvent.VK_ENTER){
-//                    p.hide();
-//
-//                }
-//            }
-//        });
+        // Add and define the KeyListener here!
+        popUpFrame.addKeyListener(new KeyListener(){
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_SPACE){
+                    popUpFrame.setVisible(false);
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+        });
 
 
 }
