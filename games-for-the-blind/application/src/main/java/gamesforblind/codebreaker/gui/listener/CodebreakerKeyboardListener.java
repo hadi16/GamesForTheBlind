@@ -68,6 +68,8 @@ public class CodebreakerKeyboardListener implements KeyListener {
             return;
         }
 
+
+
         // Case 3: the selected key is the 'I' key (play the instructions).
         if (selectedKeyCode == KeyEvent.VK_I) {
             this.codebreakerGame.receiveAction(new CodebreakerInstructionsAction());
@@ -107,8 +109,13 @@ public class CodebreakerKeyboardListener implements KeyListener {
             this.codebreakerGame.receiveAction(new CodebreakerSetGuessAction());
             return;
         }
+        // Case 8: The user presses INSERT to have the row read off
+        if(selectedKeyCode == KeyEvent.VK_Y){
+            this.codebreakerGame.receiveAction(new CodebreakerReadBackAction());
+            return;
+        }
 
-        // Case 8: the selected key is unrecognized.
+        // Case 9: the selected key is unrecognized.
         this.codebreakerGame.receiveAction(new CodebreakerUnrecognizedKeyAction(e.getKeyCode()));
     }
 
