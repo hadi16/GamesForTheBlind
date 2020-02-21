@@ -59,8 +59,14 @@ public class AudioPlayer implements Runnable {
         try {
             Clip phraseClip = AudioSystem.getClip();
 
-            InputStream phraseAudioStream = phrase.getPhraseInputStream();
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(phraseAudioStream);
+            Optional<InputStream> maybePhraseAudioStream = phrase.getPhraseInputStream();
+
+            if (maybePhraseAudioStream.isEmpty()) {
+                System.err.println(String.format("Failed to find phrase audio file: %s!", phrase));
+                return Optional.empty();
+            }
+
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(maybePhraseAudioStream.get());
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedInputStream);
 
             // The Clip should be opened so that it can be immediately played.

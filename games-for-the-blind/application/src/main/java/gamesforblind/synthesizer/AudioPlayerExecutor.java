@@ -15,6 +15,13 @@ public class AudioPlayerExecutor {
     private final AudioPlayer audioPlayer;
 
     /**
+     * Creates a dummy AudioPlayerExecutor for testing purposes.
+     */
+    public AudioPlayerExecutor() {
+        this.audioPlayer = null;
+    }
+
+    /**
      * Creates a new AudioPlayerExecutor.
      *
      * @param audioPlayer The program's audio player.

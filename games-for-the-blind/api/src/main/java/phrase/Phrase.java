@@ -14,6 +14,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import static java.util.Map.entry;
 import static java.util.Map.ofEntries;
@@ -200,7 +201,6 @@ public enum Phrase {
     CODEBREAKER_GUESS_WAS("the codebreaker code guess was:"),
     CODEBREAKER_READ_ROW("Row"),
     CODEBREAKER_UNKNOWN_GUESS("has the following guess so far");
-
 
 
     /**
@@ -416,12 +416,13 @@ public enum Phrase {
     /**
      * Used when reading audio files in the game. Uses "resources" so that it works in a JAR file.
      *
-     * @return The {@link InputStream} to the given Phrase.
+     * @return The {@link InputStream} to the given Phrase wrapped by an Optional.
      */
-    public InputStream getPhraseInputStream() {
+    public Optional<InputStream> getPhraseInputStream() {
         // Audio file is a resource, which is under "phrases/<SHA_256_value>.wav"
-        return ClassLoader.getSystemClassLoader().getResourceAsStream(
-                String.format("phrases/%s.wav", this.getPhaseHashValue())
+        final String audioFileName = String.format("phrases/%s.wav", this.getPhaseHashValue());
+        return Optional.ofNullable(
+                ClassLoader.getSystemClassLoader().getResourceAsStream(audioFileName)
         );
     }
 }

@@ -9,6 +9,7 @@ import gamesforblind.enums.GameMenuItem;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.awt.*;
 
 import static gamesforblind.Constants.FRAME_DIMENSION;
 
@@ -111,8 +112,12 @@ public class CodebreakerFrame extends JFrame {
     public void closeFrames() {
         this.frame.setVisible(false);
         this.frame.dispose();
-        codebreakerPanel.getPopUpFrame().setVisible(false);
-        codebreakerPanel.getPopUpFrame().dispose();
+        this.codebreakerPanel.getPopUpFrame().setVisible(false);
+        this.codebreakerPanel.getPopUpFrame().dispose();
 
+    }
+
+    public Rectangle getFrameBounds() {
+        return new Rectangle(this.frame.getBounds());
     }
 }

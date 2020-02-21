@@ -1,25 +1,34 @@
 import gamesforblind.codebreaker.CodebreakerGuess;
 import gamesforblind.codebreaker.CodebreakerState;
 import gamesforblind.enums.CodebreakerType;
-import gamesforblind.synthesizer.AudioPlayer;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
-import javax.sound.sampled.LineUnavailableException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
 @SuppressWarnings("ConstantConditions")
 public class CodeBreakerTest {
-    private final AudioPlayerExecutor testAudioPlayerExecutor = new AudioPlayerExecutor(new AudioPlayer());
-    private final CodebreakerType codebreakerType = CodebreakerType.FOUR;
-    private final CodebreakerState codebreakerState = new CodebreakerState(
-            this.testAudioPlayerExecutor, this.codebreakerType
-    );
+    private AudioPlayerExecutor testAudioPlayerExecutor;
+    private CodebreakerType codebreakerType;
+    private CodebreakerState codebreakerState;
 
-    public CodeBreakerTest() throws LineUnavailableException {
+    @Before
+    public void setUp() {
+        this.testAudioPlayerExecutor = new AudioPlayerExecutor();
+        this.codebreakerType = CodebreakerType.FOUR;
+        this.codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, this.codebreakerType);
+    }
+
+    @After
+    public void tearDown() {
+        this.testAudioPlayerExecutor = null;
+        this.codebreakerType = null;
+        this.codebreakerState = null;
     }
 
     @Test
@@ -51,7 +60,7 @@ public class CodeBreakerTest {
                 null, null, null, null, null, null, null, null, null, null, null, null
         ));
 
-        Assert.assertTrue(CodebreakerState.checkThatGameIsOver(new int[]{}, guessList));
+        Assert.assertTrue(CodebreakerState.checkThatGameIsOver(new int[]{1, 2, 3, 4}, guessList));
     }
 
     @Test
@@ -101,21 +110,26 @@ public class CodeBreakerTest {
     public void codebreakerMaxTrialsForFiveLengthCodeLose() {
         // Only 15 guesses allowed
         ArrayList<CodebreakerGuess> guessList = new ArrayList<>(Arrays.asList(
-                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null
+                null, null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null
         ));
 
-        Assert.assertTrue(CodebreakerState.checkThatGameIsOver(new int[]{}, guessList));
+        Assert.assertTrue(CodebreakerState.checkThatGameIsOver(new int[]{1, 2, 3, 4, 5}, guessList));
     }
 
     // Tests that if the correct code was not guessed for 6 length code and 20 guesses have already been made
     @Test
     public void codebreakerMaxTrialsForSixLengthCodeLose() {
         // 20 long to match the max number of trials.
+        CodebreakerGuess codebreakerGuess = new CodebreakerGuess(new int[]{}, new Integer[]{});
         ArrayList<CodebreakerGuess> guessList = new ArrayList<>(Arrays.asList(
-                null, null, null, null, null, null, null, null, null, null, null, null,
-                null, null, null, null, null, null, null, null, null, null, null, null
+                null, null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null
         ));
-        Assert.assertTrue(CodebreakerState.checkThatGameIsOver(new int[]{}, guessList));
+        Assert.assertTrue(CodebreakerState.checkThatGameIsOver(new int[]{1, 1, 1, 1, 1, 1}, guessList));
     }
 
     @Test
@@ -131,13 +145,5 @@ public class CodeBreakerTest {
         if (CodebreakerState.checkThatGameIsOver(correctCode, guessList)) {
             Assert.assertTrue(codebreakerState.initNewCodebreakerGame());
         }
-    }
-
-    @Test
-    public void codebreakerHint() {
-        // If player wants to guess correctCode[1]
-        CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, CodebreakerType.FOUR);
-        int[] correctCode = new int[]{1, 2, 3, 4};
-        Assert.assertEquals(codebreakerState.hint(correctCode[1]), 2);
     }
 }
