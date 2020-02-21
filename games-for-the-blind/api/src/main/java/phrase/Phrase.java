@@ -79,6 +79,8 @@ public enum Phrase {
     /* General: Congratulations message */
     CONGRATS("YOU'VE FINISHED THE GAME! CONGRATULATIONS!"),
 
+    NO_MORE_GUESSES("You've ran out of guesses. The correct code is: "),
+
     /* General: Error Phrases */
     UNRECOGNIZED_KEY("An unrecognized key was pressed on the keyboard:"),
 

@@ -69,7 +69,7 @@ public class CodebreakerState {
             throw new IllegalArgumentException("Invalid code length passed to checker function!");
         }
 
-        if (guessList.size() == codebreakerType.getCodeLength()) {
+        if (guessList.size() == codebreakerType.getNumberOfRows()) {
             return true;
         }
 
@@ -102,6 +102,29 @@ public class CodebreakerState {
                 return;
             }
         }
+        CodebreakerGuess currentCodebreakerGuess = new CodebreakerGuess(this.codeToBreak, this.currentGuess);
+        this.guessList.add(currentCodebreakerGuess);
+
+        ArrayList<Phrase> relevantPhrases;
+        //if the game is over, give message
+       if(checkThatGameIsOver(codeToBreak, guessList)){
+           gameOver = true;
+           feedbackGameOver(currentCodebreakerGuess);
+
+       }
+
+       //if the game is not over, give the player feedback
+       else{
+           feedbackGuess(currentCodebreakerGuess);
+       }
+
+        this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
+        this.selectedCellPoint.x = 0;
+        this.selectedCellPoint.y++;
+
+    }
+
+    public void feedbackGuess(CodebreakerGuess currentGuess){
 
 
         CodebreakerGuess currentCodebreakerGuess = new CodebreakerGuess(this.codeToBreak, this.currentGuess);
@@ -116,23 +139,39 @@ public class CodebreakerState {
             relevantPhrases.add(Phrase.convertIntegerToPhrase(i));
         }
 
-
         Phrase[] phrasesToAdd = {
                 Phrase.CODEBREAKER_GUESS_NUMBER,
                 Phrase.convertIntegerToPhrase(this.guessList.size()),
                 Phrase.CODEBREAKER_NUMBER_CORRECT_POSITION,
-                Phrase.convertIntegerToPhrase(currentCodebreakerGuess.getNumberInCorrectPosition()),
+                Phrase.convertIntegerToPhrase(currentGuess.getNumberInCorrectPosition()),
                 Phrase.CODEBREAKER_NUMBER_ONLY,
-                Phrase.convertIntegerToPhrase(currentCodebreakerGuess.getNumberOfCorrectColor())
+                Phrase.convertIntegerToPhrase(currentGuess.getNumberOfCorrectColor())
         };
         relevantPhrases.addAll(Arrays.asList(phrasesToAdd));
 
         this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
-        this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
 
-        this.selectedCellPoint.x = 0;
-        this.selectedCellPoint.y++;
     }
+    public void feedbackGameOver(CodebreakerGuess currentGuess){
+        ArrayList<Phrase> relevantPhrases;
+        //if code is guessed correctly
+        if(codeToBreak.length == guessList.get(guessList.size() - 1).getNumberInCorrectPosition()){
+            relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
+        }
+
+        //if player ran out of guesses
+        else{
+            relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.NO_MORE_GUESSES));
+            for (int i =0; i < codebreakerType.getCodeLength(); i++){
+                relevantPhrases.add(Phrase.convertIntegerToPhrase(codeToBreak[i]));
+            }
+
+        }
+        relevantPhrases.add(Phrase.SPACE_FOR_EXIT);
+        this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
+
+    }
+
 
     public void setSingleNumber(int numberToSet) {
         this.audioPlayerExecutor.replacePhraseAndPrint(
@@ -140,6 +179,12 @@ public class CodebreakerState {
         );
 
         this.currentGuess[this.selectedCellPoint.x] = numberToSet;
+        if(this.selectedCellPoint.x == codebreakerType.getCodeLength()-1){
+            this.selectedCellPoint.x = 0;
+        }
+        else{
+            this.selectedCellPoint.x =  this.selectedCellPoint.x+1;
+        }
     }
 
     public void changeSelectedCellPoint(@NotNull ArrowKeyDirection arrowKeyDirection) {
