@@ -26,11 +26,6 @@ public class CodebreakerPanel extends JPanel {
     private final CodebreakerType codebreakerType;
 
     /**
-     * This is reset every time the board is repainted (based on the bounds of the GUI window).
-     */
-    private int totalBoardLength;
-
-    /**
      * Creates a new CodebreakerPanel.
      *
      * @param initialState The initial state of the Codebreaker game.
@@ -61,18 +56,20 @@ public class CodebreakerPanel extends JPanel {
             return width;
         };
 
-        final Function<Integer, Integer> GET_RECTANGLE_LENGTH = (length) -> {
-            switch (this.codebreakerType) {
-                case FOUR:
-                    return 2;
-                case FIVE:
-                    return 5;
-                case SIX:
-                    return 10;
-                default:
-                    throw new IllegalArgumentException("Invalid codebreaker type passed!");
-            }
-        };
+        final int RECTANGLE_HEIGHT_FACTOR;
+        switch (this.codebreakerType) {
+            case FOUR:
+                RECTANGLE_HEIGHT_FACTOR = 2;
+                break;
+            case FIVE:
+                RECTANGLE_HEIGHT_FACTOR = 5;
+                break;
+            case SIX:
+                RECTANGLE_HEIGHT_FACTOR = 10;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid codebreaker type passed!");
+        }
 
         graphics.drawRect(
                 initialPosition.x - 1,
@@ -80,11 +77,12 @@ public class CodebreakerPanel extends JPanel {
                 GET_RECTANGLE_WIDTH.apply(squareDimension * CODE_LENGTH + squareDimension),
                 10 * squareDimension
         );
+
         graphics.drawRect(
                 initialPosition.x + squareDimension * CODE_LENGTH + squareDimension * 3 + 1,
                 initialPosition.y - 1,
                 GET_RECTANGLE_WIDTH.apply(squareDimension * CODE_LENGTH + squareDimension),
-                GET_RECTANGLE_LENGTH.apply(CODE_LENGTH) * squareDimension
+                RECTANGLE_HEIGHT_FACTOR * squareDimension
         );
 
         graphics.drawRect(
@@ -98,7 +96,7 @@ public class CodebreakerPanel extends JPanel {
                 initialPosition.x + (squareDimension * CODE_LENGTH) - 1 + squareDimension * CODE_LENGTH + squareDimension * 3 + 1,
                 initialPosition.y - 1,
                 GET_RECTANGLE_WIDTH.apply(squareDimension),
-                GET_RECTANGLE_LENGTH.apply(CODE_LENGTH) * squareDimension
+                RECTANGLE_HEIGHT_FACTOR * squareDimension
         );
 
         ArrayList<CodebreakerGuess> guesses = this.codebreakerState.getGuessList();
@@ -168,12 +166,13 @@ public class CodebreakerPanel extends JPanel {
                 numberOfCorrectColor = currentCodeGuess.getNumberOfCorrectColor();
             }
 
+            int numberOfDrawnPegs = 0;
             for (int rowIndex = 0; rowIndex < 2; rowIndex++) {
                 int adjustedGuessIndex = guessIndex > 9 ? guessIndex % 10 : guessIndex;
                 int yPosition = initialPosition.y + (2 * adjustedGuessIndex + rowIndex) * squareDimension;
 
                 int xPosition;
-                for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++) {
+                for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++, numberOfDrawnPegs++) {
                     xPosition = initialPosition.x + columnIndex * squareDimension;
                     if (guessIndex > 9) {
                         if (this.codebreakerType == CodebreakerType.FOUR) {
@@ -189,11 +188,9 @@ public class CodebreakerPanel extends JPanel {
                     graphics.setColor(Color.BLACK);
                     graphics.drawRect(xPosition, yPosition, squareDimension, squareDimension);
 
-                    // Special case: there is no sixth peg for the five type.
-                    if (this.codebreakerType == CodebreakerType.FIVE) {
-                        if (rowIndex % 2 == 1 && columnIndex == NUMBER_OF_COLUMNS - 1) {
-                            continue;
-                        }
+                    // Don't want to draw too many pegs.
+                    if (this.codebreakerType.getCodeLength() == numberOfDrawnPegs) {
+                        continue;
                     }
 
                     graphics.drawRoundRect(
@@ -230,37 +227,40 @@ public class CodebreakerPanel extends JPanel {
      * @param squareDimension The pixel dimension of each square on the board.
      * @param initialPosition Amount of pixels to begin painting board from (row & column labels come before this).
      */
-    private void paintBoardLabels(@NotNull Graphics graphics, int squareDimension, @NotNull Point initialPosition) {
+    private void paintBoardLabels(
+            @NotNull Graphics graphics, int squareDimension, @NotNull Point initialPosition, int totalBoardLength
+    ) {
         final int CODE_LENGTH = this.codebreakerType.getCodeLength();
         final int NUMBER_OF_ROWS = this.codebreakerType.getNumberOfRows();
 
         graphics.setColor(Color.BLACK);
+
         graphics.setFont(
-                new Font("Arial", Font.BOLD, (93 - 7 * 10) * this.totalBoardLength / 390)
+                new Font("Arial", Font.BOLD, (93 - 7 * 10) * totalBoardLength / 390)
         );
 
-        // Step 1: print the row labels (numbers 1, 2, 3, etc.)
+        // Step 1: print the row labels (numbers r1, r2, r3, etc.)
         for (int rowIndex = 0; rowIndex < 10; rowIndex++) {
             graphics.drawString(
-                    Integer.toString(rowIndex + 1),
-                    initialPosition.x - (squareDimension),
+                    ("r" + Integer.toString(rowIndex + 1)),
+                    initialPosition.x - (squareDimension)- (squareDimension/4),
                     initialPosition.y + (squareDimension * rowIndex) + (3 * squareDimension / 4)
             );
         }
 
         for (int rowIdx = 10, secondRowIdx = 0; rowIdx < NUMBER_OF_ROWS; rowIdx++, secondRowIdx++) {
             graphics.drawString(
-                    Integer.toString(rowIdx + 1),
-                    initialPosition.x + squareDimension * CODE_LENGTH + squareDimension * 2 + 1,
+                    ("r" + Integer.toString(rowIdx + 1)),
+                    initialPosition.x + squareDimension * CODE_LENGTH + squareDimension * 2 + 1 -(squareDimension/3),
                     initialPosition.y + (squareDimension * secondRowIdx) + (3 * squareDimension / 4)
             );
         }
 
-        // Step 2: print the column labels (letters 'A', 'B', 'C', etc.)
+        // Step 2: print the column labels (letters 'c1', 'c2', 'c3', etc.)
         for (int columnIndex = 0; columnIndex < CODE_LENGTH; columnIndex++) {
             graphics.drawString(
-                    Character.toString((char) columnIndex + 'A'),
-                    initialPosition.x + 10 + squareDimension * columnIndex,
+                    ("c" + Integer.toString(columnIndex + 1)),
+                    initialPosition.x +5 + squareDimension * columnIndex,
                     initialPosition.y - (CODE_LENGTH * squareDimension / 14)
             );
         }
@@ -268,8 +268,8 @@ public class CodebreakerPanel extends JPanel {
         final int X_OFFSET = initialPosition.x + squareDimension * CODE_LENGTH + squareDimension * 3 + 1;
         for (int columnIndex = 0; columnIndex < CODE_LENGTH; columnIndex++) {
             graphics.drawString(
-                    Character.toString((char) columnIndex + 'A'),
-                    X_OFFSET + 10 + squareDimension * columnIndex,
+                    ("c" + Integer.toString(columnIndex + 1)),
+                    X_OFFSET + 5 + squareDimension * columnIndex,
                     initialPosition.y - (CODE_LENGTH * squareDimension / 14)
             );
         }
@@ -286,31 +286,33 @@ public class CodebreakerPanel extends JPanel {
         super.paintComponent(graphics);
 
         Rectangle clipBounds = graphics.getClipBounds();
-        this.totalBoardLength = Math.min(clipBounds.height - 10, clipBounds.width + 20);
 
-        int squaresPerSide = 13; // 12 (for initial board) + 1
-        int squareDimension = (((this.totalBoardLength - squaresPerSide) / squaresPerSide) / 2) * 2;
-
-        final int INITIAL_POSITION = this.totalBoardLength - (squareDimension * squaresPerSide) + 3 * (squareDimension / 2);
+        final int TOTAL_BOARD_LENGTH = Math.min(clipBounds.height - 10, clipBounds.width + 20);
+        final int SQUARES_PER_SIDE = 13; // 12 (for initial board) + 1
+        final int SQUARE_DIM = (((TOTAL_BOARD_LENGTH - SQUARES_PER_SIDE) / SQUARES_PER_SIDE) / 2) * 2;
+        final int INITIAL_POSITION = TOTAL_BOARD_LENGTH - (SQUARE_DIM * SQUARES_PER_SIDE) + 3 * (SQUARE_DIM / 2);
 
         // Step 1: paint the board, 4x10 grid currently
         this.paintMainBoard(
-                graphics, squareDimension, new Point(INITIAL_POSITION, INITIAL_POSITION - (squareDimension / 2))
+                graphics, SQUARE_DIM, new Point(INITIAL_POSITION, INITIAL_POSITION - (SQUARE_DIM / 2))
         );
 
         //Step 2: paint small board that will display the result of previous guess
         this.paintResultBoard(
                 graphics,
-                squareDimension / 2,
+                SQUARE_DIM / 2,
                 new Point(
-                        INITIAL_POSITION + (squareDimension * this.codebreakerType.getCodeLength()),
-                        INITIAL_POSITION - (squareDimension / 2)
+                        INITIAL_POSITION + (SQUARE_DIM * this.codebreakerType.getCodeLength()),
+                        INITIAL_POSITION - (SQUARE_DIM / 2)
                 )
         );
 
         // Step 3: paint the labels
         this.paintBoardLabels(
-                graphics, squareDimension, new Point(INITIAL_POSITION, INITIAL_POSITION - (squareDimension / 2))
+                graphics,
+                SQUARE_DIM,
+                new Point(INITIAL_POSITION, INITIAL_POSITION - (SQUARE_DIM / 2)),
+                TOTAL_BOARD_LENGTH
         );
     }
 }

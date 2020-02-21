@@ -12,29 +12,45 @@ import java.util.*;
 import static gamesforblind.Constants.CODEBREAKER_MAX_CODE_INT;
 
 /**
- * Class that contains information about the current state of the Sudoku board.
- * Also handles any calls into the {@link AudioPlayerExecutor} for Sudoku.
+ * Class that contains information about the current state of the Codebreaker board.
+ * Also handles any calls into the {@link AudioPlayerExecutor} for Codebreaker.
  */
 public class CodebreakerState {
     private final CodebreakerType codebreakerType;
-    private final int[] codeToBreak;
-    private final boolean gameOver;
     private final AudioPlayerExecutor audioPlayerExecutor;
-    private final ArrayList<CodebreakerGuess> guessList = new ArrayList<>();
-    private final Point selectedCellPoint = new Point();
 
+    private boolean gameOver;
+    private int[] codeToBreak;
     private Integer[] currentGuess;
     private int[][] pastGuesses = new int[20][8];
+    private ArrayList<CodebreakerGuess> guessList;
+    private Point selectedCellPoint;
 
     private int j = 0;
     private int k = 0;
     public int h = 0;
     public CodebreakerState(@NotNull AudioPlayerExecutor audioPlayerExecutor, @NotNull CodebreakerType codebreakerType) {
         this.audioPlayerExecutor = audioPlayerExecutor;
-        this.gameOver = false;
         this.codebreakerType = codebreakerType;
+
+        this.initNewCodebreakerGame();
+    }
+
+    public boolean initNewCodebreakerGame() {
+        this.gameOver = false;
         this.codeToBreak = this.generateCorrectCode();
         this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
+        this.guessList = new ArrayList<>();
+        this.selectedCellPoint = new Point();
+
+        return true;
+    }
+
+    public void readUnrecognizedKey(int keyCode) {
+        ArrayList<Phrase> phrasesToRead = new ArrayList<>(Arrays.asList(
+                Phrase.UNRECOGNIZED_KEY, Phrase.keyCodeToPhrase(keyCode)
+        ));
+        this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
 
     public static boolean checkThatGameIsOver(
@@ -308,6 +324,13 @@ public class CodebreakerState {
     }
 
     /**
+     * Reads the value of the currently selected cell
+     */
+    public void readSelectedSquare() {
+        this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.convertPointToLocationPhrase(this.selectedCellPoint));
+    }
+
+    /**
      * Getter for gameOver
      *
      * @return true if the game is over (otherwise, false).
@@ -318,10 +341,6 @@ public class CodebreakerState {
 
     public int[] getCodeToBreak() {
         return this.codeToBreak;
-    }
-
-    public boolean restart() {
-        throw new UnsupportedOperationException("Restart not implemented yet!");
     }
 
     public int hint(int value) {

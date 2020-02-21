@@ -106,15 +106,15 @@ public enum Phrase {
     RESTART_GAME("Press the R key again to restart the game"),
 
     /* Sudoku: locations */
-    A1, A2, A3, A4, A5, A6, A7, A8, A9,
-    B1, B2, B3, B4, B5, B6, B7, B8, B9,
-    C1, C2, C3, C4, C5, C6, C7, C8, C9,
-    D1, D2, D3, D4, D5, D6, D7, D8, D9,
-    E1, E2, E3, E4, E5, E6, E7, E8, E9,
-    F1, F2, F3, F4, F5, F6, F7, F8, F9,
-    G1, G2, G3, G4, G5, G6, G7, G8, G9,
-    H1, H2, H3, H4, H5, H6, H7, H8, H9,
-    I1, I2, I3, I4, I5, I6, I7, I8, I9,
+    c1r1, c1r2, c1r3, c1r4, c1r5, c1r6, c1r7, c1r8, c1r9,
+    c2r1, c2r2, c2r3, c2r4, c2r5, c2r6, c2r7, c2r8, c2r9,
+    c3r1, c3r2, c3r3, c3r4, c3r5, c3r6, c3r7, c3r8, c3r9,
+    c4r1, c4r2, c4r3, c4r4, c4r5, c4r6, c4r7, c4r8, c4r9,
+    c5r1, c5r2, c5r3, c5r4, c5r5, c5r6, c5r7, c5r8, c5r9,
+    c6r1, c6r2, c6r3, c6r4, c6r5, c6r6, c6r7, c6r8, c6r9,
+    c7r1, c7r2, c7r3, c7r4, c7r5, c7r6, c7r7, c7r8, c7r9,
+    c8r1, c8r2, c8r3, c8r4, c8r5, c8r6, c8r7, c8r8, c8r9,
+    c9r1, c9r2, c9r3, c9r4, c9r5, c9r6, c9r7, c9r8, c9r9,
 
     /* Sudoku: numbers in same row/column/block */
     IN_ROW("You have the following numbers in the same row:"),
@@ -198,6 +198,8 @@ public enum Phrase {
     CODEBREAKER_GUESS_WAS("the codebreaker code guess was:"),
     CODEBREAKER_READ_ROW("Row"),
     CODEBREAKER_UNKNOWN_GUESS("has the following guess so far");
+
+
 
     /**
      * The directory for all of the Phrase audio files ("resources/phrases" folder under the root of the project).
@@ -349,26 +351,27 @@ public enum Phrase {
     }
 
     /**
-     * Converts a selected {@link Point} on the Sudoku board to a Phrase.
+     * Converts a selected {@link Point} on the board to a Phrase.
      *
      * @param selectedPoint The currently selected {@link Point} in the game.
-     * @return The location on the board as a Phrase (e.g. "A2", "B3", etc.)
+     * @return The location on the board as a Phrase (e.g. "c1r2", "c2r3", etc.)
      */
     public static Phrase convertPointToLocationPhrase(@NotNull Point selectedPoint) {
         final Phrase[][] LOCATIONS_PHRASE_LIST = new Phrase[][]{
-                new Phrase[]{A1, A2, A3, A4, A5, A6, A7, A8, A9},
-                new Phrase[]{B1, B2, B3, B4, B5, B6, B7, B8, B9},
-                new Phrase[]{C1, C2, C3, C4, C5, C6, C7, C8, C9},
-                new Phrase[]{D1, D2, D3, D4, D5, D6, D7, D8, D9},
-                new Phrase[]{E1, E2, E3, E4, E5, E6, E7, E8, E9},
-                new Phrase[]{F1, F2, F3, F4, F5, F6, F7, F8, F9},
-                new Phrase[]{G1, G2, G3, G4, G5, G6, G7, G8, G9},
-                new Phrase[]{H1, H2, H3, H4, H5, H6, H7, H8, H9},
-                new Phrase[]{I1, I2, I3, I4, I5, I6, I7, I8, I9},
+                new Phrase[]{c1r1, c1r2, c1r3, c1r4, c1r5, c1r6, c1r7, c1r8, c1r9},
+                new Phrase[]{c2r1, c2r2, c2r3, c2r4, c2r5, c2r6, c2r7, c2r8, c2r9},
+                new Phrase[]{c3r1, c3r2, c3r3, c3r4, c3r5, c3r6, c3r7, c3r8, c3r9},
+                new Phrase[]{c4r1, c4r2, c4r3, c4r4, c4r5, c4r6, c4r7, c4r8, c4r9},
+                new Phrase[]{c5r1, c5r2, c5r3, c5r4, c5r5, c5r6, c5r7, c5r8, c5r9},
+                new Phrase[]{c6r1, c6r2, c6r3, c6r4, c6r5, c6r6, c6r7, c6r8, c6r9},
+                new Phrase[]{c7r1, c7r2, c7r3, c7r4, c7r5, c7r6, c7r7, c7r8, c7r9},
+                new Phrase[]{c8r1, c8r2, c8r3, c8r4, c8r5, c8r6, c8r7, c8r8, c8r9},
+                new Phrase[]{c9r1, c9r2, c9r3, c9r4, c9r5, c9r6, c9r7, c9r8, c9r9},
+
         };
 
-        // x value: 0 maps to "A", 1 maps to "B", etc.
-        // y value: 0 maps to "1", 1 maps to "2", etc.
+        // x value: 0 maps to "c1", 1 maps to "c2", etc.
+        // y value: 0 maps to "r1", 1 maps to "r2", etc.
         return LOCATIONS_PHRASE_LIST[selectedPoint.x][selectedPoint.y];
     }
 

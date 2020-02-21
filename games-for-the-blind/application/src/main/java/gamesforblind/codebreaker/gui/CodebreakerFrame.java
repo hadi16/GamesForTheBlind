@@ -71,8 +71,8 @@ public class CodebreakerFrame extends JFrame {
     /**
      * Sets up the {@link JMenu}. Adds all the {@link JMenuItem}s & {@link CodebreakerMenuItemListener} to these items.
      *
-     * @param codebreakerGame The current Sudoku game.
-     * @return The initialized {@link JMenu} for the Sudoku game.
+     * @param codebreakerGame The current Codebreaker game.
+     * @return The initialized {@link JMenu} for the Codebreaker game.
      */
     private JMenu getInitializedMenu(@NotNull CodebreakerGame codebreakerGame) {
         this.frame.add(this.codebreakerPanel);
