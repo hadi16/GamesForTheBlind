@@ -54,13 +54,14 @@ public class CodebreakerMouseListener implements MouseListener {
         Point selectedPoint = e.getPoint();
         Rectangle frameBounds = this.codebreakerFrame.getFrameBounds();
 
+        /*
         int squareDimension = Math.min(frameBounds.height, frameBounds.width) / (this.sudokuBoardSize + 1);
         this.codebreakerGame.receiveAction(
                 new SudokuHighlightAction(
                         new Point(selectedPoint.x / squareDimension, selectedPoint.y / squareDimension),
                         InputType.MOUSE
                 )
-        );
+        );*/
     }
 
     /* These methods are required to be overridden by the MouseListener, but they are unused. */
