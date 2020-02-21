@@ -394,6 +394,7 @@ public class CodebreakerPanel extends JPanel {
         );
 
         if(codebreakerState.isGameOver() == true){
+            this.totalBoardLength = TOTAL_BOARD_LENGTH;
             paintCode();
 
         }
