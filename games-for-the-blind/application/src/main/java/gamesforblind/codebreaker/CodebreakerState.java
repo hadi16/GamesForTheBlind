@@ -135,6 +135,12 @@ public class CodebreakerState {
         );
 
         this.currentGuess[this.selectedCellPoint.x] = numberToSet;
+        if(this.selectedCellPoint.x == codebreakerType.getCodeLength()-1){
+            this.selectedCellPoint.x = 0;
+        }
+        else{
+            this.selectedCellPoint.x =  this.selectedCellPoint.x+1;
+        }
     }
 
     public void changeSelectedCellPoint(@NotNull ArrowKeyDirection arrowKeyDirection) {
