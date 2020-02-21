@@ -13,7 +13,7 @@ import java.util.Map;
 import static gamesforblind.Constants.CODEBREAKER_MAX_CODE_INT;
 
 /**
- * Keyboard listener for Sudoku that receives keyboard inputs and appropriately calls the proper action class
+ * Keyboard listener for Codebreaker that receives keyboard inputs and appropriately calls the proper action class
  */
 public class CodebreakerKeyboardListener implements KeyListener {
     /**
@@ -94,7 +94,7 @@ public class CodebreakerKeyboardListener implements KeyListener {
             return;
         }
 
-        // Case 6: the user wants to restart the current CodeBreaker board.
+        // Case 6: the user wants to restart the current Codebreaker board.
         if (selectedKeyCode == KeyEvent.VK_Q) {
             // The last element is the CURRENT key pressed, so I want the second to last element.
             if (numberOfPressedKeys > 1 && this.pressedKeyCodeList.get(numberOfPressedKeys - 2) == KeyEvent.VK_Q) {

@@ -4,6 +4,7 @@ import gamesforblind.codebreaker.CodebreakerGame;
 import gamesforblind.codebreaker.action.CodebreakerAction;
 import gamesforblind.codebreaker.action.CodebreakerInstructionsAction;
 import gamesforblind.codebreaker.action.CodebreakerMainMenuAction;
+import gamesforblind.codebreaker.action.CodebreakerRestartAction;
 import gamesforblind.enums.GameMenuItem;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,7 +42,8 @@ public class CodebreakerMenuItemListener implements ActionListener {
 
         final Map<String, CodebreakerAction> SELECTED_MENU_TEXT_TO_ACTION = Map.of(
                 GameMenuItem.RETURN_TO_MAIN_MENU.toString(), new CodebreakerMainMenuAction(),
-                GameMenuItem.INSTRUCTIONS.toString(), new CodebreakerInstructionsAction()
+                GameMenuItem.INSTRUCTIONS.toString(), new CodebreakerInstructionsAction(),
+                GameMenuItem.RESTART.toString(), new CodebreakerRestartAction()
         );
 
         CodebreakerAction codebreakerAction = SELECTED_MENU_TEXT_TO_ACTION.get(selectedMenuText);

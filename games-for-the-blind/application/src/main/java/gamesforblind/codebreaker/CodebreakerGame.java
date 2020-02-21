@@ -71,21 +71,37 @@ public class CodebreakerGame {
                 // Case 2: exit the game.
                 CodebreakerExitAction.class, this.gameLoader::exitApplication,
 
+                // Case 3: an arrow key is pressed.
                 CodebreakerArrowKeyAction.class, () -> {
                     this.changeSelectedCellPoint((CodebreakerArrowKeyAction) codebreakerAction);
                 },
 
+                // Case 4: a single number is set by the user.
                 CodebreakerSetSingleNumberAction.class, () -> {
                     this.setSingleNumber((CodebreakerSetSingleNumberAction) codebreakerAction);
                 },
 
+                // Case 5: the user wants the current row to be read off.
                 CodebreakerReadBackAction.class, this.codebreakerState::readBackRow,
 
+                // Case 6: the user wants the instructions to be read.
                 CodebreakerInstructionsAction.class, this.codebreakerState::readInstructions,
 
+                // Case 7: the user wants the current Codebreaker guess to be set.
                 CodebreakerSetGuessAction.class, () -> {
                     this.codebreakerState.setCodebreakerGuess();
                     this.codebreakerFrame.repaintCodebreakerPanel();
+                },
+
+                // Case 8: the user wants to restart the current Codebreaker game.
+                CodebreakerRestartAction.class, () -> {
+                    this.codebreakerState.initNewCodebreakerGame();
+                    this.codebreakerFrame.repaintCodebreakerPanel();
+                },
+
+                // Case 9: the user has pressed an unrecognized key in the game.
+                CodebreakerUnrecognizedKeyAction.class, () -> {
+                    this.readUnrecognizedKey((CodebreakerUnrecognizedKeyAction) codebreakerAction);
                 }
         );
 
@@ -97,9 +113,15 @@ public class CodebreakerGame {
         }
     }
 
+    private void readUnrecognizedKey(@NotNull CodebreakerUnrecognizedKeyAction codebreakerUnrecognizedKeyAction) {
+        this.codebreakerState.readUnrecognizedKey(codebreakerUnrecognizedKeyAction.getKeyCode());
+    }
+
     private void changeSelectedCellPoint(@NotNull CodebreakerArrowKeyAction codebreakerArrowKeyAction) {
         this.codebreakerState.changeSelectedCellPoint(codebreakerArrowKeyAction.getArrowKeyDirection());
+        this.codebreakerState.readSelectedSquare();
         this.codebreakerFrame.repaintCodebreakerPanel();
+
     }
 
     private void setSingleNumber(@NotNull CodebreakerSetSingleNumberAction codebreakerSetSingleNumberAction) {
@@ -114,6 +136,4 @@ public class CodebreakerGame {
         this.codebreakerFrame.closeFrames();
         this.gameLoader.openLoaderInterface();
     }
-
-
 }
