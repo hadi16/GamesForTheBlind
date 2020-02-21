@@ -69,7 +69,7 @@ public class CodebreakerState {
             throw new IllegalArgumentException("Invalid code length passed to checker function!");
         }
 
-        if (guessList.size() == codebreakerType.getCodeLength()) {
+        if (guessList.size() == codebreakerType.getNumberOfRows()) {
             return true;
         }
 
@@ -341,10 +341,6 @@ public class CodebreakerState {
 
     public int[] getCodeToBreak() {
         return this.codeToBreak;
-    }
-
-    public int hint(int value) {
-        throw new UnsupportedOperationException("Hint not implemented yet!");
     }
 
     public CodebreakerType getCodebreakerType() {
