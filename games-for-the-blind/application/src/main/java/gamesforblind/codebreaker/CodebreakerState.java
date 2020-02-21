@@ -106,7 +106,7 @@ public class CodebreakerState {
 
            //if player ran out of guesses
            else{
-               ArrayList<Phrase> relevantPhrases = new ArrayList<>();
+               ArrayList<Phrase> relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.NO_MORE_GUESSES));
                for (int i =0; i < codebreakerType.getCodeLength(); i++){
                    relevantPhrases.add(Phrase.convertIntegerToPhrase(codeToBreak[i]));
                }
