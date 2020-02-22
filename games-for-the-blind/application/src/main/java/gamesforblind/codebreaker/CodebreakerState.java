@@ -55,14 +55,12 @@ public class CodebreakerState {
         return codeToBreak.length == guessList.get(guessList.size() - 1).getNumberInCorrectPosition();
     }
 
-    public boolean initNewCodebreakerGame() {
+    public void initNewCodebreakerGame() {
         this.gameOver = false;
         this.codeToBreak = this.generateCorrectCode();
         this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
         this.guessList = new ArrayList<>();
         this.selectedCellPoint = new Point();
-
-        return true;
     }
 
     public void readUnrecognizedKey(int keyCode) {
@@ -84,6 +82,10 @@ public class CodebreakerState {
     }
 
     public void setCodebreakerGuess() {
+        if (this.selectedCellPoint.y != this.guessList.size()) {
+            return;
+        }
+
         for (Integer i : this.currentGuess) {
             if (i == null) {
                 this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CODEBREAKER_NEED_CODE);
@@ -148,6 +150,10 @@ public class CodebreakerState {
     }
 
     public void setSingleNumber(int numberToSet) {
+        if (this.selectedCellPoint.y != this.guessList.size()) {
+            return;
+        }
+
         this.audioPlayerExecutor.replacePhraseAndPrint(
                 new ArrayList<>(Arrays.asList(Phrase.PLACED_NUM, Phrase.convertIntegerToPhrase(numberToSet, true)))
         );
@@ -182,7 +188,8 @@ public class CodebreakerState {
                 }
                 break;
             case DOWN:
-                if (this.selectedCellPoint.y != this.codebreakerType.getNumberOfRows() - 1) {
+                final int numberOfRows = this.codebreakerType.getNumberOfRows();
+                if (this.selectedCellPoint.y < this.guessList.size() && this.selectedCellPoint.y != numberOfRows - 1) {
                     this.selectedCellPoint.y++;
                 }
                 break;

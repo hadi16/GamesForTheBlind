@@ -10,6 +10,7 @@ import gamesforblind.synthesizer.AudioPlayerExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 
@@ -109,7 +110,13 @@ public class CodebreakerGame {
                             codebreakerMouseAction.getSelectedPoint()
                     );
 
-                    maybeSelectedPoint.ifPresent(this.codebreakerState::setSelectedCellPoint);
+                    maybeSelectedPoint.ifPresent(selectedPoint -> {
+                        ArrayList<CodebreakerGuess> guessList = this.codebreakerState.getGuessList();
+                        if (selectedPoint.y <= guessList.size()) {
+                            this.codebreakerState.setSelectedCellPoint(selectedPoint);
+                        }
+                    });
+
                     this.codebreakerFrame.repaintCodebreakerPanel();
                 },
 
