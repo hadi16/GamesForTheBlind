@@ -4,12 +4,14 @@ import gamesforblind.codebreaker.CodebreakerGame;
 import gamesforblind.codebreaker.CodebreakerState;
 import gamesforblind.codebreaker.gui.listener.CodebreakerKeyboardListener;
 import gamesforblind.codebreaker.gui.listener.CodebreakerMenuItemListener;
+import gamesforblind.codebreaker.gui.listener.CodebreakerMouseListener;
 import gamesforblind.codebreaker.gui.listener.CodebreakerWindowListener;
 import gamesforblind.enums.GameMenuItem;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Optional;
 
 import static gamesforblind.Constants.FRAME_DIMENSION;
 
@@ -44,6 +46,7 @@ public class CodebreakerFrame extends JFrame {
         if (!playbackMode) {
             this.frame.addWindowListener(new CodebreakerWindowListener(codebreakerGame));
             this.frame.addKeyListener(new CodebreakerKeyboardListener(codebreakerGame));
+            this.frame.addMouseListener(new CodebreakerMouseListener(codebreakerGame));
         }
     }
 
@@ -114,10 +117,13 @@ public class CodebreakerFrame extends JFrame {
         this.frame.dispose();
         this.codebreakerPanel.getPopUpFrame().setVisible(false);
         this.codebreakerPanel.getPopUpFrame().dispose();
-
     }
 
     public Rectangle getFrameBounds() {
         return new Rectangle(this.frame.getBounds());
+    }
+
+    public Optional<Point> getMouseSelectedPoint(Point mousePoint) {
+        return this.codebreakerPanel.getMouseSelectedPoint(mousePoint);
     }
 }
