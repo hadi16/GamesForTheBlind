@@ -119,10 +119,6 @@ public class CodebreakerFrame extends JFrame {
         this.codebreakerPanel.getPopUpFrame().dispose();
     }
 
-    public Rectangle getFrameBounds() {
-        return new Rectangle(this.frame.getBounds());
-    }
-
     public Optional<Point> getMouseSelectedPoint(Point mousePoint) {
         return this.codebreakerPanel.getMouseSelectedPoint(mousePoint);
     }
