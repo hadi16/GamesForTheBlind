@@ -143,7 +143,8 @@ public class CodeBreakerTest {
         );
 
         if (CodebreakerState.checkThatGameIsOver(correctCode, guessList)) {
-            Assert.assertTrue(codebreakerState.initNewCodebreakerGame());
+            codebreakerState.initNewCodebreakerGame();
+            Assert.assertTrue(codebreakerState.getGuessList().isEmpty());
         }
     }
 }
