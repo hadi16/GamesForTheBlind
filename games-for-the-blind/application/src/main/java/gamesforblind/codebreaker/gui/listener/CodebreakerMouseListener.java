@@ -1,8 +1,7 @@
 package gamesforblind.codebreaker.gui.listener;
 
 import gamesforblind.codebreaker.CodebreakerGame;
-import gamesforblind.codebreaker.gui.CodebreakerFrame;
-import gamesforblind.enums.CodebreakerType;
+import gamesforblind.codebreaker.action.CodebreakerMouseAction;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -19,27 +18,12 @@ public class CodebreakerMouseListener implements MouseListener {
     private final CodebreakerGame codebreakerGame;
 
     /**
-     * A reference to the class containing the main JFrame (for the Codebreaker GUI).
-     */
-    private final CodebreakerFrame codebreakerFrame;
-
-    private final CodebreakerType codebreakerType;
-
-    /**
      * Creates a new CodebreakerMouseListener.
      *
      * @param codebreakerGame  The current {@link CodebreakerGame}
-     * @param codebreakerFrame A reference to the class containing the main JFrame (for the Codebreaker GUI).
-     * @param codebreakerType  The type of Codebreaker game.
      */
-    public CodebreakerMouseListener(
-            @NotNull CodebreakerGame codebreakerGame,
-            @NotNull CodebreakerFrame codebreakerFrame,
-            @NotNull CodebreakerType codebreakerType
-    ) {
+    public CodebreakerMouseListener(@NotNull CodebreakerGame codebreakerGame) {
         this.codebreakerGame = codebreakerGame;
-        this.codebreakerFrame = codebreakerFrame;
-        this.codebreakerType = codebreakerType;
     }
 
     /**
@@ -50,17 +34,7 @@ public class CodebreakerMouseListener implements MouseListener {
      */
     @Override
     public void mouseClicked(@NotNull MouseEvent e) {
-        Point selectedPoint = e.getPoint();
-        Rectangle frameBounds = this.codebreakerFrame.getFrameBounds();
-
-        /*
-        int squareDimension = Math.min(frameBounds.height, frameBounds.width) / (this.sudokuBoardSize + 1);
-        this.codebreakerGame.receiveAction(
-                new SudokuHighlightAction(
-                        new Point(selectedPoint.x / squareDimension, selectedPoint.y / squareDimension),
-                        InputType.MOUSE
-                )
-        );*/
+        this.codebreakerGame.receiveAction(new CodebreakerMouseAction(new Point(e.getPoint())));
     }
 
     /* These methods are required to be overridden by the MouseListener, but they are unused. */

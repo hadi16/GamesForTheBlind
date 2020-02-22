@@ -352,4 +352,8 @@ public class CodebreakerState {
     public Point getSelectedCellPoint() {
         return this.selectedCellPoint;
     }
+
+    public void setSelectedCellPoint(Point selectedCellPoint) {
+        this.selectedCellPoint = selectedCellPoint;
+    }
 }

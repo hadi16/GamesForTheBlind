@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -27,8 +28,17 @@ public class CodebreakerPanel extends JPanel {
      */
     private final CodebreakerType codebreakerType;
 
-    private final Function<Integer, Integer> getSecondGroupXOffset;
-    private final Function<Integer, Boolean> isSecondGroup = (index) -> index > 9;
+    private int mainBoardSquareDim = 0;
+    private Point mainBoardInitialPoint = null;
+
+    private int getSecondGroupXOffset(int squareDimension) {
+        return squareDimension * this.codebreakerType.getCodeLength() + squareDimension * 3 + 1;
+    }
+
+    private boolean isSecondGroup(int index) {
+        return index > 9;
+    }
+
     private final JFrame popUpFrame = new JFrame("End of Game");
 
     /**
@@ -39,29 +49,53 @@ public class CodebreakerPanel extends JPanel {
     public CodebreakerPanel(@NotNull CodebreakerState initialState) {
         this.codebreakerType = initialState.getCodebreakerType();
         this.codebreakerState = initialState;
+    }
 
-        this.getSecondGroupXOffset = (squareDimension) -> {
-            return squareDimension * this.codebreakerType.getCodeLength() + squareDimension * 3 + 1;
-        };
+    private Point getMainBoardPoint(int rowIndex, int columnIndex) {
+        boolean IS_SECOND_GROUP = this.isSecondGroup(rowIndex);
+
+        int xPosition = this.mainBoardInitialPoint.x + columnIndex * this.mainBoardSquareDim;
+        if (IS_SECOND_GROUP) {
+            xPosition += this.getSecondGroupXOffset(this.mainBoardSquareDim);
+        }
+
+        int adjustedRowIndex = IS_SECOND_GROUP ? rowIndex % 10 : rowIndex;
+        int yPosition = this.mainBoardInitialPoint.y + adjustedRowIndex * this.mainBoardSquareDim;
+
+        return new Point(xPosition, yPosition);
+    }
+
+    public Optional<Point> getMouseSelectedPoint(Point mousePoint) {
+        for (int rowIndex = 0; rowIndex < this.codebreakerType.getNumberOfRows(); rowIndex++) {
+            for (int columnIndex = 0; columnIndex < this.codebreakerType.getCodeLength(); columnIndex++) {
+                Point position = this.getMainBoardPoint(rowIndex, columnIndex);
+
+                boolean xCorrect = mousePoint.x >= position.x && mousePoint.x < position.x + this.mainBoardSquareDim;
+                boolean yCorrect = mousePoint.y >= position.y && mousePoint.y < position.y + 2 * this.mainBoardSquareDim;
+                if (xCorrect && yCorrect) {
+                    return Optional.of(new Point(columnIndex, rowIndex));
+                }
+            }
+        }
+
+        return Optional.empty();
     }
 
     /**
      * Paints the Codebreaker board where the colors will be placed.
      *
-     * @param graphics        The {@link Graphics} object used for painting.
-     * @param squareDimension The pixel dimension of each square on the board.
-     * @param initialPosition Amount of pixels to begin painting board from (the row & column labels come before this).
+     * @param graphics The {@link Graphics} object used for painting.
      */
-    private void paintMainBoard(@NotNull Graphics graphics, int squareDimension, @NotNull Point initialPosition) {
+    private void paintMainBoard(@NotNull Graphics graphics) {
         final int CODE_LENGTH = this.codebreakerType.getCodeLength();
-        final int SECOND_GROUP_X_OFFSET = this.getSecondGroupXOffset.apply(squareDimension);
+        final int SECOND_GROUP_X_OFFSET = this.getSecondGroupXOffset(this.mainBoardSquareDim);
 
         final Font MAIN_BOARD_FONT = new Font("Serif", Font.BOLD, 50);
         graphics.setFont(MAIN_BOARD_FONT);
 
         final Function<Integer, Integer> GET_RECTANGLE_WIDTH = (width) -> {
             if (this.codebreakerType != CodebreakerType.FOUR) {
-                return width + squareDimension / 2;
+                return width + this.mainBoardSquareDim / 2;
             }
 
             return width;
@@ -83,42 +117,37 @@ public class CodebreakerPanel extends JPanel {
         }
 
         graphics.drawRect(
-                initialPosition.x - 1,
-                initialPosition.y - 1,
-                GET_RECTANGLE_WIDTH.apply(squareDimension * CODE_LENGTH + squareDimension),
-                10 * squareDimension
+                this.mainBoardInitialPoint.x - 1,
+                this.mainBoardInitialPoint.y - 1,
+                GET_RECTANGLE_WIDTH.apply(this.mainBoardSquareDim * CODE_LENGTH + this.mainBoardSquareDim),
+                10 * this.mainBoardSquareDim
         );
 
         graphics.drawRect(
-                initialPosition.x + SECOND_GROUP_X_OFFSET,
-                initialPosition.y - 1,
-                GET_RECTANGLE_WIDTH.apply(squareDimension * CODE_LENGTH + squareDimension),
-                RECTANGLE_HEIGHT_FACTOR * squareDimension
+                this.mainBoardInitialPoint.x + SECOND_GROUP_X_OFFSET,
+                this.mainBoardInitialPoint.y - 1,
+                GET_RECTANGLE_WIDTH.apply(this.mainBoardSquareDim * CODE_LENGTH + this.mainBoardSquareDim),
+                RECTANGLE_HEIGHT_FACTOR * this.mainBoardSquareDim
         );
 
         graphics.drawRect(
-                initialPosition.x + (squareDimension * CODE_LENGTH) - 1,
-                initialPosition.y - 1,
-                GET_RECTANGLE_WIDTH.apply(squareDimension),
-                squareDimension * 10
+                this.mainBoardInitialPoint.x + (this.mainBoardSquareDim * CODE_LENGTH) - 1,
+                this.mainBoardInitialPoint.y - 1,
+                GET_RECTANGLE_WIDTH.apply(this.mainBoardSquareDim),
+                this.mainBoardSquareDim * 10
         );
 
         graphics.drawRect(
-                initialPosition.x + (squareDimension * CODE_LENGTH) - 1 + SECOND_GROUP_X_OFFSET,
-                initialPosition.y - 1,
-                GET_RECTANGLE_WIDTH.apply(squareDimension),
-                RECTANGLE_HEIGHT_FACTOR * squareDimension
+                this.mainBoardInitialPoint.x + (this.mainBoardSquareDim * CODE_LENGTH) - 1 + SECOND_GROUP_X_OFFSET,
+                this.mainBoardInitialPoint.y - 1,
+                GET_RECTANGLE_WIDTH.apply(this.mainBoardSquareDim),
+                RECTANGLE_HEIGHT_FACTOR * this.mainBoardSquareDim
         );
 
         ArrayList<CodebreakerGuess> guesses = this.codebreakerState.getGuessList();
         Point selectedCellPoint = this.codebreakerState.getSelectedCellPoint();
 
         for (int rowIndex = 0; rowIndex < this.codebreakerType.getNumberOfRows(); rowIndex++) {
-            final boolean IS_SECOND_GROUP = this.isSecondGroup.apply(rowIndex);
-
-            int adjustedRowIndex = IS_SECOND_GROUP ? rowIndex % 10 : rowIndex;
-            int yPosition = initialPosition.y + adjustedRowIndex * squareDimension;
-
             Integer[] guessedCode = null;
             if (rowIndex <= guesses.size() - 1) {
                 guessedCode = Arrays.stream(guesses.get(rowIndex).getGuessedCode()).boxed().toArray(Integer[]::new);
@@ -127,17 +156,14 @@ public class CodebreakerPanel extends JPanel {
             }
 
             for (int columnIndex = 0; columnIndex < CODE_LENGTH; columnIndex++) {
-                int xPosition = initialPosition.x + columnIndex * squareDimension;
-                if (IS_SECOND_GROUP) {
-                    xPosition += SECOND_GROUP_X_OFFSET;
-                }
+                final Point position = this.getMainBoardPoint(rowIndex, columnIndex);
 
                 graphics.setColor(Color.BLACK);
-                graphics.drawRect(xPosition, yPosition, squareDimension, squareDimension);
+                graphics.drawRect(position.x, position.y, this.mainBoardSquareDim, this.mainBoardSquareDim);
 
                 if (selectedCellPoint.y == rowIndex && selectedCellPoint.x == columnIndex) {
                     graphics.setColor(Color.GREEN);
-                    graphics.fillRect(xPosition, yPosition, squareDimension, squareDimension);
+                    graphics.fillRect(position.x, position.y, this.mainBoardSquareDim, this.mainBoardSquareDim);
                 }
 
                 if (guessedCode != null) {
@@ -146,8 +172,8 @@ public class CodebreakerPanel extends JPanel {
                     if (guessedCode[columnIndex] != null) {
                         graphics.drawString(
                                 String.valueOf(guessedCode[columnIndex]),
-                                xPosition + squareDimension / 3,
-                                yPosition + 3 * squareDimension / 4
+                                position.x + this.mainBoardSquareDim / 3,
+                                position.y + 3 * this.mainBoardSquareDim / 4
                         );
                     }
                 }
@@ -172,7 +198,7 @@ public class CodebreakerPanel extends JPanel {
         Integer numberOfCorrectColor = null;
 
         for (int guessIndex = 0; guessIndex < this.codebreakerType.getNumberOfRows(); guessIndex++) {
-            final boolean IS_SECOND_GROUP = this.isSecondGroup.apply(guessIndex);
+            final boolean IS_SECOND_GROUP = this.isSecondGroup(guessIndex);
 
             if (guessIndex <= codebreakerGuesses.size() - 1) {
                 currentCodeGuess = codebreakerGuesses.get(guessIndex);
@@ -334,7 +360,7 @@ public class CodebreakerPanel extends JPanel {
             );
         }
 
-        final int X_OFFSET = initialPosition.x + this.getSecondGroupXOffset.apply(squareDimension);
+        final int X_OFFSET = initialPosition.x + this.getSecondGroupXOffset(squareDimension);
         for (int columnIndex = 0; columnIndex < CODE_LENGTH; columnIndex++) {
             graphics.drawString(
                     ("c" + (columnIndex + 1)),
@@ -361,10 +387,11 @@ public class CodebreakerPanel extends JPanel {
         final int SQUARE_DIM = (((TOTAL_BOARD_LENGTH - SQUARES_PER_SIDE) / SQUARES_PER_SIDE) / 2) * 2;
         final int INITIAL_POSITION = TOTAL_BOARD_LENGTH - (SQUARE_DIM * SQUARES_PER_SIDE) + 3 * (SQUARE_DIM / 2);
 
+        this.mainBoardInitialPoint = new Point(INITIAL_POSITION, INITIAL_POSITION - (SQUARE_DIM / 2));
+        this.mainBoardSquareDim = SQUARE_DIM;
+
         // Step 1: paint the board, 4x10 grid currently
-        this.paintMainBoard(
-                graphics, SQUARE_DIM, new Point(INITIAL_POSITION, INITIAL_POSITION - (SQUARE_DIM / 2))
-        );
+        this.paintMainBoard(graphics);
 
         //Step 2: paint small board that will display the result of previous guess
         this.paintResultBoard(
