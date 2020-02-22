@@ -111,16 +111,16 @@ public class CodebreakerState {
     private void feedbackGuess(CodebreakerGuess currentGuess) {
         ArrayList<Phrase> relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.PLACED_CODEBREAKER_CODE));
         for (int i : this.currentGuess) {
-            relevantPhrases.add(Phrase.convertIntegerToPhrase(i));
+            relevantPhrases.add(Phrase.convertIntegerToPhrase(i, true));
         }
 
         Phrase[] phrasesToAdd = {
                 Phrase.CODEBREAKER_GUESS_NUMBER,
-                Phrase.convertIntegerToPhrase(this.guessList.size()),
+                Phrase.convertIntegerToPhrase(this.guessList.size(), true),
                 Phrase.CODEBREAKER_NUMBER_CORRECT_POSITION,
-                Phrase.convertIntegerToPhrase(currentGuess.getNumberInCorrectPosition()),
+                Phrase.convertIntegerToPhrase(currentGuess.getNumberInCorrectPosition(), true),
                 Phrase.CODEBREAKER_NUMBER_ONLY,
-                Phrase.convertIntegerToPhrase(currentGuess.getNumberOfCorrectColor())
+                Phrase.convertIntegerToPhrase(currentGuess.getNumberOfCorrectColor(), true)
         };
         relevantPhrases.addAll(Arrays.asList(phrasesToAdd));
 
@@ -131,14 +131,15 @@ public class CodebreakerState {
     private void feedbackGameOver() {
         ArrayList<Phrase> relevantPhrases;
 
-        if (this.codeToBreak.length == this.guessList.get(this.guessList.size() - 1).getNumberInCorrectPosition()) {
+        final CodebreakerGuess lastCodebreakerGuess = this.guessList.get(this.guessList.size() - 1);
+        if (this.codeToBreak.length == lastCodebreakerGuess.getNumberInCorrectPosition()) {
             // If code is guessed correctly
             relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
         } else {
             // If player ran out of guesses
             relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.NO_MORE_GUESSES));
             for (int i = 0; i < this.codebreakerType.getCodeLength(); i++) {
-                relevantPhrases.add(Phrase.convertIntegerToPhrase(this.codeToBreak[i]));
+                relevantPhrases.add(Phrase.convertIntegerToPhrase(this.codeToBreak[i], true));
             }
         }
 
@@ -148,7 +149,7 @@ public class CodebreakerState {
 
     public void setSingleNumber(int numberToSet) {
         this.audioPlayerExecutor.replacePhraseAndPrint(
-                new ArrayList<>(Arrays.asList(Phrase.PLACED_NUM, Phrase.convertIntegerToPhrase(numberToSet)))
+                new ArrayList<>(Arrays.asList(Phrase.PLACED_NUM, Phrase.convertIntegerToPhrase(numberToSet, true)))
         );
 
         this.currentGuess[this.selectedCellPoint.x] = numberToSet;
@@ -238,7 +239,7 @@ public class CodebreakerState {
 
             readBackPhrases = new ArrayList<>(Arrays.asList(
                     Phrase.CODEBREAKER_READ_ROW,
-                    Phrase.convertIntegerToPhrase(selectedRowIndex + 1),
+                    Phrase.convertIntegerToPhrase(selectedRowIndex + 1, true),
                     Phrase.CODEBREAKER_UNKNOWN_GUESS
             ));
 
@@ -248,12 +249,12 @@ public class CodebreakerState {
                     continue;
                 }
 
-                readBackPhrases.add(Phrase.convertIntegerToPhrase(maybeGuessNumber));
+                readBackPhrases.add(Phrase.convertIntegerToPhrase(maybeGuessNumber, true));
             }
         } else {
             readBackPhrases = new ArrayList<>(Arrays.asList(
                     Phrase.CODEBREAKER_GUESS_NUMBER_RESPONSE,
-                    Phrase.convertIntegerToPhrase(selectedRowIndex + 1),
+                    Phrase.convertIntegerToPhrase(selectedRowIndex + 1, true),
                     Phrase.CODEBREAKER_GUESS_WAS
             ));
 
@@ -264,9 +265,9 @@ public class CodebreakerState {
 
             readBackPhrases.addAll(Arrays.asList(
                     Phrase.CODEBREAKER_NUMBER_CORRECT_POSITION,
-                    Phrase.convertIntegerToPhrase(guess.getNumberInCorrectPosition()),
+                    Phrase.convertIntegerToPhrase(guess.getNumberInCorrectPosition(), true),
                     Phrase.CODEBREAKER_NUMBER_ONLY,
-                    Phrase.convertIntegerToPhrase(guess.getNumberOfCorrectColor())
+                    Phrase.convertIntegerToPhrase(guess.getNumberOfCorrectColor(), true)
             ));
         }
 
