@@ -9,7 +9,9 @@ import gamesforblind.logger.LogFactory;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Game class that is called directly from the {@link GameLoader} class.
@@ -100,7 +102,18 @@ public class CodebreakerGame {
                     this.codebreakerFrame.repaintCodebreakerPanel();
                 },
 
-                // Case 9: the user has pressed an unrecognized key in the game.
+                // Case 9: the user has clicked on the Codebreaker board.
+                CodebreakerMouseAction.class, () -> {
+                    CodebreakerMouseAction codebreakerMouseAction = (CodebreakerMouseAction) codebreakerAction;
+                    Optional<Point> maybeSelectedPoint = this.codebreakerFrame.getMouseSelectedPoint(
+                            codebreakerMouseAction.getSelectedPoint()
+                    );
+
+                    maybeSelectedPoint.ifPresent(this.codebreakerState::setSelectedCellPoint);
+                    this.codebreakerFrame.repaintCodebreakerPanel();
+                },
+
+                // Case 10: the user has pressed an unrecognized key in the game.
                 CodebreakerUnrecognizedKeyAction.class, () -> {
                     this.readUnrecognizedKey((CodebreakerUnrecognizedKeyAction) codebreakerAction);
                 }
