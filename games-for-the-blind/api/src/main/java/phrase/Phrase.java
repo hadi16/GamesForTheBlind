@@ -385,39 +385,39 @@ public enum Phrase {
      */
     public static Phrase convertPointToLocationPhrase(@NotNull Point selectedPoint) {
         final Phrase[][] LOCATIONS_PHRASE_LIST = new Phrase[][]{
-                new Phrase[] {
+                new Phrase[]{
                         c1r1, c1r2, c1r3, c1r4, c1r5, c1r6, c1r7, c1r8, c1r9, c1r10,
                         c1r11, c1r12, c1r13, c1r14, c1r15, c1r16, c1r17, c1r18, c1r19, c1r20
                 },
-                new Phrase[] {
+                new Phrase[]{
                         c2r1, c2r2, c2r3, c2r4, c2r5, c2r6, c2r7, c2r8, c2r9, c2r10,
                         c2r11, c2r12, c2r13, c2r14, c2r15, c2r16, c2r17, c2r18, c2r19, c2r20
                 },
-                new Phrase[] {
+                new Phrase[]{
                         c3r1, c3r2, c3r3, c3r4, c3r5, c3r6, c3r7, c3r8, c3r9, c3r10,
                         c3r11, c3r12, c3r13, c3r14, c3r15, c3r16, c3r17, c3r18, c3r19, c3r20
                 },
-                new Phrase[] {
+                new Phrase[]{
                         c4r1, c4r2, c4r3, c4r4, c4r5, c4r6, c4r7, c4r8, c4r9, c4r10,
                         c4r11, c4r12, c4r13, c4r14, c4r15, c4r16, c4r17, c4r18, c4r19, c4r20
                 },
-                new Phrase[] {
+                new Phrase[]{
                         c5r1, c5r2, c5r3, c5r4, c5r5, c5r6, c5r7, c5r8, c5r9, c5r10,
                         c5r11, c5r12, c5r13, c5r14, c5r15, c5r16, c5r17, c5r18, c5r19, c5r20
                 },
-                new Phrase[] {
+                new Phrase[]{
                         c6r1, c6r2, c6r3, c6r4, c6r5, c6r6, c6r7, c6r8, c6r9, c6r10,
                         c6r11, c6r12, c6r13, c6r14, c6r15, c6r16, c6r17, c6r18, c6r19, c6r20
                 },
-                new Phrase[] {
+                new Phrase[]{
                         c7r1, c7r2, c7r3, c7r4, c7r5, c7r6, c7r7, c7r8, c7r9, c7r10,
                         c7r11, c7r12, c7r13, c7r14, c7r15, c7r16, c7r17, c7r18, c7r19, c7r20
                 },
-                new Phrase[] {
+                new Phrase[]{
                         c8r1, c8r2, c8r3, c8r4, c8r5, c8r6, c8r7, c8r8, c8r9, c8r10,
                         c8r11, c8r12, c8r13, c8r14, c8r15, c8r16, c8r17, c8r18, c8r19, c8r20
                 },
-                new Phrase[] {
+                new Phrase[]{
                         c9r1, c9r2, c9r3, c9r4, c9r5, c9r6, c9r7, c9r8, c9r9, c9r10,
                         c9r11, c9r12, c9r13, c9r14, c9r15, c9r16, c9r17, c9r18, c9r19, c9r20
                 }

@@ -20,7 +20,7 @@ public class CodebreakerMouseListener implements MouseListener {
     /**
      * Creates a new CodebreakerMouseListener.
      *
-     * @param codebreakerGame  The current {@link CodebreakerGame}
+     * @param codebreakerGame The current {@link CodebreakerGame}
      */
     public CodebreakerMouseListener(@NotNull CodebreakerGame codebreakerGame) {
         this.codebreakerGame = codebreakerGame;
