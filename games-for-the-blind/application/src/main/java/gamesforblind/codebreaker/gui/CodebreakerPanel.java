@@ -27,19 +27,9 @@ public class CodebreakerPanel extends JPanel {
      * Whether the Codebreaker game is a 4, 5, or 6 variant.
      */
     private final CodebreakerType codebreakerType;
-
+    private final JFrame popUpFrame = new JFrame("End of Game");
     private int mainBoardSquareDim = 0;
     private Point mainBoardInitialPoint = null;
-
-    private int getSecondGroupXOffset(int squareDimension) {
-        return squareDimension * this.codebreakerType.getCodeLength() + squareDimension * 3 + 1;
-    }
-
-    private boolean isSecondGroup(int index) {
-        return index > 9;
-    }
-
-    private final JFrame popUpFrame = new JFrame("End of Game");
 
     /**
      * Creates a new CodebreakerPanel.
@@ -49,6 +39,14 @@ public class CodebreakerPanel extends JPanel {
     public CodebreakerPanel(@NotNull CodebreakerState initialState) {
         this.codebreakerType = initialState.getCodebreakerType();
         this.codebreakerState = initialState;
+    }
+
+    private int getSecondGroupXOffset(int squareDimension) {
+        return squareDimension * this.codebreakerType.getCodeLength() + squareDimension * 3 + 1;
+    }
+
+    private boolean isSecondGroup(int index) {
+        return index > 9;
     }
 
     private Point getMainBoardPoint(int rowIndex, int columnIndex) {
