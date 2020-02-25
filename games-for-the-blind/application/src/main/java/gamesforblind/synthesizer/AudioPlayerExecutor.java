@@ -37,7 +37,10 @@ public class AudioPlayerExecutor {
      */
     public void replacePhraseAndPrint(@NotNull Phrase phrase) {
         System.out.println(phrase.getPhraseValue());
-        this.audioPlayer.replacePhraseToPlay(phrase);
+
+        if (this.audioPlayer != null) {
+            this.audioPlayer.replacePhraseToPlay(phrase);
+        }
     }
 
     /**
@@ -51,13 +54,17 @@ public class AudioPlayerExecutor {
         phrases.forEach(phrase -> phraseStringList.add(phrase.getPhraseValue()));
         System.out.println(String.join(" ", phraseStringList));
 
-        this.audioPlayer.replacePhraseToPlay(phrases);
+        if (this.audioPlayer != null) {
+            this.audioPlayer.replacePhraseToPlay(phrases);
+        }
     }
 
     /**
      * Terminates the audio player by just calling into the same method in the audio player instance variable.
      */
     public void terminateAudioPlayer() {
-        this.audioPlayer.terminateAudioPlayer();
+        if (this.audioPlayer != null) {
+            this.audioPlayer.terminateAudioPlayer();
+        }
     }
 }
