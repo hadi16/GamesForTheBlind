@@ -27,19 +27,9 @@ public class CodebreakerPanel extends JPanel {
      * Whether the Codebreaker game is a 4, 5, or 6 variant.
      */
     private final CodebreakerType codebreakerType;
-
+    private final JFrame popUpFrame = new JFrame("End of Game");
     private int mainBoardSquareDim = 0;
     private Point mainBoardInitialPoint = null;
-
-    private int getSecondGroupXOffset(int squareDimension) {
-        return squareDimension * this.codebreakerType.getCodeLength() + squareDimension * 3 + 1;
-    }
-
-    private boolean isSecondGroup(int index) {
-        return index > 9;
-    }
-
-    private final JFrame popUpFrame = new JFrame("End of Game");
 
     /**
      * Creates a new CodebreakerPanel.
@@ -49,6 +39,14 @@ public class CodebreakerPanel extends JPanel {
     public CodebreakerPanel(@NotNull CodebreakerState initialState) {
         this.codebreakerType = initialState.getCodebreakerType();
         this.codebreakerState = initialState;
+    }
+
+    private int getSecondGroupXOffset(int squareDimension) {
+        return squareDimension * this.codebreakerType.getCodeLength() + squareDimension * 3 + 1;
+    }
+
+    private boolean isSecondGroup(int index) {
+        return index > 9;
     }
 
     private Point getMainBoardPoint(int rowIndex, int columnIndex) {
@@ -263,9 +261,6 @@ public class CodebreakerPanel extends JPanel {
     private void paintCode(int totalBoardLength) {
         final int[] codeToBreak = this.codebreakerState.getCodeToBreak();
 
-        JPanel popUpPanel = new JPanel();
-        JLabel label;
-
         // Convert int[] to string and append together
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < this.codebreakerType.getCodeLength(); i++) {
@@ -273,7 +268,7 @@ public class CodebreakerPanel extends JPanel {
             stringBuilder.append(newNum);
         }
 
-        // Create a label
+        final JLabel label;
         final ArrayList<CodebreakerGuess> guessList = this.codebreakerState.getGuessList();
         final CodebreakerGuess lastGuess = guessList.get(guessList.size() - 1);
         if (this.codebreakerType.getCodeLength() == lastGuess.getNumberInCorrectPosition()) {
@@ -287,6 +282,7 @@ public class CodebreakerPanel extends JPanel {
         this.popUpFrame.setSize(totalBoardLength, totalBoardLength / 3);
 
         // Create a popup
+        JPanel popUpPanel = new JPanel();
         popUpPanel.add(label);
         Popup popup = new PopupFactory().getPopup(
                 this.popUpFrame, popUpPanel, totalBoardLength / 2, totalBoardLength / 2
@@ -296,14 +292,14 @@ public class CodebreakerPanel extends JPanel {
         this.popUpFrame.setVisible(true);
         this.popUpFrame.addKeyListener(new KeyListener() {
             @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                     CodebreakerPanel.this.popUpFrame.setVisible(false);
                 }
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {
             }
 
             @Override
@@ -313,7 +309,6 @@ public class CodebreakerPanel extends JPanel {
 
         popup.show();
     }
-
 
     /**
      * Paints the  labels along the left and top edges of the board
@@ -329,7 +324,6 @@ public class CodebreakerPanel extends JPanel {
         final int NUMBER_OF_ROWS = this.codebreakerType.getNumberOfRows();
 
         graphics.setColor(Color.BLACK);
-
         graphics.setFont(
                 new Font("Arial", Font.BOLD, (93 - 7 * 10) * totalBoardLength / 390)
         );

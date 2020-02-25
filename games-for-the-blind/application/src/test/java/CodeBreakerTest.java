@@ -122,7 +122,6 @@ public class CodeBreakerTest {
     @Test
     public void codebreakerMaxTrialsForSixLengthCodeLose() {
         // 20 long to match the max number of trials.
-        CodebreakerGuess codebreakerGuess = new CodebreakerGuess(new int[]{}, new Integer[]{});
         ArrayList<CodebreakerGuess> guessList = new ArrayList<>(Arrays.asList(
                 null, null, null, null, null,
                 null, null, null, null, null,
@@ -143,7 +142,8 @@ public class CodeBreakerTest {
         );
 
         if (CodebreakerState.checkThatGameIsOver(correctCode, guessList)) {
-            Assert.assertTrue(codebreakerState.initNewCodebreakerGame());
+            codebreakerState.initNewCodebreakerGame();
+            Assert.assertTrue(codebreakerState.getGuessList().isEmpty());
         }
     }
 }
