@@ -78,6 +78,7 @@ public class SudokuPanel extends JPanel {
     private void paintMainBoard(@NotNull Graphics graphics, int squareDimension, int initialPosition) {
         int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
         Grid sudokuGrid = this.sudokuState.getSudokuGrid();
+        ArrayList<Point> originallyFilledSquares = this.sudokuState.getOriginallyFilledSquares();
 
         graphics.setFont(new Font("Arial", Font.BOLD, this.totalBoardLength / sudokuBoardSize));
 
@@ -101,7 +102,13 @@ public class SudokuPanel extends JPanel {
                         graphics.setColor(Color.GREEN);
                     } else {
                         // Case 3: the Point is not highlighted & not empty.
-                        graphics.setColor(BRIGHT_BLUE);
+                        if (originallyFilledSquares.contains(currentPoint)) {
+                            // Case 3a: the Point is an originally filled square.
+                            graphics.setColor(Color.RED);
+                        } else {
+                            // Case 3b: the Point is NOT an originally filled square.
+                            graphics.setColor(BRIGHT_BLUE);
+                        }
                     }
 
                     graphics.fillRect(xPosition, yPosition, squareDimension, squareDimension);

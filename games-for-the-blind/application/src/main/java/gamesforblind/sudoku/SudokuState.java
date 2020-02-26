@@ -347,7 +347,7 @@ public class SudokuState {
      * followed by telling them how many squares they have left to fill.
      */
     private void readNoSelectedSquareMessage() {
-        ArrayList<Phrase> phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.NO_SELECTED_SQUARE));
+        ArrayList<Phrase> phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.NO_SELECTED_CELL));
         phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
@@ -436,16 +436,16 @@ public class SudokuState {
     }
 
     /**
-     * Gets the {@link Phrase} values of all the cells in the same block (as the currently selected Point).
+     * Gets the {@link Phrase} values of all the cells in the same box (as the currently selected Point).
      *
      * @param selectedPoint The {@link Point} that is currently selected in the game.
-     * @return A list of {@link Phrase}s corresponding to all of the numeric values of the cells in the same block.
+     * @return A list of {@link Phrase}s corresponding to all of the numeric values of the cells in the same box.
      */
     private ArrayList<Phrase> getBlockPhrases(@NotNull Point selectedPoint) {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>();
 
-        // Begin with "You have the following numbers in the same block"
-        phrasesToRead.add(Phrase.IN_BLOCK);
+        // Begin with "You have the following numbers in the same box"
+        phrasesToRead.add(Phrase.IN_BOX);
 
         // Need to divide by blockHeight first to get the truncated quotient [e.g. (7 / 3) * 3 = 2 * 3 = 6]
         int blockHeight = this.sudokuType.getBlockHeight();
@@ -492,9 +492,9 @@ public class SudokuState {
     }
 
     /**
-     * Reads the values from the row, column, or block of the currently selected {@link Point}.
+     * Reads the values from the row, column, or box of the currently selected {@link Point}.
      *
-     * @param sectionToRead Whether to read a row, column, or block.
+     * @param sectionToRead Whether to read a row, column, or box.
      */
     public void readBoardSection(@NotNull SudokuSection sectionToRead) {
         Optional<Point> maybeSelectedPoint = this.sudokuKeyboardInterface.getSelectedPoint();
@@ -584,5 +584,9 @@ public class SudokuState {
      */
     public SudokuType getSudokuType() {
         return this.sudokuType;
+    }
+
+    public ArrayList<Point> getOriginallyFilledSquares() {
+        return this.originallyFilledSquares;
     }
 }
