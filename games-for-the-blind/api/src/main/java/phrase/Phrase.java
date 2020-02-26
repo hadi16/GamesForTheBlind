@@ -69,6 +69,26 @@ public enum Phrase {
     THIRTY_EIGHT("35"),
     THIRTY_NINE("39"),
     FORTY("40"),
+    FORTY_ONE("41"),
+    FORTY_TWO("42"),
+    FORTY_THREE("43"),
+    FORTY_FOUR("44"),
+    FORTY_FIVE("45"),
+    FORTY_SIX("46"),
+    FORTY_SEVEN("47"),
+    FORTY_EIGHT("48"),
+    FORTY_NINE("49"),
+    FIFTY("50"),
+    FIFTY_ONE("51"),
+    FIFTY_TWO("52"),
+    FIFTY_THREE("53"),
+    FIFTY_FOUR("54"),
+    FIFTY_FIVE("55"),
+    FIFTY_SIX("56"),
+    FIFTY_SEVEN("57"),
+    FIFTY_EIGHT("58"),
+    FIFTY_NINE("59"),
+    SIXTY("60"),
 
     /* General: Keyboard Key Phrases */
     A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
@@ -217,7 +237,12 @@ public enum Phrase {
     CODEBREAKER_GUESS_NUMBER_RESPONSE("Guess number:"),
     CODEBREAKER_GUESS_WAS("the codebreaker code guess was:"),
     CODEBREAKER_READ_ROW("Row"),
-    CODEBREAKER_UNKNOWN_GUESS("has the following guess so far:");
+    CODEBREAKER_UNKNOWN_GUESS("has the following guess so far:"),
+
+    IT_TOOK_YOU("It took you:"),
+    HOURS("hours"),
+    MINUTES("minutes"),
+    SECONDS("seconds");
 
 
     /**
@@ -351,7 +376,7 @@ public enum Phrase {
      * @return The numeric Phrase that corresponds to the given number that was passed.
      */
     public static Phrase convertIntegerToPhrase(int numberToConvert, boolean useZero) {
-        if (numberToConvert == 0 && useZero) {
+        if (useZero && numberToConvert == 0) {
             return Phrase.ZERO;
         }
 
@@ -361,7 +386,13 @@ public enum Phrase {
                 Phrase.NINE, Phrase.TEN, Phrase.ELEVEN, Phrase.TWELVE, Phrase.THIRTEEN, Phrase.FOURTEEN, Phrase.FIFTEEN,
                 Phrase.SIXTEEN, Phrase.SEVENTEEN, Phrase.EIGHTEEN, Phrase.NINETEEN, Phrase.TWENTY, Phrase.TWENTY_ONE,
                 Phrase.TWENTY_TWO, Phrase.TWENTY_THREE, Phrase.TWENTY_FOUR, Phrase.TWENTY_FIVE, Phrase.TWENTY_SIX,
-                Phrase.TWENTY_SEVEN, Phrase.TWENTY_EIGHT, Phrase.TWENTY_NINE, Phrase.THIRTY
+                Phrase.TWENTY_SEVEN, Phrase.TWENTY_EIGHT, Phrase.TWENTY_NINE, Phrase.THIRTY, Phrase.THIRTY_ONE,
+                Phrase.THIRTY_TWO, Phrase.THIRTY_THREE, Phrase.THIRTY_FOUR, Phrase.THIRTY_FIVE, Phrase.THIRTY_SIX,
+                Phrase.THIRTY_SEVEN, Phrase.THIRTY_EIGHT, Phrase.THIRTY_NINE, Phrase.FORTY, Phrase.FORTY_ONE,
+                Phrase.FORTY_TWO, Phrase.FORTY_THREE, Phrase.FORTY_FOUR, Phrase.FORTY_FIVE, Phrase.FORTY_SIX,
+                Phrase.FORTY_SEVEN, Phrase.FORTY_EIGHT, Phrase.FORTY_NINE, Phrase.FIFTY, Phrase.FIFTY_ONE,
+                Phrase.FIFTY_TWO, Phrase.FIFTY_THREE, Phrase.FIFTY_FOUR, Phrase.FIFTY_FIVE, Phrase.FIFTY_SIX,
+                Phrase.FIFTY_SEVEN, Phrase.FIFTY_EIGHT, Phrase.FIFTY_NINE, Phrase.SIXTY
         };
 
         /* Verify that passed number is between 0 & 30 (if not, throw an error) */
