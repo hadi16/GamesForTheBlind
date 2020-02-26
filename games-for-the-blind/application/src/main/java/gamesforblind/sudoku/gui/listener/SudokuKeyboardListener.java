@@ -115,12 +115,12 @@ public class SudokuKeyboardListener implements KeyListener {
         }
 
         final Map<Integer, SudokuSection> KEY_TO_SECTION = Map.of(
-                KeyEvent.VK_J, SudokuSection.ROW,
-                KeyEvent.VK_K, SudokuSection.COLUMN,
-                KeyEvent.VK_L, SudokuSection.BLOCK
+                KeyEvent.VK_S, SudokuSection.ROW,
+                KeyEvent.VK_D, SudokuSection.COLUMN,
+                KeyEvent.VK_F, SudokuSection.BLOCK
         );
 
-        // Case 7: the selected key is a J, K, or L (read row, column, or block, respectively).
+        // Case 7: the selected key is a S, D, or F (read row, column, or block, respectively).
         SudokuSection sudokuSection = KEY_TO_SECTION.get(selectedKeyCode);
         if (sudokuSection != null) {
             this.sudokuGame.receiveAction(new SudokuReadPositionAction(sudokuSection));
