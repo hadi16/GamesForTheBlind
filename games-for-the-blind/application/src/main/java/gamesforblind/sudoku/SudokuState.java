@@ -179,10 +179,7 @@ public class SudokuState {
     private ArrayList<Phrase> getRemainingNumberOfEmptySquaresPhraseList() {
         // Case 1: return the congrats message.
         if (this.numberOfEmptyCells == 0) {
-            ArrayList<Phrase> relevantPhrases = new ArrayList<>(Arrays.asList(
-                    Phrase.CONGRATS,
-                    Phrase.IT_TOOK_YOU
-            ));
+            ArrayList<Phrase> relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
 
             Duration timeElapsed = Duration.between(this.startingInstant, Instant.now());
 
@@ -190,6 +187,8 @@ public class SudokuState {
             if (timeElapsed.isNegative()) {
                 return relevantPhrases;
             }
+
+            relevantPhrases.add(Phrase.IT_TOOK_YOU);
 
             int hoursElapsed = timeElapsed.toHoursPart();
             if (hoursElapsed > 0) {
