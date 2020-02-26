@@ -136,10 +136,10 @@ public enum Phrase {
     c9r1, c9r2, c9r3, c9r4, c9r5, c9r6, c9r7, c9r8, c9r9, c9r10,
     c9r11, c9r12, c9r13, c9r14, c9r15, c9r16, c9r17, c9r18, c9r19, c9r20,
 
-    /* Sudoku: numbers in same row/column/block */
+    /* Sudoku: numbers in same row/column/box */
     IN_ROW("You have the following numbers in the same row:"),
     IN_COLUMN("You have the following numbers in the same column:"),
-    IN_BLOCK("You have the following numbers in the same block:"),
+    IN_BOX("You have the following numbers in the same box:"),
 
     /* Sudoku: Error Phrases */
     NO_SELECTED_CELL("You didn't select a cell first."),
@@ -147,7 +147,7 @@ public enum Phrase {
     CANNOT_DELETE_EMPTY("You are trying to delete an already empty cell."),
     CELL_VALUE_INVALID("This value is invalid for the cell."),
     PLACED_CELL_UNSOLVABLE("Placing this value here would make the board unsolvable."),
-    SELECTED_BOTH("You have already selected both a block & cell on the board."),
+    SELECTED_BOTH("You have already selected both a box & cell on the board."),
 
     /* Sudoku: invalid number to fill Phrases */
     INVALID_NUMBER_TO_FILL_4("The number to fill must be between 1 and 4"),
@@ -155,17 +155,17 @@ public enum Phrase {
     INVALID_NUMBER_TO_FILL_9("The number to fill must be between 1 and 9"),
 
     /* Sudoku: Instructions Phrases. */
-    INSTRUCTIONS_SUDOKU_4("Welcome to Sudoku! Each of the four blocks must contain the numbers 1 through 4" +
+    INSTRUCTIONS_SUDOKU_4("Welcome to Sudoku! Each of the four boxes must contain the numbers 1 through 4" +
             " within its cell."),
     INSTRUCTIONS_SUDOKU_4_SECOND("Each four-cell column," +
             " or four-cell row, within the entire board, must also have the numbers 1 through 4, without repetition."),
 
-    INSTRUCTIONS_SUDOKU_6("Welcome to Sudoku! Each of the six blocks must contain the numbers 1 through 6" +
+    INSTRUCTIONS_SUDOKU_6("Welcome to Sudoku! Each of the six boxes must contain the numbers 1 through 6" +
             " within its cell."),
     INSTRUCTIONS_SUDOKU_6_SECOND("Each six-cell column," +
             " or six-cell row, within the entire board, must also have the numbers 1 through 6, without repetition."),
 
-    INSTRUCTIONS_SUDOKU_9("Welcome to Sudoku! Each of the nine blocks must contain the numbers 1 through 9" +
+    INSTRUCTIONS_SUDOKU_9("Welcome to Sudoku! Each of the nine boxes must contain the numbers 1 through 9" +
             " within its cell."),
     INSTRUCTIONS_SUDOKU_9_SECOND("Each nine-cell column," +
             " or nine-cell row, within the entire board, must also have the numbers 1 through 9, without repetition."),
@@ -173,7 +173,7 @@ public enum Phrase {
     INSTRUCTIONS_SUDOKU_MIDDLE_SAME("Each number can only appear once in a row, column, or box"),
     INSTRUCTIONS_SUDOKU_ENDING_SAME("To hear the numbers in the currently selected number's row press J," +
             " to hear the numbers in the currently selected number's column press K, to hear all of the numbers in" +
-            " the current block press L. If you have selected an empty cell and are stuck, press H to automatically" +
+            " the current box press L. If you have selected an empty cell and are stuck, press H to automatically" +
             " fill in the cell. Navigate the board using the arrow keys. Press and hold the control key while" +
             " clicking an arrow to jump to the end of the row or column. When you have selected the box you want" +
             " to add a number to, select a number on your keypad to try and place it into the highlighted box"),
