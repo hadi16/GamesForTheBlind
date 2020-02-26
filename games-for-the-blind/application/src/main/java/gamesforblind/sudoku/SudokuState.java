@@ -15,6 +15,8 @@ import phrase.Phrase;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,6 +33,7 @@ public class SudokuState {
     private final SudokuKeyboardInterface sudokuKeyboardInterface;
     private final AudioPlayerExecutor audioPlayerExecutor;
 
+    private Instant startingInstant;
     private OriginalSudokuGrid originalGrid;
     private Grid sudokuGrid;
     private ArrayList<Point> originallyFilledSquares;
@@ -53,6 +56,7 @@ public class SudokuState {
             @NotNull OriginalSudokuGrid originalGrid
     ) {
         this.gameOver = false;
+        this.startingInstant = Instant.now();
 
         this.sudokuType = sudokuType;
         this.audioPlayerExecutor = audioPlayerExecutor;
@@ -78,6 +82,7 @@ public class SudokuState {
             @NotNull AudioPlayerExecutor audioPlayerExecutor
     ) {
         this.gameOver = false;
+        this.startingInstant = Instant.now();
 
         this.sudokuType = sudokuType;
         this.audioPlayerExecutor = audioPlayerExecutor;
@@ -97,6 +102,7 @@ public class SudokuState {
      */
     public void resetSudokuState(@Nullable OriginalSudokuGrid originalGrid) {
         this.gameOver = false;
+        this.startingInstant = Instant.now();
         this.numberOfEmptyCells = this.getInitialNumberOfEmptyCells(this.sudokuType.getSudokuBoardSize());
 
         if (originalGrid != null) {
@@ -173,7 +179,34 @@ public class SudokuState {
     private ArrayList<Phrase> getRemainingNumberOfEmptySquaresPhraseList() {
         // Case 1: return the congrats message.
         if (this.numberOfEmptyCells == 0) {
-            return new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
+            ArrayList<Phrase> relevantPhrases = new ArrayList<>(Arrays.asList(
+                    Phrase.CONGRATS,
+                    Phrase.IT_TOOK_YOU
+            ));
+
+            Duration timeElapsed = Duration.between(this.startingInstant, Instant.now());
+
+            // Indicates that an error occurred with the time measurement.
+            if (timeElapsed.isNegative()) {
+                return relevantPhrases;
+            }
+
+            int hoursElapsed = timeElapsed.toHoursPart();
+            if (hoursElapsed > 0) {
+                relevantPhrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(hoursElapsed), Phrase.HOURS));
+            }
+
+            int minutesElapsed = timeElapsed.toMinutesPart();
+            if (minutesElapsed > 0) {
+                relevantPhrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(minutesElapsed), Phrase.MINUTES));
+            }
+
+            int secondsElapsed = timeElapsed.toSecondsPart();
+            if (secondsElapsed > 0) {
+                relevantPhrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(secondsElapsed), Phrase.SECONDS));
+            }
+
+            return relevantPhrases;
         }
 
         // Case 2: return the singular version of empty squares left.
