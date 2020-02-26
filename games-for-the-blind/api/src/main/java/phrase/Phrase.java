@@ -142,12 +142,12 @@ public enum Phrase {
     IN_BLOCK("You have the following numbers in the same block:"),
 
     /* Sudoku: Error Phrases */
-    NO_SELECTED_SQUARE("You didn't select a square first."),
-    CANNOT_DELETE_ORIGINAL("You cannot delete an originally set square on the board."),
-    CANNOT_DELETE_EMPTY("You are trying to delete an already empty square."),
+    NO_SELECTED_CELL("You didn't select a cell first."),
+    CANNOT_DELETE_ORIGINAL("You cannot delete an originally set cell on the board."),
+    CANNOT_DELETE_EMPTY("You are trying to delete an already empty cell."),
     CELL_VALUE_INVALID("This value is invalid for the cell."),
     PLACED_CELL_UNSOLVABLE("Placing this value here would make the board unsolvable."),
-    SELECTED_BOTH("You have already selected both a block & square on the board."),
+    SELECTED_BOTH("You have already selected both a block & cell on the board."),
 
     /* Sudoku: invalid number to fill Phrases */
     INVALID_NUMBER_TO_FILL_4("The number to fill must be between 1 and 4"),
@@ -156,34 +156,34 @@ public enum Phrase {
 
     /* Sudoku: Instructions Phrases. */
     INSTRUCTIONS_SUDOKU_4("Welcome to Sudoku! Each of the four blocks must contain the numbers 1 through 4" +
-            " within its square."),
-    INSTRUCTIONS_SUDOKU_4_SECOND("Each four-square column," +
-            " or four-square row, within the entire board, must also have the numbers 1 through 4, without repetition."),
+            " within its cell."),
+    INSTRUCTIONS_SUDOKU_4_SECOND("Each four-cell column," +
+            " or four-cell row, within the entire board, must also have the numbers 1 through 4, without repetition."),
 
     INSTRUCTIONS_SUDOKU_6("Welcome to Sudoku! Each of the six blocks must contain the numbers 1 through 6" +
-            " within its square."),
-    INSTRUCTIONS_SUDOKU_6_SECOND("Each six-square column," +
-            " or six-square row, within the entire board, must also have the numbers 1 through 6, without repetition."),
+            " within its cell."),
+    INSTRUCTIONS_SUDOKU_6_SECOND("Each six-cell column," +
+            " or six-cell row, within the entire board, must also have the numbers 1 through 6, without repetition."),
 
     INSTRUCTIONS_SUDOKU_9("Welcome to Sudoku! Each of the nine blocks must contain the numbers 1 through 9" +
-            " within its square."),
-    INSTRUCTIONS_SUDOKU_9_SECOND("Each nine-square column," +
-            " or nine-square row, within the entire board, must also have the numbers 1 through 9, without repetition."),
+            " within its cell."),
+    INSTRUCTIONS_SUDOKU_9_SECOND("Each nine-cell column," +
+            " or nine-cell row, within the entire board, must also have the numbers 1 through 9, without repetition."),
 
     INSTRUCTIONS_SUDOKU_MIDDLE_SAME("Each number can only appear once in a row, column, or box"),
     INSTRUCTIONS_SUDOKU_ENDING_SAME("To hear the numbers in the currently selected number's row press J," +
             " to hear the numbers in the currently selected number's column press K, to hear all of the numbers in" +
-            " the current block press L. If you have selected an empty square and are stuck, press H to automatically" +
-            " fill in the square. Navigate the board using the arrow keys. Press and hold the control key while" +
+            " the current block press L. If you have selected an empty cell and are stuck, press H to automatically" +
+            " fill in the cell. Navigate the board using the arrow keys. Press and hold the control key while" +
             " clicking an arrow to jump to the end of the row or column. When you have selected the box you want" +
             " to add a number to, select a number on your keypad to try and place it into the highlighted box"),
 
-    /* Sudoku: Empty Squares Left */
+    /* Sudoku: Empty Cells Left */
     EMPTY_PIECES_OF_BOARD_PLURAL_1("There are"),
-    EMPTY_PIECES_OF_BOARD_PLURAL_2("empty squares left on the board."),
+    EMPTY_PIECES_OF_BOARD_PLURAL_2("empty cells left on the board."),
     EMPTY_PIECES_OF_BOARD_SINGULAR_1("There is"),
-    EMPTY_PIECES_OF_BOARD_SINGULAR_2("empty square left on the board."),
-    EMPTY_PIECES_IN_SECTION("empty squares left in this section."),
+    EMPTY_PIECES_OF_BOARD_SINGULAR_2("empty cell left on the board."),
+    EMPTY_PIECES_IN_SECTION("empty cells left in this section."),
 
     /* Sudoku: Information Phrases */
     CURRENT_VALUE("The current value in this box is"),
