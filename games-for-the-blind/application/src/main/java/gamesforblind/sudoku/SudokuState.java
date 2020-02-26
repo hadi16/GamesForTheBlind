@@ -585,4 +585,8 @@ public class SudokuState {
     public SudokuType getSudokuType() {
         return this.sudokuType;
     }
+
+    public ArrayList<Point> getOriginallyFilledSquares() {
+        return this.originallyFilledSquares;
+    }
 }
