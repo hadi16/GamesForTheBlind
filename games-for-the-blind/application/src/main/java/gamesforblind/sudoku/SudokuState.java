@@ -347,7 +347,7 @@ public class SudokuState {
      * followed by telling them how many squares they have left to fill.
      */
     private void readNoSelectedSquareMessage() {
-        ArrayList<Phrase> phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.NO_SELECTED_SQUARE));
+        ArrayList<Phrase> phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.NO_SELECTED_CELL));
         phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
