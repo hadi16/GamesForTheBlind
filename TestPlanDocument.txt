@@ -30,3 +30,13 @@ codebreakerMaxTrialsForSixLengthCodeLose(): Checks that the game will end if the
 codebreakerGameisOverRestart: Checks that when game is over, the game restarts.
 
 codebreakerHint: Check that the hint function returns the correct number.
+
+Tests Sprint 7 (Feb 27)
+
+2 Total tests have been drafted.
+
+//Wasn't implemented last sprint.  Will be implemented this sprint
+codebreakerHint: Check that the hint function returns the correct number.
+
+codebreakerTimer: Checks the stopwatch is functional
+
