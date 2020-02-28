@@ -289,6 +289,13 @@ public class CodebreakerState {
     }
 
     /**
+     * Provides the answer for the highlighted cell
+     */
+    public int getHint(){
+        return 1;
+    }
+
+    /**
      * Getter for gameOver
      *
      * @return true if the game is over (otherwise, false).
