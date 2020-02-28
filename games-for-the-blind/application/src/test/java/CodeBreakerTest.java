@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -147,28 +148,24 @@ public class CodeBreakerTest {
         }
     }
 
-    //SPRINT 7 TESTS:
+    // SPRINT 7 TESTS
     @Test
     public void codebreakerHint() {
+        final int SELECTED_X_INDEX = 2;
+
         CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, CodebreakerType.FOUR);
+        int[] codeToBreak = codebreakerState.getCodeToBreak();
+        codebreakerState.setSelectedCellPoint(new Point(SELECTED_X_INDEX, 0));
 
-        int[] correctCode = new int[]{1, 2, 3, 4};
-        Integer[] guessedCode = new Integer[]{codebreakerState.getHint(),2,3, 4};
-
-        ArrayList<CodebreakerGuess> guessList = new ArrayList<>(
-                Collections.singletonList(new CodebreakerGuess(correctCode, guessedCode))
-        );
-
-        Assert.assertTrue(CodebreakerState.checkThatGameIsOver(correctCode, guessList));
+        Assert.assertEquals(codeToBreak[SELECTED_X_INDEX], codebreakerState.getHint());
     }
 
     @Test
     public void codebreakerTimer() {
-        CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, CodebreakerType.FOUR);
         long startTime = System.nanoTime();
 
         int[] correctCode = new int[]{1, 2, 3, 4};
-        Integer[] guessedCode = new Integer[]{1,2,3, 4};
+        Integer[] guessedCode = new Integer[]{1, 2, 3, 4};
 
         ArrayList<CodebreakerGuess> guessList = new ArrayList<>(
                 Collections.singletonList(new CodebreakerGuess(correctCode, guessedCode))
