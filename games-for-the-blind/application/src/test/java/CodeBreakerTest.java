@@ -146,4 +146,38 @@ public class CodeBreakerTest {
             Assert.assertTrue(codebreakerState.getGuessList().isEmpty());
         }
     }
+
+    //SPRINT 7 TESTS:
+    @Test
+    public void codebreakerHint() {
+        CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, CodebreakerType.FOUR);
+
+        int[] correctCode = new int[]{1, 2, 3, 4};
+        Integer[] guessedCode = new Integer[]{codebreakerState.getHint(),2,3, 4};
+
+        ArrayList<CodebreakerGuess> guessList = new ArrayList<>(
+                Collections.singletonList(new CodebreakerGuess(correctCode, guessedCode))
+        );
+
+        Assert.assertTrue(CodebreakerState.checkThatGameIsOver(correctCode, guessList));
+    }
+
+    @Test
+    public void codebreakerTimer() {
+        CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, CodebreakerType.FOUR);
+        long startTime = System.nanoTime();
+
+        int[] correctCode = new int[]{1, 2, 3, 4};
+        Integer[] guessedCode = new Integer[]{1,2,3, 4};
+
+        ArrayList<CodebreakerGuess> guessList = new ArrayList<>(
+                Collections.singletonList(new CodebreakerGuess(correctCode, guessedCode))
+        );
+        CodebreakerState.checkThatGameIsOver(correctCode, guessList);
+
+        long endTime = System.nanoTime();
+
+        long duration = (endTime - startTime);
+        Assert.assertTrue(duration != 0);
+    }
 }
