@@ -291,8 +291,8 @@ public class CodebreakerState {
     /**
      * Provides the answer for the highlighted cell
      */
-    public int getHint(){
-        return 1;
+    public int getHint() {
+        return this.codeToBreak[this.selectedCellPoint.x];
     }
 
     /**
