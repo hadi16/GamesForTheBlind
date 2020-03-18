@@ -7,12 +7,18 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.time.*;
 
 /**
  * Contains the main GUI code for Codebreaker. Serves as a custom JPanel for Codebreaker GUI (extends JPanel).
@@ -113,6 +119,14 @@ public class CodebreakerPanel extends JPanel {
             default:
                 throw new IllegalArgumentException("Invalid codebreaker type passed!");
         }
+
+        Duration timeElapsed = Duration.between(codebreakerState.getTime(), Instant.now());
+        int hoursElapsed = timeElapsed.toHoursPart();
+        int minutesElapsed = timeElapsed.toMinutesPart();
+        int secondsElapsed = timeElapsed.toSecondsPart();
+        graphics.drawString("Time: " + hoursElapsed +":"+ minutesElapsed +":"+ secondsElapsed,
+                this.mainBoardInitialPoint.x + 2*SECOND_GROUP_X_OFFSET,
+                this.mainBoardInitialPoint.y + SECOND_GROUP_X_OFFSET);
 
         graphics.drawRect(
                 this.mainBoardInitialPoint.x - 1,
@@ -271,12 +285,19 @@ public class CodebreakerPanel extends JPanel {
         final JLabel label;
         final ArrayList<CodebreakerGuess> guessList = this.codebreakerState.getGuessList();
         final CodebreakerGuess lastGuess = guessList.get(guessList.size() - 1);
+        Font f = new Font("Arial", Font.BOLD, (93 - 7 * 10) * totalBoardLength / 490);
+        final JLabel label2;
+        CodebreakerState.getTimer().stop();
         if (this.codebreakerType.getCodeLength() == lastGuess.getNumberInCorrectPosition()) {
             label = new JLabel("Congrats! You guessed the correct code!");
-            label.setFont(new Font("Arial", Font.BOLD, (93 - 7 * 10) * totalBoardLength / 490));
+            label2 = new JLabel("Time: " + CodebreakerState.getTimer().getTime(TimeUnit.SECONDS) + " seconds");
+            label.setFont(f);
+            label2.setFont(f);
         } else {
             label = new JLabel("Correct code: " + stringBuilder);
-            label.setFont(new Font("Arial", Font.BOLD, (93 - 7 * 10) * totalBoardLength / 390));
+            label2 = new JLabel("Time: " + CodebreakerState.getTimer().getTime(TimeUnit.SECONDS) + " seconds");
+            label.setFont(f);
+            label2.setFont(f);
         }
 
         this.popUpFrame.setSize(totalBoardLength, totalBoardLength / 3);
@@ -287,6 +308,10 @@ public class CodebreakerPanel extends JPanel {
         Popup popup = new PopupFactory().getPopup(
                 this.popUpFrame, popUpPanel, totalBoardLength / 2, totalBoardLength / 2
         );
+
+
+//        label2 = new JLabel("Time: " + CodebreakerState.getTimer().getTime(TimeUnit.SECONDS) + "seconds");
+        popUpPanel.add(label2);
 
         this.popUpFrame.add(popUpPanel);
         this.popUpFrame.setVisible(true);
@@ -409,6 +434,7 @@ public class CodebreakerPanel extends JPanel {
             this.paintCode(TOTAL_BOARD_LENGTH);
         }
     }
+
 
     public JFrame getPopUpFrame() {
         return this.popUpFrame;

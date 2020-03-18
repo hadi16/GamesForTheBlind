@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static gamesforblind.Constants.FRAME_DIMENSION;
 
@@ -60,7 +62,16 @@ public class SudokuFrame extends JFrame {
      * @param sudokuGame The Sudoku game.
      */
     private void initializeGui(@NotNull SudokuGame sudokuGame) {
+        java.util.Timer timer = new Timer();
+
         this.frame.add(this.sudokuPanel);
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                repaintSudokuPanel();
+            }
+        }, 1000, 1000);
 
         this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.frame.setSize(FRAME_DIMENSION, FRAME_DIMENSION);

@@ -618,6 +618,14 @@ public class SudokuState {
         return this.sudokuType;
     }
 
+    /**
+     * Getter for timer
+     * @return
+     */
+    public Instant getTime(){
+        return this.startingInstant;
+    }
+
     public ArrayList<Point> getOriginallyFilledSquares() {
         return this.originallyFilledSquares;
     }
