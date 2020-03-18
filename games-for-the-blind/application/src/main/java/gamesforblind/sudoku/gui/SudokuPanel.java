@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 
 import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
@@ -127,6 +129,7 @@ public class SudokuPanel extends JPanel {
                 // Step 3: draw the basic square that holds a number on the Sudoku board.
                 graphics.setColor(Color.BLACK);
                 graphics.drawRect(xPosition, yPosition, squareDimension, squareDimension);
+                Duration timeElapsed = Duration.between(sudokuState.getTime(), Instant.now());
             }
         }
     }
@@ -164,6 +167,21 @@ public class SudokuPanel extends JPanel {
                     initialPosition + (11 * squareDimension / 12)
             );
         }
+
+        final Font MAIN_BOARD_FONT = new Font("Serif", Font.BOLD, 50);
+        graphics.setFont(MAIN_BOARD_FONT);
+
+        Duration timeElapsed = Duration.between(this.sudokuState.getTime(), Instant.now());
+        int hoursElapsed = timeElapsed.toHoursPart();
+        int minutesElapsed = timeElapsed.toMinutesPart();
+        int secondsElapsed = timeElapsed.toSecondsPart();
+        graphics.drawString("Time: " + hoursElapsed +":"+ minutesElapsed +":"+ secondsElapsed,
+                initialPosition + (51 * squareDimension * sudokuBoardSize++ / 50) + (29 * squareDimension / 24) - (squareDimension / 4),
+                (1044 - 11 * sudokuBoardSize) * squareDimension / 1050);
+
+        graphics.setFont(
+                new Font("Arial", Font.BOLD, (93 - 7 * sudokuBoardSize) * this.totalBoardLength / 390)
+        );
     }
 
     /**

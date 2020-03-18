@@ -47,6 +47,7 @@ public class CodebreakerGame {
 
         this.codebreakerState = new CodebreakerState(audioPlayerExecutor, codebreakerType);
         this.codebreakerFrame = new CodebreakerFrame(this, this.codebreakerState, programArgs.isPlaybackMode());
+
     }
 
     /**

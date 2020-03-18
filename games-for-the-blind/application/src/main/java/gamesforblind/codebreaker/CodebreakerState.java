@@ -3,10 +3,13 @@ package gamesforblind.codebreaker;
 import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.enums.CodebreakerType;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
+import org.apache.commons.lang3.time.StopWatch;
 import org.jetbrains.annotations.NotNull;
 import phrase.Phrase;
 
 import java.awt.*;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 
 import static gamesforblind.Constants.CODEBREAKER_MAX_CODE_INT;
@@ -24,6 +27,9 @@ public class CodebreakerState {
     private Integer[] currentGuess;
     private ArrayList<CodebreakerGuess> guessList;
     private Point selectedCellPoint;
+    static StopWatch watch = new StopWatch();
+    private Instant startingInstant;
+
 
     public CodebreakerState(@NotNull AudioPlayerExecutor audioPlayerExecutor, @NotNull CodebreakerType codebreakerType) {
         this.audioPlayerExecutor = audioPlayerExecutor;
@@ -61,7 +67,12 @@ public class CodebreakerState {
         this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
         this.guessList = new ArrayList<>();
         this.selectedCellPoint = new Point();
+        this.startingInstant = Instant.now();
+        watch.start();
+        System.out.println("Time start: " + watch.getTime());
+
     }
+
 
     public void readUnrecognizedKey(int keyCode) {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>(Arrays.asList(
@@ -100,6 +111,8 @@ public class CodebreakerState {
             // If the game is over, give message
             this.gameOver = true;
             this.feedbackGameOver();
+
+
         } else {
             // If the game is not over, give the player feedback
             this.feedbackGuess(currentCodebreakerGuess);
@@ -145,7 +158,32 @@ public class CodebreakerState {
             }
         }
 
+        Duration timeElapsed = Duration.between(this.startingInstant, Instant.now());
+
+        // Indicates that an error occurred with the time measurement.
+        if (timeElapsed.isNegative()) {
+            relevantPhrases.add(Phrase.SPACE_FOR_EXIT);
+            this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
+        }
+
+        relevantPhrases.add(Phrase.IT_TOOK_YOU);
+
+        int hoursElapsed = timeElapsed.toHoursPart();
+        if (hoursElapsed > 0) {
+            relevantPhrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(hoursElapsed), Phrase.HOURS));
+        }
+
+        int minutesElapsed = timeElapsed.toMinutesPart();
+        if (minutesElapsed > 0) {
+            relevantPhrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(minutesElapsed), Phrase.MINUTES));
+        }
+
+        int secondsElapsed = timeElapsed.toSecondsPart();
+        if (secondsElapsed > 0) {
+            relevantPhrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(secondsElapsed), Phrase.SECONDS));
+        }
         relevantPhrases.add(Phrase.SPACE_FOR_EXIT);
+
         this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
     }
 
@@ -327,4 +365,8 @@ public class CodebreakerState {
     public void setSelectedCellPoint(Point selectedCellPoint) {
         this.selectedCellPoint = selectedCellPoint;
     }
+
+    public static StopWatch getTimer(){return watch;}
+
+    public Instant getTime(){return this.startingInstant;}
 }
