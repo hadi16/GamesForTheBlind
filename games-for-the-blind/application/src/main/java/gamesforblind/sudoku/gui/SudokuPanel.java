@@ -142,7 +142,7 @@ public class SudokuPanel extends JPanel {
      * @param initialPosition Amount of pixels to begin painting board from.
      */
     private void paintBoardLabels(@NotNull Graphics graphics, int squareDimension, int initialPosition) {
-        int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
+        final int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
 
         graphics.setColor(Color.BLACK);
         graphics.setFont(
@@ -174,12 +174,11 @@ public class SudokuPanel extends JPanel {
         int hoursElapsed = timeElapsed.toHoursPart();
         int minutesElapsed = timeElapsed.toMinutesPart();
         int secondsElapsed = timeElapsed.toSecondsPart();
-        graphics.drawString("Time: " + hoursElapsed + ":" + minutesElapsed + ":" + secondsElapsed,
-                initialPosition + (51 * squareDimension * sudokuBoardSize++ / 50) + (29 * squareDimension / 24) - (squareDimension / 4),
-                (1044 - 11 * sudokuBoardSize) * squareDimension / 1050);
 
-        graphics.setFont(
-                new Font("Arial", Font.BOLD, (93 - 7 * sudokuBoardSize) * this.totalBoardLength / 390)
+        graphics.drawString(
+                "Time: " + hoursElapsed + ":" + minutesElapsed + ":" + secondsElapsed,
+                initialPosition + (51 * squareDimension * sudokuBoardSize / 50) + (29 * squareDimension / 24) - (squareDimension / 4),
+                (1044 - 11 * sudokuBoardSize) * squareDimension / 1050
         );
     }
 

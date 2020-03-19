@@ -62,14 +62,12 @@ public class SudokuFrame extends JFrame {
      * @param sudokuGame The Sudoku game.
      */
     private void initializeGui(@NotNull SudokuGame sudokuGame) {
-        java.util.Timer timer = new Timer();
-
         this.frame.add(this.sudokuPanel);
 
-        timer.scheduleAtFixedRate(new TimerTask() {
+        new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                repaintSudokuPanel();
+                SudokuFrame.this.repaintSudokuPanel();
             }
         }, 1000, 1000);
 

@@ -14,8 +14,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Contains the main GUI code for Codebreaker. Serves as a custom JPanel for Codebreaker GUI (extends JPanel).
@@ -117,13 +118,16 @@ public class CodebreakerPanel extends JPanel {
                 throw new IllegalArgumentException("Invalid codebreaker type passed!");
         }
 
-        Duration timeElapsed = Duration.between(codebreakerState.getTime(), Instant.now());
+        Duration timeElapsed = Duration.between(this.codebreakerState.getTime(), Instant.now());
         int hoursElapsed = timeElapsed.toHoursPart();
         int minutesElapsed = timeElapsed.toMinutesPart();
         int secondsElapsed = timeElapsed.toSecondsPart();
-        graphics.drawString("Time: " + hoursElapsed + ":" + minutesElapsed + ":" + secondsElapsed,
+
+        graphics.drawString(
+                "Time: " + hoursElapsed + ":" + minutesElapsed + ":" + secondsElapsed,
                 this.mainBoardInitialPoint.x + 2 * SECOND_GROUP_X_OFFSET,
-                this.mainBoardInitialPoint.y + SECOND_GROUP_X_OFFSET);
+                this.mainBoardInitialPoint.y + SECOND_GROUP_X_OFFSET
+        );
 
         graphics.drawRect(
                 this.mainBoardInitialPoint.x - 1,
@@ -270,31 +274,24 @@ public class CodebreakerPanel extends JPanel {
     }
 
     private void paintCode(int totalBoardLength) {
-        final int[] codeToBreak = this.codebreakerState.getCodeToBreak();
-
-        // Convert int[] to string and append together
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < this.codebreakerType.getCodeLength(); i++) {
-            String newNum = Integer.toString(codeToBreak[i]);
-            stringBuilder.append(newNum);
-        }
-
         final ArrayList<CodebreakerGuess> guessList = this.codebreakerState.getGuessList();
         final CodebreakerGuess lastGuess = guessList.get(guessList.size() - 1);
-        final Font font = new Font("Arial", Font.BOLD, (93 - 7 * 10) * totalBoardLength / 490);
 
-        CodebreakerState.getTimer().stop();
+        final Font font = new Font("Arial", Font.BOLD, (93 - 7 * 10) * totalBoardLength / 490);
 
         final JLabel resultLabel;
         if (this.codebreakerType.getCodeLength() == lastGuess.getNumberInCorrectPosition()) {
             resultLabel = new JLabel("Congrats! You guessed the correct code!");
         } else {
-            resultLabel = new JLabel("Correct code: " + stringBuilder);
+            final int[] codeToBreak = this.codebreakerState.getCodeToBreak();
+            final String correctCode = IntStream.of(codeToBreak)
+                    .mapToObj(String::valueOf)
+                    .collect(Collectors.joining());
+            resultLabel = new JLabel("Correct code: " + correctCode);
         }
 
-        final JLabel timeLabel = new JLabel(
-                "Time: " + CodebreakerState.getTimer().getTime(TimeUnit.SECONDS) + " seconds"
-        );
+        final Duration timeElapsed = this.codebreakerState.getTimeElapsed();
+        final JLabel timeLabel = new JLabel("Time: " + timeElapsed.getSeconds() + " seconds");
 
         resultLabel.setFont(font);
         timeLabel.setFont(font);

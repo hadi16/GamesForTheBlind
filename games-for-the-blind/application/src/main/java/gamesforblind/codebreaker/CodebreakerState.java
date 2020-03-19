@@ -3,7 +3,6 @@ package gamesforblind.codebreaker;
 import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.enums.CodebreakerType;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
-import org.apache.commons.lang3.time.StopWatch;
 import org.jetbrains.annotations.NotNull;
 import phrase.Phrase;
 
@@ -19,7 +18,6 @@ import static gamesforblind.Constants.CODEBREAKER_MAX_CODE_INT;
  * Also handles any calls into the {@link AudioPlayerExecutor} for Codebreaker.
  */
 public class CodebreakerState {
-    private static final StopWatch watch = new StopWatch();
     private final CodebreakerType codebreakerType;
     private final AudioPlayerExecutor audioPlayerExecutor;
     private boolean gameOver;
@@ -27,8 +25,9 @@ public class CodebreakerState {
     private Integer[] currentGuess;
     private ArrayList<CodebreakerGuess> guessList;
     private Point selectedCellPoint;
-    private Instant startingInstant;
 
+    private Instant startingInstant;
+    private Duration timeElapsed;
 
     public CodebreakerState(@NotNull AudioPlayerExecutor audioPlayerExecutor, @NotNull CodebreakerType codebreakerType) {
         this.audioPlayerExecutor = audioPlayerExecutor;
@@ -60,19 +59,15 @@ public class CodebreakerState {
         return codeToBreak.length == guessList.get(guessList.size() - 1).getNumberInCorrectPosition();
     }
 
-    public static StopWatch getTimer() {
-        return watch;
-    }
-
     public void initNewCodebreakerGame() {
         this.gameOver = false;
         this.codeToBreak = this.generateCorrectCode();
         this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
         this.guessList = new ArrayList<>();
         this.selectedCellPoint = new Point();
+
         this.startingInstant = Instant.now();
-        watch.start();
-        System.out.println("Time start: " + watch.getTime());
+        this.timeElapsed = null;
     }
 
     public void readUnrecognizedKey(int keyCode) {
@@ -111,9 +106,9 @@ public class CodebreakerState {
         if (checkThatGameIsOver(this.codeToBreak, this.guessList)) {
             // If the game is over, give message
             this.gameOver = true;
+            this.timeElapsed = Duration.between(this.startingInstant, Instant.now());
+
             this.feedbackGameOver();
-
-
         } else {
             // If the game is not over, give the player feedback
             this.feedbackGuess(currentCodebreakerGuess);
@@ -159,15 +154,13 @@ public class CodebreakerState {
             }
         }
 
-        Duration timeElapsed = Duration.between(this.startingInstant, Instant.now());
-
         // Indicates that an error occurred with the time measurement.
-        if (timeElapsed.isNegative()) {
+        if (this.timeElapsed.isNegative()) {
             relevantPhrases.add(Phrase.SPACE_FOR_EXIT);
             this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
         }
 
-        relevantPhrases.addAll(Phrase.getTimeElapsedPhrases(timeElapsed));
+        relevantPhrases.addAll(Phrase.getTimeElapsedPhrases(this.timeElapsed));
         relevantPhrases.add(Phrase.SPACE_FOR_EXIT);
 
         this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
@@ -354,5 +347,9 @@ public class CodebreakerState {
 
     public Instant getTime() {
         return this.startingInstant;
+    }
+
+    public Duration getTimeElapsed() {
+        return this.timeElapsed;
     }
 }

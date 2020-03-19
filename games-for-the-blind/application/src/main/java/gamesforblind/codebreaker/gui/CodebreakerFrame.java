@@ -60,14 +60,12 @@ public class CodebreakerFrame extends JFrame {
      */
     private void initializeGui(@NotNull CodebreakerGame codebreakerGame) {
         this.frame.add(this.codebreakerPanel);
+        this.frame.getContentPane().add(this.codebreakerPanel);
 
-        Timer timer = new Timer();
-        this.frame.getContentPane().add(codebreakerPanel);
-
-        timer.scheduleAtFixedRate(new TimerTask() {
+        new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                repaintCodebreakerPanel();
+                CodebreakerFrame.this.repaintCodebreakerPanel();
             }
         }, 1000, 1000);
 
