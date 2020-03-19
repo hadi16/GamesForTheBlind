@@ -124,7 +124,7 @@ public class CodebreakerPanel extends JPanel {
         int secondsElapsed = timeElapsed.toSecondsPart();
 
         graphics.drawString(
-                "Time: " + hoursElapsed + ":" + minutesElapsed + ":" + secondsElapsed,
+                String.format("Time: %d:%d:%d", hoursElapsed, minutesElapsed, secondsElapsed),
                 this.mainBoardInitialPoint.x + 2 * SECOND_GROUP_X_OFFSET,
                 this.mainBoardInitialPoint.y + SECOND_GROUP_X_OFFSET
         );
@@ -314,6 +314,7 @@ public class CodebreakerPanel extends JPanel {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                     CodebreakerPanel.this.popUpFrame.setVisible(false);
+                    CodebreakerPanel.this.popUpFrame.dispose();
                 }
             }
 
@@ -428,7 +429,6 @@ public class CodebreakerPanel extends JPanel {
             this.paintCode(TOTAL_BOARD_LENGTH);
         }
     }
-
 
     public JFrame getPopUpFrame() {
         return this.popUpFrame;

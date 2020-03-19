@@ -21,6 +21,7 @@ import static gamesforblind.Constants.FRAME_DIMENSION;
  * Class that creates the Codebreaker GUI, adds the listeners to that GUI, and updates the Codebreaker state of the GUI.
  */
 public class CodebreakerFrame extends JFrame {
+    private final CodebreakerState codebreakerState;
     private final JFrame frame;
 
     /**
@@ -40,6 +41,7 @@ public class CodebreakerFrame extends JFrame {
             @NotNull CodebreakerState initialState,
             boolean playbackMode
     ) {
+        this.codebreakerState = initialState;
         this.codebreakerPanel = new CodebreakerPanel(initialState);
         this.frame = new JFrame("Codebreaker");
 
@@ -65,7 +67,12 @@ public class CodebreakerFrame extends JFrame {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                CodebreakerFrame.this.repaintCodebreakerPanel();
+                final boolean gameOver = CodebreakerFrame.this.codebreakerState.isGameOver();
+                if (gameOver) {
+                    this.cancel();
+                } else {
+                    CodebreakerFrame.this.repaintCodebreakerPanel();
+                }
             }
         }, 1000, 1000);
 

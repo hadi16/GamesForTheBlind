@@ -21,6 +21,7 @@ import static gamesforblind.Constants.FRAME_DIMENSION;
  * Class that creates the Sudoku GUI, adds the listeners to that GUI, and updates the Sudoku state of the GUI.
  */
 public class SudokuFrame extends JFrame {
+    private final SudokuState sudokuState;
     private final JFrame frame;
 
     /**
@@ -42,6 +43,7 @@ public class SudokuFrame extends JFrame {
             @NotNull SudokuType sudokuType,
             boolean playbackMode
     ) {
+        this.sudokuState = initialState;
         this.sudokuPanel = new SudokuPanel(initialState);
         this.frame = new JFrame("Sudoku");
 
@@ -67,7 +69,12 @@ public class SudokuFrame extends JFrame {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                SudokuFrame.this.repaintSudokuPanel();
+                final boolean gameOver = SudokuFrame.this.sudokuState.isGameOver();
+                if (gameOver) {
+                    this.cancel();
+                } else {
+                    SudokuFrame.this.repaintSudokuPanel();
+                }
             }
         }, 1000, 1000);
 

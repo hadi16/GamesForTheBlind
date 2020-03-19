@@ -176,7 +176,7 @@ public class SudokuPanel extends JPanel {
         int secondsElapsed = timeElapsed.toSecondsPart();
 
         graphics.drawString(
-                "Time: " + hoursElapsed + ":" + minutesElapsed + ":" + secondsElapsed,
+                String.format("Time: %d:%d:%d", hoursElapsed, minutesElapsed, secondsElapsed),
                 initialPosition + (51 * squareDimension * sudokuBoardSize / 50) + (29 * squareDimension / 24) - (squareDimension / 4),
                 (1044 - 11 * sudokuBoardSize) * squareDimension / 1050
         );
