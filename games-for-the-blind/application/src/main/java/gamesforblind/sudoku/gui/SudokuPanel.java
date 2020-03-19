@@ -129,7 +129,6 @@ public class SudokuPanel extends JPanel {
                 // Step 3: draw the basic square that holds a number on the Sudoku board.
                 graphics.setColor(Color.BLACK);
                 graphics.drawRect(xPosition, yPosition, squareDimension, squareDimension);
-                Duration timeElapsed = Duration.between(sudokuState.getTime(), Instant.now());
             }
         }
     }
@@ -175,7 +174,7 @@ public class SudokuPanel extends JPanel {
         int hoursElapsed = timeElapsed.toHoursPart();
         int minutesElapsed = timeElapsed.toMinutesPart();
         int secondsElapsed = timeElapsed.toSecondsPart();
-        graphics.drawString("Time: " + hoursElapsed +":"+ minutesElapsed +":"+ secondsElapsed,
+        graphics.drawString("Time: " + hoursElapsed + ":" + minutesElapsed + ":" + secondsElapsed,
                 initialPosition + (51 * squareDimension * sudokuBoardSize++ / 50) + (29 * squareDimension / 24) - (squareDimension / 4),
                 (1044 - 11 * sudokuBoardSize) * squareDimension / 1050);
 

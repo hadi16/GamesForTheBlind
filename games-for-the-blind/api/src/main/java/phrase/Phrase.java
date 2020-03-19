@@ -12,9 +12,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.time.Duration;
+import java.util.*;
 
 import static java.util.Map.entry;
 import static java.util.Map.ofEntries;
@@ -455,6 +454,27 @@ public enum Phrase {
         // x value: 0 maps to "c1", 1 maps to "c2", etc.
         // y value: 0 maps to "r1", 1 maps to "r2", etc.
         return LOCATIONS_PHRASE_LIST[selectedPoint.x][selectedPoint.y];
+    }
+
+    public static ArrayList<Phrase> getTimeElapsedPhrases(Duration timeElapsed) {
+        final ArrayList<Phrase> phrases = new ArrayList<>(Collections.singletonList(Phrase.IT_TOOK_YOU));
+
+        int hoursElapsed = timeElapsed.toHoursPart();
+        if (hoursElapsed > 0) {
+            phrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(hoursElapsed), Phrase.HOURS));
+        }
+
+        int minutesElapsed = timeElapsed.toMinutesPart();
+        if (minutesElapsed > 0) {
+            phrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(minutesElapsed), Phrase.MINUTES));
+        }
+
+        int secondsElapsed = timeElapsed.toSecondsPart();
+        if (secondsElapsed > 0) {
+            phrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(secondsElapsed), Phrase.SECONDS));
+        }
+
+        return phrases;
     }
 
     /**

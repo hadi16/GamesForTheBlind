@@ -19,15 +19,14 @@ import static gamesforblind.Constants.CODEBREAKER_MAX_CODE_INT;
  * Also handles any calls into the {@link AudioPlayerExecutor} for Codebreaker.
  */
 public class CodebreakerState {
+    private static final StopWatch watch = new StopWatch();
     private final CodebreakerType codebreakerType;
     private final AudioPlayerExecutor audioPlayerExecutor;
-
     private boolean gameOver;
     private int[] codeToBreak;
     private Integer[] currentGuess;
     private ArrayList<CodebreakerGuess> guessList;
     private Point selectedCellPoint;
-    static StopWatch watch = new StopWatch();
     private Instant startingInstant;
 
 
@@ -61,6 +60,10 @@ public class CodebreakerState {
         return codeToBreak.length == guessList.get(guessList.size() - 1).getNumberInCorrectPosition();
     }
 
+    public static StopWatch getTimer() {
+        return watch;
+    }
+
     public void initNewCodebreakerGame() {
         this.gameOver = false;
         this.codeToBreak = this.generateCorrectCode();
@@ -70,9 +73,7 @@ public class CodebreakerState {
         this.startingInstant = Instant.now();
         watch.start();
         System.out.println("Time start: " + watch.getTime());
-
     }
-
 
     public void readUnrecognizedKey(int keyCode) {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>(Arrays.asList(
@@ -166,22 +167,7 @@ public class CodebreakerState {
             this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
         }
 
-        relevantPhrases.add(Phrase.IT_TOOK_YOU);
-
-        int hoursElapsed = timeElapsed.toHoursPart();
-        if (hoursElapsed > 0) {
-            relevantPhrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(hoursElapsed), Phrase.HOURS));
-        }
-
-        int minutesElapsed = timeElapsed.toMinutesPart();
-        if (minutesElapsed > 0) {
-            relevantPhrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(minutesElapsed), Phrase.MINUTES));
-        }
-
-        int secondsElapsed = timeElapsed.toSecondsPart();
-        if (secondsElapsed > 0) {
-            relevantPhrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(secondsElapsed), Phrase.SECONDS));
-        }
+        relevantPhrases.addAll(Phrase.getTimeElapsedPhrases(timeElapsed));
         relevantPhrases.add(Phrase.SPACE_FOR_EXIT);
 
         this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
@@ -366,7 +352,7 @@ public class CodebreakerState {
         this.selectedCellPoint = selectedCellPoint;
     }
 
-    public static StopWatch getTimer(){return watch;}
-
-    public Instant getTime(){return this.startingInstant;}
+    public Instant getTime() {
+        return this.startingInstant;
+    }
 }

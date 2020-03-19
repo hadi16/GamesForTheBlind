@@ -11,15 +11,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Date;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import static gamesforblind.Constants.FRAME_DIMENSION;
 
@@ -108,9 +102,7 @@ public class CodebreakerFrame extends JFrame {
         // Add menu bar to frame
         this.frame.setJMenuBar(menuBar);
         JMenu mainMenu = new JMenu("Menu");
-//        JMenu showTimer = new JMenu("Time");
         CodebreakerMenuItemListener codebreakerMenuItemListener = new CodebreakerMenuItemListener(codebreakerGame);
-
 
         /* Add menu items to menu. */
         for (GameMenuItem gameMenuItem : GameMenuItem.CODEBREAKER_MENU_ITEMS) {
@@ -142,5 +134,4 @@ public class CodebreakerFrame extends JFrame {
     public Optional<Point> getMouseSelectedPoint(Point mousePoint) {
         return this.codebreakerPanel.getMouseSelectedPoint(mousePoint);
     }
-
 }

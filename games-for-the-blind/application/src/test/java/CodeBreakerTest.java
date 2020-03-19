@@ -133,7 +133,7 @@ public class CodeBreakerTest {
     }
 
     @Test
-    public void codebreakerGameisOverRestart() {
+    public void codebreakerGameIsOverRestart() {
         CodebreakerState codebreakerState = new CodebreakerState(this.testAudioPlayerExecutor, CodebreakerType.FOUR);
         int[] correctCode = new int[]{1, 2, 3, 4};
         Integer[] guessedCode = new Integer[]{1, 2, 3, 4};

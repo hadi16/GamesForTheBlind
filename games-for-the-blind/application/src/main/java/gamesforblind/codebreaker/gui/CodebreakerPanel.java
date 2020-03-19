@@ -7,18 +7,15 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.time.format.DateTimeFormatter;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-import java.time.*;
 
 /**
  * Contains the main GUI code for Codebreaker. Serves as a custom JPanel for Codebreaker GUI (extends JPanel).
@@ -124,8 +121,8 @@ public class CodebreakerPanel extends JPanel {
         int hoursElapsed = timeElapsed.toHoursPart();
         int minutesElapsed = timeElapsed.toMinutesPart();
         int secondsElapsed = timeElapsed.toSecondsPart();
-        graphics.drawString("Time: " + hoursElapsed +":"+ minutesElapsed +":"+ secondsElapsed,
-                this.mainBoardInitialPoint.x + 2*SECOND_GROUP_X_OFFSET,
+        graphics.drawString("Time: " + hoursElapsed + ":" + minutesElapsed + ":" + secondsElapsed,
+                this.mainBoardInitialPoint.x + 2 * SECOND_GROUP_X_OFFSET,
                 this.mainBoardInitialPoint.y + SECOND_GROUP_X_OFFSET);
 
         graphics.drawRect(
@@ -282,36 +279,36 @@ public class CodebreakerPanel extends JPanel {
             stringBuilder.append(newNum);
         }
 
-        final JLabel label;
         final ArrayList<CodebreakerGuess> guessList = this.codebreakerState.getGuessList();
         final CodebreakerGuess lastGuess = guessList.get(guessList.size() - 1);
-        Font f = new Font("Arial", Font.BOLD, (93 - 7 * 10) * totalBoardLength / 490);
-        final JLabel label2;
+        final Font font = new Font("Arial", Font.BOLD, (93 - 7 * 10) * totalBoardLength / 490);
+
         CodebreakerState.getTimer().stop();
+
+        final JLabel resultLabel;
         if (this.codebreakerType.getCodeLength() == lastGuess.getNumberInCorrectPosition()) {
-            label = new JLabel("Congrats! You guessed the correct code!");
-            label2 = new JLabel("Time: " + CodebreakerState.getTimer().getTime(TimeUnit.SECONDS) + " seconds");
-            label.setFont(f);
-            label2.setFont(f);
+            resultLabel = new JLabel("Congrats! You guessed the correct code!");
         } else {
-            label = new JLabel("Correct code: " + stringBuilder);
-            label2 = new JLabel("Time: " + CodebreakerState.getTimer().getTime(TimeUnit.SECONDS) + " seconds");
-            label.setFont(f);
-            label2.setFont(f);
+            resultLabel = new JLabel("Correct code: " + stringBuilder);
         }
+
+        final JLabel timeLabel = new JLabel(
+                "Time: " + CodebreakerState.getTimer().getTime(TimeUnit.SECONDS) + " seconds"
+        );
+
+        resultLabel.setFont(font);
+        timeLabel.setFont(font);
 
         this.popUpFrame.setSize(totalBoardLength, totalBoardLength / 3);
 
         // Create a popup
         JPanel popUpPanel = new JPanel();
-        popUpPanel.add(label);
+        popUpPanel.add(resultLabel);
         Popup popup = new PopupFactory().getPopup(
                 this.popUpFrame, popUpPanel, totalBoardLength / 2, totalBoardLength / 2
         );
 
-
-//        label2 = new JLabel("Time: " + CodebreakerState.getTimer().getTime(TimeUnit.SECONDS) + "seconds");
-        popUpPanel.add(label2);
+        popUpPanel.add(timeLabel);
 
         this.popUpFrame.add(popUpPanel);
         this.popUpFrame.setVisible(true);

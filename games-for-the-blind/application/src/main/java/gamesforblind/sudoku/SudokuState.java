@@ -188,22 +188,7 @@ public class SudokuState {
                 return relevantPhrases;
             }
 
-            relevantPhrases.add(Phrase.IT_TOOK_YOU);
-
-            int hoursElapsed = timeElapsed.toHoursPart();
-            if (hoursElapsed > 0) {
-                relevantPhrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(hoursElapsed), Phrase.HOURS));
-            }
-
-            int minutesElapsed = timeElapsed.toMinutesPart();
-            if (minutesElapsed > 0) {
-                relevantPhrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(minutesElapsed), Phrase.MINUTES));
-            }
-
-            int secondsElapsed = timeElapsed.toSecondsPart();
-            if (secondsElapsed > 0) {
-                relevantPhrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(secondsElapsed), Phrase.SECONDS));
-            }
+            relevantPhrases.addAll(Phrase.getTimeElapsedPhrases(timeElapsed));
 
             return relevantPhrases;
         }
@@ -618,11 +603,7 @@ public class SudokuState {
         return this.sudokuType;
     }
 
-    /**
-     * Getter for timer
-     * @return
-     */
-    public Instant getTime(){
+    public Instant getTime() {
         return this.startingInstant;
     }
 
