@@ -283,7 +283,7 @@ public class CodebreakerPanel extends JPanel {
         final CodebreakerGuess lastGuess = guessList.get(guessList.size() - 1);
         final Font font = new Font("Arial", Font.BOLD, (93 - 7 * 10) * totalBoardLength / 490);
 
-        CodebreakerState.getTimer().stop();
+        //CodebreakerState.getTimer().stop();
 
         final JLabel resultLabel;
         if (this.codebreakerType.getCodeLength() == lastGuess.getNumberInCorrectPosition()) {
@@ -293,7 +293,7 @@ public class CodebreakerPanel extends JPanel {
         }
 
         final JLabel timeLabel = new JLabel(
-                "Time: " + CodebreakerState.getTimer().getTime(TimeUnit.SECONDS) + " seconds"
+              //  "Time: " + CodebreakerState.getTimer().getTime(TimeUnit.SECONDS) + " seconds"
         );
 
         resultLabel.setFont(font);

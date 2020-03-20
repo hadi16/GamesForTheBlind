@@ -19,7 +19,7 @@ import static gamesforblind.Constants.CODEBREAKER_MAX_CODE_INT;
  * Also handles any calls into the {@link AudioPlayerExecutor} for Codebreaker.
  */
 public class CodebreakerState {
-    private static final StopWatch watch = new StopWatch();
+   // private static final StopWatch watch = new StopWatch();
     private final CodebreakerType codebreakerType;
     private final AudioPlayerExecutor audioPlayerExecutor;
     private boolean gameOver;
@@ -60,9 +60,9 @@ public class CodebreakerState {
         return codeToBreak.length == guessList.get(guessList.size() - 1).getNumberInCorrectPosition();
     }
 
-    public static StopWatch getTimer() {
-        return watch;
-    }
+    //public static StopWatch getTimer() {
+    //    return watch;
+    //}
 
     public void initNewCodebreakerGame() {
         this.gameOver = false;
@@ -71,8 +71,8 @@ public class CodebreakerState {
         this.guessList = new ArrayList<>();
         this.selectedCellPoint = new Point();
         this.startingInstant = Instant.now();
-        watch.start();
-        System.out.println("Time start: " + watch.getTime());
+        //watch.start();
+       // System.out.println("Time start: " + watch.getTime());
     }
 
     public void readUnrecognizedKey(int keyCode) {
