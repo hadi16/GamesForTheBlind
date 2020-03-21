@@ -34,7 +34,7 @@ public class CodebreakerState {
     public CodebreakerState(@NotNull AudioPlayerExecutor audioPlayerExecutor, @NotNull CodebreakerType codebreakerType) {
         this.audioPlayerExecutor = audioPlayerExecutor;
         this.codebreakerType = codebreakerType;
-        this.hintNum = 3;
+
 
         this.initNewCodebreakerGame();
     }
@@ -73,6 +73,7 @@ public class CodebreakerState {
         this.guessList = new ArrayList<>();
         this.selectedCellPoint = new Point();
         this.startingInstant = Instant.now();
+        this.hintNum = 3;
         watch.start();
         System.out.println("Time start: " + watch.getTime());
     }
@@ -338,7 +339,6 @@ public class CodebreakerState {
     public boolean isGameOver() {
         return this.gameOver;
     }
-
 
     public int[] getCodeToBreak() {
         return this.codeToBreak;
