@@ -331,34 +331,15 @@ public class SudokuState {
      * Reads the instructions for the 4x4, 6x6, or 9x9 game.
      */
     public void readInstructions() {
-        ArrayList<Phrase> instructionsPhrases;
-        switch (this.sudokuType) {
-            case FOUR_BY_FOUR:
-                instructionsPhrases = new ArrayList<>(Arrays.asList(
-                        Phrase.INSTRUCTIONS_SUDOKU_4,
-                        Phrase.INSTRUCTIONS_SUDOKU_MIDDLE_SAME,
-                        Phrase.INSTRUCTIONS_SUDOKU_4_SECOND,
-                        Phrase.INSTRUCTIONS_SUDOKU_ENDING_SAME));
-                break;
-            case SIX_BY_SIX:
-                instructionsPhrases = new ArrayList<>(Arrays.asList(
-                        Phrase.INSTRUCTIONS_SUDOKU_6,
-                        Phrase.INSTRUCTIONS_SUDOKU_MIDDLE_SAME,
-                        Phrase.INSTRUCTIONS_SUDOKU_6_SECOND,
-                        Phrase.INSTRUCTIONS_SUDOKU_ENDING_SAME));
-                break;
-            case NINE_BY_NINE:
-                instructionsPhrases = new ArrayList<>(Arrays.asList(
-                        Phrase.INSTRUCTIONS_SUDOKU_9,
-                        Phrase.INSTRUCTIONS_SUDOKU_MIDDLE_SAME,
-                        Phrase.INSTRUCTIONS_SUDOKU_9_SECOND,
-                        Phrase.INSTRUCTIONS_SUDOKU_ENDING_SAME));
-                break;
-            default:
-                throw new IllegalArgumentException(
-                        String.format("Invalid Sudoku type: '%s'!", this.sudokuType)
-                );
-        }
+        final Phrase boardSizePhrase = Phrase.convertIntegerToPhrase(this.sudokuType.getSudokuBoardSize());
+
+        ArrayList<Phrase> instructionsPhrases = new ArrayList<>(Arrays.asList(
+                Phrase.INSTRUCTIONS_SUDOKU_1,
+                boardSizePhrase,
+                Phrase.INSTRUCTIONS_SUDOKU_2,
+                boardSizePhrase,
+                Phrase.INSTRUCTIONS_SUDOKU_3
+        ));
 
         this.audioPlayerExecutor.replacePhraseAndPrint(instructionsPhrases);
     }

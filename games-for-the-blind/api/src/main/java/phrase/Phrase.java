@@ -97,35 +97,32 @@ public enum Phrase {
     OPEN_BRACKET("OPEN BRACKET"), CLOSE_BRACKET("CLOSE BRACKET"),
 
     /* General: Congratulations message */
-    CONGRATS("YOU'VE FINISHED THE GAME! CONGRATULATIONS!"),
+    CONGRATS("YOU FINISHED THE GAME! CONGRATULATIONS!"),
 
-    NO_MORE_GUESSES("You've ran out of guesses. The correct code is: "),
+    NO_MORE_GUESSES("You're out of guesses. The correct code is: "),
 
     /* General: Error Phrases */
-    UNRECOGNIZED_KEY("An unrecognized key was pressed on the keyboard:"),
+    UNRECOGNIZED_KEY("Unrecognized key:"),
 
     /* Loader */
-    SPACE_FOR_EXIT("Press the SPACE BAR to exit."),
-    SPACE_FOR_SUDOKU("Press the SPACE BAR to play Sudoku."),
-    SPACE_FOR_CODEBREAKER("Press the SPACE BAR to play CODE BREAKER."),
-    GO_BACK_TO_GAME_SELECTION("Press the SPACE BAR to go back to the game selection screen."),
-    SELECT_SUDOKU_FOUR("Press the SPACE BAR to play the 4 by 4 version of Sudoku."),
-    SELECT_SUDOKU_SIX("Press the SPACE BAR to play the 6 by 6 version of Sudoku."),
-    SELECT_SUDOKU_NINE("Press the SPACE BAR to play the 9 by 9 version of Sudoku."),
-    WHICH_SUDOKU_GAME_ALL("Which Sudoku game would you like to play, 4 by 4, 6 by 6, or 9 by 9?" +
-            " Use the arrow keys to make your selection."),
-    WHICH_SUDOKU_GAME_NO_SIX("Which Sudoku game would you like to play, 4 by 4 or 9 by 9?" +
-            " Use the arrow keys to make your selection."),
-    WHICH_CODEBREAKER_GAME_ALL("Which Code Breaker game would you like to play, 4, 5, or 6?" +
-            " Use the arrow keys to make your selection."),
-    SELECT_CODEBREAKER_FOUR("Press the SPACE BAR to play the 4 version of Code Breaker."),
-    SELECT_CODEBREAKER_FIVE("Press the SPACE BAR to play the 5 version of Code Breaker."),
-    SELECT_CODEBREAKER_SIX("Press the SPACE BAR to play the 6 version of Code Breaker."),
-    PLAY_OR_EXIT("Would you like to play Sudoku, Code Breaker, or exit? Use the arrow keys to make your selection."),
-    EXITING("The game is exiting. Goodbye!"),
-    CODEBREAKER_NEED_CODE("You didn't enter the whole Codebreaker code yet!"),
-    RETURN_TO_MENU("Press the M key again to return to the main menu"),
-    RESTART_GAME("Press the R key again to restart the game"),
+    SPACE_FOR_EXIT("Press SPACE to exit."),
+    SPACE_FOR_SUDOKU("Press SPACE for Sudoku."),
+    SPACE_FOR_CODEBREAKER("Press SPACE for Code Breaker."),
+    GO_BACK_TO_GAME_SELECTION("Press SPACE to go back to game selection screen."),
+    SELECT_SUDOKU_FOUR("Press SPACE for 4 by 4 version of Sudoku."),
+    SELECT_SUDOKU_SIX("Press SPACE for 6 by 6 version of Sudoku."),
+    SELECT_SUDOKU_NINE("Press SPACE for 9 by 9 version of Sudoku."),
+    WHICH_SUDOKU_GAME_ALL("Which Sudoku game: 4 by 4, 6 by 6, or 9 by 9? Use arrow keys."),
+    WHICH_SUDOKU_GAME_NO_SIX("Which Sudoku game: 4 by 4 or 9 by 9? Use arrow keys."),
+    WHICH_CODEBREAKER_GAME_ALL("Which Code Breaker game: 4, 5, or 6? Use arrow keys."),
+    SELECT_CODEBREAKER_FOUR("Press SPACE for 4 version of Code Breaker."),
+    SELECT_CODEBREAKER_FIVE("Press SPACE for 5 version of Code Breaker."),
+    SELECT_CODEBREAKER_SIX("Press SPACE for 6 version of Code Breaker."),
+    PLAY_OR_EXIT("Play Sudoku, Code Breaker, or exit? Use the arrow keys."),
+    EXITING("Game is exiting. Goodbye!"),
+    CODEBREAKER_NEED_CODE("You didn't enter the whole code yet!"),
+    RETURN_TO_MENU("Press M key again to return to main menu"),
+    RESTART_GAME("Press R key again to restart"),
 
     /* Sudoku & Codebreaker: locations */
     c1r1, c1r2, c1r3, c1r4, c1r5, c1r6, c1r7, c1r8, c1r9, c1r10,
@@ -156,17 +153,17 @@ public enum Phrase {
     c9r11, c9r12, c9r13, c9r14, c9r15, c9r16, c9r17, c9r18, c9r19, c9r20,
 
     /* Sudoku: numbers in same row/column/box */
-    IN_ROW("You have the following numbers in the same row:"),
-    IN_COLUMN("You have the following numbers in the same column:"),
-    IN_BOX("You have the following numbers in the same box:"),
+    IN_ROW("Numbers in same row:"),
+    IN_COLUMN("Numbers in same column:"),
+    IN_BOX("Numbers in same box:"),
 
     /* Sudoku: Error Phrases */
     NO_SELECTED_CELL("You didn't select a cell first."),
-    CANNOT_DELETE_ORIGINAL("You cannot delete an originally set cell on the board."),
-    CANNOT_DELETE_EMPTY("You are trying to delete an already empty cell."),
-    CELL_VALUE_INVALID("This value is invalid for the cell."),
-    PLACED_CELL_UNSOLVABLE("Placing this value here would make the board unsolvable."),
-    SELECTED_BOTH("You have already selected both a box & cell on the board."),
+    CANNOT_DELETE_ORIGINAL("You cannot delete an originally set cell."),
+    CANNOT_DELETE_EMPTY("You cannot delete an already empty cell."),
+    CELL_VALUE_INVALID("Incorrect value for this cell."),
+    PLACED_CELL_UNSOLVABLE("Placing number here would make the board unsolvable."),
+    SELECTED_BOTH("You have already selected both a box and cell on the board."),
 
     /* Sudoku: invalid number to fill Phrases */
     INVALID_NUMBER_TO_FILL_4("The number to fill must be between 1 and 4"),
@@ -174,28 +171,15 @@ public enum Phrase {
     INVALID_NUMBER_TO_FILL_9("The number to fill must be between 1 and 9"),
 
     /* Sudoku: Instructions Phrases. */
-    INSTRUCTIONS_SUDOKU_4("Welcome to Sudoku! Each of the four boxes must contain the numbers 1 through 4" +
-            " within its cell."),
-    INSTRUCTIONS_SUDOKU_4_SECOND("Each four-cell column," +
-            " or four-cell row, within the entire board, must also have the numbers 1 through 4, without repetition."),
-
-    INSTRUCTIONS_SUDOKU_6("Welcome to Sudoku! Each of the six boxes must contain the numbers 1 through 6" +
-            " within its cell."),
-    INSTRUCTIONS_SUDOKU_6_SECOND("Each six-cell column," +
-            " or six-cell row, within the entire board, must also have the numbers 1 through 6, without repetition."),
-
-    INSTRUCTIONS_SUDOKU_9("Welcome to Sudoku! Each of the nine boxes must contain the numbers 1 through 9" +
-            " within its cell."),
-    INSTRUCTIONS_SUDOKU_9_SECOND("Each nine-cell column," +
-            " or nine-cell row, within the entire board, must also have the numbers 1 through 9, without repetition."),
-
-    INSTRUCTIONS_SUDOKU_MIDDLE_SAME("Each number can only appear once in a row, column, or box"),
-    INSTRUCTIONS_SUDOKU_ENDING_SAME("To hear the numbers in the currently selected number's row press S," +
-            " to hear the numbers in the currently selected number's column press D, to hear all of the numbers in" +
-            " the current box press F. If you have selected an empty cell and are stuck, press H to automatically" +
-            " fill in the cell. Navigate the board using the arrow keys. Press and hold the control key while" +
-            " clicking an arrow to jump to the end of the row or column. When you have selected the box you want" +
-            " to add a number to, select a number on your keypad to try and place it into the highlighted box"),
+    INSTRUCTIONS_SUDOKU_1("Welcome to Sudoku! Each cell must contain the numbers 1 through"),
+    INSTRUCTIONS_SUDOKU_2(". Each row, column, or box must have the numbers 1 through"),
+    INSTRUCTIONS_SUDOKU_3("without repetition. To hear the numbers in the selected row press S, to hear" +
+            " the numbers in the selected column press D, to hear the numbers in the selected box press F. If you" +
+            " have selected an empty cell and are stuck, press H to fill in the cell. Navigate using arrow keys." +
+            " Press and hold the control key while pressing an arrow key to jump to the beginning or ending of the" +
+            " row or column. When you have selected the box you want to add a number to, select a number on your" +
+            " keyboard to try and place it into the cell."
+    ),
 
     /* Sudoku: Empty Cells Left */
     EMPTY_PIECES_OF_BOARD_PLURAL_1("There are"),
@@ -205,42 +189,31 @@ public enum Phrase {
     EMPTY_PIECES_IN_SECTION("empty cells left in this section."),
 
     /* Sudoku: Information Phrases */
-    CURRENT_VALUE("The current value in this box is"),
-    PLACED_NUM("You have placed a"),
-    REMOVED_NUM("You have removed the number"),
+    CURRENT_VALUE("Current value in this cell is"),
+    PLACED_NUM("You placed"),
+    REMOVED_NUM("You removed the number"),
 
     /* Codebreaker: Instructions Phrases */
-    INSTRUCTIONS_CODEBREAKER_4("Welcome to Codebreaker! The goal is to accurately guess a secret code of" +
-            " four numbers."),
-    INSTRUCTIONS_CODEBREAKER_4_SECOND("four pegs of either black or white."),
-
-    INSTRUCTIONS_CODEBREAKER_5("Welcome to Codebreaker! The goal is to accurately guess a secret code of" +
-            " five numbers."),
-    INSTRUCTIONS_CODEBREAKER_5_SECOND("five pegs of either black or white."),
-
-    INSTRUCTIONS_CODEBREAKER_6("Welcome to Codebreaker! The goal is to accurately guess a secret code of" +
-            " six numbers."),
-    INSTRUCTIONS_CODEBREAKER_6_SECOND("six pegs of either black or white."),
-
-    INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME("To make a guess use the arrow keys to select a space and enter a number" +
+    INSTRUCTIONS_CODEBREAKER_1("Welcome to Code Breaker! You need to guess a secret code of"),
+    INSTRUCTIONS_CODEBREAKER_2("numbers. To make a guess use the arrow keys to select a space and enter a number" +
             " from 1-6. Once you have finalized your guess, hit the space key to see if you guessed correctly. If you" +
-            " did not guess the right code, the small box to the right of your guess will contain "),
-    INSTRUCTIONS_CODEBREAKER_ENDING_SAME("A white peg means that one of the numbers you have guessed is correct," +
+            " did not guess the right code, the small box to the right of your guess will contain"),
+    INSTRUCTIONS_CODEBREAKER_3("pegs of either black or red. A white peg means that one of the numbers you have guessed is correct," +
             " but it is in the wrong place. A black peg means that one of your numbers is the correct number and is in" +
-            " the correct place. If you have guessed correctly, you win the game!Press INS-DOWN to hear the current"+
+            " the correct place. If you have guessed correctly, you win the game!Press INS-DOWN to hear the current" +
             " location and its contents. To hear previous guesses, use the up and down arrow keys to move through the" +
-            " board. Once you are in the desired location, press Y to hear the previous guess and feedback. For a hint,"+
-            "press H to automatically fill in the selected space. This can be done three times. Press Q to restart the"+
+            " board. Once you are in the desired location, press Y to hear the previous guess and feedback. For a hint," +
+            " press H to automatically fill in the selected space. This can be done three times. Press Q to restart the" +
             " game. Press Alt-M to return to the main menu."),
 
     PLACED_CODEBREAKER_CODE("Code Placed:"),
     CODEBREAKER_GUESS_NUMBER("Guess Number:"),
-    CODEBREAKER_NUMBER_CORRECT_POSITION("Number of black pegs:"),
-    CODEBREAKER_NUMBER_ONLY("Number of red pegs:"),
-    CODEBREAKER_GUESS_NUMBER_RESPONSE("Guess number:"),
+    CODEBREAKER_NUMBER_CORRECT_POSITION("Black Pegs:"),
+    CODEBREAKER_NUMBER_ONLY("Red Pegs:"),
+    CODEBREAKER_GUESS_NUMBER_RESPONSE("Guess Number:"),
     CODEBREAKER_GUESS_WAS("code guessed:"),
     CODEBREAKER_READ_ROW("Row"),
-    CODEBREAKER_UNKNOWN_GUESS("has the following guess so far:"),
+    CODEBREAKER_UNKNOWN_GUESS("has this guess so far:"),
     CODEBREAKER_LAST_ROW("You have reached the first row."),
     CODEBREAKER_FIRST_ROW("You have reached the last row."),
     CODEBREAKER_NO_MORE_HINTS("You have run out of hints."),
@@ -249,7 +222,6 @@ public enum Phrase {
     HOURS("hours"),
     MINUTES("minutes"),
     SECONDS("seconds");
-
 
     /**
      * The directory for all of the Phrase audio files ("resources/phrases" folder under the root of the project).
@@ -287,7 +259,7 @@ public enum Phrase {
      * @return A Phrase that represents the passed key code from the keyboard.
      */
     public static Phrase keyCodeToPhrase(int keyCode) {
-        @SuppressWarnings("JavacQuirks") final Map<Integer, Phrase> KEY_CODE_TO_PHRASE = ofEntries(
+        final Map<Integer, Phrase> KEY_CODE_TO_PHRASE = ofEntries(
                 /* Numeric keyboard values */
                 entry(KeyEvent.VK_0, Phrase.ZERO),
                 entry(KeyEvent.VK_1, Phrase.ONE),

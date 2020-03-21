@@ -53,7 +53,7 @@ public class AudioPlayerExecutor {
         ArrayList<String> phraseStringList = new ArrayList<>();
         phrases.forEach(phrase -> phraseStringList.add(phrase.getPhraseValue()));
         String phraseString = String.join(" ", phraseStringList);
-        
+
         if (!phraseString.isBlank()) {
             System.out.println(phraseString);
         }

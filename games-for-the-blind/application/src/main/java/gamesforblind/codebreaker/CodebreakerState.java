@@ -224,34 +224,15 @@ public class CodebreakerState {
      * Reads the instructions for the codebreaker game of difficulty 4, 5, 6 respectively
      */
     public void readInstructions() {
-        ArrayList<Phrase> instructionsPhrases;
-        switch (this.codebreakerType) {
-            case FOUR:
-                instructionsPhrases = new ArrayList<>(Arrays.asList(
-                        Phrase.INSTRUCTIONS_CODEBREAKER_4,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_4_SECOND,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_ENDING_SAME));
-                break;
-            case FIVE:
-                instructionsPhrases = new ArrayList<>(Arrays.asList(
-                        Phrase.INSTRUCTIONS_CODEBREAKER_5,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_5_SECOND,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_ENDING_SAME));
-                break;
-            case SIX:
-                instructionsPhrases = new ArrayList<>(Arrays.asList(
-                        Phrase.INSTRUCTIONS_CODEBREAKER_6,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_6_SECOND,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_ENDING_SAME));
-                break;
-            default:
-                throw new IllegalArgumentException(
-                        String.format("Invalid codebreaker type: '%s'!", this.codebreakerType)
-                );
-        }
+        final Phrase codeLengthPhrase = Phrase.convertIntegerToPhrase(this.codebreakerType.getCodeLength());
+
+        ArrayList<Phrase> instructionsPhrases = new ArrayList<>(Arrays.asList(
+                Phrase.INSTRUCTIONS_CODEBREAKER_1,
+                codeLengthPhrase,
+                Phrase.INSTRUCTIONS_CODEBREAKER_2,
+                codeLengthPhrase,
+                Phrase.INSTRUCTIONS_CODEBREAKER_3
+        ));
 
         this.audioPlayerExecutor.replacePhraseAndPrint(instructionsPhrases);
     }
