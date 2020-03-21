@@ -145,7 +145,20 @@ public class CodebreakerGame {
                         CodebreakerStopReadingAction.class, this.codebreakerState::stopReadingPhrases
                 ),
 
-                // Case 11: the user has pressed an unrecognized key in the game.
+                // Case 11: the user has pressed hint key.
+                new AbstractMap.SimpleEntry<>(
+                        CodebreakerHintKeyAction.class,
+                        () -> {
+                            if (this.codebreakerState.getHintNum() != 0) {
+                                this.codebreakerState.setSingleNumber(this.codebreakerState.getHint());
+                                this.codebreakerFrame.repaintCodebreakerPanel();
+                            } else {
+                                this.codebreakerState.playNoHint();
+                            }
+                        }
+                ),
+
+                // Case 12: the user has pressed an unrecognized key in the game.
                 new AbstractMap.SimpleEntry<>(
                         CodebreakerUnrecognizedKeyAction.class,
                         () -> this.readUnrecognizedKey((CodebreakerUnrecognizedKeyAction) codebreakerAction)
@@ -166,7 +179,7 @@ public class CodebreakerGame {
 
     private void changeSelectedCellPoint(@NotNull CodebreakerArrowKeyAction codebreakerArrowKeyAction) {
         this.codebreakerState.changeSelectedCellPoint(codebreakerArrowKeyAction.getArrowKeyDirection());
-        this.codebreakerState.readSelectedSquare();
+
         this.codebreakerFrame.repaintCodebreakerPanel();
 
     }

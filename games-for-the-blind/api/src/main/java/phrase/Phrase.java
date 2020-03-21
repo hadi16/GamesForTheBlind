@@ -190,9 +190,9 @@ public enum Phrase {
             " or nine-cell row, within the entire board, must also have the numbers 1 through 9, without repetition."),
 
     INSTRUCTIONS_SUDOKU_MIDDLE_SAME("Each number can only appear once in a row, column, or box"),
-    INSTRUCTIONS_SUDOKU_ENDING_SAME("To hear the numbers in the currently selected number's row press J," +
-            " to hear the numbers in the currently selected number's column press K, to hear all of the numbers in" +
-            " the current box press L. If you have selected an empty cell and are stuck, press H to automatically" +
+    INSTRUCTIONS_SUDOKU_ENDING_SAME("To hear the numbers in the currently selected number's row press S," +
+            " to hear the numbers in the currently selected number's column press D, to hear all of the numbers in" +
+            " the current box press F. If you have selected an empty cell and are stuck, press H to automatically" +
             " fill in the cell. Navigate the board using the arrow keys. Press and hold the control key while" +
             " clicking an arrow to jump to the end of the row or column. When you have selected the box you want" +
             " to add a number to, select a number on your keypad to try and place it into the highlighted box"),
@@ -227,16 +227,23 @@ public enum Phrase {
             " did not guess the right code, the small box to the right of your guess will contain "),
     INSTRUCTIONS_CODEBREAKER_ENDING_SAME("A white peg means that one of the numbers you have guessed is correct," +
             " but it is in the wrong place. A black peg means that one of your numbers is the correct number and is in" +
-            " the correct place. If you have guessed correctly, you win the game!"),
+            " the correct place. If you have guessed correctly, you win the game!Press INS-DOWN to hear the current"+
+            " location and its contents. To hear previous guesses, use the up and down arrow keys to move through the" +
+            " board. Once you are in the desired location, press Y to hear the previous guess and feedback. For a hint,"+
+            "press H to automatically fill in the selected space. This can be done three times. Press Q to restart the"+
+            " game. Press Alt-M to return to the main menu."),
 
-    PLACED_CODEBREAKER_CODE("You have placed the codebreaker code:"),
-    CODEBREAKER_GUESS_NUMBER("It is guess number:"),
-    CODEBREAKER_NUMBER_CORRECT_POSITION("Pegs with the correct position and number:"),
-    CODEBREAKER_NUMBER_ONLY("Pegs with the correct number:"),
+    PLACED_CODEBREAKER_CODE("Code Placed:"),
+    CODEBREAKER_GUESS_NUMBER("Guess Number:"),
+    CODEBREAKER_NUMBER_CORRECT_POSITION("Number of black pegs:"),
+    CODEBREAKER_NUMBER_ONLY("Number of red pegs:"),
     CODEBREAKER_GUESS_NUMBER_RESPONSE("Guess number:"),
-    CODEBREAKER_GUESS_WAS("the codebreaker code guess was:"),
+    CODEBREAKER_GUESS_WAS("code guessed:"),
     CODEBREAKER_READ_ROW("Row"),
     CODEBREAKER_UNKNOWN_GUESS("has the following guess so far:"),
+    CODEBREAKER_LAST_ROW("You have reached the first row."),
+    CODEBREAKER_FIRST_ROW("You have reached the last row."),
+    CODEBREAKER_NO_MORE_HINTS("You have run out of hints."),
 
     IT_TOOK_YOU("It took you:"),
     HOURS("hours"),
