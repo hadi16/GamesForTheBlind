@@ -291,7 +291,7 @@ public class CodebreakerPanel extends JPanel {
         }
 
         final Duration timeElapsed = this.codebreakerState.getTimeElapsed();
-        final JLabel timeLabel = new JLabel("Time: " + timeElapsed.getSeconds() + " seconds");
+        final JLabel timeLabel = new JLabel(String.format("Time: %d seconds", timeElapsed.getSeconds()));
 
         resultLabel.setFont(font);
         timeLabel.setFont(font);

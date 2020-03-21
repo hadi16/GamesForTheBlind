@@ -72,15 +72,17 @@ public class SudokuKeyboardListener implements KeyListener {
             return;
         }
 
-        // Case 2: hot key was registered (using the Ctrl key).
-        // If no hot key mappings exist, don't check (e.g. block selection interface).
-        if (!this.keyCodeToHotKeyAction.isEmpty() && e.isControlDown()) {
+        // Case 2: Ctrl is pressed.
+        if (e.isControlDown()) {
+            // Stop reading the audio phrases.
+            this.sudokuGame.receiveAction(new SudokuStopReadingAction());
+
+            // If hot key was registered (e.g. go all the way to the right).
             SudokuHotKeyAction sudokuHotKeyAction = this.keyCodeToHotKeyAction.get(e.getKeyCode());
             if (sudokuHotKeyAction != null) {
                 this.sudokuGame.receiveAction(sudokuHotKeyAction);
             }
 
-            // Prevents the game from saying that CTRL is an unrecognized key.
             return;
         }
 

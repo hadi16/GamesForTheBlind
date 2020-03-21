@@ -234,6 +234,10 @@ public class SudokuState {
         return true;
     }
 
+    public void stopReadingPhrases() {
+        this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>());
+    }
+
     /**
      * Sets the currently selected {@link Point} to a given number (if the number is valid for the cell).
      *

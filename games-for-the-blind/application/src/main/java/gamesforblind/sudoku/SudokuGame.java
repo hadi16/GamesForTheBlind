@@ -142,7 +142,13 @@ public class SudokuGame {
                         this::returnToMainMenu
                 ),
 
-                // Case 11: restart the current Sudoku board.
+                // Case 11: the user wants the phrases to stop being read.
+                new AbstractMap.SimpleEntry<>(
+                        SudokuStopReadingAction.class,
+                        this.sudokuState::stopReadingPhrases
+                ),
+
+                // Case 12: restart the current Sudoku board.
                 new AbstractMap.SimpleEntry<>(
                         SudokuRestartAction.class,
                         this::restartSudokuBoard

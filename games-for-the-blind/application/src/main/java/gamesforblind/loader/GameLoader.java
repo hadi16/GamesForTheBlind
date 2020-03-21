@@ -181,7 +181,11 @@ public class GameLoader {
 
                 // Case 6: the user has decided to exit the loader GUI.
                 LoaderExitAction.class,
-                this::exitApplication
+                this::exitApplication,
+
+                // Case 7: the user wants to stop reading the phrases.
+                LoaderStopReadingAction.class,
+                () -> this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>())
         );
 
         Runnable functionToExecute = LOADER_ACTION_TO_RUNNABLE.get(loaderAction.getClass());

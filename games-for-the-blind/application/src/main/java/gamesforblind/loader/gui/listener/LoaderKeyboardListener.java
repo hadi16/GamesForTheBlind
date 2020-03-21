@@ -3,6 +3,7 @@ package gamesforblind.loader.gui.listener;
 import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.loader.GameLoader;
 import gamesforblind.loader.action.LoaderArrowKeyAction;
+import gamesforblind.loader.action.LoaderStopReadingAction;
 import gamesforblind.loader.action.LoaderUnrecognizedKeyAction;
 import gamesforblind.loader.gui.LoaderFrame;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +58,13 @@ public class LoaderKeyboardListener extends LoaderListener implements KeyEventDi
      * @param e The event that was triggered by the user pressing a key in the game.
      */
     private void sendActionBasedOnKeyPressed(@NotNull KeyEvent e) {
-        // Case 1: the user has selected the currently highlighted button.
+        // Case 1: Ctrl is pressed (stop reading phrases).
+        if (e.isControlDown()) {
+            this.gameLoader.receiveAction(new LoaderStopReadingAction());
+            return;
+        }
+
+        // Case 2: the user has selected the currently highlighted button.
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             // TODO: get the highlighted button text directly from the KeyEvent (causes bugs w/ current implementation).
             this.sendSelectionActionBasedOnButtonText(this.loaderFrame.getCurrentlyHighlightedButtonText());
@@ -81,13 +88,13 @@ public class LoaderKeyboardListener extends LoaderListener implements KeyEventDi
                 break;
         }
 
-        // Case 2: If the user didn't select an arrow key, then an unrecognized key was pressed by the user.
+        // Case 3: If the user didn't select an arrow key, then an unrecognized key was pressed by the user.
         if (arrowKeyDirection == null) {
             this.gameLoader.receiveAction(new LoaderUnrecognizedKeyAction(e.getKeyCode()));
             return;
         }
 
-        // Case 3: The user has pressed an arrow key to change the currently selected button in the game.
+        // Case 4: The user has pressed an arrow key to change the currently selected button in the game.
         this.gameLoader.receiveAction(new LoaderArrowKeyAction(arrowKeyDirection));
     }
 }

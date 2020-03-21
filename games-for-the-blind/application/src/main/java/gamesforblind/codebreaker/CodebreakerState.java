@@ -88,6 +88,10 @@ public class CodebreakerState {
         return codeToBreak;
     }
 
+    public void stopReadingPhrases() {
+        this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>());
+    }
+
     public void setCodebreakerGuess() {
         if (this.selectedCellPoint.y != this.guessList.size()) {
             return;

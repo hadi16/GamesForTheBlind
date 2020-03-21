@@ -10,6 +10,7 @@ import gamesforblind.synthesizer.AudioPlayerExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
@@ -68,62 +69,87 @@ public class CodebreakerGame {
             return;
         }
 
-        final Map<Class<? extends CodebreakerAction>, Runnable> CODEBREAKER_ACTION_TO_RUNNABLE = Map.of(
+        final Map<Class<? extends CodebreakerAction>, Runnable> CODEBREAKER_ACTION_TO_RUNNABLE = Map.ofEntries(
                 // Case 1: return to main menu.
-                CodebreakerMainMenuAction.class, this::returnToMainMenu,
+                new AbstractMap.SimpleEntry<>(
+                        CodebreakerMainMenuAction.class, this::returnToMainMenu
+                ),
 
                 // Case 2: exit the game.
-                CodebreakerExitAction.class, this.gameLoader::exitApplication,
+                new AbstractMap.SimpleEntry<>(
+                        CodebreakerExitAction.class, this.gameLoader::exitApplication
+                ),
 
                 // Case 3: an arrow key is pressed.
-                CodebreakerArrowKeyAction.class, () -> {
-                    this.changeSelectedCellPoint((CodebreakerArrowKeyAction) codebreakerAction);
-                },
+                new AbstractMap.SimpleEntry<>(
+                        CodebreakerArrowKeyAction.class,
+                        () -> this.changeSelectedCellPoint((CodebreakerArrowKeyAction) codebreakerAction)
+                ),
 
                 // Case 4: a single number is set by the user.
-                CodebreakerSetSingleNumberAction.class, () -> {
-                    this.setSingleNumber((CodebreakerSetSingleNumberAction) codebreakerAction);
-                },
+                new AbstractMap.SimpleEntry<>(
+                        CodebreakerSetSingleNumberAction.class,
+                        () -> this.setSingleNumber((CodebreakerSetSingleNumberAction) codebreakerAction)
+                ),
 
                 // Case 5: the user wants the current row to be read off.
-                CodebreakerReadBackAction.class, this.codebreakerState::readBackRow,
+                new AbstractMap.SimpleEntry<>(
+                        CodebreakerReadBackAction.class, this.codebreakerState::readBackRow
+                ),
 
                 // Case 6: the user wants the instructions to be read.
-                CodebreakerInstructionsAction.class, this.codebreakerState::readInstructions,
+                new AbstractMap.SimpleEntry<>(
+                        CodebreakerInstructionsAction.class, this.codebreakerState::readInstructions
+                ),
 
                 // Case 7: the user wants the current Codebreaker guess to be set.
-                CodebreakerSetGuessAction.class, () -> {
-                    this.codebreakerState.setCodebreakerGuess();
-                    this.codebreakerFrame.repaintCodebreakerPanel();
-                },
+                new AbstractMap.SimpleEntry<>(
+                        CodebreakerSetGuessAction.class,
+                        () -> {
+                            this.codebreakerState.setCodebreakerGuess();
+                            this.codebreakerFrame.repaintCodebreakerPanel();
+                        }
+                ),
 
                 // Case 8: the user wants to restart the current Codebreaker game.
-                CodebreakerRestartAction.class, () -> {
-                    this.codebreakerState.initNewCodebreakerGame();
-                    this.codebreakerFrame.repaintCodebreakerPanel();
-                },
+                new AbstractMap.SimpleEntry<>(
+                        CodebreakerRestartAction.class,
+                        () -> {
+                            this.codebreakerState.initNewCodebreakerGame();
+                            this.codebreakerFrame.repaintCodebreakerPanel();
+                        }
+                ),
 
                 // Case 9: the user has clicked on the Codebreaker board.
-                CodebreakerMouseAction.class, () -> {
-                    CodebreakerMouseAction codebreakerMouseAction = (CodebreakerMouseAction) codebreakerAction;
-                    Optional<Point> maybeSelectedPoint = this.codebreakerFrame.getMouseSelectedPoint(
-                            codebreakerMouseAction.getSelectedPoint()
-                    );
+                new AbstractMap.SimpleEntry<>(
+                        CodebreakerMouseAction.class,
+                        () -> {
+                            CodebreakerMouseAction codebreakerMouseAction = (CodebreakerMouseAction) codebreakerAction;
+                            Optional<Point> maybeSelectedPoint = this.codebreakerFrame.getMouseSelectedPoint(
+                                    codebreakerMouseAction.getSelectedPoint()
+                            );
 
-                    maybeSelectedPoint.ifPresent(selectedPoint -> {
-                        ArrayList<CodebreakerGuess> guessList = this.codebreakerState.getGuessList();
-                        if (selectedPoint.y <= guessList.size()) {
-                            this.codebreakerState.setSelectedCellPoint(selectedPoint);
+                            maybeSelectedPoint.ifPresent(selectedPoint -> {
+                                ArrayList<CodebreakerGuess> guessList = this.codebreakerState.getGuessList();
+                                if (selectedPoint.y <= guessList.size()) {
+                                    this.codebreakerState.setSelectedCellPoint(selectedPoint);
+                                }
+                            });
+
+                            this.codebreakerFrame.repaintCodebreakerPanel();
                         }
-                    });
+                ),
 
-                    this.codebreakerFrame.repaintCodebreakerPanel();
-                },
+                // Case 10: the user wants the phrases to stop being read.
+                new AbstractMap.SimpleEntry<>(
+                        CodebreakerStopReadingAction.class, this.codebreakerState::stopReadingPhrases
+                ),
 
-                // Case 10: the user has pressed an unrecognized key in the game.
-                CodebreakerUnrecognizedKeyAction.class, () -> {
-                    this.readUnrecognizedKey((CodebreakerUnrecognizedKeyAction) codebreakerAction);
-                }
+                // Case 11: the user has pressed an unrecognized key in the game.
+                new AbstractMap.SimpleEntry<>(
+                        CodebreakerUnrecognizedKeyAction.class,
+                        () -> this.readUnrecognizedKey((CodebreakerUnrecognizedKeyAction) codebreakerAction)
+                )
         );
 
         Runnable functionToExecute = CODEBREAKER_ACTION_TO_RUNNABLE.get(codebreakerAction.getClass());
