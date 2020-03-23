@@ -13,6 +13,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 
+import static util.MapUtil.entry;
+import static util.MapUtil.map;
+
 /**
  * The {@link ActionListener} for each of the {@link JMenuItem}s in the Codebreaker menu.
  */
@@ -40,10 +43,10 @@ public class CodebreakerMenuItemListener implements ActionListener {
     public void actionPerformed(@NotNull ActionEvent e) {
         String selectedMenuText = e.getActionCommand();
 
-        final Map<String, CodebreakerAction> SELECTED_MENU_TEXT_TO_ACTION = Map.of(
-                GameMenuItem.RETURN_TO_MAIN_MENU.toString(), new CodebreakerMainMenuAction(),
-                GameMenuItem.INSTRUCTIONS.toString(), new CodebreakerInstructionsAction(),
-                GameMenuItem.RESTART.toString(), new CodebreakerRestartAction()
+        final Map<String, CodebreakerAction> SELECTED_MENU_TEXT_TO_ACTION = map(
+                entry(GameMenuItem.RETURN_TO_MAIN_MENU.toString(), new CodebreakerMainMenuAction()),
+                entry(GameMenuItem.INSTRUCTIONS.toString(), new CodebreakerInstructionsAction()),
+                entry(GameMenuItem.RESTART.toString(), new CodebreakerRestartAction())
         );
 
         CodebreakerAction codebreakerAction = SELECTED_MENU_TEXT_TO_ACTION.get(selectedMenuText);

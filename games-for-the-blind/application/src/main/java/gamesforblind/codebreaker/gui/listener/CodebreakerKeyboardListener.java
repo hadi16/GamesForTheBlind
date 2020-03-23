@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import static gamesforblind.Constants.CODEBREAKER_MAX_CODE_INT;
+import static util.MapUtil.entry;
+import static util.MapUtil.map;
 
 /**
  * Keyboard listener for Codebreaker that receives keyboard inputs and appropriately calls the proper action class
@@ -60,11 +62,11 @@ public class CodebreakerKeyboardListener implements KeyListener {
             }
         }
 
-        final Map<Integer, ArrowKeyDirection> ARROW_KEY_MAP = Map.of(
-                KeyEvent.VK_LEFT, ArrowKeyDirection.LEFT,
-                KeyEvent.VK_RIGHT, ArrowKeyDirection.RIGHT,
-                KeyEvent.VK_UP, ArrowKeyDirection.UP,
-                KeyEvent.VK_DOWN, ArrowKeyDirection.DOWN
+        final Map<Integer, ArrowKeyDirection> ARROW_KEY_MAP = map(
+                entry(KeyEvent.VK_LEFT, ArrowKeyDirection.LEFT),
+                entry(KeyEvent.VK_RIGHT, ArrowKeyDirection.RIGHT),
+                entry(KeyEvent.VK_UP, ArrowKeyDirection.UP),
+                entry(KeyEvent.VK_DOWN, ArrowKeyDirection.DOWN)
         );
 
         // Case 3: pressed key is an arrow key.

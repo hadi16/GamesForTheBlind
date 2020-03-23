@@ -10,10 +10,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
+import static util.MapUtil.entry;
+import static util.MapUtil.map;
 
 /**
  * Old "block selection" interface where user first highlights a block on the board, then a square within that block.
@@ -25,23 +25,27 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
      * <p>
      * (This principle is closely modeled for the 9x9 key mappings).
      */
-    private static final Map<SudokuType, Map<Integer, Point>> TYPE_TO_KEY_TO_POINT = Map.of(
-            SudokuType.FOUR_BY_FOUR, Map.of(
-                    KeyEvent.VK_S, new Point(0, 0),
-                    KeyEvent.VK_D, new Point(1, 0),
-                    KeyEvent.VK_X, new Point(0, 1),
-                    KeyEvent.VK_C, new Point(1, 1)
+    private static final Map<SudokuType, Map<Integer, Point>> TYPE_TO_KEY_TO_POINT = map(
+            entry(
+                    SudokuType.FOUR_BY_FOUR, map(
+                            entry(KeyEvent.VK_S, new Point(0, 0)),
+                            entry(KeyEvent.VK_D, new Point(1, 0)),
+                            entry(KeyEvent.VK_X, new Point(0, 1)),
+                            entry(KeyEvent.VK_C, new Point(1, 1))
+                    )
             ),
-            SudokuType.NINE_BY_NINE, Map.of(
-                    KeyEvent.VK_W, new Point(0, 0),
-                    KeyEvent.VK_E, new Point(1, 0),
-                    KeyEvent.VK_R, new Point(2, 0),
-                    KeyEvent.VK_S, new Point(0, 1),
-                    KeyEvent.VK_D, new Point(1, 1),
-                    KeyEvent.VK_F, new Point(2, 1),
-                    KeyEvent.VK_X, new Point(0, 2),
-                    KeyEvent.VK_C, new Point(1, 2),
-                    KeyEvent.VK_V, new Point(2, 2)
+            entry(
+                    SudokuType.NINE_BY_NINE, map(
+                            entry(KeyEvent.VK_W, new Point(0, 0)),
+                            entry(KeyEvent.VK_E, new Point(1, 0)),
+                            entry(KeyEvent.VK_R, new Point(2, 0)),
+                            entry(KeyEvent.VK_S, new Point(0, 1)),
+                            entry(KeyEvent.VK_D, new Point(1, 1)),
+                            entry(KeyEvent.VK_F, new Point(2, 1)),
+                            entry(KeyEvent.VK_X, new Point(0, 2)),
+                            entry(KeyEvent.VK_C, new Point(1, 2)),
+                            entry(KeyEvent.VK_V, new Point(2, 2))
+                    )
             )
     );
 
@@ -71,7 +75,7 @@ public class SudokuBlockSelectionInterface extends SudokuKeyboardInterface {
      */
     public SudokuBlockSelectionInterface(@NotNull SudokuState sudokuState) {
         // No hotkeys in the block selection interface.
-        super(sudokuState, Map.of(), new SudokuHighlightAction(null, InputType.KEYBOARD));
+        super(sudokuState, new HashMap<>(), new SudokuHighlightAction(null, InputType.KEYBOARD));
     }
 
     /**

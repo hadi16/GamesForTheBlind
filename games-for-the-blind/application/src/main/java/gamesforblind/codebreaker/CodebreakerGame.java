@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 
-import static java.util.Map.entry;
+import static util.MapUtil.entry;
+import static util.MapUtil.map;
 
 /**
  * Game class that is called directly from the {@link GameLoader} class.
@@ -70,7 +71,7 @@ public class CodebreakerGame {
             return;
         }
 
-        final Map<Class<? extends CodebreakerAction>, Runnable> CODEBREAKER_ACTION_TO_RUNNABLE = Map.ofEntries(
+        final Map<Class<? extends CodebreakerAction>, Runnable> CODEBREAKER_ACTION_TO_RUNNABLE = map(
                 // Case 1: return to main menu.
                 entry(CodebreakerMainMenuAction.class, this::returnToMainMenu),
 

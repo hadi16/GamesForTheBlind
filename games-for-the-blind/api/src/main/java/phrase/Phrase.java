@@ -15,8 +15,9 @@ import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.*;
 
-import static java.util.Map.entry;
-import static java.util.Map.ofEntries;
+import static util.DurationUtil.*;
+import static util.MapUtil.entry;
+import static util.MapUtil.map;
 
 /**
  * Contains all audio phrases in the program along with logic to map between Phrases & keyboard keys, numbers, etc.
@@ -259,7 +260,7 @@ public enum Phrase {
      * @return A Phrase that represents the passed key code from the keyboard.
      */
     public static Phrase keyCodeToPhrase(int keyCode) {
-        final Map<Integer, Phrase> KEY_CODE_TO_PHRASE = ofEntries(
+        final Map<Integer, Phrase> KEY_CODE_TO_PHRASE = map(
                 /* Numeric keyboard values */
                 entry(KeyEvent.VK_0, Phrase.ZERO),
                 entry(KeyEvent.VK_1, Phrase.ONE),
@@ -340,7 +341,8 @@ public enum Phrase {
         );
 
         // Return just an empty Phrase to prevent a null ptr exception (calls audio file that contains no sound).
-        return Objects.requireNonNullElse(KEY_CODE_TO_PHRASE.get(keyCode), Phrase.BLANK);
+        Phrase maybePhrase = KEY_CODE_TO_PHRASE.get(keyCode);
+        return (maybePhrase != null) ? maybePhrase : Phrase.BLANK;
     }
 
     public static Phrase convertIntegerToPhrase(int numberToConvert) {
@@ -438,17 +440,17 @@ public enum Phrase {
     public static ArrayList<Phrase> getTimeElapsedPhrases(Duration timeElapsed) {
         final ArrayList<Phrase> phrases = new ArrayList<>(Collections.singletonList(Phrase.IT_TOOK_YOU));
 
-        int hoursElapsed = timeElapsed.toHoursPart();
+        final int hoursElapsed = toHoursPart(timeElapsed);
         if (hoursElapsed > 0) {
             phrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(hoursElapsed), Phrase.HOURS));
         }
 
-        int minutesElapsed = timeElapsed.toMinutesPart();
+        final int minutesElapsed = toMinutesPart(timeElapsed);
         if (minutesElapsed > 0) {
             phrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(minutesElapsed), Phrase.MINUTES));
         }
 
-        int secondsElapsed = timeElapsed.toSecondsPart();
+        final int secondsElapsed = toSecondsPart(timeElapsed);
         if (secondsElapsed > 0) {
             phrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(secondsElapsed), Phrase.SECONDS));
         }

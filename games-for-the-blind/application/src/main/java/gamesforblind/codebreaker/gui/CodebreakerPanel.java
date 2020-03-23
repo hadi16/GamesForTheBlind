@@ -18,6 +18,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static util.DurationUtil.*;
+
 /**
  * Contains the main GUI code for Codebreaker. Serves as a custom JPanel for Codebreaker GUI (extends JPanel).
  */
@@ -118,10 +120,10 @@ public class CodebreakerPanel extends JPanel {
                 throw new IllegalArgumentException("Invalid codebreaker type passed!");
         }
 
-        Duration timeElapsed = Duration.between(this.codebreakerState.getTime(), Instant.now());
-        int hoursElapsed = timeElapsed.toHoursPart();
-        int minutesElapsed = timeElapsed.toMinutesPart();
-        int secondsElapsed = timeElapsed.toSecondsPart();
+        final Duration timeElapsed = Duration.between(this.codebreakerState.getTime(), Instant.now());
+        final int hoursElapsed = toHoursPart(timeElapsed);
+        final int minutesElapsed = toMinutesPart(timeElapsed);
+        final int secondsElapsed = toSecondsPart(timeElapsed);
 
         graphics.drawString(
                 String.format("Time: %d:%d:%d", hoursElapsed, minutesElapsed, secondsElapsed),

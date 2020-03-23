@@ -13,7 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.util.Map;
 
-import static java.util.Map.entry;
+import static util.MapUtil.entry;
+import static util.MapUtil.map;
 
 /**
  * Game class that is called directly from the {@link GameLoader} class.
@@ -82,7 +83,7 @@ public class SudokuGame {
             return;
         }
 
-        final Map<Class<? extends SudokuAction>, Runnable> SUDOKU_ACTION_TO_RUNNABLE = Map.ofEntries(
+        final Map<Class<? extends SudokuAction>, Runnable> SUDOKU_ACTION_TO_RUNNABLE = map(
                 // Case 1: the user wishes to exit the game.
                 entry(SudokuExitAction.class, this.gameLoader::exitApplication),
 

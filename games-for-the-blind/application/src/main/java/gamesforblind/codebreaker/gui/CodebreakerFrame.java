@@ -77,7 +77,7 @@ public class CodebreakerFrame extends JFrame {
         }, 1000, 1000);
 
         this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.frame.setSize(FRAME_DIMENSION, FRAME_DIMENSION);
+        this.frame.setSize((int) (1.5 * FRAME_DIMENSION), FRAME_DIMENSION);
         this.frame.setVisible(true);
 
         JMenuBar menuBar = new JMenuBar();
@@ -97,10 +97,6 @@ public class CodebreakerFrame extends JFrame {
      */
     private JMenu getInitializedMenu(@NotNull CodebreakerGame codebreakerGame) {
         this.frame.add(this.codebreakerPanel);
-
-        this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.frame.setSize(FRAME_DIMENSION, FRAME_DIMENSION);
-        this.frame.setVisible(true);
 
         JMenuBar menuBar = new JMenuBar();
 

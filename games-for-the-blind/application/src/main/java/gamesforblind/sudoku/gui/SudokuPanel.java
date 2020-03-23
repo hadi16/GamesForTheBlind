@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 
 import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
+import static util.DurationUtil.*;
 
 /**
  * Contains the main GUI code for Sudoku. Serves as a custom JPanel for Sudoku GUI (extends JPanel).
@@ -170,10 +171,10 @@ public class SudokuPanel extends JPanel {
         final Font MAIN_BOARD_FONT = new Font("Serif", Font.BOLD, 50);
         graphics.setFont(MAIN_BOARD_FONT);
 
-        Duration timeElapsed = Duration.between(this.sudokuState.getTime(), Instant.now());
-        int hoursElapsed = timeElapsed.toHoursPart();
-        int minutesElapsed = timeElapsed.toMinutesPart();
-        int secondsElapsed = timeElapsed.toSecondsPart();
+        final Duration timeElapsed = Duration.between(this.sudokuState.getTime(), Instant.now());
+        final int hoursElapsed = toHoursPart(timeElapsed);
+        final int minutesElapsed = toMinutesPart(timeElapsed);
+        final int secondsElapsed = toSecondsPart(timeElapsed);
 
         graphics.drawString(
                 String.format("Time: %d:%d:%d", hoursElapsed, minutesElapsed, secondsElapsed),
