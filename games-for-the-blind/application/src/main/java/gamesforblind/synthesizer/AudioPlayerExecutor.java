@@ -54,7 +54,7 @@ public class AudioPlayerExecutor {
         phrases.forEach(phrase -> phraseStringList.add(phrase.getPhraseValue()));
         String phraseString = String.join(" ", phraseStringList);
 
-        if (!phraseString.isBlank()) {
+        if (!phraseString.trim().isEmpty()) {
             System.out.println(phraseString);
         }
 

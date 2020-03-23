@@ -247,7 +247,7 @@ public class SudokuState {
         Optional<Point> maybePointToSet = this.sudokuKeyboardInterface.getSelectedPoint();
 
         // Case 1: no Point is selected on the board.
-        if (maybePointToSet.isEmpty()) {
+        if (!maybePointToSet.isPresent()) {
             this.readNoSelectedSquareMessage();
             return;
         }
@@ -361,7 +361,7 @@ public class SudokuState {
         Optional<Point> maybePointToSet = this.sudokuKeyboardInterface.getSelectedPoint();
 
         // Case 1: no point is currently selected on the board.
-        if (maybePointToSet.isEmpty()) {
+        if (!maybePointToSet.isPresent()) {
             this.readNoSelectedSquareMessage();
             return;
         }
@@ -502,7 +502,7 @@ public class SudokuState {
         Optional<Point> maybeSelectedPoint = this.sudokuKeyboardInterface.getSelectedPoint();
 
         // If no point is currently selected, inform the user & return.
-        if (maybeSelectedPoint.isEmpty()) {
+        if (!maybeSelectedPoint.isPresent()) {
             this.readNoSelectedSquareMessage();
             return;
         }

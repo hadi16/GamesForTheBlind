@@ -138,13 +138,13 @@ public class LogWriter {
         String logXmlString = this.marshalLogToXmlString();
         Optional<Document> maybeLogXmlDocument = XmlHelpers.convertXmlStringToDocument(logXmlString);
 
-        if (maybeLogXmlDocument.isEmpty()) {
+        if (!maybeLogXmlDocument.isPresent()) {
             return;
         }
 
         // Step 2: get the beautified XML log file String.
         Optional<String> beautifiedLogXmlString = XmlHelpers.beautifyXmlDocument(maybeLogXmlDocument.get());
-        if (beautifiedLogXmlString.isEmpty()) {
+        if (!beautifiedLogXmlString.isPresent()) {
             return;
         }
 

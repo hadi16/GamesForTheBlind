@@ -138,7 +138,7 @@ public class GameLoader {
         Optional<String> maybeLogFilePath = logFileSelectionGui.getSelectedLogFilePath();
 
         // If the user didn't select a XML log file from the GUI.
-        if (maybeLogFilePath.isEmpty()) {
+        if (!maybeLogFilePath.isPresent()) {
             System.err.println("Could not load XML log file!");
             System.exit(1);
         }
