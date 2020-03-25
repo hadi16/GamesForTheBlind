@@ -69,6 +69,8 @@ public class SudokuKeyboardListener implements KeyListener {
         int selectedKeyCode = e.getKeyCode();
         this.pressedKeyCodeList.add(selectedKeyCode);
 
+        final int numberOfPressedKeys = this.pressedKeyCodeList.size();
+
         // Case 1: ALT + M is pressed (go to main menu).
         if (e.isAltDown() && selectedKeyCode == KeyEvent.VK_M) {
             this.sudokuGame.receiveAction(new SudokuMainMenuAction());
@@ -116,7 +118,23 @@ public class SudokuKeyboardListener implements KeyListener {
             return;
         }
 
-        // Case 7: the selected key exists within the passed mapping of key codes & Points.
+        // Case 7: the selected key is the 'A' key (triggers message for squares left to fill).
+        if (selectedKeyCode == KeyEvent.VK_A) {
+            this.sudokuGame.receiveAction(new SudokuReadRemainingAction());
+            return;
+        }
+
+        // Case 8: the user wants to read off the currently selected location & value.
+        if (selectedKeyCode == KeyEvent.VK_DOWN) {
+            // The last element is the CURRENT key pressed, so I want the second to last element.
+            if (numberOfPressedKeys > 1 && this.pressedKeyCodeList.get(numberOfPressedKeys - 2) == KeyEvent.VK_INSERT) {
+                this.sudokuGame.receiveAction(new SudokuLocationAction());
+                this.pressedKeyCodeList.clear();
+                return;
+            }
+        }
+
+        // Case 9: the selected key exists within the passed mapping of key codes & Points.
         Point currentSelectedPoint = this.keyCodeToPoint.get(selectedKeyCode);
         if (currentSelectedPoint != null) {
             this.sudokuGame.receiveAction(
@@ -131,16 +149,14 @@ public class SudokuKeyboardListener implements KeyListener {
                 entry(KeyEvent.VK_F, SudokuSection.BLOCK)
         );
 
-        // Case 8: the selected key is a S, D, or F (read row, column, or block, respectively).
+        // Case 10: the selected key is a S, D, or F (read row, column, or block, respectively).
         SudokuSection sudokuSection = KEY_TO_SECTION.get(selectedKeyCode);
         if (sudokuSection != null) {
             this.sudokuGame.receiveAction(new SudokuReadPositionAction(sudokuSection));
             return;
         }
 
-        int numberOfPressedKeys = this.pressedKeyCodeList.size();
-
-        // Case 9: the user wants to restart the current Sudoku board.
+        // Case 11: the user wants to restart the current Sudoku board.
         if (selectedKeyCode == KeyEvent.VK_Q) {
             // The last element is the CURRENT key pressed, so I want the second to last element.
             if (numberOfPressedKeys > 1 && this.pressedKeyCodeList.get(numberOfPressedKeys - 2) == KeyEvent.VK_Q) {
@@ -151,8 +167,10 @@ public class SudokuKeyboardListener implements KeyListener {
             return;
         }
 
-        // Case 10: the selected key is unrecognized.
-        this.sudokuGame.receiveAction(new SudokuUnrecognizedKeyAction(e.getKeyCode()));
+        // Case 12: the selected key is unrecognized.
+        if (selectedKeyCode != KeyEvent.VK_INSERT) {
+            this.sudokuGame.receiveAction(new SudokuUnrecognizedKeyAction(e.getKeyCode()));
+        }
     }
 
     /* These methods are required to be overridden by the KeyListener, but they are unused. */

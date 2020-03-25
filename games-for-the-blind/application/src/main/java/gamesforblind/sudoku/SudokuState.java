@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
+import static java.util.Arrays.*;
 
 /**
  * Class that contains information about the current state of the Sudoku board.
@@ -168,44 +169,40 @@ public class SudokuState {
         return originallyFilledSquares;
     }
 
-    /**
-     * Gets a list of {@link Phrase}s in this format:
-     * - If no empty squares are left to fill, return a list containing a single element (the congrats message).
-     * - Otherwise, if more than one left to fill: "There are __ empty squares left on the board."
-     * - Else: "There is 1 empty square left on the board."
-     *
-     * @return A list of {@link Phrase}s representing how many empty squares are left (or the congrats message).
-     */
-    private ArrayList<Phrase> getRemainingNumberOfEmptySquaresPhraseList() {
+    private ArrayList<Phrase> maybeGetCongratsMessage() {
         // Case 1: return the congrats message.
-        if (this.numberOfEmptyCells == 0) {
-            ArrayList<Phrase> relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
+        if (this.numberOfEmptyCells != 0) {
+            return new ArrayList<>();
+        }
 
-            Duration timeElapsed = Duration.between(this.startingInstant, Instant.now());
+        final ArrayList<Phrase> relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
+        final Duration timeElapsed = Duration.between(this.startingInstant, Instant.now());
 
-            // Indicates that an error occurred with the time measurement.
-            if (timeElapsed.isNegative()) {
-                return relevantPhrases;
-            }
-
-            relevantPhrases.addAll(Phrase.getTimeElapsedPhrases(timeElapsed));
-
+        // Indicates that an error occurred with the time measurement.
+        if (timeElapsed.isNegative()) {
             return relevantPhrases;
         }
 
-        // Case 2: return the singular version of empty squares left.
-        if (this.numberOfEmptyCells == 1) {
-            return new ArrayList<>(Arrays.asList(
-                    Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_1, Phrase.ONE, Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_2
-            ));
-        }
+        relevantPhrases.addAll(Phrase.getTimeElapsedPhrases(timeElapsed));
+        return relevantPhrases;
+    }
 
-        // Case 3: return the plural version of empty squares left.
-        return new ArrayList<>(Arrays.asList(
-                Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_1,
-                Phrase.convertIntegerToPhrase(this.numberOfEmptyCells),
-                Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_2
-        ));
+    public void readRemainingCellsToFill() {
+        if (this.numberOfEmptyCells == 1) {
+            // Case 1: return the singular version of empty squares left.
+            this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(asList(
+                    Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_1,
+                    Phrase.ONE,
+                    Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_2
+            )));
+        } else {
+            // Case 2: return the plural version of empty squares left.
+            this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(asList(
+                    Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_1,
+                    Phrase.convertIntegerToPhrase(this.numberOfEmptyCells),
+                    Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_2
+            )));
+        }
     }
 
     /**
@@ -225,7 +222,7 @@ public class SudokuState {
         Cell cellToSet = this.sudokuGrid.getCell(pointToCheck.y, pointToCheck.x);
 
         // Square will always contain a number from 1-9 or 1-4 (never 0), since it is an originally set square.
-        this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
+        this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(asList(
                 Phrase.CANNOT_DELETE_ORIGINAL,
                 Phrase.CURRENT_VALUE,
                 Phrase.convertIntegerToPhrase(cellToSet.getValue())
@@ -268,7 +265,7 @@ public class SudokuState {
 
         // Case 4: the user wishes to delete the cell value.
         if (numberToFill == EMPTY_SUDOKU_SQUARE) {
-            this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
+            this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(asList(
                     Phrase.REMOVED_NUM, Phrase.convertIntegerToPhrase(cellToSet.getValue()))
             ));
             cellToSet.setValue(EMPTY_SUDOKU_SQUARE);
@@ -323,9 +320,9 @@ public class SudokuState {
 
         // Tell the user which number was placed along with the number of remaining empty squares on the board.
         ArrayList<Phrase> phrasesToRead = new ArrayList<>(
-                Arrays.asList(Phrase.PLACED_NUM, Phrase.convertIntegerToPhrase(numberToFill))
+                asList(Phrase.PLACED_NUM, Phrase.convertIntegerToPhrase(numberToFill))
         );
-        phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
+        phrasesToRead.addAll(this.maybeGetCongratsMessage());
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
 
@@ -335,7 +332,7 @@ public class SudokuState {
     public void readInstructions() {
         final Phrase boardSizePhrase = Phrase.convertIntegerToPhrase(this.sudokuType.getSudokuBoardSize());
 
-        ArrayList<Phrase> instructionsPhrases = new ArrayList<>(Arrays.asList(
+        ArrayList<Phrase> instructionsPhrases = new ArrayList<>(asList(
                 Phrase.INSTRUCTIONS_SUDOKU_1,
                 boardSizePhrase,
                 Phrase.INSTRUCTIONS_SUDOKU_2,
@@ -352,7 +349,7 @@ public class SudokuState {
      */
     private void readNoSelectedSquareMessage() {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.NO_SELECTED_CELL));
-        phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
+        phrasesToRead.addAll(this.maybeGetCongratsMessage());
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
 
@@ -392,7 +389,7 @@ public class SudokuState {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>(
                 Collections.singletonList(Phrase.convertIntegerToPhrase(cellToSet.getValue()))
         );
-        phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
+        phrasesToRead.addAll(this.maybeGetCongratsMessage());
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
 
         // If there are no cells left to fill, the game is over.
@@ -407,7 +404,7 @@ public class SudokuState {
      * @param keyCode Key code of the unrecognized key that was pressed (compare against values in {@link KeyEvent}).
      */
     public void readUnrecognizedKey(int keyCode) {
-        ArrayList<Phrase> phrasesToRead = new ArrayList<>(Arrays.asList(
+        ArrayList<Phrase> phrasesToRead = new ArrayList<>(asList(
                 Phrase.UNRECOGNIZED_KEY, Phrase.keyCodeToPhrase(keyCode)
         ));
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
@@ -477,8 +474,14 @@ public class SudokuState {
     public void readSelectedLocation() {
         Optional<Point> maybeSelectedPoint = this.sudokuKeyboardInterface.getSelectedPoint();
         if (maybeSelectedPoint.isPresent()) {
-            Point selectedPoint = maybeSelectedPoint.get();
-            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.convertPointToLocationPhrase(selectedPoint));
+            final Point selectedPoint = maybeSelectedPoint.get();
+            final int cellValue = this.sudokuGrid.getCell(selectedPoint.y, selectedPoint.x).getValue();
+            this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(asList(
+                    Phrase.YOU_ARE_IN,
+                    Phrase.convertPointToLocationPhrase(selectedPoint),
+                    Phrase.CURRENT_VALUE,
+                    Phrase.convertIntegerToPhrase(cellValue)
+            )));
         }
     }
 

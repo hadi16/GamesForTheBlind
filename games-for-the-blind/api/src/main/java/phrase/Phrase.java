@@ -190,7 +190,8 @@ public enum Phrase {
     EMPTY_PIECES_IN_SECTION("empty cells left in this section."),
 
     /* Sudoku: Information Phrases */
-    CURRENT_VALUE("Current value in this cell is"),
+    YOU_ARE_IN("You are in"),
+    CURRENT_VALUE("Current value in cell:"),
     PLACED_NUM("You placed"),
     REMOVED_NUM("You removed the number"),
 

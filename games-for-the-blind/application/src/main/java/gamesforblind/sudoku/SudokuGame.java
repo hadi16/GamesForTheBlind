@@ -121,7 +121,10 @@ public class SudokuGame {
                 entry(SudokuStopReadingAction.class, this.sudokuState::stopReadingPhrases),
 
                 // Case 12: restart the current Sudoku board.
-                entry(SudokuRestartAction.class, this::restartSudokuBoard)
+                entry(SudokuRestartAction.class, this::restartSudokuBoard),
+
+                // Case 13: read off the remaining cells to fill.
+                entry(SudokuReadRemainingAction.class, this.sudokuState::readRemainingCellsToFill)
         );
 
         Runnable functionToExecute = SUDOKU_ACTION_TO_RUNNABLE.get(sudokuAction.getClass());

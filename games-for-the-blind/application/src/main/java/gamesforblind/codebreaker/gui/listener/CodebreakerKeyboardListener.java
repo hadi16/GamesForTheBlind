@@ -112,6 +112,7 @@ public class CodebreakerKeyboardListener implements KeyListener {
             this.codebreakerGame.receiveAction(new CodebreakerSetGuessAction());
             return;
         }
+
         // Case 9: The user presses INSERT to have the row read off
         if (selectedKeyCode == KeyEvent.VK_Y) {
             this.codebreakerGame.receiveAction(new CodebreakerReadBackAction());
