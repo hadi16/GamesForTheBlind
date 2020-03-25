@@ -75,7 +75,7 @@ public class SudokuKeyboardListener implements KeyListener {
             return;
         }
 
-        // Case 2: Ctrl is pressed.
+        // Case 2: Ctrl is pressed (stop reading phrases).
         if (e.isControlDown()) {
             // Stop reading the audio phrases.
             this.sudokuGame.receiveAction(new SudokuStopReadingAction());
@@ -140,18 +140,7 @@ public class SudokuKeyboardListener implements KeyListener {
 
         int numberOfPressedKeys = this.pressedKeyCodeList.size();
 
-        // Case 9: the user wants to return to the main menu.
-        if (selectedKeyCode == KeyEvent.VK_M) {
-            // The last element is the CURRENT key pressed, so I want the second to last element.
-            if (numberOfPressedKeys > 1 && this.pressedKeyCodeList.get(numberOfPressedKeys - 2) == KeyEvent.VK_M) {
-                this.sudokuGame.receiveAction(new SudokuMainMenuAction());
-                this.pressedKeyCodeList.clear();
-            }
-
-            return;
-        }
-
-        // Case 10: the user wants to restart the current Sudoku board.
+        // Case 9: the user wants to restart the current Sudoku board.
         if (selectedKeyCode == KeyEvent.VK_Q) {
             // The last element is the CURRENT key pressed, so I want the second to last element.
             if (numberOfPressedKeys > 1 && this.pressedKeyCodeList.get(numberOfPressedKeys - 2) == KeyEvent.VK_Q) {
@@ -162,7 +151,7 @@ public class SudokuKeyboardListener implements KeyListener {
             return;
         }
 
-        // Case 11: the selected key is unrecognized.
+        // Case 10: the selected key is unrecognized.
         this.sudokuGame.receiveAction(new SudokuUnrecognizedKeyAction(e.getKeyCode()));
     }
 
