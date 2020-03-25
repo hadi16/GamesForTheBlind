@@ -293,8 +293,8 @@ public class SudokuState {
             return;
         }
 
-        // Case 6: the numeric value is not valid for the selected cell.
-        if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
+        // Case 6: the numeric value is not valid for the selected cell (only 4x4 version).
+        if (this.sudokuType == SudokuType.FOUR_BY_FOUR && !this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
             this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CELL_VALUE_INVALID);
             return;
         }
@@ -306,13 +306,15 @@ public class SudokuState {
 
         cellToSet.setValue(numberToFill);
 
-        // Case 8: the board would not be solvable from this new state (uses deep copy of current grid).
-        Solver solver = new Solver(sudokuBoardSize);
-        if (!solver.isSolvable(new Grid(this.sudokuGrid))) {
-            cellToSet.setValue(EMPTY_SUDOKU_SQUARE);
-            this.numberOfEmptyCells++;
-            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.PLACED_CELL_UNSOLVABLE);
-            return;
+        // Case 8: the board would not be solvable from this new state (only 4x4 version).
+        if (this.sudokuType == SudokuType.FOUR_BY_FOUR) {
+            Solver solver = new Solver(sudokuBoardSize);
+            if (!solver.isSolvable(new Grid(this.sudokuGrid))) {
+                cellToSet.setValue(EMPTY_SUDOKU_SQUARE);
+                this.numberOfEmptyCells++;
+                this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.PLACED_CELL_UNSOLVABLE);
+                return;
+            }
         }
 
         if (this.numberOfEmptyCells == 0) {
