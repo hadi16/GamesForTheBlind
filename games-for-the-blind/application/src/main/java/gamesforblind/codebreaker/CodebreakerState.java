@@ -189,33 +189,45 @@ public class CodebreakerState {
     public void changeSelectedCellPoint(@NotNull ArrowKeyDirection arrowKeyDirection) {
         switch (arrowKeyDirection) {
             case LEFT:
-                if (this.selectedCellPoint.x == 0) {
-                    this.selectedCellPoint.x = this.codebreakerType.getCodeLength() - 1;
-                } else {
+                if (this.selectedCellPoint.x != 0) {
                     this.selectedCellPoint.x--;
                 }
+
+                if (this.selectedCellPoint.x == 0) {
+                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.FIRST_COLUMN);
+                }
+
                 break;
             case RIGHT:
-                if (this.selectedCellPoint.x == this.codebreakerType.getCodeLength() - 1) {
-                    this.selectedCellPoint.x = 0;
-                } else {
+                if (this.selectedCellPoint.x != this.codebreakerType.getCodeLength() - 1) {
                     this.selectedCellPoint.x++;
                 }
+
+                if (this.selectedCellPoint.x == this.codebreakerType.getCodeLength() - 1) {
+                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.LAST_COLUMN);
+                }
+
                 break;
             case UP:
                 if (this.selectedCellPoint.y != 0) {
                     this.selectedCellPoint.y--;
-                } else {
-                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.LAST_ROW);
                 }
+
+                if (this.selectedCellPoint.y == 0) {
+                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.FIRST_ROW);
+                }
+
                 break;
             case DOWN:
                 final int numberOfRows = this.codebreakerType.getNumberOfRows();
-                if (this.selectedCellPoint.y < this.guessList.size() && this.selectedCellPoint.y != numberOfRows - 1) {
+                if (this.selectedCellPoint.y != numberOfRows - 1 && this.selectedCellPoint.y < this.guessList.size()) {
                     this.selectedCellPoint.y++;
-                } else if (this.selectedCellPoint.y == numberOfRows - 1) {
-                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.FIRST_ROW);
                 }
+
+                if (this.selectedCellPoint.y == numberOfRows - 1) {
+                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.LAST_ROW);
+                }
+
                 break;
         }
     }
