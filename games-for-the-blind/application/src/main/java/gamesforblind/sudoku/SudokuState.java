@@ -1,6 +1,8 @@
 package gamesforblind.sudoku;
 
 import gamesforblind.enums.*;
+import gamesforblind.sudoku.action.SudokuHighlightAction;
+import gamesforblind.sudoku.action.SudokuHotKeyAction;
 import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Generator;
 import gamesforblind.sudoku.generator.Grid;
@@ -18,7 +20,6 @@ import java.awt.event.KeyEvent;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -486,16 +487,59 @@ public class SudokuState {
     }
 
     /**
-     * Reads the value of the currently selected {@link Cell} on the Sudoku board (if one is selected).
+     * Sets highlighted point based on pressed hot key & reads off new selected square.
+     *
+     * @param sudokuHotKeyAction The {@link SudokuHotKeyAction} that was sent to the game.
      */
-    public void readSelectedSquare() {
+    public void processHotKey(@NotNull SudokuHotKeyAction sudokuHotKeyAction) {
+        this.setHighlightedPoint(sudokuHotKeyAction.getArrowKeyDirection());
+        this.getSelectedSquarePhrase().ifPresent(this.audioPlayerExecutor::replacePhraseAndPrint);
+    }
+
+    /**
+     * Sets the highlighted point (not based on hot key) & reads off selected square.
+     *
+     * @param sudokuHighlightAction The {@link SudokuHighlightAction} that was sent to the game.
+     */
+    public void changeHighlightedSquare(@NotNull SudokuHighlightAction sudokuHighlightAction) {
+        final Point previousPoint = this.sudokuKeyboardInterface.getSelectedPoint().orElse(null);
+        this.setHighlightedPoint(
+                sudokuHighlightAction.getPointToHighlight(), sudokuHighlightAction.getInputType()
+        );
+        this.getSelectedSquarePhrase().ifPresent(phrase -> {
+            final ArrayList<Phrase> phrases = new ArrayList<>(Collections.singletonList(phrase));
+            this.sudokuKeyboardInterface.getSelectedPoint().ifPresent(point -> {
+                if (previousPoint == null) {
+                    return;
+                }
+
+                final int maxIndex = this.sudokuType.getSudokuBoardSize() - 1;
+                if (point.x == 0 && previousPoint.x != 0) {
+                    phrases.add(Phrase.FIRST_COLUMN);
+                } else if (point.y == 0 && previousPoint.y != 0) {
+                    phrases.add(Phrase.FIRST_ROW);
+                } else if (point.x == maxIndex && previousPoint.x != maxIndex) {
+                    phrases.add(Phrase.LAST_COLUMN);
+                } else if (point.y == maxIndex && previousPoint.y != maxIndex) {
+                    phrases.add(Phrase.LAST_ROW);
+                }
+            });
+            this.audioPlayerExecutor.replacePhraseAndPrint(phrases);
+        });
+    }
+
+    public Optional<Phrase> getSelectedSquarePhrase() {
         Optional<Point> maybeSelectedPoint = this.sudokuKeyboardInterface.getSelectedPoint();
         if (maybeSelectedPoint.isPresent()) {
             Point selectedPoint = maybeSelectedPoint.get();
             Cell selectedCell = this.sudokuGrid.getCell(selectedPoint.y, selectedPoint.x);
 
-            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.convertIntegerToPhrase(selectedCell.getValue()));
+            return Optional.of(
+                    Phrase.convertIntegerToPhrase(selectedCell.getValue())
+            );
         }
+
+        return Optional.empty();
     }
 
     /**

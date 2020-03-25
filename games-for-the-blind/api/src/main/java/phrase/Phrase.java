@@ -216,9 +216,12 @@ public enum Phrase {
     CODEBREAKER_GUESS_WAS("code guessed:"),
     CODEBREAKER_READ_ROW("Row"),
     CODEBREAKER_UNKNOWN_GUESS("has this guess so far:"),
-    CODEBREAKER_LAST_ROW("You have reached the first row."),
-    CODEBREAKER_FIRST_ROW("You have reached the last row."),
     CODEBREAKER_NO_MORE_HINTS("You have run out of hints."),
+
+    FIRST_ROW("You have reached the first row."),
+    LAST_ROW("You have reached the last row."),
+    FIRST_COLUMN("You have reached the first column."),
+    LAST_COLUMN("You have reached the last column."),
 
     IT_TOOK_YOU("It took you:"),
     HOURS("hours"),

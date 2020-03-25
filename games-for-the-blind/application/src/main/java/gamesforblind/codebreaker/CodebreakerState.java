@@ -206,7 +206,7 @@ public class CodebreakerState {
                 if (this.selectedCellPoint.y != 0) {
                     this.selectedCellPoint.y--;
                 } else {
-                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CODEBREAKER_LAST_ROW);
+                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.LAST_ROW);
                 }
                 break;
             case DOWN:
@@ -214,7 +214,7 @@ public class CodebreakerState {
                 if (this.selectedCellPoint.y < this.guessList.size() && this.selectedCellPoint.y != numberOfRows - 1) {
                     this.selectedCellPoint.y++;
                 } else if (this.selectedCellPoint.y == numberOfRows - 1) {
-                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CODEBREAKER_FIRST_ROW);
+                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.FIRST_ROW);
                 }
                 break;
         }
