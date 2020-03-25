@@ -14,6 +14,9 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.*;
 
+import static util.MapUtil.entry;
+import static util.MapUtil.map;
+
 /**
  * The new arrow key interface for our Sudoku game. Inherits from {@link SudokuKeyboardInterface}.
  */
@@ -35,11 +38,11 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
     public SudokuArrowKeyInterface(@NotNull SudokuState sudokuState) {
         super(
                 sudokuState,
-                Map.of(
-                        KeyEvent.VK_LEFT, new SudokuHotKeyAction(ArrowKeyDirection.LEFT),
-                        KeyEvent.VK_RIGHT, new SudokuHotKeyAction(ArrowKeyDirection.RIGHT),
-                        KeyEvent.VK_UP, new SudokuHotKeyAction(ArrowKeyDirection.UP),
-                        KeyEvent.VK_DOWN, new SudokuHotKeyAction(ArrowKeyDirection.DOWN)
+                map(
+                        entry(KeyEvent.VK_LEFT, new SudokuHotKeyAction(ArrowKeyDirection.LEFT)),
+                        entry(KeyEvent.VK_RIGHT, new SudokuHotKeyAction(ArrowKeyDirection.RIGHT)),
+                        entry(KeyEvent.VK_UP, new SudokuHotKeyAction(ArrowKeyDirection.UP)),
+                        entry(KeyEvent.VK_DOWN, new SudokuHotKeyAction(ArrowKeyDirection.DOWN))
                 ),
                 // Read off the location of the selected square when the space bar is pressed.
                 new SudokuLocationAction()
@@ -119,11 +122,11 @@ public class SudokuArrowKeyInterface extends SudokuKeyboardInterface {
     @Override
     public Map<Integer, Point> getKeyCodeToPointMapping() {
         // Left arrow key moves the selection left by a single square, etc.
-        return Map.of(
-                KeyEvent.VK_LEFT, new Point(-1, 0),
-                KeyEvent.VK_RIGHT, new Point(1, 0),
-                KeyEvent.VK_UP, new Point(0, -1),
-                KeyEvent.VK_DOWN, new Point(0, 1)
+        return map(
+                entry(KeyEvent.VK_LEFT, new Point(-1, 0)),
+                entry(KeyEvent.VK_RIGHT, new Point(1, 0)),
+                entry(KeyEvent.VK_UP, new Point(0, -1)),
+                entry(KeyEvent.VK_DOWN, new Point(0, 1))
         );
     }
 

@@ -28,6 +28,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import static gamesforblind.Constants.*;
+import static util.MapUtil.entry;
+import static util.MapUtil.map;
 
 /**
  * Universal loader for the program. Instantiated solely in {@link gamesforblind.Main}.
@@ -93,10 +95,10 @@ public class GameLoader {
         for (int i = 0; i < programActions.size(); i++) {
             ProgramAction currentAction = programActions.get(i);
 
-            final Map<Class<? extends ProgramAction>, Runnable> ACTION_TO_RUNNABLE = Map.of(
-                    LoaderAction.class, () -> this.receiveAction((LoaderAction) currentAction),
-                    SudokuAction.class, () -> this.sudokuGame.receiveAction((SudokuAction) currentAction),
-                    CodebreakerAction.class, () -> this.codebreakerGame.receiveAction((CodebreakerAction) currentAction)
+            final Map<Class<? extends ProgramAction>, Runnable> ACTION_TO_RUNNABLE = map(
+                    entry(LoaderAction.class, () -> this.receiveAction((LoaderAction) currentAction)),
+                    entry(SudokuAction.class, () -> this.sudokuGame.receiveAction((SudokuAction) currentAction)),
+                    entry(CodebreakerAction.class, () -> this.codebreakerGame.receiveAction((CodebreakerAction) currentAction))
             );
 
             Runnable functionToExecute = ACTION_TO_RUNNABLE.get(currentAction.getClass());
@@ -138,7 +140,7 @@ public class GameLoader {
         Optional<String> maybeLogFilePath = logFileSelectionGui.getSelectedLogFilePath();
 
         // If the user didn't select a XML log file from the GUI.
-        if (maybeLogFilePath.isEmpty()) {
+        if (!maybeLogFilePath.isPresent()) {
             System.err.println("Could not load XML log file!");
             System.exit(1);
         }
@@ -158,30 +160,45 @@ public class GameLoader {
             this.logFactory.addProgramAction(loaderAction);
         }
 
-        final Map<Class<? extends LoaderAction>, Runnable> LOADER_ACTION_TO_RUNNABLE = Map.of(
+        final Map<Class<? extends LoaderAction>, Runnable> LOADER_ACTION_TO_RUNNABLE = map(
                 // Case 1: the user pressed one of the arrow keys in the loader GUI.
-                LoaderArrowKeyAction.class,
-                () -> this.highlightDifferentLoaderButton((LoaderArrowKeyAction) loaderAction),
+                entry(
+                        LoaderArrowKeyAction.class,
+                        () -> this.highlightDifferentLoaderButton((LoaderArrowKeyAction) loaderAction)
+                ),
 
                 // Case 2: the user changed the currently selected game in the loader GUI.
-                LoaderGameSelectionAction.class,
-                () -> this.changeCurrentGame((LoaderGameSelectionAction) loaderAction),
+                entry(
+                        LoaderGameSelectionAction.class,
+                        () -> this.changeCurrentGame((LoaderGameSelectionAction) loaderAction)
+                ),
 
                 // Case 3: the user selected one of the Sudoku board sizes in the loader GUI (4x4, 6x6, or 9x9).
-                LoaderSudokuSelectionAction.class,
-                () -> this.loadSudokuGame((LoaderSudokuSelectionAction) loaderAction),
+                entry(
+                        LoaderSudokuSelectionAction.class,
+                        () -> this.loadSudokuGame((LoaderSudokuSelectionAction) loaderAction)
+                ),
 
                 // Case 4: the user selected one of the Codebreaker board sizes in the loader GUI (4,5, or 6).
-                LoaderCodebreakerSelectionAction.class,
-                () -> this.loadCodebreakerGame((LoaderCodebreakerSelectionAction) loaderAction),
+                entry(
+                        LoaderCodebreakerSelectionAction.class,
+                        () -> this.loadCodebreakerGame((LoaderCodebreakerSelectionAction) loaderAction)
+                ),
 
                 // Case 5: the user pressed an unrecognized key on the keyboard.
-                LoaderUnrecognizedKeyAction.class,
-                () -> this.readUnrecognizedKey((LoaderUnrecognizedKeyAction) loaderAction),
+                entry(
+                        LoaderUnrecognizedKeyAction.class,
+                        () -> this.readUnrecognizedKey((LoaderUnrecognizedKeyAction) loaderAction)
+                ),
 
                 // Case 6: the user has decided to exit the loader GUI.
-                LoaderExitAction.class,
-                this::exitApplication
+                entry(LoaderExitAction.class, this::exitApplication),
+
+                // Case 7: the user wants to stop reading the phrases.
+                entry(
+                        LoaderStopReadingAction.class,
+                        () -> this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>())
+                )
         );
 
         Runnable functionToExecute = LOADER_ACTION_TO_RUNNABLE.get(loaderAction.getClass());
@@ -198,17 +215,17 @@ public class GameLoader {
      * @param loaderArrowKeyAction The {@link LoaderArrowKeyAction} that was sent to the loader.
      */
     private void highlightDifferentLoaderButton(@NotNull LoaderArrowKeyAction loaderArrowKeyAction) {
-        final Map<String, Phrase> BUTTON_TEXT_TO_PHRASE = Map.of(
-                PLAY_SUDOKU_BUTTON, Phrase.SPACE_FOR_SUDOKU,
-                PLAY_CODEBREAKER_BUTTON, Phrase.SPACE_FOR_CODEBREAKER,
-                EXIT_BUTTON, Phrase.SPACE_FOR_EXIT,
-                BACK_BUTTON, Phrase.GO_BACK_TO_GAME_SELECTION,
-                FOUR_BY_FOUR_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_FOUR,
-                SIX_BY_SIX_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_SIX,
-                NINE_BY_NINE_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_NINE,
-                FOUR_CODEBREAKER_BUTTON, Phrase.SELECT_CODEBREAKER_FOUR,
-                FIVE_CODEBREAKER_BUTTON, Phrase.SELECT_CODEBREAKER_FIVE,
-                SIX_CODEBREAKER_BUTTON, Phrase.SELECT_CODEBREAKER_SIX
+        final Map<String, Phrase> BUTTON_TEXT_TO_PHRASE = map(
+                entry(PLAY_SUDOKU_BUTTON, Phrase.SPACE_FOR_SUDOKU),
+                entry(PLAY_CODEBREAKER_BUTTON, Phrase.SPACE_FOR_CODEBREAKER),
+                entry(EXIT_BUTTON, Phrase.SPACE_FOR_EXIT),
+                entry(BACK_BUTTON, Phrase.GO_BACK_TO_GAME_SELECTION),
+                entry(FOUR_BY_FOUR_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_FOUR),
+                entry(SIX_BY_SIX_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_SIX),
+                entry(NINE_BY_NINE_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_NINE),
+                entry(FOUR_CODEBREAKER_BUTTON, Phrase.SELECT_CODEBREAKER_FOUR),
+                entry(FIVE_CODEBREAKER_BUTTON, Phrase.SELECT_CODEBREAKER_FIVE),
+                entry(SIX_CODEBREAKER_BUTTON, Phrase.SELECT_CODEBREAKER_SIX)
         );
 
         this.loaderFrame.changeHighlightedButton(loaderArrowKeyAction.getArrowKeyDirection());

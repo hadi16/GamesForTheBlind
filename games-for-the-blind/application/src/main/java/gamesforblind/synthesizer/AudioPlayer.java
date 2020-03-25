@@ -61,7 +61,7 @@ public class AudioPlayer implements Runnable {
 
             Optional<InputStream> maybePhraseAudioStream = phrase.getPhraseInputStream();
 
-            if (maybePhraseAudioStream.isEmpty()) {
+            if (!maybePhraseAudioStream.isPresent()) {
                 System.err.println(String.format("Failed to find phrase audio file: %s!", phrase));
                 return Optional.empty();
             }

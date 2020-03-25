@@ -21,6 +21,7 @@ import static gamesforblind.Constants.FRAME_DIMENSION;
  * Class that creates the Codebreaker GUI, adds the listeners to that GUI, and updates the Codebreaker state of the GUI.
  */
 public class CodebreakerFrame extends JFrame {
+    private final CodebreakerState codebreakerState;
     private final JFrame frame;
 
     /**
@@ -40,6 +41,7 @@ public class CodebreakerFrame extends JFrame {
             @NotNull CodebreakerState initialState,
             boolean playbackMode
     ) {
+        this.codebreakerState = initialState;
         this.codebreakerPanel = new CodebreakerPanel(initialState);
         this.frame = new JFrame("Codebreaker");
 
@@ -60,19 +62,22 @@ public class CodebreakerFrame extends JFrame {
      */
     private void initializeGui(@NotNull CodebreakerGame codebreakerGame) {
         this.frame.add(this.codebreakerPanel);
+        this.frame.getContentPane().add(this.codebreakerPanel);
 
-        Timer timer = new Timer();
-        this.frame.getContentPane().add(codebreakerPanel);
-
-        timer.scheduleAtFixedRate(new TimerTask() {
+        new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                repaintCodebreakerPanel();
+                final boolean gameOver = CodebreakerFrame.this.codebreakerState.isGameOver();
+                if (gameOver) {
+                    this.cancel();
+                } else {
+                    CodebreakerFrame.this.repaintCodebreakerPanel();
+                }
             }
         }, 1000, 1000);
 
         this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.frame.setSize(FRAME_DIMENSION, FRAME_DIMENSION);
+        this.frame.setSize((int) (1.5 * FRAME_DIMENSION), FRAME_DIMENSION);
         this.frame.setVisible(true);
 
         JMenuBar menuBar = new JMenuBar();
@@ -92,10 +97,6 @@ public class CodebreakerFrame extends JFrame {
      */
     private JMenu getInitializedMenu(@NotNull CodebreakerGame codebreakerGame) {
         this.frame.add(this.codebreakerPanel);
-
-        this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.frame.setSize(FRAME_DIMENSION, FRAME_DIMENSION);
-        this.frame.setVisible(true);
 
         JMenuBar menuBar = new JMenuBar();
 

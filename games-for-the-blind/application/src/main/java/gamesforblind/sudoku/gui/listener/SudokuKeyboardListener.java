@@ -13,6 +13,9 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Map;
 
+import static util.MapUtil.entry;
+import static util.MapUtil.map;
+
 /**
  * Keyboard listener for Sudoku that receives keyboard inputs and appropriately calls the proper action class
  */
@@ -72,15 +75,17 @@ public class SudokuKeyboardListener implements KeyListener {
             return;
         }
 
-        // Case 2: hot key was registered (using the Ctrl key).
-        // If no hot key mappings exist, don't check (e.g. block selection interface).
-        if (!this.keyCodeToHotKeyAction.isEmpty() && e.isControlDown()) {
+        // Case 2: Ctrl is pressed.
+        if (e.isControlDown()) {
+            // Stop reading the audio phrases.
+            this.sudokuGame.receiveAction(new SudokuStopReadingAction());
+
+            // If hot key was registered (e.g. go all the way to the right).
             SudokuHotKeyAction sudokuHotKeyAction = this.keyCodeToHotKeyAction.get(e.getKeyCode());
             if (sudokuHotKeyAction != null) {
                 this.sudokuGame.receiveAction(sudokuHotKeyAction);
             }
 
-            // Prevents the game from saying that CTRL is an unrecognized key.
             return;
         }
 
@@ -120,10 +125,10 @@ public class SudokuKeyboardListener implements KeyListener {
             return;
         }
 
-        final Map<Integer, SudokuSection> KEY_TO_SECTION = Map.of(
-                KeyEvent.VK_S, SudokuSection.ROW,
-                KeyEvent.VK_D, SudokuSection.COLUMN,
-                KeyEvent.VK_F, SudokuSection.BLOCK
+        final Map<Integer, SudokuSection> KEY_TO_SECTION = map(
+                entry(KeyEvent.VK_S, SudokuSection.ROW),
+                entry(KeyEvent.VK_D, SudokuSection.COLUMN),
+                entry(KeyEvent.VK_F, SudokuSection.BLOCK)
         );
 
         // Case 8: the selected key is a S, D, or F (read row, column, or block, respectively).

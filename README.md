@@ -5,7 +5,7 @@ Games for the Blind is a computer game program specifically designed for the bli
 ## Features
 
 **Self-Contained Program:**
-This program is not internet dependent and only uses libraries contained in version 12 of Oracle's Java Development Kit.
+This program is not internet dependent and only uses libraries contained in version 8 of Oracle's Java Development Kit.
 
 **Software GUI (Frontend):** The frontend of the software consists of Java Swing components. It serves as a visual representation of the current game state, with the game state being updated as the game is played.
 
@@ -18,7 +18,7 @@ This program is not internet dependent and only uses libraries contained in vers
 ## Installation 
 Games for the Blind uses izPack 5.1 to create a JAR installer file for the  application. The software uses launch4j to: 
 1. wrap this JAR installer file into a Windows executable  
-2. embed JDK 12 into this executable installer file.
+2. embed JDK 8 into this executable installer file.
 Games for the Blind can be easily installed by blind users. 
 
 

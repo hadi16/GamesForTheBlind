@@ -114,9 +114,8 @@ public class LoaderFrame extends JFrame implements ComponentListener {
         optionsPanel.setLayout(new GridLayout());
 
         buttonNameList.forEach(buttonName -> {
-            optionsPanel.add(
-                    this.getUIButton(buttonName, getButtonDimension.apply(buttonNameList.size()))
-            );
+            final Dimension buttonDimension = getButtonDimension.apply(buttonNameList.size());
+            optionsPanel.add(this.getUIButton(buttonName, buttonDimension));
         });
 
         return new ArrayList<>(Collections.singletonList(optionsPanel));

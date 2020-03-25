@@ -3,7 +3,6 @@ package gamesforblind.codebreaker;
 import gamesforblind.enums.ArrowKeyDirection;
 import gamesforblind.enums.CodebreakerType;
 import gamesforblind.synthesizer.AudioPlayerExecutor;
-import org.apache.commons.lang3.time.StopWatch;
 import org.jetbrains.annotations.NotNull;
 import phrase.Phrase;
 
@@ -19,7 +18,6 @@ import static gamesforblind.Constants.CODEBREAKER_MAX_CODE_INT;
  * Also handles any calls into the {@link AudioPlayerExecutor} for Codebreaker.
  */
 public class CodebreakerState {
-    private static final StopWatch watch = new StopWatch();
     private final CodebreakerType codebreakerType;
     private final AudioPlayerExecutor audioPlayerExecutor;
     private boolean gameOver;
@@ -27,9 +25,9 @@ public class CodebreakerState {
     private Integer[] currentGuess;
     private ArrayList<CodebreakerGuess> guessList;
     private Point selectedCellPoint;
-    private Instant startingInstant;
     private int hintNum;
-
+    private Instant startingInstant;
+    private Duration timeElapsed;
 
     public CodebreakerState(@NotNull AudioPlayerExecutor audioPlayerExecutor, @NotNull CodebreakerType codebreakerType) {
         this.audioPlayerExecutor = audioPlayerExecutor;
@@ -62,20 +60,16 @@ public class CodebreakerState {
         return codeToBreak.length == guessList.get(guessList.size() - 1).getNumberInCorrectPosition();
     }
 
-    public static StopWatch getTimer() {
-        return watch;
-    }
-
     public void initNewCodebreakerGame() {
         this.gameOver = false;
         this.codeToBreak = this.generateCorrectCode();
         this.currentGuess = new Integer[this.codebreakerType.getCodeLength()];
         this.guessList = new ArrayList<>();
         this.selectedCellPoint = new Point();
+
         this.startingInstant = Instant.now();
+        this.timeElapsed = null;
         this.hintNum = 3;
-        watch.start();
-        System.out.println("Time start: " + watch.getTime());
     }
 
     public void readUnrecognizedKey(int keyCode) {
@@ -96,6 +90,10 @@ public class CodebreakerState {
         return codeToBreak;
     }
 
+    public void stopReadingPhrases() {
+        this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>());
+    }
+
     public void setCodebreakerGuess() {
         if (this.selectedCellPoint.y != this.guessList.size()) {
             return;
@@ -114,9 +112,9 @@ public class CodebreakerState {
         if (checkThatGameIsOver(this.codeToBreak, this.guessList)) {
             // If the game is over, give message
             this.gameOver = true;
+            this.timeElapsed = Duration.between(this.startingInstant, Instant.now());
+
             this.feedbackGameOver();
-
-
         } else {
             // If the game is not over, give the player feedback
             this.feedbackGuess(currentCodebreakerGuess);
@@ -160,15 +158,13 @@ public class CodebreakerState {
             }
         }
 
-        Duration timeElapsed = Duration.between(this.startingInstant, Instant.now());
-
         // Indicates that an error occurred with the time measurement.
-        if (timeElapsed.isNegative()) {
+        if (this.timeElapsed.isNegative()) {
             relevantPhrases.add(Phrase.SPACE_FOR_EXIT);
             this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
         }
 
-        relevantPhrases.addAll(Phrase.getTimeElapsedPhrases(timeElapsed));
+        relevantPhrases.addAll(Phrase.getTimeElapsedPhrases(this.timeElapsed));
         relevantPhrases.add(Phrase.SPACE_FOR_EXIT);
 
         this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrases);
@@ -209,21 +205,17 @@ public class CodebreakerState {
             case UP:
                 if (this.selectedCellPoint.y != 0) {
                     this.selectedCellPoint.y--;
-                }
-                else if(this.selectedCellPoint.y == 0){
+                } else {
                     this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CODEBREAKER_LAST_ROW);
                 }
-
                 break;
             case DOWN:
                 final int numberOfRows = this.codebreakerType.getNumberOfRows();
                 if (this.selectedCellPoint.y < this.guessList.size() && this.selectedCellPoint.y != numberOfRows - 1) {
                     this.selectedCellPoint.y++;
-                }
-                else if (this.selectedCellPoint.y == numberOfRows - 1){
+                } else if (this.selectedCellPoint.y == numberOfRows - 1) {
                     this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CODEBREAKER_FIRST_ROW);
                 }
-
                 break;
         }
     }
@@ -232,34 +224,15 @@ public class CodebreakerState {
      * Reads the instructions for the codebreaker game of difficulty 4, 5, 6 respectively
      */
     public void readInstructions() {
-        ArrayList<Phrase> instructionsPhrases;
-        switch (this.codebreakerType) {
-            case FOUR:
-                instructionsPhrases = new ArrayList<>(Arrays.asList(
-                        Phrase.INSTRUCTIONS_CODEBREAKER_4,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_4_SECOND,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_ENDING_SAME));
-                break;
-            case FIVE:
-                instructionsPhrases = new ArrayList<>(Arrays.asList(
-                        Phrase.INSTRUCTIONS_CODEBREAKER_5,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_5_SECOND,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_ENDING_SAME));
-                break;
-            case SIX:
-                instructionsPhrases = new ArrayList<>(Arrays.asList(
-                        Phrase.INSTRUCTIONS_CODEBREAKER_6,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_MIDDLE_SAME,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_6_SECOND,
-                        Phrase.INSTRUCTIONS_CODEBREAKER_ENDING_SAME));
-                break;
-            default:
-                throw new IllegalArgumentException(
-                        String.format("Invalid codebreaker type: '%s'!", this.codebreakerType)
-                );
-        }
+        final Phrase codeLengthPhrase = Phrase.convertIntegerToPhrase(this.codebreakerType.getCodeLength());
+
+        ArrayList<Phrase> instructionsPhrases = new ArrayList<>(Arrays.asList(
+                Phrase.INSTRUCTIONS_CODEBREAKER_1,
+                codeLengthPhrase,
+                Phrase.INSTRUCTIONS_CODEBREAKER_2,
+                codeLengthPhrase,
+                Phrase.INSTRUCTIONS_CODEBREAKER_3
+        ));
 
         this.audioPlayerExecutor.replacePhraseAndPrint(instructionsPhrases);
     }
@@ -326,7 +299,11 @@ public class CodebreakerState {
         this.hintNum--;
         return this.codeToBreak[this.selectedCellPoint.x];
     }
-    public int getHintNum() { return this.hintNum; }
+
+    public int getHintNum() {
+        return this.hintNum;
+    }
+
     public void playNoHint() {
         this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CODEBREAKER_NO_MORE_HINTS);
     }
@@ -366,5 +343,9 @@ public class CodebreakerState {
 
     public Instant getTime() {
         return this.startingInstant;
+    }
+
+    public Duration getTimeElapsed() {
+        return this.timeElapsed;
     }
 }

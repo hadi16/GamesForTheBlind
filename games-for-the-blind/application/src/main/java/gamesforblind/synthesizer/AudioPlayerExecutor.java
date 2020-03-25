@@ -52,7 +52,11 @@ public class AudioPlayerExecutor {
         // Prints all of the phrases on a single line, separated with a space (" ").
         ArrayList<String> phraseStringList = new ArrayList<>();
         phrases.forEach(phrase -> phraseStringList.add(phrase.getPhraseValue()));
-        System.out.println(String.join(" ", phraseStringList));
+        String phraseString = String.join(" ", phraseStringList);
+
+        if (!phraseString.trim().isEmpty()) {
+            System.out.println(phraseString);
+        }
 
         if (this.audioPlayer != null) {
             this.audioPlayer.replacePhraseToPlay(phrases);

@@ -10,6 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 
+import static util.MapUtil.entry;
+import static util.MapUtil.map;
+
 /**
  * The {@link ActionListener} for each of the {@link JMenuItem}s in the Sudoku menu.
  */
@@ -38,11 +41,11 @@ public class SudokuMenuItemListener implements ActionListener {
         String selectedMenuText = e.getActionCommand();
 
         // TODO: Support the language option.
-        final Map<String, SudokuAction> SELECTED_MENU_TEXT_TO_ACTION = Map.of(
-                GameMenuItem.HINT.toString(), new SudokuHintKeyAction(),
-                GameMenuItem.INSTRUCTIONS.toString(), new SudokuInstructionsAction(),
-                GameMenuItem.RETURN_TO_MAIN_MENU.toString(), new SudokuMainMenuAction(),
-                GameMenuItem.RESTART.toString(), new SudokuRestartAction()
+        final Map<String, SudokuAction> SELECTED_MENU_TEXT_TO_ACTION = map(
+                entry(GameMenuItem.HINT.toString(), new SudokuHintKeyAction()),
+                entry(GameMenuItem.INSTRUCTIONS.toString(), new SudokuInstructionsAction()),
+                entry(GameMenuItem.RETURN_TO_MAIN_MENU.toString(), new SudokuMainMenuAction()),
+                entry(GameMenuItem.RESTART.toString(), new SudokuRestartAction())
         );
 
         SudokuAction sudokuAction = SELECTED_MENU_TEXT_TO_ACTION.get(selectedMenuText);

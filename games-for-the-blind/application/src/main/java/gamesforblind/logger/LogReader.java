@@ -39,7 +39,7 @@ public class LogReader {
 
         // Step 2: convert this XML String to a Document.
         Optional<Document> logXmlDocument = XmlHelpers.convertXmlStringToDocument(logXmlString);
-        if (logXmlDocument.isEmpty()) {
+        if (!logXmlDocument.isPresent()) {
             return new ArrayList<>();
         }
 
