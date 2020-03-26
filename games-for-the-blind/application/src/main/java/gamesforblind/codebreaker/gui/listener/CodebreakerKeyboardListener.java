@@ -47,13 +47,19 @@ public class CodebreakerKeyboardListener implements KeyListener {
         int selectedKeyCode = e.getKeyCode();
         this.pressedKeyCodeList.add(selectedKeyCode);
 
-        // Case 1: control is pressed.
+        // Case 1: ALT + M is pressed (go to main menu).
+        if (e.isAltDown() && selectedKeyCode == KeyEvent.VK_M) {
+            this.codebreakerGame.receiveAction(new CodebreakerMainMenuAction());
+            return;
+        }
+
+        // Case 2: control is pressed (stop reading phrases).
         if (e.isControlDown()) {
             this.codebreakerGame.receiveAction(new CodebreakerStopReadingAction());
             return;
         }
 
-        // Case 2: pressed key is a number.
+        // Case 3: pressed key is a number.
         if (Character.isDigit(e.getKeyChar())) {
             int selectedNumber = Character.getNumericValue(e.getKeyChar());
             if (selectedNumber > 0 && selectedNumber <= CODEBREAKER_MAX_CODE_INT) {
@@ -69,7 +75,7 @@ public class CodebreakerKeyboardListener implements KeyListener {
                 entry(KeyEvent.VK_DOWN, ArrowKeyDirection.DOWN)
         );
 
-        // Case 3: pressed key is an arrow key.
+        // Case 4: pressed key is an arrow key.
         ArrowKeyDirection maybeSelectedArrowKeyDirection = ARROW_KEY_MAP.get(e.getKeyCode());
         if (maybeSelectedArrowKeyDirection != null) {
             this.codebreakerGame.receiveAction(new CodebreakerArrowKeyAction(maybeSelectedArrowKeyDirection));
@@ -77,29 +83,19 @@ public class CodebreakerKeyboardListener implements KeyListener {
         }
 
 
-        // Case 4: the selected key is the 'I' key (play the instructions).
+        // Case 5: the selected key is the 'I' key (play the instructions).
         if (selectedKeyCode == KeyEvent.VK_I) {
             this.codebreakerGame.receiveAction(new CodebreakerInstructionsAction());
             return;
         }
 
-        // Case 5: the selected key is the 'H' key (triggers a hint).
+        // Case 6: the selected key is the 'H' key (triggers a hint).
         if (selectedKeyCode == KeyEvent.VK_H) {
             this.codebreakerGame.receiveAction(new CodebreakerHintKeyAction());
             return;
         }
 
         int numberOfPressedKeys = this.pressedKeyCodeList.size();
-
-        // Case 6: the user wants to return to the main menu.
-        if (selectedKeyCode == KeyEvent.VK_M) {
-            // The last element is the CURRENT key pressed, so I want the second to last element.
-            if (numberOfPressedKeys > 1 && this.pressedKeyCodeList.get(numberOfPressedKeys - 2) == KeyEvent.VK_M) {
-                this.codebreakerGame.receiveAction(new CodebreakerMainMenuAction());
-                this.pressedKeyCodeList.clear();
-            }
-            return;
-        }
 
         // Case 7: the user wants to restart the current Codebreaker board.
         if (selectedKeyCode == KeyEvent.VK_Q) {
@@ -116,14 +112,27 @@ public class CodebreakerKeyboardListener implements KeyListener {
             this.codebreakerGame.receiveAction(new CodebreakerSetGuessAction());
             return;
         }
-        // Case 9: The user presses INSERT to have the row read off
-        if (selectedKeyCode == KeyEvent.VK_Y) {
+
+        // Case 9: The user presses A to have the row read off.
+        if (selectedKeyCode == KeyEvent.VK_A) {
             this.codebreakerGame.receiveAction(new CodebreakerReadBackAction());
             return;
         }
 
-        // Case 10: the selected key is unrecognized.
-        this.codebreakerGame.receiveAction(new CodebreakerUnrecognizedKeyAction(e.getKeyCode()));
+        // Case 10: the user wants to read off the currently selected location & value.
+        if (selectedKeyCode == KeyEvent.VK_DOWN) {
+            // The last element is the CURRENT key pressed, so I want the second to last element.
+            if (numberOfPressedKeys > 1 && this.pressedKeyCodeList.get(numberOfPressedKeys - 2) == KeyEvent.VK_INSERT) {
+                this.codebreakerGame.receiveAction(new CodebreakerLocationAction());
+                this.pressedKeyCodeList.clear();
+                return;
+            }
+        }
+
+        // Case 11: the selected key is unrecognized.
+        if (selectedKeyCode != KeyEvent.VK_INSERT) {
+            this.codebreakerGame.receiveAction(new CodebreakerUnrecognizedKeyAction(e.getKeyCode()));
+        }
     }
 
     /* These methods are required to be overridden by the KeyListener, but they are unused. */

@@ -100,10 +100,22 @@ public class SudokuGame {
                 ),
 
                 // Case 5: the user hits a hot key (e.g. Ctrl + LEFT)
-                entry(SudokuHotKeyAction.class, () -> this.processHotKey((SudokuHotKeyAction) sudokuAction)),
+                entry(
+                        SudokuHotKeyAction.class,
+                        () -> {
+                            this.sudokuState.processHotKey((SudokuHotKeyAction) sudokuAction);
+                            this.sudokuFrame.repaintSudokuPanel();
+                        }
+                ),
 
                 // Case 6: the user wants to highlight a square/block on the board.
-                entry(SudokuHighlightAction.class, () -> this.changeHighlightedSquare((SudokuHighlightAction) sudokuAction)),
+                entry(
+                        SudokuHighlightAction.class,
+                        () -> {
+                            this.sudokuState.changeHighlightedSquare((SudokuHighlightAction) sudokuAction);
+                            this.sudokuFrame.repaintSudokuPanel();
+                        }
+                ),
 
                 // Case 7: the user wants to fill a square on the board.
                 entry(SudokuFillAction.class, () -> this.fillSudokuSquare((SudokuFillAction) sudokuAction)),
@@ -112,7 +124,7 @@ public class SudokuGame {
                 entry(SudokuReadPositionAction.class, () -> this.readBoardSection((SudokuReadPositionAction) sudokuAction)),
 
                 // Case 9: the user wants to read off the location of the currently selected square.
-                entry(SudokuLocationAction.class, this.sudokuState::readSelectedLocation),
+                entry(SudokuLocationAction.class, this.sudokuState::readSelectedLocationWithValue),
 
                 // Case 10: return to main menu.
                 entry(SudokuMainMenuAction.class, this::returnToMainMenu),
@@ -121,7 +133,10 @@ public class SudokuGame {
                 entry(SudokuStopReadingAction.class, this.sudokuState::stopReadingPhrases),
 
                 // Case 12: restart the current Sudoku board.
-                entry(SudokuRestartAction.class, this::restartSudokuBoard)
+                entry(SudokuRestartAction.class, this::restartSudokuBoard),
+
+                // Case 13: read off the remaining cells to fill.
+                entry(SudokuReadRemainingAction.class, this.sudokuState::readRemainingCellsToFill)
         );
 
         Runnable functionToExecute = SUDOKU_ACTION_TO_RUNNABLE.get(sudokuAction.getClass());
@@ -147,30 +162,6 @@ public class SudokuGame {
      */
     private void readUnrecognizedKey(@NotNull SudokuUnrecognizedKeyAction sudokuUnrecognizedKeyAction) {
         this.sudokuState.readUnrecognizedKey(sudokuUnrecognizedKeyAction.getKeyCode());
-    }
-
-    /**
-     * Sets highlighted point based on pressed hot key, reads off new selected square, and repaints the Sudoku panel.
-     *
-     * @param sudokuHotKeyAction The {@link SudokuHotKeyAction} that was sent to the game.
-     */
-    private void processHotKey(@NotNull SudokuHotKeyAction sudokuHotKeyAction) {
-        this.sudokuState.setHighlightedPoint(sudokuHotKeyAction.getArrowKeyDirection());
-        this.sudokuState.readSelectedSquare();
-        this.sudokuFrame.repaintSudokuPanel();
-    }
-
-    /**
-     * Sets the highlighted point (not based on hot key), reads off selected square, and repaints the Sudoku panel.
-     *
-     * @param sudokuHighlightAction The {@link SudokuHighlightAction} that was sent to the game.
-     */
-    private void changeHighlightedSquare(@NotNull SudokuHighlightAction sudokuHighlightAction) {
-        this.sudokuState.setHighlightedPoint(
-                sudokuHighlightAction.getPointToHighlight(), sudokuHighlightAction.getInputType()
-        );
-        this.sudokuState.readSelectedSquare();
-        this.sudokuFrame.repaintSudokuPanel();
     }
 
     /**

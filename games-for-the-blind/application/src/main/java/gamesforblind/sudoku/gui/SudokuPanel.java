@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 
 import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
+import static gamesforblind.Constants.FRAME_DIMENSION;
 import static util.DurationUtil.*;
 
 /**
@@ -134,15 +135,48 @@ public class SudokuPanel extends JPanel {
         }
     }
 
+    private void paintTimeDisplay(@NotNull Graphics graphics, int initialPosition, int squareDimension) {
+        final int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
+
+        final Duration timeElapsed = Duration.between(this.sudokuState.getTime(), Instant.now());
+        final int hoursElapsed = toHoursPart(timeElapsed);
+        final int minutesElapsed = toMinutesPart(timeElapsed);
+        final int secondsElapsed = toSecondsPart(timeElapsed);
+
+        final Point timePoint = new Point(
+                initialPosition + (int) ((sudokuBoardSize + 1.5) * squareDimension), FRAME_DIMENSION / 10
+        );
+
+        StringBuilder timeStringBuilder = new StringBuilder("Time\n");
+        for (int i : new int[]{hoursElapsed, minutesElapsed, secondsElapsed}) {
+            if (String.valueOf(i).length() == 1) {
+                timeStringBuilder.append(String.format("0%d:", i));
+            } else {
+                timeStringBuilder.append(String.format("%d:", i));
+            }
+        }
+
+        final String timeString = timeStringBuilder.toString().substring(0, timeStringBuilder.length() - 1);
+        final int fontHeight = graphics.getFontMetrics().getHeight();
+        for (String line : timeString.split("\n")) {
+            graphics.drawString(line, timePoint.x, timePoint.y);
+            timePoint.y += fontHeight;
+        }
+
+        graphics.drawRect(
+                timePoint.x, timePoint.y - (int) (2.8 * fontHeight), (int) (3.7 * fontHeight), 2 * fontHeight
+        );
+    }
+
     /**
      * Paints the row & column labels for the Sudoku board.
      * We will model this closely after Excel, which uses numbers for row labels & letters for column labels.
      *
      * @param graphics        The {@link Graphics} object used for painting.
-     * @param squareDimension The pixel dimension of each square on the board.
      * @param initialPosition Amount of pixels to begin painting board from.
+     * @param squareDimension The pixel dimension of each square on the board.
      */
-    private void paintBoardLabels(@NotNull Graphics graphics, int squareDimension, int initialPosition) {
+    private void paintBoardLabels(@NotNull Graphics graphics, int initialPosition, int squareDimension) {
         final int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
 
         graphics.setColor(Color.BLACK);
@@ -168,19 +202,8 @@ public class SudokuPanel extends JPanel {
             );
         }
 
-        final Font MAIN_BOARD_FONT = new Font("Serif", Font.BOLD, 50);
+        final Font MAIN_BOARD_FONT = new Font("Serif", Font.BOLD, this.totalBoardLength / 10);
         graphics.setFont(MAIN_BOARD_FONT);
-
-        final Duration timeElapsed = Duration.between(this.sudokuState.getTime(), Instant.now());
-        final int hoursElapsed = toHoursPart(timeElapsed);
-        final int minutesElapsed = toMinutesPart(timeElapsed);
-        final int secondsElapsed = toSecondsPart(timeElapsed);
-
-        graphics.drawString(
-                String.format("Time: %d:%d:%d", hoursElapsed, minutesElapsed, secondsElapsed),
-                initialPosition + (51 * squareDimension * sudokuBoardSize / 50) + (29 * squareDimension / 24) - (squareDimension / 4),
-                (1044 - 11 * sudokuBoardSize) * squareDimension / 1050
-        );
     }
 
     /**
@@ -202,12 +225,15 @@ public class SudokuPanel extends JPanel {
         final int INITIAL_POSITION = (this.totalBoardLength - (squareDimension * squaresPerSide)) / 2;
 
         // Step 1: paint the row & column labels (font size is slightly smaller).
-        this.paintBoardLabels(graphics, squareDimension, INITIAL_POSITION);
+        this.paintBoardLabels(graphics, INITIAL_POSITION, squareDimension);
 
-        // Step 2: paint the main Sudoku board (which includes highlighted squares).
+        // Step 2: paint the time display.
+        this.paintTimeDisplay(graphics, INITIAL_POSITION, squareDimension);
+
+        // Step 3: paint the main Sudoku board (which includes highlighted squares).
         this.paintMainBoard(graphics, squareDimension, INITIAL_POSITION + squareDimension);
 
-        // Step 3: paint the bolded block borders.
+        // Step 4: paint the bolded block borders.
         this.paintBlockBorders(graphics, squareDimension, INITIAL_POSITION + squareDimension);
     }
 }

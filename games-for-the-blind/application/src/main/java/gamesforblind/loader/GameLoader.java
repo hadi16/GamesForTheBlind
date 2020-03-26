@@ -82,7 +82,7 @@ public class GameLoader {
      * Opens the GUI for the loader. Allows the game loader to reopen when the user decides to go back to the main menu.
      */
     public void openLoaderInterface() {
-        this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.PLAY_OR_EXIT);
+        this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.LOADER_PLAY_OR_EXIT);
         this.loaderFrame = new LoaderFrame(this, this.programArgs);
     }
 
@@ -216,16 +216,16 @@ public class GameLoader {
      */
     private void highlightDifferentLoaderButton(@NotNull LoaderArrowKeyAction loaderArrowKeyAction) {
         final Map<String, Phrase> BUTTON_TEXT_TO_PHRASE = map(
-                entry(PLAY_SUDOKU_BUTTON, Phrase.SPACE_FOR_SUDOKU),
-                entry(PLAY_CODEBREAKER_BUTTON, Phrase.SPACE_FOR_CODEBREAKER),
-                entry(EXIT_BUTTON, Phrase.SPACE_FOR_EXIT),
-                entry(BACK_BUTTON, Phrase.GO_BACK_TO_GAME_SELECTION),
-                entry(FOUR_BY_FOUR_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_FOUR),
-                entry(SIX_BY_SIX_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_SIX),
-                entry(NINE_BY_NINE_SUDOKU_BUTTON, Phrase.SELECT_SUDOKU_NINE),
-                entry(FOUR_CODEBREAKER_BUTTON, Phrase.SELECT_CODEBREAKER_FOUR),
-                entry(FIVE_CODEBREAKER_BUTTON, Phrase.SELECT_CODEBREAKER_FIVE),
-                entry(SIX_CODEBREAKER_BUTTON, Phrase.SELECT_CODEBREAKER_SIX)
+                entry(PLAY_SUDOKU_BUTTON, Phrase.LOADER_SPACE_FOR_SUDOKU),
+                entry(PLAY_CODEBREAKER_BUTTON, Phrase.LOADER_SPACE_FOR_CODEBREAKER),
+                entry(EXIT_BUTTON, Phrase.LOADER_SPACE_FOR_EXIT),
+                entry(BACK_BUTTON, Phrase.LOADER_GO_BACK),
+                entry(FOUR_BY_FOUR_SUDOKU_BUTTON, Phrase.LOADER_SELECT_SUDOKU_FOUR),
+                entry(SIX_BY_SIX_SUDOKU_BUTTON, Phrase.LOADER_SELECT_SUDOKU_SIX),
+                entry(NINE_BY_NINE_SUDOKU_BUTTON, Phrase.LOADER_SELECT_SUDOKU_NINE),
+                entry(FOUR_CODEBREAKER_BUTTON, Phrase.LOADER_SELECT_CODEBREAKER_FOUR),
+                entry(FIVE_CODEBREAKER_BUTTON, Phrase.LOADER_SELECT_CODEBREAKER_FIVE),
+                entry(SIX_CODEBREAKER_BUTTON, Phrase.LOADER_SELECT_CODEBREAKER_SIX)
         );
 
         this.loaderFrame.changeHighlightedButton(loaderArrowKeyAction.getArrowKeyDirection());
@@ -245,14 +245,14 @@ public class GameLoader {
         Phrase relevantPhrase;
         if (selectedGame == SelectedGame.SUDOKU) {
             if (this.programArgs.getSelectedInterfaceType() == InterfaceType.ARROW_KEY_INTERFACE) {
-                relevantPhrase = Phrase.WHICH_SUDOKU_GAME_ALL;
+                relevantPhrase = Phrase.LOADER_WHICH_SUDOKU_ALL;
             } else {
-                relevantPhrase = Phrase.WHICH_SUDOKU_GAME_NO_SIX;
+                relevantPhrase = Phrase.LOADER_WHICH_SUDOKU_NO_SIX;
             }
         } else if (selectedGame == SelectedGame.CODEBREAKER) {
-            relevantPhrase = Phrase.WHICH_CODEBREAKER_GAME_ALL;
+            relevantPhrase = Phrase.LOADER_WHICH_CODEBREAKER;
         } else {
-            relevantPhrase = Phrase.PLAY_OR_EXIT;
+            relevantPhrase = Phrase.LOADER_PLAY_OR_EXIT;
         }
         this.audioPlayerExecutor.replacePhraseAndPrint(relevantPhrase);
 
@@ -300,7 +300,7 @@ public class GameLoader {
      */
     private void readUnrecognizedKey(@NotNull LoaderUnrecognizedKeyAction loaderUnrecognizedKeyAction) {
         this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
-                Phrase.UNRECOGNIZED_KEY, Phrase.keyCodeToPhrase(loaderUnrecognizedKeyAction.getKeyCode())
+                Phrase.GENERAL_UNRECOGNIZED_KEY, Phrase.keyCodeToPhrase(loaderUnrecognizedKeyAction.getKeyCode())
         )));
     }
 
@@ -308,7 +308,7 @@ public class GameLoader {
      * Exit from the application. If we are in playback mode, don't exit (to see the ending state of the game).
      */
     public void exitApplication() {
-        this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.EXITING);
+        this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.GENERAL_EXITING);
 
         // I don't want to exit the game if it is in playback mode (see the ending state of the game).
         if (this.programArgs.isPlaybackMode()) {

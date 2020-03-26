@@ -79,7 +79,7 @@ public class SudokuFrame extends JFrame {
         }, 1000, 1000);
 
         this.frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.frame.setSize(FRAME_DIMENSION, FRAME_DIMENSION);
+        this.frame.setSize((int) (1.4 * FRAME_DIMENSION), FRAME_DIMENSION);
         this.frame.setVisible(true);
 
         JMenuBar menuBar = new JMenuBar();

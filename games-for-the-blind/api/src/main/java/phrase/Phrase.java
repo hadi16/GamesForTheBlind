@@ -97,33 +97,42 @@ public enum Phrase {
     CAPS_LOCK("CAPS LOCK"), BACK_QUOTE("BACK QUOTE"),
     OPEN_BRACKET("OPEN BRACKET"), CLOSE_BRACKET("CLOSE BRACKET"),
 
-    /* General: Congratulations message */
-    CONGRATS("YOU FINISHED THE GAME! CONGRATULATIONS!"),
+    /* General: Congratulations Message & Unrecognized Key */
+    GENERAL_EXITING("Game is exiting. Goodbye!"),
+    GENERAL_CONGRATS("YOU FINISHED THE GAME! CONGRATULATIONS!"),
+    GENERAL_UNRECOGNIZED_KEY("Unrecognized key:"),
 
-    NO_MORE_GUESSES("You're out of guesses. The correct code is: "),
+    /* General: First/Last Row/Column */
+    GENERAL_FIRST_ROW("You have reached the first row."),
+    GENERAL_LAST_ROW("You have reached the last row."),
+    GENERAL_FIRST_COLUMN("You have reached the first column."),
+    GENERAL_LAST_COLUMN("You have reached the last column."),
 
-    /* General: Error Phrases */
-    UNRECOGNIZED_KEY("Unrecognized key:"),
+    /* General: Timer Phrases */
+    GENERAL_TOOK_YOU("It took you:"),
+    GENERAL_HOURS("hours"),
+    GENERAL_MINUTES("minutes"),
+    GENERAL_SECONDS("seconds"),
 
-    /* Loader */
-    SPACE_FOR_EXIT("Press SPACE to exit."),
-    SPACE_FOR_SUDOKU("Press SPACE for Sudoku."),
-    SPACE_FOR_CODEBREAKER("Press SPACE for Code Breaker."),
-    GO_BACK_TO_GAME_SELECTION("Press SPACE to go back to game selection screen."),
-    SELECT_SUDOKU_FOUR("Press SPACE for 4 by 4 version of Sudoku."),
-    SELECT_SUDOKU_SIX("Press SPACE for 6 by 6 version of Sudoku."),
-    SELECT_SUDOKU_NINE("Press SPACE for 9 by 9 version of Sudoku."),
-    WHICH_SUDOKU_GAME_ALL("Which Sudoku game: 4 by 4, 6 by 6, or 9 by 9? Use arrow keys."),
-    WHICH_SUDOKU_GAME_NO_SIX("Which Sudoku game: 4 by 4 or 9 by 9? Use arrow keys."),
-    WHICH_CODEBREAKER_GAME_ALL("Which Code Breaker game: 4, 5, or 6? Use arrow keys."),
-    SELECT_CODEBREAKER_FOUR("Press SPACE for 4 version of Code Breaker."),
-    SELECT_CODEBREAKER_FIVE("Press SPACE for 5 version of Code Breaker."),
-    SELECT_CODEBREAKER_SIX("Press SPACE for 6 version of Code Breaker."),
-    PLAY_OR_EXIT("Play Sudoku, Code Breaker, or exit? Use the arrow keys."),
-    EXITING("Game is exiting. Goodbye!"),
-    CODEBREAKER_NEED_CODE("You didn't enter the whole code yet!"),
-    RETURN_TO_MENU("Press M key again to return to main menu"),
-    RESTART_GAME("Press R key again to restart"),
+    /* Loader: Main Screen & Back */
+    LOADER_GO_BACK("Press SPACE to go back to game selection screen."),
+    LOADER_PLAY_OR_EXIT("Play Sudoku, Code Breaker, or exit? Use the arrow keys."),
+    LOADER_SPACE_FOR_SUDOKU("Press SPACE for Sudoku."),
+    LOADER_SPACE_FOR_CODEBREAKER("Press SPACE for Code Breaker."),
+    LOADER_SPACE_FOR_EXIT("Press SPACE to exit."),
+
+    /* Loader: Sudoku Options Screen */
+    LOADER_WHICH_SUDOKU_ALL("Which Sudoku game: 4 by 4, 6 by 6, or 9 by 9? Use arrow keys."),
+    LOADER_WHICH_SUDOKU_NO_SIX("Which Sudoku game: 4 by 4 or 9 by 9? Use arrow keys."),
+    LOADER_SELECT_SUDOKU_FOUR("Press SPACE for 4 by 4 version of Sudoku."),
+    LOADER_SELECT_SUDOKU_SIX("Press SPACE for 6 by 6 version of Sudoku."),
+    LOADER_SELECT_SUDOKU_NINE("Press SPACE for 9 by 9 version of Sudoku."),
+
+    /* Loader: Codebreaker Options Screen */
+    LOADER_WHICH_CODEBREAKER("Which Code Breaker game: 4, 5, or 6? Use arrow keys."),
+    LOADER_SELECT_CODEBREAKER_FOUR("Press SPACE for 4 version of Code Breaker."),
+    LOADER_SELECT_CODEBREAKER_FIVE("Press SPACE for 5 version of Code Breaker."),
+    LOADER_SELECT_CODEBREAKER_SIX("Press SPACE for 6 version of Code Breaker."),
 
     /* Sudoku & Codebreaker: locations */
     c1r1, c1r2, c1r3, c1r4, c1r5, c1r6, c1r7, c1r8, c1r9, c1r10,
@@ -153,76 +162,74 @@ public enum Phrase {
     c9r1, c9r2, c9r3, c9r4, c9r5, c9r6, c9r7, c9r8, c9r9, c9r10,
     c9r11, c9r12, c9r13, c9r14, c9r15, c9r16, c9r17, c9r18, c9r19, c9r20,
 
-    /* Sudoku: numbers in same row/column/box */
-    IN_ROW("Numbers in same row:"),
-    IN_COLUMN("Numbers in same column:"),
-    IN_BOX("Numbers in same box:"),
-
-    /* Sudoku: Error Phrases */
-    NO_SELECTED_CELL("You didn't select a cell first."),
-    CANNOT_DELETE_ORIGINAL("You cannot delete an originally set cell."),
-    CANNOT_DELETE_EMPTY("You cannot delete an already empty cell."),
-    CELL_VALUE_INVALID("Incorrect value for this cell."),
-    PLACED_CELL_UNSOLVABLE("Placing number here would make the board unsolvable."),
-    SELECTED_BOTH("You have already selected both a box and cell on the board."),
-
-    /* Sudoku: invalid number to fill Phrases */
-    INVALID_NUMBER_TO_FILL_4("The number to fill must be between 1 and 4"),
-    INVALID_NUMBER_TO_FILL_6("The number to fill must be between 1 and 6"),
-    INVALID_NUMBER_TO_FILL_9("The number to fill must be between 1 and 9"),
-
     /* Sudoku: Instructions Phrases. */
-    INSTRUCTIONS_SUDOKU_1("Welcome to Sudoku! Each cell must contain the numbers 1 through"),
-    INSTRUCTIONS_SUDOKU_2(". Each row, column, or box must have the numbers 1 through"),
-    INSTRUCTIONS_SUDOKU_3("without repetition. To hear the numbers in the selected row press S, to hear" +
+    SUDOKU_INSTRUCTIONS_1("Welcome to Sudoku! Each cell must contain the numbers 1 through"),
+    SUDOKU_INSTRUCTIONS_2(". Each row, column, or box must have the numbers 1 through"),
+    SUDOKU_INSTRUCTIONS_3("without repetition. To hear the numbers in the selected row press S, to hear" +
             " the numbers in the selected column press D, to hear the numbers in the selected box press F. If you" +
             " have selected an empty cell and are stuck, press H to fill in the cell. Navigate using arrow keys." +
-            " Press and hold the control key while pressing an arrow key to jump to the beginning or ending of the" +
+            " Press and hold the control key and press an arrow key to jump to the beginning or ending of the" +
             " row or column. When you have selected the box you want to add a number to, select a number on your" +
-            " keyboard to try and place it into the cell."
+            " keyboard to try and place it into the cell. Press INSERT and DOWN to hear the current location and" +
+            " its contents. Press A to hear how many cells still need to be filled. Press Q twice to restart the game." +
+            " Press ALT and M to return to the main menu."
     ),
 
+    /* Sudoku: numbers in same row/column/box */
+    SUDOKU_IN_ROW("Numbers in same row:"),
+    SUDOKU_IN_COLUMN("Numbers in same column:"),
+    SUDOKU_IN_BOX("Numbers in same box:"),
+
+    /* Sudoku: Error Phrases */
+    SUDOKU_NO_SELECTED_CELL("You didn't select a cell first."),
+    SUDOKU_CANNOT_DELETE_ORIGINAL("You cannot delete an originally set cell."),
+    SUDOKU_CANNOT_DELETE_EMPTY("You cannot delete an already empty cell."),
+    SUDOKU_INVALID_VALUE("Incorrect value for this cell."),
+    SUDOKU_INVALID_NUMBER_TO_FILL("The number to fill must be between 1 and"),
+    SUDOKU_PLACED_UNSOLVABLE("Placing number here would make the board unsolvable."),
+
     /* Sudoku: Empty Cells Left */
-    EMPTY_PIECES_OF_BOARD_PLURAL_1("There are"),
-    EMPTY_PIECES_OF_BOARD_PLURAL_2("empty cells left on the board."),
-    EMPTY_PIECES_OF_BOARD_SINGULAR_1("There is"),
-    EMPTY_PIECES_OF_BOARD_SINGULAR_2("empty cell left on the board."),
-    EMPTY_PIECES_IN_SECTION("empty cells left in this section."),
+    SUDOKU_REMAINING_PLURAL_1("There are"),
+    SUDOKU_REMAINING_PLURAL_2("empty cells left on the board."),
+    SUDOKU_REMAINING_SINGULAR_1("There is"),
+    SUDOKU_REMAINING_SINGULAR_2("empty cell left on the board."),
 
     /* Sudoku: Information Phrases */
-    CURRENT_VALUE("Current value in this cell is"),
-    PLACED_NUM("You placed"),
-    REMOVED_NUM("You removed the number"),
+    SUDOKU_YOU_ARE_IN("You are in"),
+    SUDOKU_CURRENT_VALUE("Current value in cell:"),
+    SUDOKU_YOU_PLACED("You placed"),
+    SUDOKU_REMOVED_NUMBER("You removed the number"),
 
     /* Codebreaker: Instructions Phrases */
-    INSTRUCTIONS_CODEBREAKER_1("Welcome to Code Breaker! You need to guess a secret code of"),
-    INSTRUCTIONS_CODEBREAKER_2("numbers. To make a guess use the arrow keys to select a space and enter a number" +
-            " from 1-6. Once you have finalized your guess, hit the space key to see if you guessed correctly. If you" +
-            " did not guess the right code, the small box to the right of your guess will contain"),
-    INSTRUCTIONS_CODEBREAKER_3("pegs of either black or red. A white peg means that one of the numbers you have guessed is correct," +
-            " but it is in the wrong place. A black peg means that one of your numbers is the correct number and is in" +
-            " the correct place. If you have guessed correctly, you win the game!Press INS-DOWN to hear the current" +
-            " location and its contents. To hear previous guesses, use the up and down arrow keys to move through the" +
-            " board. Once you are in the desired location, press Y to hear the previous guess and feedback. For a hint," +
-            " press H to automatically fill in the selected space. This can be done three times. Press Q to restart the" +
-            " game. Press Alt-M to return to the main menu."),
+    CODEBREAKER_INSTRUCTIONS_1("Welcome to Code Breaker! You need to guess a secret code of"),
+    CODEBREAKER_INSTRUCTIONS_2("numbers. To make a guess use the arrow keys to select a space and enter a" +
+            " number from 1 to 6. Once you have finalized your guess, hit the space key to see if you guessed correctly." +
+            " If you did not guess the right code, the small box to the right of your guess will contain"),
+    CODEBREAKER_INSTRUCTIONS_3("pegs of either black or red. A white peg means that one of the numbers" +
+            " you have guessed is correct, but it is in the wrong place. A black peg means that one of your numbers" +
+            " is the correct number and is in the correct place. If you have guessed correctly, you win the game!" +
+            " Press INSERT and DOWN to hear the current location and its contents. To hear previous guesses, use the" +
+            " up and down arrow keys to move through the board. Once you are in the desired location, press A to hear" +
+            " the previous guess and feedback. For a hint, press H to automatically fill in the selected space. This" +
+            " can be done three times. Press Q twice to restart the game. Press ALT and M to return to the main menu."
+    ),
 
-    PLACED_CODEBREAKER_CODE("Code Placed:"),
+    /* Codebreaker: Information Phrases */
+    CODEBREAKER_ROW("Row"),
+    CODEBREAKER_CODE_PLACED("Code Placed:"),
     CODEBREAKER_GUESS_NUMBER("Guess Number:"),
-    CODEBREAKER_NUMBER_CORRECT_POSITION("Black Pegs:"),
-    CODEBREAKER_NUMBER_ONLY("Red Pegs:"),
-    CODEBREAKER_GUESS_NUMBER_RESPONSE("Guess Number:"),
-    CODEBREAKER_GUESS_WAS("code guessed:"),
-    CODEBREAKER_READ_ROW("Row"),
-    CODEBREAKER_UNKNOWN_GUESS("has this guess so far:"),
-    CODEBREAKER_LAST_ROW("You have reached the first row."),
-    CODEBREAKER_FIRST_ROW("You have reached the last row."),
-    CODEBREAKER_NO_MORE_HINTS("You have run out of hints."),
+    CODEBREAKER_CODE_GUESSED("Code guessed:"),
+    CODEBREAKER_GUESS_SO_FAR("has this guess so far:"),
+    CODEBREAKER_NO_MORE_GUESSES("You're out of guesses. The correct code is: "),
 
-    IT_TOOK_YOU("It took you:"),
-    HOURS("hours"),
-    MINUTES("minutes"),
-    SECONDS("seconds");
+    /* Codebreaker: Error Phrases */
+    CODEBREAKER_NO_MORE_HINTS("You have run out of hints."),
+    CODEBREAKER_CANNOT_CHANGE("You cannot change a previously guessed code!"),
+    CODEBREAKER_NEED_CODE("You didn't enter the whole code yet!"),
+
+    /* Codebreaker: Peg Types */
+    CODEBREAKER_BLACK_PEGS("Black Pegs:"),
+    CODEBREAKER_RED_PEGS("Red Pegs:");
 
     /**
      * The directory for all of the Phrase audio files ("resources/phrases" folder under the root of the project).
@@ -438,21 +445,21 @@ public enum Phrase {
     }
 
     public static ArrayList<Phrase> getTimeElapsedPhrases(Duration timeElapsed) {
-        final ArrayList<Phrase> phrases = new ArrayList<>(Collections.singletonList(Phrase.IT_TOOK_YOU));
+        final ArrayList<Phrase> phrases = new ArrayList<>(Collections.singletonList(Phrase.GENERAL_TOOK_YOU));
 
         final int hoursElapsed = toHoursPart(timeElapsed);
         if (hoursElapsed > 0) {
-            phrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(hoursElapsed), Phrase.HOURS));
+            phrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(hoursElapsed), Phrase.GENERAL_HOURS));
         }
 
         final int minutesElapsed = toMinutesPart(timeElapsed);
         if (minutesElapsed > 0) {
-            phrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(minutesElapsed), Phrase.MINUTES));
+            phrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(minutesElapsed), Phrase.GENERAL_MINUTES));
         }
 
         final int secondsElapsed = toSecondsPart(timeElapsed);
         if (secondsElapsed > 0) {
-            phrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(secondsElapsed), Phrase.SECONDS));
+            phrases.addAll(Arrays.asList(Phrase.convertIntegerToPhrase(secondsElapsed), Phrase.GENERAL_SECONDS));
         }
 
         return phrases;

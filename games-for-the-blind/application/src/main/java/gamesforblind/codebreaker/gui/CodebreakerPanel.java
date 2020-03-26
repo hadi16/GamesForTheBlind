@@ -18,6 +18,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static gamesforblind.Constants.FRAME_DIMENSION;
 import static util.DurationUtil.*;
 
 /**
@@ -85,6 +86,41 @@ public class CodebreakerPanel extends JPanel {
         return Optional.empty();
     }
 
+    private void paintTimeDisplay(Graphics graphics) {
+        final int CODE_LENGTH = this.codebreakerType.getCodeLength();
+        final int SECOND_GROUP_X_OFFSET = this.getSecondGroupXOffset(this.mainBoardSquareDim);
+
+        final Duration timeElapsed = Duration.between(this.codebreakerState.getTime(), Instant.now());
+        final int hoursElapsed = toHoursPart(timeElapsed);
+        final int minutesElapsed = toMinutesPart(timeElapsed);
+        final int secondsElapsed = toSecondsPart(timeElapsed);
+
+        final Point timePoint = new Point(
+                (int) (1.3 * SECOND_GROUP_X_OFFSET) + (int) ((CODE_LENGTH + 1.5) * this.mainBoardSquareDim),
+                FRAME_DIMENSION / 20
+        );
+
+        StringBuilder timeStringBuilder = new StringBuilder("Time\n");
+        for (int i : new int[]{hoursElapsed, minutesElapsed, secondsElapsed}) {
+            if (String.valueOf(i).length() == 1) {
+                timeStringBuilder.append(String.format("0%d:", i));
+            } else {
+                timeStringBuilder.append(String.format("%d:", i));
+            }
+        }
+
+        final String timeString = timeStringBuilder.toString().substring(0, timeStringBuilder.length() - 1);
+        final int fontHeight = graphics.getFontMetrics().getHeight();
+        for (String line : timeString.split("\n")) {
+            graphics.drawString(line, timePoint.x, timePoint.y);
+            timePoint.y += fontHeight;
+        }
+
+        graphics.drawRect(
+                timePoint.x, timePoint.y - (int) (2.8 * fontHeight), (int) (3.7 * fontHeight), 2 * fontHeight
+        );
+    }
+
     /**
      * Paints the Codebreaker board where the colors will be placed.
      *
@@ -119,17 +155,6 @@ public class CodebreakerPanel extends JPanel {
             default:
                 throw new IllegalArgumentException("Invalid codebreaker type passed!");
         }
-
-        final Duration timeElapsed = Duration.between(this.codebreakerState.getTime(), Instant.now());
-        final int hoursElapsed = toHoursPart(timeElapsed);
-        final int minutesElapsed = toMinutesPart(timeElapsed);
-        final int secondsElapsed = toSecondsPart(timeElapsed);
-
-        graphics.drawString(
-                String.format("Time: %d:%d:%d", hoursElapsed, minutesElapsed, secondsElapsed),
-                this.mainBoardInitialPoint.x + 2 * SECOND_GROUP_X_OFFSET,
-                this.mainBoardInitialPoint.y + SECOND_GROUP_X_OFFSET
-        );
 
         graphics.drawRect(
                 this.mainBoardInitialPoint.x - 1,
@@ -409,7 +434,10 @@ public class CodebreakerPanel extends JPanel {
         // Step 1: paint the board, 4x10 grid currently
         this.paintMainBoard(graphics);
 
-        //Step 2: paint small board that will display the result of previous guess
+        // Step 2: paint the time display.
+        this.paintTimeDisplay(graphics);
+
+        //Step 3: paint small board that will display the result of previous guess
         this.paintResultBoard(
                 graphics,
                 SQUARE_DIM / 2,
@@ -419,7 +447,7 @@ public class CodebreakerPanel extends JPanel {
                 )
         );
 
-        // Step 3: paint the labels
+        // Step 4: paint the labels
         this.paintBoardLabels(
                 graphics,
                 SQUARE_DIM,

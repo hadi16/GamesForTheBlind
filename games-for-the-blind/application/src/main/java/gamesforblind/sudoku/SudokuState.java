@@ -1,6 +1,8 @@
 package gamesforblind.sudoku;
 
 import gamesforblind.enums.*;
+import gamesforblind.sudoku.action.SudokuHighlightAction;
+import gamesforblind.sudoku.action.SudokuHotKeyAction;
 import gamesforblind.sudoku.generator.Cell;
 import gamesforblind.sudoku.generator.Generator;
 import gamesforblind.sudoku.generator.Grid;
@@ -18,11 +20,11 @@ import java.awt.event.KeyEvent;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
 import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
+import static java.util.Arrays.*;
 
 /**
  * Class that contains information about the current state of the Sudoku board.
@@ -168,44 +170,40 @@ public class SudokuState {
         return originallyFilledSquares;
     }
 
-    /**
-     * Gets a list of {@link Phrase}s in this format:
-     * - If no empty squares are left to fill, return a list containing a single element (the congrats message).
-     * - Otherwise, if more than one left to fill: "There are __ empty squares left on the board."
-     * - Else: "There is 1 empty square left on the board."
-     *
-     * @return A list of {@link Phrase}s representing how many empty squares are left (or the congrats message).
-     */
-    private ArrayList<Phrase> getRemainingNumberOfEmptySquaresPhraseList() {
+    private ArrayList<Phrase> maybeGetCongratsMessage() {
         // Case 1: return the congrats message.
-        if (this.numberOfEmptyCells == 0) {
-            ArrayList<Phrase> relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.CONGRATS));
+        if (this.numberOfEmptyCells != 0) {
+            return new ArrayList<>();
+        }
 
-            Duration timeElapsed = Duration.between(this.startingInstant, Instant.now());
+        final ArrayList<Phrase> relevantPhrases = new ArrayList<>(Collections.singletonList(Phrase.GENERAL_CONGRATS));
+        final Duration timeElapsed = Duration.between(this.startingInstant, Instant.now());
 
-            // Indicates that an error occurred with the time measurement.
-            if (timeElapsed.isNegative()) {
-                return relevantPhrases;
-            }
-
-            relevantPhrases.addAll(Phrase.getTimeElapsedPhrases(timeElapsed));
-
+        // Indicates that an error occurred with the time measurement.
+        if (timeElapsed.isNegative()) {
             return relevantPhrases;
         }
 
-        // Case 2: return the singular version of empty squares left.
-        if (this.numberOfEmptyCells == 1) {
-            return new ArrayList<>(Arrays.asList(
-                    Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_1, Phrase.ONE, Phrase.EMPTY_PIECES_OF_BOARD_SINGULAR_2
-            ));
-        }
+        relevantPhrases.addAll(Phrase.getTimeElapsedPhrases(timeElapsed));
+        return relevantPhrases;
+    }
 
-        // Case 3: return the plural version of empty squares left.
-        return new ArrayList<>(Arrays.asList(
-                Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_1,
-                Phrase.convertIntegerToPhrase(this.numberOfEmptyCells),
-                Phrase.EMPTY_PIECES_OF_BOARD_PLURAL_2
-        ));
+    public void readRemainingCellsToFill() {
+        if (this.numberOfEmptyCells == 1) {
+            // Case 1: return the singular version of empty squares left.
+            this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(asList(
+                    Phrase.SUDOKU_REMAINING_SINGULAR_1,
+                    Phrase.ONE,
+                    Phrase.SUDOKU_REMAINING_SINGULAR_2
+            )));
+        } else {
+            // Case 2: return the plural version of empty squares left.
+            this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(asList(
+                    Phrase.SUDOKU_REMAINING_PLURAL_1,
+                    Phrase.convertIntegerToPhrase(this.numberOfEmptyCells),
+                    Phrase.SUDOKU_REMAINING_PLURAL_2
+            )));
+        }
     }
 
     /**
@@ -225,9 +223,9 @@ public class SudokuState {
         Cell cellToSet = this.sudokuGrid.getCell(pointToCheck.y, pointToCheck.x);
 
         // Square will always contain a number from 1-9 or 1-4 (never 0), since it is an originally set square.
-        this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
-                Phrase.CANNOT_DELETE_ORIGINAL,
-                Phrase.CURRENT_VALUE,
+        this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(asList(
+                Phrase.SUDOKU_CANNOT_DELETE_ORIGINAL,
+                Phrase.SUDOKU_CURRENT_VALUE,
                 Phrase.convertIntegerToPhrase(cellToSet.getValue())
         )));
 
@@ -257,7 +255,7 @@ public class SudokuState {
 
         // Case 2: the user tries to delete an empty cell.
         if (numberToFill == EMPTY_SUDOKU_SQUARE && cellToSet.getValue() == EMPTY_SUDOKU_SQUARE) {
-            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CANNOT_DELETE_EMPTY);
+            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.SUDOKU_CANNOT_DELETE_EMPTY);
             return;
         }
 
@@ -268,8 +266,8 @@ public class SudokuState {
 
         // Case 4: the user wishes to delete the cell value.
         if (numberToFill == EMPTY_SUDOKU_SQUARE) {
-            this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(Arrays.asList(
-                    Phrase.REMOVED_NUM, Phrase.convertIntegerToPhrase(cellToSet.getValue()))
+            this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(asList(
+                    Phrase.SUDOKU_REMOVED_NUMBER, Phrase.convertIntegerToPhrase(cellToSet.getValue()))
             ));
             cellToSet.setValue(EMPTY_SUDOKU_SQUARE);
             return;
@@ -279,23 +277,15 @@ public class SudokuState {
 
         // Case 5: the user tries to fill a square with an invalid value (e.g. 6 on a 4x4 board).
         if (!(numberToFill > 0 && numberToFill <= sudokuBoardSize)) {
-            switch (this.sudokuType) {
-                case FOUR_BY_FOUR:
-                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.INVALID_NUMBER_TO_FILL_4);
-                    break;
-                case SIX_BY_SIX:
-                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.INVALID_NUMBER_TO_FILL_6);
-                    break;
-                case NINE_BY_NINE:
-                    this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.INVALID_NUMBER_TO_FILL_9);
-                    break;
-            }
+            this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(asList(
+                    Phrase.SUDOKU_INVALID_NUMBER_TO_FILL, Phrase.convertIntegerToPhrase(sudokuBoardSize)
+            )));
             return;
         }
 
-        // Case 6: the numeric value is not valid for the selected cell.
-        if (!this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
-            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.CELL_VALUE_INVALID);
+        // Case 6: the numeric value is not valid for the selected cell (only 4x4 version).
+        if (this.sudokuType == SudokuType.FOUR_BY_FOUR && !this.sudokuGrid.isValidValueForCell(cellToSet, numberToFill)) {
+            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.SUDOKU_INVALID_VALUE);
             return;
         }
 
@@ -306,13 +296,15 @@ public class SudokuState {
 
         cellToSet.setValue(numberToFill);
 
-        // Case 8: the board would not be solvable from this new state (uses deep copy of current grid).
-        Solver solver = new Solver(sudokuBoardSize);
-        if (!solver.isSolvable(new Grid(this.sudokuGrid))) {
-            cellToSet.setValue(EMPTY_SUDOKU_SQUARE);
-            this.numberOfEmptyCells++;
-            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.PLACED_CELL_UNSOLVABLE);
-            return;
+        // Case 8: the board would not be solvable from this new state (only 4x4 version).
+        if (this.sudokuType == SudokuType.FOUR_BY_FOUR) {
+            Solver solver = new Solver(sudokuBoardSize);
+            if (!solver.isSolvable(new Grid(this.sudokuGrid))) {
+                cellToSet.setValue(EMPTY_SUDOKU_SQUARE);
+                this.numberOfEmptyCells++;
+                this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.SUDOKU_PLACED_UNSOLVABLE);
+                return;
+            }
         }
 
         if (this.numberOfEmptyCells == 0) {
@@ -321,9 +313,9 @@ public class SudokuState {
 
         // Tell the user which number was placed along with the number of remaining empty squares on the board.
         ArrayList<Phrase> phrasesToRead = new ArrayList<>(
-                Arrays.asList(Phrase.PLACED_NUM, Phrase.convertIntegerToPhrase(numberToFill))
+                asList(Phrase.SUDOKU_YOU_PLACED, Phrase.convertIntegerToPhrase(numberToFill))
         );
-        phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
+        phrasesToRead.addAll(this.maybeGetCongratsMessage());
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
 
@@ -333,12 +325,12 @@ public class SudokuState {
     public void readInstructions() {
         final Phrase boardSizePhrase = Phrase.convertIntegerToPhrase(this.sudokuType.getSudokuBoardSize());
 
-        ArrayList<Phrase> instructionsPhrases = new ArrayList<>(Arrays.asList(
-                Phrase.INSTRUCTIONS_SUDOKU_1,
+        ArrayList<Phrase> instructionsPhrases = new ArrayList<>(asList(
+                Phrase.SUDOKU_INSTRUCTIONS_1,
                 boardSizePhrase,
-                Phrase.INSTRUCTIONS_SUDOKU_2,
+                Phrase.SUDOKU_INSTRUCTIONS_2,
                 boardSizePhrase,
-                Phrase.INSTRUCTIONS_SUDOKU_3
+                Phrase.SUDOKU_INSTRUCTIONS_3
         ));
 
         this.audioPlayerExecutor.replacePhraseAndPrint(instructionsPhrases);
@@ -349,8 +341,8 @@ public class SudokuState {
      * followed by telling them how many squares they have left to fill.
      */
     private void readNoSelectedSquareMessage() {
-        ArrayList<Phrase> phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.NO_SELECTED_CELL));
-        phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
+        ArrayList<Phrase> phrasesToRead = new ArrayList<>(Collections.singletonList(Phrase.SUDOKU_NO_SELECTED_CELL));
+        phrasesToRead.addAll(this.maybeGetCongratsMessage());
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
 
@@ -390,7 +382,7 @@ public class SudokuState {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>(
                 Collections.singletonList(Phrase.convertIntegerToPhrase(cellToSet.getValue()))
         );
-        phrasesToRead.addAll(this.getRemainingNumberOfEmptySquaresPhraseList());
+        phrasesToRead.addAll(this.maybeGetCongratsMessage());
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
 
         // If there are no cells left to fill, the game is over.
@@ -405,8 +397,8 @@ public class SudokuState {
      * @param keyCode Key code of the unrecognized key that was pressed (compare against values in {@link KeyEvent}).
      */
     public void readUnrecognizedKey(int keyCode) {
-        ArrayList<Phrase> phrasesToRead = new ArrayList<>(Arrays.asList(
-                Phrase.UNRECOGNIZED_KEY, Phrase.keyCodeToPhrase(keyCode)
+        ArrayList<Phrase> phrasesToRead = new ArrayList<>(asList(
+                Phrase.GENERAL_UNRECOGNIZED_KEY, Phrase.keyCodeToPhrase(keyCode)
         ));
         this.audioPlayerExecutor.replacePhraseAndPrint(phrasesToRead);
     }
@@ -422,7 +414,7 @@ public class SudokuState {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>();
 
         // Begin with "You have the following numbers in the same row (or column)"
-        phrasesToRead.add(readRow ? Phrase.IN_ROW : Phrase.IN_COLUMN);
+        phrasesToRead.add(readRow ? Phrase.SUDOKU_IN_ROW : Phrase.SUDOKU_IN_COLUMN);
 
         for (int rowOrColumnIdx = 0; rowOrColumnIdx < this.sudokuType.getSudokuBoardSize(); rowOrColumnIdx++) {
             Cell cellToRead;
@@ -447,7 +439,7 @@ public class SudokuState {
         ArrayList<Phrase> phrasesToRead = new ArrayList<>();
 
         // Begin with "You have the following numbers in the same box"
-        phrasesToRead.add(Phrase.IN_BOX);
+        phrasesToRead.add(Phrase.SUDOKU_IN_BOX);
 
         // Need to divide by blockHeight first to get the truncated quotient [e.g. (7 / 3) * 3 = 2 * 3 = 6]
         int blockHeight = this.sudokuType.getBlockHeight();
@@ -470,27 +462,76 @@ public class SudokuState {
     }
 
     /**
-     * Reads the location of the currently selected {@link Cell} on the Sudoku board (if one is selected).
+     * Reads the location of the currently selected {@link Cell} on the Sudoku board & its value (if one is selected).
      */
-    public void readSelectedLocation() {
+    public void readSelectedLocationWithValue() {
         Optional<Point> maybeSelectedPoint = this.sudokuKeyboardInterface.getSelectedPoint();
         if (maybeSelectedPoint.isPresent()) {
-            Point selectedPoint = maybeSelectedPoint.get();
-            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.convertPointToLocationPhrase(selectedPoint));
+            final Point selectedPoint = maybeSelectedPoint.get();
+            final int cellValue = this.sudokuGrid.getCell(selectedPoint.y, selectedPoint.x).getValue();
+            this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(asList(
+                    Phrase.SUDOKU_YOU_ARE_IN,
+                    Phrase.convertPointToLocationPhrase(selectedPoint),
+                    Phrase.SUDOKU_CURRENT_VALUE,
+                    Phrase.convertIntegerToPhrase(cellValue)
+            )));
         }
     }
 
     /**
-     * Reads the value of the currently selected {@link Cell} on the Sudoku board (if one is selected).
+     * Sets highlighted point based on pressed hot key & reads off new selected square.
+     *
+     * @param sudokuHotKeyAction The {@link SudokuHotKeyAction} that was sent to the game.
      */
-    public void readSelectedSquare() {
+    public void processHotKey(@NotNull SudokuHotKeyAction sudokuHotKeyAction) {
+        this.setHighlightedPoint(sudokuHotKeyAction.getArrowKeyDirection());
+        this.getSelectedSquarePhrase().ifPresent(this.audioPlayerExecutor::replacePhraseAndPrint);
+    }
+
+    /**
+     * Sets the highlighted point (not based on hot key) & reads off selected square.
+     *
+     * @param sudokuHighlightAction The {@link SudokuHighlightAction} that was sent to the game.
+     */
+    public void changeHighlightedSquare(@NotNull SudokuHighlightAction sudokuHighlightAction) {
+        final Point previousPoint = this.sudokuKeyboardInterface.getSelectedPoint().orElse(null);
+        this.setHighlightedPoint(
+                sudokuHighlightAction.getPointToHighlight(), sudokuHighlightAction.getInputType()
+        );
+        this.getSelectedSquarePhrase().ifPresent(phrase -> {
+            final ArrayList<Phrase> phrases = new ArrayList<>(Collections.singletonList(phrase));
+            this.sudokuKeyboardInterface.getSelectedPoint().ifPresent(point -> {
+                if (previousPoint == null) {
+                    return;
+                }
+
+                final int maxIndex = this.sudokuType.getSudokuBoardSize() - 1;
+                if (point.x == 0 && previousPoint.x != 0) {
+                    phrases.add(Phrase.GENERAL_FIRST_COLUMN);
+                } else if (point.y == 0 && previousPoint.y != 0) {
+                    phrases.add(Phrase.GENERAL_FIRST_ROW);
+                } else if (point.x == maxIndex && previousPoint.x != maxIndex) {
+                    phrases.add(Phrase.GENERAL_LAST_COLUMN);
+                } else if (point.y == maxIndex && previousPoint.y != maxIndex) {
+                    phrases.add(Phrase.GENERAL_LAST_ROW);
+                }
+            });
+            this.audioPlayerExecutor.replacePhraseAndPrint(phrases);
+        });
+    }
+
+    public Optional<Phrase> getSelectedSquarePhrase() {
         Optional<Point> maybeSelectedPoint = this.sudokuKeyboardInterface.getSelectedPoint();
         if (maybeSelectedPoint.isPresent()) {
             Point selectedPoint = maybeSelectedPoint.get();
             Cell selectedCell = this.sudokuGrid.getCell(selectedPoint.y, selectedPoint.x);
 
-            this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.convertIntegerToPhrase(selectedCell.getValue()));
+            return Optional.of(
+                    Phrase.convertIntegerToPhrase(selectedCell.getValue())
+            );
         }
+
+        return Optional.empty();
     }
 
     /**
