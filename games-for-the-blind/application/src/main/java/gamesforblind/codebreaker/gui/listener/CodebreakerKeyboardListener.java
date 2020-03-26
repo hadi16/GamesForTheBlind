@@ -113,14 +113,26 @@ public class CodebreakerKeyboardListener implements KeyListener {
             return;
         }
 
-        // Case 9: The user presses INSERT to have the row read off
-        if (selectedKeyCode == KeyEvent.VK_Y) {
+        // Case 9: The user presses A to have the row read off.
+        if (selectedKeyCode == KeyEvent.VK_A) {
             this.codebreakerGame.receiveAction(new CodebreakerReadBackAction());
             return;
         }
 
-        // Case 10: the selected key is unrecognized.
-        this.codebreakerGame.receiveAction(new CodebreakerUnrecognizedKeyAction(e.getKeyCode()));
+        // Case 10: the user wants to read off the currently selected location & value.
+        if (selectedKeyCode == KeyEvent.VK_DOWN) {
+            // The last element is the CURRENT key pressed, so I want the second to last element.
+            if (numberOfPressedKeys > 1 && this.pressedKeyCodeList.get(numberOfPressedKeys - 2) == KeyEvent.VK_INSERT) {
+                this.codebreakerGame.receiveAction(new CodebreakerLocationAction());
+                this.pressedKeyCodeList.clear();
+                return;
+            }
+        }
+
+        // Case 11: the selected key is unrecognized.
+        if (selectedKeyCode != KeyEvent.VK_INSERT) {
+            this.codebreakerGame.receiveAction(new CodebreakerUnrecognizedKeyAction(e.getKeyCode()));
+        }
     }
 
     /* These methods are required to be overridden by the KeyListener, but they are unused. */

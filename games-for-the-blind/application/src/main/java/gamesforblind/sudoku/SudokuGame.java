@@ -124,7 +124,7 @@ public class SudokuGame {
                 entry(SudokuReadPositionAction.class, () -> this.readBoardSection((SudokuReadPositionAction) sudokuAction)),
 
                 // Case 9: the user wants to read off the location of the currently selected square.
-                entry(SudokuLocationAction.class, this.sudokuState::readSelectedLocation),
+                entry(SudokuLocationAction.class, this.sudokuState::readSelectedLocationWithValue),
 
                 // Case 10: return to main menu.
                 entry(SudokuMainMenuAction.class, this::returnToMainMenu),

@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.util.*;
 
 import static gamesforblind.Constants.CODEBREAKER_MAX_CODE_INT;
+import static java.util.Arrays.asList;
 
 /**
  * Class that contains information about the current state of the Codebreaker board.
@@ -251,6 +252,17 @@ public class CodebreakerState {
         this.audioPlayerExecutor.replacePhraseAndPrint(instructionsPhrases);
     }
 
+    public void readSelectedLocationWithValue() {
+        final int cellValue = this.guessList.get(this.selectedCellPoint.y).getGuessedCode()[this.selectedCellPoint.x];
+
+        this.audioPlayerExecutor.replacePhraseAndPrint(new ArrayList<>(asList(
+                Phrase.SUDOKU_YOU_ARE_IN,
+                Phrase.convertPointToLocationPhrase(this.selectedCellPoint),
+                Phrase.SUDOKU_CURRENT_VALUE,
+                Phrase.convertIntegerToPhrase(cellValue)
+        )));
+    }
+
     public void readBackRow() {
         final ArrayList<Phrase> readBackPhrases;
         final int selectedRowIndex = this.selectedCellPoint.y;
@@ -298,13 +310,6 @@ public class CodebreakerState {
         }
 
         this.audioPlayerExecutor.replacePhraseAndPrint(readBackPhrases);
-    }
-
-    /**
-     * Reads the value of the currently selected cell
-     */
-    public void readSelectedSquare() {
-        this.audioPlayerExecutor.replacePhraseAndPrint(Phrase.convertPointToLocationPhrase(this.selectedCellPoint));
     }
 
     /**

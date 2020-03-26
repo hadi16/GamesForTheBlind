@@ -126,7 +126,10 @@ public class CodebreakerGame {
                 // Case 11: the user has pressed hint key.
                 entry(CodebreakerHintKeyAction.class, this::giveHint),
 
-                // Case 12: the user has pressed an unrecognized key in the game.
+                // Case 12: the user wants the current location & value read off.
+                entry(CodebreakerLocationAction.class, this.codebreakerState::readSelectedLocationWithValue),
+
+                // Case 13: the user has pressed an unrecognized key in the game.
                 entry(
                         CodebreakerUnrecognizedKeyAction.class,
                         () -> this.readUnrecognizedKey((CodebreakerUnrecognizedKeyAction) codebreakerAction)

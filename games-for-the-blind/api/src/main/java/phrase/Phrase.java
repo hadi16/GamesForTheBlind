@@ -168,9 +168,11 @@ public enum Phrase {
     SUDOKU_INSTRUCTIONS_3("without repetition. To hear the numbers in the selected row press S, to hear" +
             " the numbers in the selected column press D, to hear the numbers in the selected box press F. If you" +
             " have selected an empty cell and are stuck, press H to fill in the cell. Navigate using arrow keys." +
-            " Press and hold the control key while pressing an arrow key to jump to the beginning or ending of the" +
+            " Press and hold the control key and press an arrow key to jump to the beginning or ending of the" +
             " row or column. When you have selected the box you want to add a number to, select a number on your" +
-            " keyboard to try and place it into the cell."
+            " keyboard to try and place it into the cell. Press INSERT and DOWN to hear the current location and" +
+            " its contents. Press A to hear how many cells still need to be filled. Press Q twice to restart the game." +
+            " Press ALT and M to return to the main menu."
     ),
 
     /* Sudoku: numbers in same row/column/box */
@@ -201,15 +203,15 @@ public enum Phrase {
     /* Codebreaker: Instructions Phrases */
     CODEBREAKER_INSTRUCTIONS_1("Welcome to Code Breaker! You need to guess a secret code of"),
     CODEBREAKER_INSTRUCTIONS_2("numbers. To make a guess use the arrow keys to select a space and enter a" +
-            " number from 1-6. Once you have finalized your guess, hit the space key to see if you guessed correctly." +
+            " number from 1 to 6. Once you have finalized your guess, hit the space key to see if you guessed correctly." +
             " If you did not guess the right code, the small box to the right of your guess will contain"),
     CODEBREAKER_INSTRUCTIONS_3("pegs of either black or red. A white peg means that one of the numbers" +
             " you have guessed is correct, but it is in the wrong place. A black peg means that one of your numbers" +
             " is the correct number and is in the correct place. If you have guessed correctly, you win the game!" +
             " Press INSERT and DOWN to hear the current location and its contents. To hear previous guesses, use the" +
-            " up and down arrow keys to move through the board. Once you are in the desired location, press Y to hear" +
+            " up and down arrow keys to move through the board. Once you are in the desired location, press A to hear" +
             " the previous guess and feedback. For a hint, press H to automatically fill in the selected space. This" +
-            " can be done three times. Press Q twice to restart the game. Press Alt-M to return to the main menu."
+            " can be done three times. Press Q twice to restart the game. Press ALT and M to return to the main menu."
     ),
 
     /* Codebreaker: Information Phrases */

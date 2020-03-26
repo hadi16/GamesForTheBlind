@@ -462,9 +462,9 @@ public class SudokuState {
     }
 
     /**
-     * Reads the location of the currently selected {@link Cell} on the Sudoku board (if one is selected).
+     * Reads the location of the currently selected {@link Cell} on the Sudoku board & its value (if one is selected).
      */
-    public void readSelectedLocation() {
+    public void readSelectedLocationWithValue() {
         Optional<Point> maybeSelectedPoint = this.sudokuKeyboardInterface.getSelectedPoint();
         if (maybeSelectedPoint.isPresent()) {
             final Point selectedPoint = maybeSelectedPoint.get();

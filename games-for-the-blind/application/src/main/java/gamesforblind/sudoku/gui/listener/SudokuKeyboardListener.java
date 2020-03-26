@@ -77,7 +77,7 @@ public class SudokuKeyboardListener implements KeyListener {
             return;
         }
 
-        // Case 2: Ctrl is pressed (stop reading phrases).
+        // Case 2: control is pressed (stop reading phrases).
         if (e.isControlDown()) {
             // Stop reading the audio phrases.
             this.sudokuGame.receiveAction(new SudokuStopReadingAction());
