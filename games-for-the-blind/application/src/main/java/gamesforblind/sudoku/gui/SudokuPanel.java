@@ -135,42 +135,8 @@ public class SudokuPanel extends JPanel {
         }
     }
 
-    /**
-     * Paints the row & column labels for the Sudoku board.
-     * We will model this closely after Excel, which uses numbers for row labels & letters for column labels.
-     *
-     * @param graphics        The {@link Graphics} object used for painting.
-     * @param squareDimension The pixel dimension of each square on the board.
-     * @param initialPosition Amount of pixels to begin painting board from.
-     */
-    private void paintBoardLabels(@NotNull Graphics graphics, int squareDimension, int initialPosition) {
+    private void paintTimeDisplay(@NotNull Graphics graphics, int initialPosition, int squareDimension) {
         final int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
-
-        graphics.setColor(Color.BLACK);
-        graphics.setFont(
-                new Font("Arial", Font.BOLD, (93 - 7 * sudokuBoardSize) * this.totalBoardLength / 390)
-        );
-
-        // Step 1: print the row labels (numbers r1, r2, r3, etc.)
-        for (int rowIndex = 0; rowIndex < sudokuBoardSize; rowIndex++) {
-            graphics.drawString(
-                    ("r" + (rowIndex + 1)),
-                    initialPosition + (11 * squareDimension / 24) - (squareDimension / 3),
-                    initialPosition + (squareDimension * rowIndex) + (11 * squareDimension / 6)
-            );
-        }
-
-        // Step 2: print the column labels (letters 'c1', 'c2', 'c3', etc.)
-        for (int columnIndex = 0; columnIndex < sudokuBoardSize; columnIndex++) {
-            graphics.drawString(
-                    "c" + (columnIndex + 1),
-                    initialPosition + (51 * squareDimension * columnIndex / 50) + (29 * squareDimension / 24) - (squareDimension / 4),
-                    initialPosition + (11 * squareDimension / 12)
-            );
-        }
-
-        final Font MAIN_BOARD_FONT = new Font("Serif", Font.BOLD, this.totalBoardLength / 10);
-        graphics.setFont(MAIN_BOARD_FONT);
 
         final Duration timeElapsed = Duration.between(this.sudokuState.getTime(), Instant.now());
         final int hoursElapsed = toHoursPart(timeElapsed);
@@ -203,6 +169,44 @@ public class SudokuPanel extends JPanel {
     }
 
     /**
+     * Paints the row & column labels for the Sudoku board.
+     * We will model this closely after Excel, which uses numbers for row labels & letters for column labels.
+     *
+     * @param graphics        The {@link Graphics} object used for painting.
+     * @param initialPosition Amount of pixels to begin painting board from.
+     * @param squareDimension The pixel dimension of each square on the board.
+     */
+    private void paintBoardLabels(@NotNull Graphics graphics, int initialPosition, int squareDimension) {
+        final int sudokuBoardSize = this.sudokuType.getSudokuBoardSize();
+
+        graphics.setColor(Color.BLACK);
+        graphics.setFont(
+                new Font("Arial", Font.BOLD, (93 - 7 * sudokuBoardSize) * this.totalBoardLength / 390)
+        );
+
+        // Step 1: print the row labels (numbers r1, r2, r3, etc.)
+        for (int rowIndex = 0; rowIndex < sudokuBoardSize; rowIndex++) {
+            graphics.drawString(
+                    ("r" + (rowIndex + 1)),
+                    initialPosition + (11 * squareDimension / 24) - (squareDimension / 3),
+                    initialPosition + (squareDimension * rowIndex) + (11 * squareDimension / 6)
+            );
+        }
+
+        // Step 2: print the column labels (letters 'c1', 'c2', 'c3', etc.)
+        for (int columnIndex = 0; columnIndex < sudokuBoardSize; columnIndex++) {
+            graphics.drawString(
+                    "c" + (columnIndex + 1),
+                    initialPosition + (51 * squareDimension * columnIndex / 50) + (29 * squareDimension / 24) - (squareDimension / 4),
+                    initialPosition + (11 * squareDimension / 12)
+            );
+        }
+
+        final Font MAIN_BOARD_FONT = new Font("Serif", Font.BOLD, this.totalBoardLength / 10);
+        graphics.setFont(MAIN_BOARD_FONT);
+    }
+
+    /**
      * When repaint() or paint() is called, paints the Sudoku GUI.
      * Might look into using comic sans as a font.
      *
@@ -221,12 +225,15 @@ public class SudokuPanel extends JPanel {
         final int INITIAL_POSITION = (this.totalBoardLength - (squareDimension * squaresPerSide)) / 2;
 
         // Step 1: paint the row & column labels (font size is slightly smaller).
-        this.paintBoardLabels(graphics, squareDimension, INITIAL_POSITION);
+        this.paintBoardLabels(graphics, INITIAL_POSITION, squareDimension);
 
-        // Step 2: paint the main Sudoku board (which includes highlighted squares).
+        // Step 2: paint the time display.
+        this.paintTimeDisplay(graphics, INITIAL_POSITION, squareDimension);
+
+        // Step 3: paint the main Sudoku board (which includes highlighted squares).
         this.paintMainBoard(graphics, squareDimension, INITIAL_POSITION + squareDimension);
 
-        // Step 3: paint the bolded block borders.
+        // Step 4: paint the bolded block borders.
         this.paintBlockBorders(graphics, squareDimension, INITIAL_POSITION + squareDimension);
     }
 }
