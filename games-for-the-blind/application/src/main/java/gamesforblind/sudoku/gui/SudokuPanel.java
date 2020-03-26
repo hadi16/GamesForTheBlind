@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 
 import static gamesforblind.Constants.EMPTY_SUDOKU_SQUARE;
+import static gamesforblind.Constants.FRAME_DIMENSION;
 import static util.DurationUtil.*;
 
 /**
@@ -168,7 +169,7 @@ public class SudokuPanel extends JPanel {
             );
         }
 
-        final Font MAIN_BOARD_FONT = new Font("Serif", Font.BOLD, 50);
+        final Font MAIN_BOARD_FONT = new Font("Serif", Font.BOLD, this.totalBoardLength / 10);
         graphics.setFont(MAIN_BOARD_FONT);
 
         final Duration timeElapsed = Duration.between(this.sudokuState.getTime(), Instant.now());
@@ -176,10 +177,28 @@ public class SudokuPanel extends JPanel {
         final int minutesElapsed = toMinutesPart(timeElapsed);
         final int secondsElapsed = toSecondsPart(timeElapsed);
 
-        graphics.drawString(
-                String.format("Time: %d:%d:%d", hoursElapsed, minutesElapsed, secondsElapsed),
-                initialPosition + (51 * squareDimension * sudokuBoardSize / 50) + (29 * squareDimension / 24) - (squareDimension / 4),
-                (1044 - 11 * sudokuBoardSize) * squareDimension / 1050
+        final Point timePoint = new Point(
+                initialPosition + (int) ((sudokuBoardSize + 1.5) * squareDimension), FRAME_DIMENSION / 10
+        );
+
+        StringBuilder timeStringBuilder = new StringBuilder("Time\n");
+        for (int i : new int[]{hoursElapsed, minutesElapsed, secondsElapsed}) {
+            if (String.valueOf(i).length() == 1) {
+                timeStringBuilder.append(String.format("0%d:", i));
+            } else {
+                timeStringBuilder.append(String.format("%d:", i));
+            }
+        }
+
+        final String timeString = timeStringBuilder.toString().substring(0, timeStringBuilder.length() - 1);
+        final int fontHeight = graphics.getFontMetrics().getHeight();
+        for (String line : timeString.split("\n")) {
+            graphics.drawString(line, timePoint.x, timePoint.y);
+            timePoint.y += fontHeight;
+        }
+
+        graphics.drawRect(
+                timePoint.x, timePoint.y - (int) (2.8 * fontHeight), (int) (3.7 * fontHeight), 2 * fontHeight
         );
     }
 

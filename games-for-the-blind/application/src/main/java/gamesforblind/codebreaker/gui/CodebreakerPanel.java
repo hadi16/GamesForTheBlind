@@ -125,11 +125,16 @@ public class CodebreakerPanel extends JPanel {
         final int minutesElapsed = toMinutesPart(timeElapsed);
         final int secondsElapsed = toSecondsPart(timeElapsed);
 
-        graphics.drawString(
-                String.format("Time: %d:%d:%d", hoursElapsed, minutesElapsed, secondsElapsed),
-                this.mainBoardInitialPoint.x + 2 * SECOND_GROUP_X_OFFSET,
-                this.mainBoardInitialPoint.y + SECOND_GROUP_X_OFFSET
+        final Point timePoint = new Point(
+                this.mainBoardInitialPoint.x + (int) (1.9 * SECOND_GROUP_X_OFFSET),
+                this.mainBoardInitialPoint.y
         );
+
+        final String timeString = String.format("Time\n%d:%d:%d", hoursElapsed, minutesElapsed, secondsElapsed);
+        for (String line : timeString.split("\n")) {
+            graphics.drawString(line, timePoint.x, timePoint.y);
+            timePoint.y += graphics.getFontMetrics().getHeight();
+        }
 
         graphics.drawRect(
                 this.mainBoardInitialPoint.x - 1,
