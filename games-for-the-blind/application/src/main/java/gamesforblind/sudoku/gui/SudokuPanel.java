@@ -108,10 +108,10 @@ public class SudokuPanel extends JPanel {
                         // Case 3: the Point is not highlighted & not empty.
                         if (originallyFilledSquares.contains(currentPoint)) {
                             // Case 3a: the Point is an originally filled square.
-                            graphics.setColor(Color.RED);
+                            graphics.setColor(BRIGHT_BLUE);
                         } else {
                             // Case 3b: the Point is NOT an originally filled square.
-                            graphics.setColor(BRIGHT_BLUE);
+                            graphics.setColor(Color.RED);
                         }
                     }
 
