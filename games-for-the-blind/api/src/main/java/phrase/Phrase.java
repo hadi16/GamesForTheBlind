@@ -205,7 +205,7 @@ public enum Phrase {
     CODEBREAKER_INSTRUCTIONS_2("numbers. To make a guess use the arrow keys to select a space and enter a" +
             " number from 1 to 6. Once you have finalized your guess, hit the space key to see if you guessed correctly." +
             " If you did not guess the right code, the small box to the right of your guess will contain"),
-    CODEBREAKER_INSTRUCTIONS_3("pegs of either black or red. A white peg means that one of the numbers" +
+    CODEBREAKER_INSTRUCTIONS_3("pegs of either black or red. A red peg means that one of the numbers" +
             " you have guessed is correct, but it is in the wrong place. A black peg means that one of your numbers" +
             " is the correct number and is in the correct place. If you have guessed correctly, you win the game!" +
             " Press INSERT and DOWN to hear the current location and its contents. To hear previous guesses, use the" +
